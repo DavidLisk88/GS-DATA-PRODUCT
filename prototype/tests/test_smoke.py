@@ -10,8 +10,7 @@ import duckdb
 import pytest
 
 from lseg_copilot.catalog import Catalog
-from lseg_copilot.data_loader import load_sample_data, open_warehouse
-from lseg_copilot.indexer import build_index
+from lseg_copilot.pipeline import CopilotPipeline, bootstrap
 from lseg_copilot.planner import Planner
 from lseg_copilot.reasoner import StubReasoner
 from lseg_copilot.retriever import HybridRetriever
@@ -19,21 +18,24 @@ from lseg_copilot.sql_validator import validate_sql
 
 
 @pytest.fixture(scope="module")
-def catalog() -> Catalog:
-    return Catalog.load()
+def pipe() -> CopilotPipeline:
+    return bootstrap(load_warehouse=True)
 
 
 @pytest.fixture(scope="module")
-def warehouse(catalog: Catalog) -> duckdb.DuckDBPyConnection:
-    con = open_warehouse()
-    load_sample_data(con, catalog=catalog)
-    return con
+def catalog(pipe: CopilotPipeline) -> Catalog:
+    return pipe.catalog
 
 
 @pytest.fixture(scope="module")
-def retriever(catalog: Catalog) -> HybridRetriever:
-    artifacts = build_index(catalog=catalog, embed=False)
-    return HybridRetriever(artifacts, catalog)
+def warehouse(pipe: CopilotPipeline) -> duckdb.DuckDBPyConnection:
+    assert pipe.warehouse is not None
+    return pipe.warehouse
+
+
+@pytest.fixture(scope="module")
+def retriever(pipe: CopilotPipeline) -> HybridRetriever:
+    return pipe.retriever
 
 
 def test_catalog_loads_expected_minimum_tables(catalog: Catalog) -> None:

@@ -9,7 +9,6 @@ from __future__ import annotations
 
 import csv
 import logging
-import os
 import sys
 from pathlib import Path
 
@@ -21,13 +20,12 @@ from rich.syntax import Syntax
 from rich.table import Table
 
 from .catalog import Catalog
-from .data_loader import load_sample_data, open_warehouse, summarise_warehouse
-from .indexer import build_index, save_chunks
+from .data_loader import load_sample_data, open_warehouse
+from .indexer import save_chunks
 from .paths import workspace_paths
-from .planner import Planner
-from .reasoner import LLMReasoner, OpenAIChatClient, StubReasoner
-from .retriever import HybridRetriever
-from .sql_validator import validate_sql
+from .pipeline import bootstrap
+from .reasoner import StubReasoner, create_reasoner
+from .sql_executor import execute_validated_sql
 
 console = Console()
 
@@ -80,9 +78,9 @@ def describe_cmd() -> None:
 @click.option("--no-embed", is_flag=True, help="Skip dense embeddings.")
 def index_cmd(no_embed: bool) -> None:
     """Build the hybrid index (lexical + optional dense)."""
-    catalog = Catalog.load()
-    artifacts = build_index(catalog=catalog, embed=not no_embed)
-    chunks_path = save_chunks(artifacts)
+    pipe = bootstrap(embed=not no_embed)
+    chunks_path = save_chunks(pipe.artifacts)
+    artifacts = pipe.artifacts
     mode = artifacts.embedding_model_name or "lexical-only"
     console.print(
         f"Indexed [bold]{len(artifacts.chunks)}[/bold] chunks ({mode}); "
@@ -103,19 +101,11 @@ def index_cmd(no_embed: bool) -> None:
 @click.option("--execute/--no-execute", default=True, help="Execute generated SQL.")
 def ask_cmd(question: str, use_llm: bool, entitlements: tuple[str, ...], execute: bool) -> None:
     """One-shot ask: retrieve → plan → reason → (optionally) execute SQL."""
-    catalog = Catalog.load()
-    artifacts = build_index(catalog=catalog, embed=False)  # cheap path
-    retriever = HybridRetriever(artifacts, catalog)
-    planner = Planner(catalog)
+    pipe = bootstrap()
+    retrieved = pipe.retriever.search(question, top_k=8)
+    plan = pipe.planner.plan(question, retrieved, user_entitlements=list(entitlements))
 
-    retrieved = retriever.search(question, top_k=8)
-    plan = planner.plan(question, retrieved, user_entitlements=list(entitlements))
-
-    reasoner: StubReasoner | LLMReasoner
-    if use_llm and os.environ.get("OPENAI_API_KEY"):
-        reasoner = LLMReasoner(catalog, OpenAIChatClient())
-    else:
-        reasoner = StubReasoner(catalog)
+    reasoner = create_reasoner(pipe.catalog, use_llm=use_llm)
     answer = reasoner.answer(plan)
 
     console.print(Panel.fit(answer.text, title="Answer"))
@@ -124,22 +114,20 @@ def ask_cmd(question: str, use_llm: bool, entitlements: tuple[str, ...], execute
         for c in answer.citations:
             console.print(f"  - {c}")
     if answer.sql:
-        validation = validate_sql(answer.sql, catalog)
+        con = open_warehouse()
+        load_sample_data(con, catalog=pipe.catalog)
+        result = execute_validated_sql(answer.sql, pipe.catalog, con)
         console.print("\n[bold]Generated SQL:[/bold]")
-        console.print(Syntax(validation.sql, "sql", theme="ansi_dark", word_wrap=True))
-        if validation.errors:
-            console.print(f"[red]SQL validation errors:[/red] {validation.errors}")
-        for w in validation.warnings:
+        console.print(Syntax(result.validation.sql, "sql", theme="ansi_dark", word_wrap=True))
+        if result.validation.errors:
+            console.print(f"[red]SQL validation errors:[/red] {result.validation.errors}")
+        for w in result.validation.warnings:
             console.print(f"[yellow]warn:[/yellow] {w}")
-        if execute and validation.ok:
-            con = open_warehouse()
-            load_sample_data(con, catalog=catalog)
-            try:
-                df = con.execute(validation.sql).fetchdf()
-                console.print("\n[bold]Result:[/bold]")
-                console.print(df.to_string(index=False))
-            except Exception as exc:
-                console.print(f"[red]Execution error:[/red] {exc}")
+        if execute and result.executed:
+            console.print("\n[bold]Result:[/bold]")
+            console.print(result.dataframe.to_string(index=False))
+        elif result.error:
+            console.print(f"[red]Execution error:[/red] {result.error}")
 
 
 # --------------------------------------------------------------------------- #
@@ -148,13 +136,10 @@ def ask_cmd(question: str, use_llm: bool, entitlements: tuple[str, ...], execute
 @click.option("--max", "max_n", type=int, default=0, help="Limit number of cases (0=all).")
 def eval_cmd(kind: str, max_n: int) -> None:
     """Run a smoke evaluation against the goldset."""
-    paths = workspace_paths()
-    catalog = Catalog.load()
-    artifacts = build_index(catalog=catalog, embed=False)
-    retriever = HybridRetriever(artifacts, catalog)
-    planner = Planner(catalog)
-    reasoner = StubReasoner(catalog)
+    pipe = bootstrap(load_warehouse=(kind == "sql"))
+    reasoner = StubReasoner(pipe.catalog)
 
+    paths = workspace_paths()
     goldset_file = paths["goldset_dir"] / f"{kind}.yaml"
     if not goldset_file.exists():
         console.print(f"[red]Goldset file missing:[/red] {goldset_file}")
@@ -165,11 +150,9 @@ def eval_cmd(kind: str, max_n: int) -> None:
         questions = questions[:max_n]
 
     if kind == "sql":
-        con = open_warehouse()
-        load_sample_data(con, catalog=catalog)
-        _eval_sql(questions, con, catalog, retriever, planner, reasoner)
+        _eval_sql(questions, pipe.warehouse, pipe.catalog, pipe.retriever, pipe.planner, reasoner)
     else:
-        _eval_qa(questions, retriever, planner, reasoner)
+        _eval_qa(questions, pipe.retriever, pipe.planner, reasoner)
 
 
 def _eval_sql(
@@ -199,17 +182,15 @@ def _eval_sql(
         rows_ok = False
         tables_ok = False
         if answer.sql:
-            validation = validate_sql(answer.sql, catalog)
-            if validation.ok:
-                try:
-                    df = con.execute(validation.sql).fetchdf()
-                    exec_ok = True
-                    fix_path = q.get("fixture")
-                    if fix_path:
-                        fix_rows = _read_fixture(paths["root"] / fix_path)
-                        rows_ok = _compare_rows(df, fix_rows)
-                except Exception as exc:
-                    console.print(f"[red]{qid} exec error:[/red] {exc}")
+            result = execute_validated_sql(answer.sql, catalog, con)
+            exec_ok = result.executed
+            if result.error:
+                console.print(f"[red]{qid} exec error:[/red] {result.error}")
+            if exec_ok:
+                fix_path = q.get("fixture")
+                if fix_path:
+                    fix_rows = _read_fixture(paths["root"] / fix_path)
+                    rows_ok = _compare_rows(result.dataframe, fix_rows)
 
         expected_tables = set(q.get("expected_tables") or [])
         if expected_tables:

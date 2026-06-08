@@ -17,6 +17,17 @@ from .catalog import Catalog
 from .planner import PlanResult
 
 
+def create_reasoner(
+    catalog: Catalog,
+    *,
+    use_llm: bool = False,
+) -> "StubReasoner | LLMReasoner":
+    """Factory: return an LLM-backed reasoner when possible, else a stub."""
+    if use_llm and os.environ.get("OPENAI_API_KEY"):
+        return LLMReasoner(catalog, OpenAIChatClient())
+    return StubReasoner(catalog)
+
+
 @dataclass
 class Answer:
     question: str
@@ -26,6 +37,16 @@ class Answer:
     refusal: bool = False
     confidence: float = 0.0
     extras: dict[str, Any] = field(default_factory=dict)
+
+    @classmethod
+    def refused(cls, plan: "PlanResult") -> "Answer":
+        """Build a standard refusal answer from a plan."""
+        return cls(
+            question=plan.question,
+            text=f"REFUSED: {plan.refusal_reason}",
+            refusal=True,
+            confidence=0.95,
+        )
 
 
 # --------------------------------------------------------------------------- #
@@ -177,12 +198,7 @@ class StubReasoner:
         question_id: str | None = None,
     ) -> Answer:
         if plan.intent == "refusal":
-            return Answer(
-                question=plan.question,
-                text=f"REFUSED: {plan.refusal_reason}",
-                refusal=True,
-                confidence=0.95,
-            )
+            return Answer.refused(plan)
 
         sql = None
         if question_id and question_id in _STUB_SQL_TEMPLATES:
@@ -258,12 +274,7 @@ class LLMReasoner:
 
     def answer(self, plan: PlanResult, *, question_id: str | None = None) -> Answer:
         if plan.intent == "refusal":
-            return Answer(
-                question=plan.question,
-                text=f"REFUSED: {plan.refusal_reason}",
-                refusal=True,
-                confidence=0.95,
-            )
+            return Answer.refused(plan)
         excerpts = "\n\n---\n".join(
             f"[{r.chunk.source_path}::{r.chunk.title}]\n{r.chunk.text[:2000]}"
             for r in plan.retrieved[:6]
