@@ -1,0 +1,936 @@
+table: qa_street_ev.SECmpInfo
+domain: events
+description: This table contains organization-level information.
+update_cadence: Hourly
+columns:
+- name: CmpId
+  type: INTEGER
+  nullable: false
+  description: Integer ID of the company.
+- name: OrgPermId
+  type: BIGINT
+  nullable: true
+  description: Organization Perm ID.
+- name: CobrandId
+  type: INTEGER
+  nullable: true
+  description: Company ID based on legacy system. From 2005 onwards, most of the orgs should have the ID and CobrandID as
+    the same.
+- name: CmpName
+  type: varchar(100)
+  nullable: true
+  description: Company Name.
+- name: Cusip
+  type: varchar(10)
+  nullable: true
+  description: Market level identifier of the issue.
+- name: Sedol
+  type: varchar(8)
+  nullable: true
+  description: Market level identifier of the issue.
+- name: Rank_
+  type: INTEGER
+  nullable: true
+  description: StreetEvents Company Rank.
+- name: CmpBoardIsClient
+  type: varchar(10)
+  nullable: true
+  description: This field is no longer used and is left in to maintain backwards compatibility.
+- name: IR_URL
+  type: varchar(500)
+  nullable: true
+  description: Company investor relations URL.
+- name: LicFlag
+  type: TINYINT
+  nullable: true
+  description: Placeholder for future use.
+---
+table: qa_street_ev.SECmpInfoChg
+domain: events
+description: This table contains organization-level information changes.
+update_cadence: Hourly
+columns:
+- name: CmpId
+  type: INTEGER
+  nullable: false
+  description: Integer ID of the company.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is a unique integer code that identifies an item. It joins to the SECmpInfo table.
+- name: StartDt
+  type: TIMESTAMP(6)
+  nullable: false
+  description: The date from which validity of the Item value begins.
+- name: EndDt
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date when validity of the Item value ends.
+- name: Value_
+  type: varchar(1000)
+  nullable: false
+  description: Value of the corresponding item.
+- name: LicFlag
+  type: TINYINT
+  nullable: true
+  description: Placeholder for future use. LSEG Quantitative Analytics Street Events 8
+---
+table: qa_street_ev.SECmpContact
+domain: events
+description: This table contains organization-level contact information.
+update_cadence: Hourly
+columns:
+- name: CmpId
+  type: INTEGER
+  nullable: false
+  description: Integer ID of the company.
+- name: ContactName
+  type: varchar(200)
+  nullable: true
+  description: Contact person’s full name.
+- name: Email
+  type: varchar(100)
+  nullable: true
+  description: Contact person’s email address.
+- name: Phone
+  type: varchar(50)
+  nullable: true
+  description: Contact person’s phone number.
+- name: Title
+  type: varchar(200)
+  nullable: true
+  description: Contact person’s title.
+- name: LicFlag
+  type: TINYINT
+  nullable: true
+  description: Placeholder for future use.
+---
+table: qa_street_ev.SECmpContactChg
+domain: events
+description: This table contains organization-level contact information changes.
+update_cadence: Hourly
+columns:
+- name: CmpId
+  type: INTEGER
+  nullable: false
+  description: Integer ID of the company.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is a unique integer code that identifies an item. It joins to the SECmpContact table.
+- name: StartDt
+  type: TIMESTAMP(6)
+  nullable: false
+  description: The date from which validity of the Item value begins.
+- name: EndDt
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date when validity of the item value ends.
+- name: Value_
+  type: varchar(200)
+  nullable: false
+  description: Value of the corresponding item.
+- name: LicFlag
+  type: TINYINT
+  nullable: true
+  description: Placeholder for future use.
+---
+table: qa_street_ev.SECmpCoverage
+domain: events
+description: This table contains company coverage event information.
+update_cadence: Hourly
+columns:
+- name: CmpId
+  type: INTEGER
+  nullable: false
+  description: Integer ID of the company.
+- name: CobrandId
+  type: INTEGER
+  nullable: true
+  description: Company ID based on legacy system. From 2005 onwards, most of the orgs should have the ID and CobrandID as
+    the same.
+- name: EvtCov
+  type: varchar(50)
+  nullable: true
+  description: Events Coverage. Which can be either Full, Partial, None, or Rejected. LSEG Quantitative Analytics Street Events
+    9
+- name: BrfCov
+  type: varchar(50)
+  nullable: true
+  description: Briefs Coverage. Which can be either Full, Partial, None, or Rejected.
+- name: TransCov
+  type: varchar(50)
+  nullable: true
+  description: Transcript Coverage. Which can be either Full, Partial, None, or Rejected.
+- name: ConfPresTransCov
+  type: varchar(50)
+  nullable: true
+  description: Conference Presentations Transcript Coverage. Which can be either Full, Partial, None, or Rejected.
+- name: LicFlag
+  type: TINYINT
+  nullable: true
+  description: Placeholder for future use.
+---
+table: qa_street_ev.SECmpEarnings
+domain: events
+description: This table contains company earnings event information.
+update_cadence: Hourly
+columns:
+- name: CmpId
+  type: INTEGER
+  nullable: false
+  description: Integer ID of the company.
+- name: EarnTypeCode
+  type: INTEGER
+  nullable: false
+  description: Type attribute indicates the type of EarningsRecord. Type may contain ‘Estimate’ or ‘Actual’.
+- name: PerTypeCode
+  type: INTEGER
+  nullable: false
+  description: PerType attribute indicates the time period this earnings data refers to. May contain ‘Quarterly’ or ‘Annual’.
+- name: FYE
+  type: INTEGER
+  nullable: false
+  description: End month/year of the fiscal year to which this record applies.
+- name: CalQtrEnd
+  type: INTEGER
+  nullable: false
+  description: The month and year representing the end of the current calendar quarter.
+- name: CobrandId
+  type: INTEGER
+  nullable: true
+  description: Company ID based on legacy system. From 2005 onwards, most of the orgs should have the ID and CobrandID as
+    the same.
+- name: FY
+  type: INTEGER
+  nullable: true
+  description: Fiscal year to which this record applies.
+- name: FQtr
+  type: TINYINT
+  nullable: true
+  description: The number of the current quarter (i.e. 1, 2, 3, or 4).
+- name: EarnNum
+  type: FLOAT
+  nullable: true
+  description: The consensus earnings number, which is either Actual or Estimated, for either the Quarter, or Year, as specified
+    by the attributes of EarningsRecord.
+- name: Brokers
+  type: SMALLINT
+  nullable: true
+  description: The number of brokers used in determining the EarningsNumber.
+- name: LicFlag
+  type: TINYINT
+  nullable: true
+  description: Placeholder for future use.
+---
+table: qa_street_ev.SEEcoInfo
+domain: events
+description: This table contains economic event definition and description.
+update_cadence: Hourly
+columns:
+- name: EcoId
+  type: INTEGER
+  nullable: false
+  description: Integer ID of the Economic event.
+- name: ReleasedFor
+  type: varchar(100)
+  nullable: true
+  description: Time period released for.
+- name: EcoName
+  type: varchar(255)
+  nullable: true
+  description: Event name. LSEG Quantitative Analytics Street Events 10
+- name: Description_
+  type: varchar(6000)
+  nullable: true
+  description: Event Description.
+- name: EventDef
+  type: varchar(2000)
+  nullable: true
+  description: Event Definition.
+- name: LicFlag
+  type: TINYINT
+  nullable: true
+  description: Placeholder for future use.
+---
+table: qa_street_ev.SEEcoDet
+domain: events
+description: This table contains economic event details.
+update_cadence: Hourly
+columns:
+- name: EcoId
+  type: INTEGER
+  nullable: false
+  description: Integer ID of the Economic event.
+- name: SeqNum
+  type: TINYINT
+  nullable: false
+  description: Incremental sequence number generated based on EcoID and sorted in ascending order for every economic event.
+- name: EcoName
+  type: varchar(100)
+  nullable: true
+  description: Details name.
+- name: Actual
+  type: varchar(50)
+  nullable: true
+  description: Actual value.
+- name: Consensus
+  type: varchar(50)
+  nullable: true
+  description: Consensus value.
+- name: Prefix
+  type: varchar(10)
+  nullable: true
+  description: Prefix.
+- name: Suffix
+  type: varchar(50)
+  nullable: true
+  description: Suffix.
+- name: Status_
+  type: char(6)
+  nullable: true
+  description: Status.
+- name: PrimaryValue
+  type: BOOLEAN
+  nullable: true
+  description: Primary Value.
+- name: LicFlag
+  type: TINYINT
+  nullable: true
+  description: Placeholder for future use.
+---
+table: qa_street_ev.SEIPO
+domain: events
+description: This table contains IPO event details.
+update_cadence: Hourly
+columns:
+- name: IPOId
+  type: INTEGER
+  nullable: false
+  description: Integer ID of the IPO event.
+- name: CmpId
+  type: INTEGER
+  nullable: true
+  description: Integer ID of the company.
+- name: AmtExpPrcLow
+  type: FLOAT
+  nullable: true
+  description: Low end of expected offering price range.
+- name: AmtExpPrcHigh
+  type: FLOAT
+  nullable: true
+  description: High end of expected offering price range.
+- name: AmtOfferSize
+  type: FLOAT
+  nullable: true
+  description: Amount/value of the offer.
+- name: FilingDt
+  type: TIMESTAMP(6)
+  nullable: true
+  description: SEC Filing Date.
+- name: Exchange
+  type: varchar(150)
+  nullable: true
+  description: Exchange.
+- name: FormFiled
+  type: varchar(255)
+  nullable: true
+  description: Form Filed with SEC.
+- name: LeadUnderCmpName
+  type: varchar(200)
+  nullable: true
+  description: Lead underwriter company name.
+- name: NumOfShs
+  type: BIGINT
+  nullable: true
+  description: Number of shares offered.
+- name: BizDescription
+  type: varchar(2000)
+  nullable: true
+  description: Additional description.
+- name: LicFlag
+  type: TINYINT
+  nullable: true
+  description: Placeholder for future use. LSEG Quantitative Analytics Street Events 11
+---
+table: qa_street_ev.SEDividend
+domain: events
+description: This table contains dividend event information.
+update_cadence: Hourly
+columns:
+- name: DivId
+  type: INTEGER
+  nullable: false
+  description: Integer ID of the Dividend event.
+- name: CmpId
+  type: INTEGER
+  nullable: false
+  description: Integer ID of the company.
+- name: DecDt
+  type: TIMESTAMP(6)
+  nullable: true
+  description: Date when board of directors approved the dividend payment.
+- name: DecDtType
+  type: varchar(3)
+  nullable: true
+  description: Type indicates the date type.
+- name: PaymDt
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date on which a cash dividend will be paid to stockholders of record.
+- name: PaymDtType
+  type: varchar(3)
+  nullable: true
+  description: Type indicates the date type.
+- name: RecDt
+  type: TIMESTAMP(6)
+  nullable: true
+  description: Stockholders of record on this Date are entitled to the dividend payment.
+- name: RecDtType
+  type: varchar(3)
+  nullable: true
+  description: Type indicates the date type.
+- name: ExDivDt
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The ExDividend Date is the date on which the security’s opening market price reflects a deduction equal to
+    the amount of the dividend payment.
+- name: ExDivDtType
+  type: varchar(3)
+  nullable: true
+  description: Type indicates the date type.
+- name: PaymISOCurrCode
+  type: varchar(3)
+  nullable: true
+  description: CurrencyCode indicates the currency of the payment amount. Currency codes are ISO 4217 compliant, with the
+    exception of the value ‘STK’ which indicates a stock dividend.
+- name: PaymAmt
+  type: FLOAT
+  nullable: true
+  description: Dividend Payment amount.
+- name: AnnPaymISOCurrCode
+  type: varchar(3)
+  nullable: true
+  description: CurrencyCode indicates the currency of the payment amount. Currency codes are ISO 4217 compliant, with the
+    exception of the value ‘STK’ which indicates a stock dividend.
+- name: AnnPaymAmt
+  type: FLOAT
+  nullable: true
+  description: Annualized indicated annual dividend payment.
+- name: Description_
+  type: varchar(255)
+  nullable: true
+  description: Describes the nature or type of dividend.
+- name: LicFlag
+  type: TINYINT
+  nullable: true
+  description: Placeholder for future use.
+---
+table: qa_street_ev.SELocation
+domain: events
+description: This table contains event location information.
+update_cadence: Hourly
+columns:
+- name: LocId
+  type: INTEGER
+  nullable: false
+  description: Integer ID of the Location event.
+- name: LocName
+  type: varchar(100)
+  nullable: true
+  description: Location name.
+- name: CmpId
+  type: INTEGER
+  nullable: true
+  description: Integer ID of the company.
+- name: AddrLine1
+  type: varchar(100)
+  nullable: true
+  description: Location address line 1.
+- name: AddrLine2
+  type: varchar(100)
+  nullable: true
+  description: Location address line 2. LSEG Quantitative Analytics Street Events 12
+- name: City
+  type: varchar(50)
+  nullable: true
+  description: Location city.
+- name: State_
+  type: varchar(50)
+  nullable: true
+  description: Location state.
+- name: Zip
+  type: varchar(50)
+  nullable: true
+  description: Location zip code.
+- name: Country
+  type: varchar(50)
+  nullable: true
+  description: Location country.
+- name: LicFlag
+  type: TINYINT
+  nullable: true
+  description: Placeholder for future use.
+---
+table: qa_street_ev.SERegistration
+domain: events
+description: This table contains event registration details.
+update_cadence: Hourly
+columns:
+- name: RegId
+  type: INTEGER
+  nullable: false
+  description: Integer ID of the Registration event.
+- name: CmpId
+  type: INTEGER
+  nullable: true
+  description: Integer ID of the company.
+- name: IsRegRequired
+  type: varchar(3)
+  nullable: true
+  description: May contain ‘No’ or ‘Yes’ and indicates whether registration is required for this event.
+- name: EndDt
+  type: TIMESTAMP(6)
+  nullable: true
+  description: Registration end date and time.
+- name: Phone
+  type: varchar(40)
+  nullable: true
+  description: Registration phone number.
+- name: Fax
+  type: varchar(40)
+  nullable: true
+  description: Registration fax number.
+- name: URL
+  type: varchar(500)
+  nullable: true
+  description: Registration URL.
+- name: Email
+  type: varchar(100)
+  nullable: true
+  description: Registration email address.
+- name: LicFlag
+  type: TINYINT
+  nullable: true
+  description: Placeholder for future use.
+---
+table: qa_street_ev.SESplit
+domain: events
+description: This table contains Split event details.
+update_cadence: Hourly
+columns:
+- name: SplitId
+  type: INTEGER
+  nullable: false
+  description: Integer ID of the Split event.
+- name: CmpId
+  type: INTEGER
+  nullable: true
+  description: Integer ID of the company.
+- name: DecDt
+  type: TIMESTAMP(6)
+  nullable: true
+  description: Date when board of directors approved the split.
+- name: DecDtType
+  type: varchar(4)
+  nullable: true
+  description: Type indicates the date type.
+- name: PaymDt
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date on which a stock distribution will be paid to stockholders of record.
+- name: PaymDtType
+  type: varchar(4)
+  nullable: true
+  description: Type indicates the date type.
+- name: RecDt
+  type: TIMESTAMP(6)
+  nullable: true
+  description: Stockholders of record on this Date are entitled to the split.
+- name: RecDtType
+  type: varchar(4)
+  nullable: true
+  description: Type indicates the date type.
+- name: ExDistDt
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The ExDistribution Date is the date on which the security’s opening market price reflects the split-adjusted
+    price.
+- name: ExDistDtType
+  type: varchar(4)
+  nullable: true
+  description: Type indicates the date type.
+- name: SplitRatio
+  type: FLOAT
+  nullable: true
+  description: Split Ratio (i.e. 2 means a 2 for 1 split). LSEG Quantitative Analytics Street Events 13
+- name: Description_
+  type: varchar(255)
+  nullable: true
+  description: Describes the nature or type of the split.
+- name: LicFlag
+  type: TINYINT
+  nullable: true
+  description: Placeholder for future use.
+---
+table: qa_street_ev.SETouchpoint
+domain: events
+description: This table contains touch point or access methods for an event.
+update_cadence: Hourly
+columns:
+- name: TPId
+  type: INTEGER
+  nullable: false
+  description: Integer ID of the TouchPoint event. .
+- name: SeqNum
+  type: TINYINT
+  nullable: true
+  description: Incremental sequence number for every unique touchpoint (Phone and/or URL), which is generated based on TPId
+    and sorted in the ascending order by TPType, Phone and URL.
+- name: TPType
+  type: varchar(50)
+  nullable: true
+  description: Type of TouchPoint.
+- name: CmpId
+  type: INTEGER
+  nullable: true
+  description: Integer ID of the company.
+- name: Sponsor
+  type: varchar(100)
+  nullable: true
+  description: Sponsor may identify the sponsoring company.
+- name: Permission
+  type: varchar(100)
+  nullable: true
+  description: Permission identifies the permissions associated with all information related to this touch point.
+- name: Phone
+  type: varchar(40)
+  nullable: true
+  description: Phone number access point.
+- name: URL
+  type: varchar(500)
+  nullable: true
+  description: An online site specifically prepared for the event/location.
+- name: URLType
+  type: varchar(100)
+  nullable: true
+  description: Type indicates what type of StreetEvents webcast, or indicates that it is a third-party webcast, not hosted
+    by StreetEvents.
+- name: URLFormat
+  type: varchar(100)
+  nullable: true
+  description: Format indicates audio format of webcast. Useful for determining what type of media player should be used.
+- name: PwdRequired
+  type: varchar(3)
+  nullable: true
+  description: Is password required.
+- name: Pwd
+  type: varchar(50)
+  nullable: true
+  description: Access password.
+- name: StartDateType
+  type: varchar(4)
+  nullable: true
+  description: Type indicates the date type.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: Start Date to access touch point.
+- name: EndDateType
+  type: varchar(4)
+  nullable: true
+  description: Type indicates the date type.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: End Date to access touch point.
+- name: Description_
+  type: varchar(6000)
+  nullable: true
+  description: Touchpoint Description.
+- name: LicFlag
+  type: TINYINT
+  nullable: true
+  description: Placeholder for future use.
+---
+table: qa_street_ev.SEAddlMat
+domain: events
+description: This table contains any additional materials used for the event, e.g. presentation materials.
+update_cadence: Hourly
+columns:
+- name: EventId
+  type: INTEGER
+  nullable: false
+  description: Integer ID of the Event. LSEG Quantitative Analytics Street Events 14
+- name: SeqNum
+  type: TINYINT
+  nullable: true
+  description: Incremental sequence number for every unique Content or Media URL, which is generated based on EventId and
+    sorted in the ascending order by URL.
+- name: CmpId
+  type: INTEGER
+  nullable: true
+  description: Integer ID of the company.
+- name: ContentType
+  type: varchar(100)
+  nullable: true
+  description: Any additional materials used for the event, e.g. presentation materials.
+- name: MediaType
+  type: varchar(50)
+  nullable: true
+  description: This tells the user in what media type the additional materials can be accessed, e.g. a link.
+- name: URL
+  type: varchar(500)
+  nullable: true
+  description: This is the exact URL link to the additional material.
+- name: LicFlag
+  type: TINYINT
+  nullable: true
+  description: Placeholder for future use.
+---
+table: qa_street_ev.SEMP3URL
+domain: events
+update_cadence: Hourly
+columns:
+- name: EventId
+  type: INTEGER
+  nullable: false
+  description: Integer ID of the Event.
+- name: CmpId
+  type: INTEGER
+  nullable: true
+  description: Integer ID of the company.
+- name: MP3URL
+  type: varchar(500)
+  nullable: true
+  description: Contains the MP3 Audio URL.
+- name: LicFlag
+  type: TINYINT
+  nullable: true
+  description: Placeholder for future use.
+---
+table: qa_street_ev.SEInfo
+domain: events
+description: This parent table contains information for all events e.g., global transcripts, briefs, events, guidance, filings
+  and
+update_cadence: Hourly
+columns:
+- name: EventId
+  type: INTEGER
+  nullable: false
+  description: Integer ID of the Event.
+- name: TypeId
+  type: INTEGER
+  nullable: true
+  description: Integer code for various type of Event.
+- name: ParentId
+  type: INTEGER
+  nullable: true
+  description: Integer ID of the parent Event.
+- name: Permission
+  type: varchar(50)
+  nullable: true
+  description: Permission attribute that controls whether the event will be included in the feed.
+- name: PermissionDet
+  type: varchar(50)
+  nullable: true
+  description: Permission identifies the permissions associated with all information related to this event.
+- name: SEMId
+  type: BIGINT
+  nullable: true
+  description: New strategic PermID for Events.
+- name: EventName
+  type: varchar(255)
+  nullable: true
+  description: Event Name.
+- name: StartDt
+  type: TIMESTAMP(6)
+  nullable: true
+  description: Event start date and time.
+- name: StartDtType
+  type: varchar(4)
+  nullable: true
+  description: Type indicates the date type.
+- name: StartDtIsEst
+  type: vachar(3)
+  nullable: true
+  description: IsEstimated may contain ‘No’ or ‘Yes’ and indicates whether the date information is an estimate. The implied
+    value is ‘No’.
+- name: EndDt
+  type: TIMESTAMP(6)
+  nullable: true
+  description: Event end date and time. LSEG Quantitative Analytics Street Events 15
+- name: EndDtType
+  type: varchar(4)
+  nullable: true
+  description: Type indicates the date type.
+- name: EndDtIsEst
+  type: vachar(3)
+  nullable: true
+  description: IsEstimated may contain ‘No’ or ‘Yes’ and indicates whether the date information is an estimate. The implied
+    value is ‘No’.
+- name: LocPhoneVoice
+  type: varchar(200)
+  nullable: true
+  description: Location voice phone number.
+- name: SponsorCmpId
+  type: INTEGER
+  nullable: true
+  description: Integer ID of the company.
+- name: TransMDStatus
+  type: varchar(20)
+  nullable: true
+  description: Status of the transcript attached to the event (Expected, Cancelled, Modified, Approved).
+- name: TransMDDelivery
+  type: varchar(20)
+  nullable: true
+  description: How the transcript will be processed (Live, Near-live, Regular). .
+- name: LastUpdatedAt
+  type: TIMESTAMP(6)
+  nullable: true
+  description: Date when event record was last updated.
+- name: CreationDt
+  type: TIMESTAMP(6)
+  nullable: true
+  description: Date when event record was created.
+- name: Source_
+  type: varchar(20)
+  nullable: true
+  description: Source for the event information.
+- name: EventNotes
+  type: varchar(max)
+  nullable: true
+  description: Event notes and details. Additional information about the event. This could also contain special instructions
+    from the host of the event.
+- name: FY
+  type: INTEGER
+  nullable: true
+  description: Fiscal year for a quarterly event.
+- name: Qtr
+  type: INTEGER
+  nullable: true
+  description: Quarter for a quarterly event.
+- name: BriefMDStatus
+  type: varchar(20)
+  nullable: true
+  description: Status of the brief related to the transcript attached to the event (Expected, Cancelled, Modified, Approved).
+- name: LicFlag
+  type: TINYINT
+  nullable: true
+  description: Placeholder for future use.
+---
+table: qa_street_ev.SEHosts
+domain: events
+description: This is a child table of SEInfo that captures multiple (hosts) CmpId for a given event.
+update_cadence: Hourly
+columns:
+- name: EventId
+  type: INTEGER
+  nullable: false
+  description: Integer ID of the Event.
+- name: CmpId
+  type: INTEGER
+  nullable: true
+  description: Integer ID of the company.
+- name: LicFlag
+  type: TINYINT
+  nullable: true
+  description: Placeholder for future use.
+---
+table: qa_street_ev.SETopics
+domain: events
+description: This is a child table of SEInfo that captures multiple topics in a given event.
+update_cadence: 'Hourly Adjusted: N/A'
+columns:
+- name: EventId
+  type: INTEGER
+  nullable: false
+  description: Integer ID of the Event.
+- name: SeqNum
+  type: TINYINT
+  nullable: true
+  description: Incremental sequence number for every unique Topic. It’s generated based on EventId and sorted in the ascending
+    order by Topic.
+- name: Topic
+  type: varchar(500)
+  nullable: true
+  description: May contain one or more Event topics.
+- name: LicFlag
+  type: TINYINT
+  nullable: true
+  description: Placeholder for future use. LSEG Quantitative Analytics Street Events 16
+---
+table: qa_street_ev.SEItem
+domain: events
+description: This table contains item codes assigned to each individual attribute in the SECmpInfoChg and | DataTables varchar(20)
+  Yes Numeric code for the Table that corresponding Item joins
+update_cadence: Hourly
+columns:
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item is a unique integer code that identifies an item. It joins to the SECmpInfoChg and SECmpContactChg tables.
+- name: Mnemonic
+  type: varchar(100)
+  nullable: true
+  description: Mnemonic is a single-word, alphanumeric coded name for the item.
+- name: Description_
+  type: varchar(500)
+  nullable: true
+  description: Desc_ is a short description of the item.
+- name: DataType
+  type: varchar(10)
+  nullable: true
+  description: Data type of the underlying Item value_.
+- name: DataTables
+  type: varchar(20)
+  nullable: true
+  description: Numeric code for the Table that corresponding Item joins to.
+- name: CodeNumb
+  type: TINYINT
+  nullable: true
+  description: Corresponding Type_ code in the SECode table.
+- name: DescNumb
+  type: TINYINT
+  nullable: true
+  description: Corresponding Type_ code in the SEDesc table.
+---
+table: qa_street_ev.SECode
+domain: events
+description: This table contains descriptions for the integer codes.
+update_cadence: Hourly
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Enlists types of codified data items.
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code represents the Value_ data item from any StreetEvents data or change table.
+- name: Desc
+  type: varchar(100)
+  nullable: true
+  description: Contains the coded data item description.
+---
+table: qa_street_ev.SEDesc
+domain: events
+description: This table contains descriptions for the character codes.
+update_cadence: Hourly
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Enlists types of codified data items.
+- name: Code
+  type: varchar(50)
+  nullable: false
+  description: Code represents the Value_ data item from any StreetEvents data or change table.
+- name: Desc_
+  type: varchar(200)
+  nullable: true
+  description: Contains the coded data item description. LSEG Quantitative Analytics Street Events Copyright © 2024 London
+    Stock Exchange Group plc and its group of companies (LSEG) and/or its affiliates. All rights reserved. The LSEG content
+    received through this service is the intellectual property of LSEG or its third party suppliers. Republicati on or redistribution
+    of content provided by LSEG is expressly prohibited without the prior written consent of LSEG, except where permitted
+    by the terms of the rele

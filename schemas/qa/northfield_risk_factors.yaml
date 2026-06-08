@@ -1,0 +1,546 @@
+table: qa_northfield.NFCmCode
+domain: risk_models
+description: Common Integer Coded Values | This table contains integer coded values.
+update_cadence: Monthly
+columns:
+- name: Type_
+  type: SMALLINT
+  nullable: false
+  description: Type_ is a numeric code for a type of data.
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is a coded value for an element of Type_. When Type_ = 0, Code is the numeric code for each Type_ other
+    than 0 and Desc_ is a description of each Type_.
+- name: Desc_
+  type: varchar(127)
+  nullable: true
+  description: Desc_ is a plain-language description of the element defined by Type_ and Code.
+---
+table: qa_northfield.NFCmDesc
+domain: risk_models
+description: Common String Coded Values | This table contains string coded values. This table can be joined to the NFCmCode
+  table using the following
+update_cadence: Monthly
+columns:
+- name: Type_
+  type: SMALLINT
+  nullable: false
+  description: Type_ is a numeric code for a type of data.
+- name: Code
+  type: varchar(4)
+  nullable: false
+  description: Code is a coded value for an element of Type_. When Type_ = 0, Code is the numeric code for each Type_ other
+    than 0 and Desc_ is a description of each Type_.
+- name: Desc_
+  type: varchar(127)
+  nullable: true
+  description: Desc_ is a plain-language description of the element defined by Type_ and Code.
+---
+table: qa_northfield.NFCmFactors
+domain: risk_models
+description: Common Risk Factors Information | This table contains risk factors information.
+update_cadence: Monthly
+columns:
+- name: FactorCode
+  type: SMALLINT
+  nullable: false
+  description: FactorCode is a unique integer code that identifies a factor. This integer code is defined in TRDW and is not
+    received from the vendor.
+- name: FactorID
+  type: varchar(30)
+  nullable: false
+  description: FactorID is the risk factor identifier.
+- name: Name_
+  type: varchar(25)
+  nullable: false
+  description: Name_ is the risk factor name.
+- name: LongName
+  type: varchar(100)
+  nullable: false
+  description: LongName is the risk factor long name.
+- name: ModelType
+  type: SMALLINT
+  nullable: false
+  description: 'ModelType specifies the type of model to which the risk factor belongs. There are five types of risk models
+    in Northfield Risk Factors: – Domestic – Global – Regional – Single Country – Everything Everywhere NFCmFactors.ModelType
+    cross-references NFCmCode.Code where Type_ = 7. Use the following query: select C.Desc_ from NFCmFactors F join NFCmCode
+    C on F.ModelType=C.Code and C.Type_=7 where F.FactorCode=73'
+---
+table: qa_northfield.NFCmIndustry
+domain: risk_models
+description: Common Industry Information | This table contains industry information.
+update_cadence: Monthly
+columns:
+- name: IndustryCode
+  type: SMALLINT
+  nullable: false
+  description: IndustryCode is a unique integer code that identifies an industry. This integer code is defined in TRDW and
+    is not received from the vendor.
+- name: SectorType
+  type: SMALLINT
+  nullable: true
+  description: 'SectorType distinguishes between three different types of industry data available in Northfield Risk Models.
+    – 1 = Northfield US Fundamental Sector (domestic industry data): FND/APT Industry mnemonics are integer values. – 2 =
+    Northfield US Real Estate Sector (US real estate industry data): REIT model industry mnemonics are integer values. – 3
+    = Northfield Global Sector (global industry data): In global industry data, industry Mnemonics are in Sx-Cy format. For
+    example, in s3-c23, s3 means secto'
+- name: Mnemonic
+  type: varchar(10)
+  nullable: true
+  description: Mnemonic is the industry identifier. Each sector type has a separate naming convention for the industry mnemonic.
+- name: Name_
+  type: varchar(100)
+  nullable: true
+  description: Name_ is the industry name.
+- name: SectorCode
+  type: SMALLINT
+  nullable: true
+  description: SectorCode is the sector code to which the industry belongs. NFCmIndustry.SectorCode cross-references with
+    NFCmCode.Code where Type_ = 10. LSEG Quantitative Analytics Database Schema for Northfield Risk Factors 8
+---
+table: qa_northfield.NFCmInfo
+domain: risk_models
+description: Common Entity Information | This table contains a single entry for each entity encountered, including the latest
+  value of entity identifiers.
+update_cadence: Monthly
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is a unique integer code that identifies a security. This integer code is defined in TDW and is not received
+    from the vendor.
+- name: Name_
+  type: varchar(150)
+  nullable: true
+  description: Name_ is the security name.
+- name: NFNIS
+  type: varchar(12)
+  nullable: true
+  description: NFNIS is the Northfield unique security identifier. The vendor files contain Northfield unique identifiers
+    for equity data only. Most of the securities in the EE model are without unique identifiers.
+- name: NFTicker
+  type: varchar(12)
+  nullable: true
+  description: 'NFTicker can be either a security identifier or a Northfield custom identifier. The value of the NFIdType
+    field determines what NFTicker represents: – NFIdType = 1 for a security identifier – NFIdType = 2 for a Northfield custom
+    identifier'
+- name: Cusip
+  type: varchar(9)
+  nullable: true
+  description: Cusip is the security’s CUSIP identifier.
+- name: Sedol
+  type: varchar(7)
+  nullable: true
+  description: Sedol is the security’s SEDOL identifier.
+- name: Isin
+  type: varchar(12)
+  nullable: true
+  description: Isin is the security’s ISIN identifier.
+- name: UpdateDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: UpdateDate is the most recent date the record was updated.
+- name: NFIdType
+  type: SMALLINT
+  nullable: true
+  description: NFIdType is used to distinguish between custom IDs and security ticker IDs in the NFTicker field.
+- name: AssetType
+  type: SMALLINT
+  nullable: true
+  description: AssetType is not populated from the vendor file.
+---
+table: qa_northfield.NFCmModel
+domain: risk_models
+description: Common Risk Model Information | This table contains risk model information.
+update_cadence: Monthly
+columns:
+- name: ModelCode
+  type: SMALLINT
+  nullable: false
+  description: ModelCode is a unique integer code that identifies a risk model.
+- name: Mnemonic
+  type: varchar(8)
+  nullable: false
+  description: Mnemonic is the risk model mnemonic.
+- name: Name_
+  type: varchar(25)
+  nullable: false
+  description: Name_ is the risk model name.
+- name: ModelType
+  type: SMALLINT
+  nullable: false
+  description: 'ModelType specifies the type of model to which the risk factor belongs. There are three types of risk models
+    in Northfield Risk Factors: – 1 = Domestic – 2 = Global – 3= Regional – 4 = Single Country – 5 = Everything Everywhere
+    NFCmModel.ModelType cross-references with NFCmCode.Code where Type_ = 7. LSEG Quantitative Analytics Database Schema for
+    Northfield Risk Factors 9'
+---
+table: qa_northfield.NFCmSecIdent
+domain: risk_models
+description: Common Security Identifier Change History | This table contains security identifier change history information.
+update_cadence: Monthly
+columns:
+- name: Ident
+  type: varchar(12)
+  nullable: false
+  description: Ident contains the change history of the NFTicker, CUSIP, SEDOL, ISIN, and NFId of a security.
+- name: IdentType
+  type: SMALLINT
+  nullable: false
+  description: 'IdentType describes what type of security identifier is present in the Ident field. IdentType can be: – 1
+    = CUSIP – 2 = SEDOL – 3 = FI_Index – 4 = Ticker – 5 = ISIN – 6 = NFId'
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the date on which the data in the file is valid. The date is in the format YYYYMMDD.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is populated when a security is changed or discontinued. The date is in the format YYYYMMDD.
+- name: Code
+  type: INTEGER
+  nullable: true
+  description: Code is the unique value assigned to a security in the NFCmInfo table.
+---
+table: qa_northfield.NFModCor
+domain: risk_models
+description: Model Factor Correlations | This table contains correlations between two factors by model.
+update_cadence: Monthly
+columns:
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the date on which the data in the file is valid. The date is in the format YYYYMMDD.
+- name: ModelCode
+  type: SMALLINT
+  nullable: false
+  description: ModelCode is an integer code that identifies the Northfield Risk Model. NFModCor.ModelCode cross-references
+    with NFCmCode.Code where Type_ = 6.
+- name: CurrCode
+  type: SMALLINT
+  nullable: false
+  description: CurrCode is an integer code that identifies the currency. NFModCor.CurrCode cross-references with NFCmCode.Code
+    where Type_ = 8.
+- name: FactorCode1
+  type: SMALLINT
+  nullable: false
+  description: FactorCode1 is the integer code assigned to factor1; it is the first factor with respect to which correlation
+    is stored. This is a foreign key from the NFCmFactors table.
+- name: FactorCode2
+  type: SMALLINT
+  nullable: false
+  description: FactorCode2 is the integer code assigned to factor2; it is the second factor with respect to which correlation
+    is stored. This is a foreign key from the NFCmFactors table.
+- name: Corr
+  type: FLOAT
+  nullable: false
+  description: Corr is the correlation value between FactorCode1 and FactorCode2.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table. NFModCor.LicFlag cross-references with NFCmCode.Code
+    where Type_ = 12. LSEG Quantitative Analytics Database Schema for Northfield Risk Factors 10
+---
+table: qa_northfield.NFModFactor
+domain: risk_models
+description: Model Factor Order | This table contains the factor order for each model.
+update_cadence: Monthly
+columns:
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the date on which the data in the file is valid. The date is in the format YYYYMMDD.
+- name: ModelCode
+  type: SMALLINT
+  nullable: false
+  description: ModelCode is a unique integer value assigned to Northfield Risk Models.
+- name: FactorCode
+  type: SMALLINT
+  nullable: false
+  description: FactorCode is a unique integer code that identifies a factor.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the date on which the data in the file is invalid. The date is in the format YYYYMMDD.
+- name: FactorOrder
+  type: INTEGER
+  nullable: true
+  description: FactorOrder is the order of factors for each model in the Exposure and Correlation File (not the field number).
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table. NFModFactor.LicFlag cross-references with
+    NFCmCode.Code where Type_ = 12.
+---
+table: qa_northfield.NFModSec
+domain: risk_models
+description: Model Security Information | This table contains security information for each model.
+update_cadence: Monthly (Daily for Short Horizon Models)
+columns:
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the date on which the data in the file is valid. The date is in the format YYYYMMDD.
+- name: ModelCode
+  type: SMALLINT
+  nullable: false
+  description: ModelCode is a unique integer value assigned to Northfield Risk Models.
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is a unique integer code that identifies a security. This integer code is defined in TDW and is not received
+    from the vendor. This value is also populated from the NFCmSecIdent table.
+- name: SecPrice
+  type: FLOAT
+  nullable: true
+  description: SecPrice is the security price.
+- name: MthResdRisk
+  type: FLOAT
+  nullable: true
+  description: MthResdRisk is the stock-specific risk.
+- name: NumShare
+  type: FLOAT
+  nullable: true
+  description: NumShare is shares outstanding (in millions).
+- name: TotalRisk
+  type: FLOAT
+  nullable: true
+  description: TotalRisk is the total risk of the security.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table. NFModSec.LicFlag cross-references with NFCmCode.Code
+    where Type_ = 12. LSEG Quantitative Analytics Database Schema for Northfield Risk Factors 11
+---
+table: qa_northfield.NFModSecCntryCurr
+domain: risk_models
+description: Model Country and Currency Information | This table contains country and currency information for each security
+  in a model.
+update_cadence: Monthly
+columns:
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the date on which the data in the file is valid. The date is in the format YYYYMMDD.
+- name: ModelCode
+  type: SMALLINT
+  nullable: false
+  description: ModelCode is an interger code that identifies the Northfield Risk Model. NFModSecCntryCurr.ModelCode cross-references
+    with NFCmCode.Code where Type_ = 6.
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is a unique integer code that identifies a security. This integer code is defined in TRDW and is not received
+    from the vendor. This value is also populated from the NFCmSecIdent table.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is populated when a security is changed or discontinued. The date is in the format YYYYMMDD.
+- name: ISOCntry
+  type: char(2)
+  nullable: true
+  description: ISOCntry is the country with which the model and security are associated.
+- name: CurrCode
+  type: SMALLINT
+  nullable: true
+  description: CurrCode is the currency with which the model and security are associated. NFModSecCntryCurr.CurrCode cross-references
+    with NFCmCode.Code where Type_ = 8.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table. NFModSecCntryCurr.LicFlag cross-references
+    with NFCmCode.Code where Type_ = 12.
+---
+table: qa_northfield.NFModSecExposure
+domain: risk_models
+description: Model Security Exposure | This table contains the security exposure to a factor by model.
+update_cadence: Monthly
+columns:
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the date on which the data in the file is valid. The date is in the format YYYYMMDD.
+- name: ModelCode
+  type: SMALLINT
+  nullable: false
+  description: ModelCode is an integer code that identifies the Northfield Risk Model. NFModSecExposure.ModelCode cross-references
+    with NFCmCode.Code where Type_ = 6.
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is a unique integer code that identifies a security. This integer code is defined in TDW and is not received
+    from the vendor. This value is also populated from the NFCmSecIdent table.
+- name: FactorCode
+  type: SMALLINT
+  nullable: false
+  description: FactorCode is an integer code assigned to a factor. FactorCode is a foreign key from the NFCmFactors table.
+- name: FacExposure
+  type: FLOAT
+  nullable: false
+  description: FacExposure is the factor exposure value (factor coefficient), for the factor represented by FactorCode.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table. NFModSecExposure.LicFlag cross-references
+    with NFCmCode.Code where Type_ = 12. LSEG Quantitative Analytics Database Schema for Northfield Risk Factors 12
+---
+table: qa_northfield.NFModSecExposureEE
+domain: risk_models
+description: Model Security Exposure – Everything
+---
+table: qa_northfield.Everywhere
+domain: risk_models
+description: This table contains the security exposure to a factor for the Everything Everywhere (EE) model.
+update_cadence: Monthly
+columns:
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the date on which the data in the file is valid. The date is in the format YYYYMMDD.
+- name: ModelCode
+  type: SMALLINT
+  nullable: false
+  description: ModelCode is an integer code that identifies the Northfield Risk Model.
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is a unique integer code that identifies a security. This integer code is defined in TRDW and is not received
+    from the vendor. This value is also populated from the NFCmSecIdent table.
+- name: FactorCode
+  type: SMALLINT
+  nullable: false
+  description: FactorCode is an integer code assigned to a factor. FactorCode is a foreign key from the NFCmFactors table.
+- name: FacExposure
+  type: FLOAT
+  nullable: false
+  description: FacExposure is the factor exposure value (factor coefficient), for the factor represented by FactorCode.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table. NFModSecExposure.LicFlag cross-references
+    with NFCmCode.Code where Type_ = 12.
+---
+table: qa_northfield.NFModSecIndustry
+domain: risk_models
+description: Model Sector and Industry Information | This table contains sector and industry information for securities by
+  model.
+update_cadence: Monthly
+columns:
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the date on which the data in the file is valid. The date is in the format YYYYMMDD.
+- name: ModelCode
+  type: SMALLINT
+  nullable: false
+  description: ModelCode is an integer code that identifies the Northfield Risk Model. NFModSecIndustry.ModelCode cross-references
+    with NFCmCode.Code where Type_ = 6.
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is a unique integer code that identifies a security. This integer code is defined in TDW and is not received
+    from the vendor. This value is also populated from the NFCmSecIdent table.
+- name: SectorType
+  type: SMALLINT
+  nullable: false
+  description: 'SectorType distinguishes between three different types of industry data available in Northfield Risk Models.
+    – 1 = Northfield US Fundamental Sector (domestic industry data): FND/APT Industry mnemonics are integer values. – 2 =
+    Northfield US Real Estate Sector (US real estate industry data): REIT model industry mnemonics are integer values. – 3
+    = Northfield Global Sector (global industry data): In global industry data, industry Mnemonics are in Sx-Cy format. For
+    example, in s3-c23, s3 means secto'
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is populated when a security is changed or discontinued. The date is in the format YYYYMMDD.
+- name: IndustryCode
+  type: SMALLINT
+  nullable: false
+  description: IndustryCode is the industry code with which the security of the model is associated. IndustryCode is a foreign
+    key from NFCmIndustry table.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table. NFModSecIndustry.LicFlag cross-references
+    with NFCmCode.Code where Type_ = 12.
+---
+table: qa_northfield.NFModSector
+domain: risk_models
+description: Model Sector Codes | This table contains sector codes by model.
+update_cadence: Monthly
+columns:
+- name: ModelCode
+  type: SMALLINT
+  nullable: false
+  description: ModelCode is a unique integer value assigned to Northfield Risk Models.
+- name: SectorType
+  type: SMALLINT
+  nullable: false
+  description: 'SectorType distinguishes between three different types of industry data available in Northfield Risk Models.
+    – 1 = Northfield US Fundamental Sector (domestic industry data): FND/APT Industry mnemonics are integer values. – 2 =
+    Northfield US Real Estate Sector (US real estate industry data): REIT model industry mnemonics are integer values. – 3
+    = Northfield Global Sector (global industry data): In global industry data, industry Mnemonics are in Sx-Cy format. For
+    example, in s3-c23, s3 means secto'
+---
+table: qa_northfield.NFModSecUniverse
+domain: risk_models
+description: Model Security Historical Timeframes | This table contains historical timeframes of securities by model.
+update_cadence: 'Monthly Adjusted: No'
+columns:
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the date on which the data in the file is valid. The date is in the format YYYYMMDD.
+- name: ModelCode
+  type: SMALLINT
+  nullable: false
+  description: ModelCode is an integer code that identifies the Northfield Risk Model. NFModSecUniverse.ModelCode cross-references
+    with NFCmCode.Code where Type_ = 6.
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is a unique integer code that identifies a security. This integer code is defined in TDW and is not received
+    from the vendor. This value is also populated from the NFCmSecIdent table.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is populated when a security is discontinued. The date is in the format YYYYMMDD.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table. NFModSecUniverse.LicFlag cross-references
+    with NFCmCode.Code where Type_ = 12. LSEG Quantitative Analytics Database Schema for Northfield Risk Factors 14
+---
+table: qa_northfield.NFModVar
+domain: risk_models
+description: Model Factor Variance | This table contains the variance of factors by model.
+update_cadence: Monthly (Daily for Short Horizon Models)
+columns:
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the date on which the data in the file is valid. The date is in the format YYYYMMDD.
+- name: ModelCode
+  type: SMALLINT
+  nullable: false
+  description: ModelCode is a unique integer value assigned to Northfield Risk Models.
+- name: CurrCode
+  type: SMALLINT
+  nullable: false
+  description: CurrCode is a unique integer code that identifies a currency. NFModVar.CurrCode cross-references with NFCmCode.Code
+    where Type_ = 8.
+- name: FactorCode
+  type: SMALLINT
+  nullable: false
+  description: FactorCode is an integer code assigned to a factor. FactorCode is a foreign key from the NFCmFactors table.
+- name: AnnVar
+  type: FLOAT
+  nullable: false
+  description: AnnVar is the annual variance value of a factor.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table. NFModVar.LicFlag cross-references with NFCmCode.Code
+    where Type_ = 12. LSEG Quantitative Analytics Database Schema for Northfield Risk Factors Copyright © 2024 London Stock
+    Exchange Group plc and its group of companies (LSEG) and/or its affiliates. All rights reserved. The LSEG content received
+    through this service is the intellectual property of LSEG or its third party suppliers. Republicati on or redistribution
+    of content provi

@@ -1,0 +1,509 @@
+table: qa_symbology.PermOrgRef
+domain: reference
+description: This table provides detailed reference information about organizations.
+update_cadence: Every 15 minutes, Monday to Friday
+columns:
+- name: OrgPermID
+  type: BIGINT
+  nullable: false
+  description: Organization Perm ID
+- name: Status
+  type: varchar(50)
+  nullable: true
+  description: 'Has the following possible values: – Active (Act) – Inactive (InAct)'
+- name: TypeCode
+  type: varchar(50)
+  nullable: true
+  description: 'Organization Type. TypeCode cross references with PermCode.Code where CodeType=1. Values available are: CBNK
+    - Central Bank CINV - Collective Investment CLGUN - Academic Institutions COM - Business Organization GVT - Government
+    GVTDA - Government Department/Agency MKP - Market Participant NGO - Non-Government Organization (NGO) SUPN - Supranational
+    UNK - Unknown D bigint Yes Geographical Headquarters of the organization'
+- name: IncCntryPermID
+  type: BIGINT
+  nullable: true
+  description: Country in which the party received its charter allowing it to operate as a corporation. If the country of
+    incorporation is not disclosed, or if the company is not a corporation, then this would be populated same as current country
+    or where the company was formed.
+- name: PriInstrPermID
+  type: BIGINT
+  nullable: true
+  description: Primary Instrument ID.
+- name: ValQuotePermID
+  type: BIGINT
+  nullable: true
+  description: This is the main ‘primary’ Quote for a multi-listed share line that is used to calculate Market Cap. In the
+    US, for example, this will be the consolidated quote on NYSE, AMEX or NASDAQ. It is set for EVERY share line, because
+    Market Cap can be calculated on the whole company or on each issue.
+- name: ComName
+  type: nvarchar(1000)
+  nullable: true
+  description: The name of the organization in mixed case, manually limited to 80 characters to meet OptionX requirements.
+    The organization legal name is used to populate this field when the legal name does not exceed 80 characters. Applied
+    to all organizations. bigint Yes Immediate Parent Organization ID. bigint Yes Ultimate Parent Organization ID. Database
+    Schema for Symbology 8
+- name: PriEstPermID
+  type: BIGINT
+  nullable: true
+  description: Primary Estimate ID. D varchar(12) Yes Worldscope Company ID.
+- name: PriRptEntityCode
+  type: varchar(5)
+  nullable: true
+  description: Primary Reporting Entity Code.
+- name: LEI
+  type: varchar(20)
+  nullable: true
+  description: Legal Entity ID.
+- name: CIK
+  type: char(10)
+  nullable: true
+  description: A Central Index Key or CIK number is a number given to an individual or company by the United States Securities
+    and Exchange Commission.
+- name: LipperID
+  type: BIGINT
+  nullable: true
+  description: Lipper Identifier.
+- name: OrganizationPI
+  type: BIGINT
+  nullable: true
+  description: OrganizationPI. Can be used to cross reference "OrgID" in RDC.
+join_hints:
+- to: PermCode
+  evidence: TypeCode cross references with PermCode.Code where CodeType=1.
+  type: cross_reference
+---
+table: qa_symbology.PermOrgInfo
+domain: reference
+description: This table provides information on the organization, including its physical location and contact details.
+update_cadence: Every 15 minutes, Monday to Friday
+columns:
+- name: OrgPermID
+  type: BIGINT
+  nullable: false
+  description: Organization Perm ID
+- name: AddrTypeCode
+  type: SMALLINT
+  nullable: false
+  description: 'Code representing the type of address: – 1 – HEA: Headquarters – 2 – LREG: Registered Address – 3 – BRA: Branch
+    – 4 – MAI: Mailing – 5 – UNK : Unknown'
+- name: IsPublic
+  type: BOOLEAN
+  nullable: true
+  description: Is the organization public
+- name: IPODate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: Date the company went public
+- name: ISO2CntryCode
+  type: char(2)
+  nullable: true
+  description: Organization Country Iso31661 Alpha Code
+- name: LegalName
+  type: nvarchar(1000)
+  nullable: true
+  description: Full registered legal name of the company or official name of the institution (including upper and lower case
+    characters). Reserved for the primary language version of the name. Where a Body Group legal or official name exists in
+    more than one language - for example, Switzerland where an organization may be registered in up to four languages - the
+    language most commonly used in the area where the head office is based is used for Legal Name purposes.
+- name: AddrLine1
+  type: nvarchar(150)
+  nullable: true
+  description: Text representing the first lines of an address - excluding county, zip code and country.
+- name: AddrLine2
+  type: nvarchar(150)
+  nullable: true
+  description: Text representing the first lines of an address - excluding county, zip code and country. Database Schema for
+    Symbology 9
+- name: City
+  type: varchar(255)
+  nullable: true
+  description: Text representing the town, neighborhood, or municipality of an address.
+- name: StateProv
+  type: nvarchar(100)
+  nullable: true
+  description: Text representing the state or province part of an address.
+- name: PostalCode
+  type: varchar(100)
+  nullable: true
+  description: Text representing the first lines of an address - excluding county, zip code and country.
+- name: PriTRBCIndPermID
+  type: BIGINT
+  nullable: true
+  description: Current primary TRBC assignment.
+- name: CntryGeoID
+  type: BIGINT
+  nullable: true
+  description: Country or Geography Perm ID.
+---
+table: qa_symbology.PermInstrRef
+domain: reference
+description: This table provides detailed reference information at the financial instrument level.
+update_cadence: Every 15 minutes, Monday to Friday
+columns:
+- name: InstrPermID
+  type: BIGINT
+  nullable: false
+  description: PermId of the financial instrument.
+- name: IsPrimary
+  type: BOOLEAN
+  nullable: true
+  description: Indicates if it is a primary instrument.
+- name: Status
+  type: varchar(400)
+  nullable: true
+  description: For non debt issues if an Issue Asset/Instrument has at least one Quote which is Active (Asset State = ‘AC’),
+    then AssetState is Active 'AC', else, if all Quote Assets are Deactivated (Asset State = ‘DC’) then AssetState becomes
+    Deactivated 'DC'. AssetState is derived for all Asset types except DEBT Issues which are maintained by the DBS forward
+    feed. AssetState is 'NA' (Not Applicable) when no Quote Asset is found against the Issue/Instrument, in particular new
+    Issues will get 'NA' status as so
+- name: TypeCode
+  type: varchar(400)
+  nullable: true
+  description: This is a legacy field. Reference the RCSAssetCla field in the PermQuoteInfo and PermInstrInfo tables.
+- name: ComName
+  type: varchar(400)
+  nullable: true
+  description: Population of this field is not mandatory. In most instances the field will not be populated, except for Equity
+    Indices, and Warrants sourced from DBS. Database Schema for Symbology 10
+- name: CurrPermID
+  type: BIGINT
+  nullable: true
+  description: The Issue Currency ID.
+- name: OrgPermID
+  type: BIGINT
+  nullable: true
+  description: The id of the origination or body group to which an issuer relationship exists between the instrument and organization.
+    bigint Yes This field identifies the quote for an instrument on the primary exchange it is traded on. This is applicable
+    to multi-listed US-based companies.
+- name: ValQuotePermID
+  type: BIGINT
+  nullable: true
+  description: This is the main ‘primary’ Quote for a multi-listed share line that is used to calculate Market Cap. In the
+    US, for example, this will be the consolidated quote on NYSE, AMEX or NASDAQ. It is set for EVERY share line, because
+    Market Cap can be calculated on the whole company or on each issue. D varchar(12) Yes Worldscope Company ID.
+- name: PriRptEntityCode
+  type: varchar(5)
+  nullable: true
+  description: Primary Reporting Entity Code.
+- name: PriEstPermID
+  type: BIGINT
+  nullable: true
+  description: Primary Estimate ID.
+- name: LipperID
+  type: BIGINT
+  nullable: true
+  description: Lipper Identifier.
+- name: EJVAssetID
+  type: varchar(20)
+  nullable: true
+  description: Fixed Income EJV Asset ID.
+- name: ADRRatio
+  type: varchar(30)
+  nullable: true
+  description: ADR Ratio.
+---
+table: qa_symbology.PermInstrInfo
+domain: reference
+description: This table provides information about the financial instrument.
+update_cadence: Every 15 minutes, Monday to Friday
+columns:
+- name: InstrPermID
+  type: BIGINT
+  nullable: false
+  description: PermId of the financial instrument.
+- name: RCSAssetCla
+  type: varchar(30)
+  nullable: true
+  description: LSEG Classification Scheme classification. Cross- reference RCSAssetCla with RDCDesc.Code where RDCDesc.Type_=
+    60.
+- name: Category
+  type: varchar(400)
+  nullable: true
+  description: This is a legacy field. Use the RSCAssetCla field to identify the correct classification of a security.
+- name: ShortName
+  type: varchar(400)
+  nullable: true
+  description: This field is not mandatory for Issue Assets. The field may hold a value for some Debt and Commodities instruments
+    (sourced from DBS and CMI respectively). No formal standard has been set. Database Schema for Symbology 11
+---
+table: qa_symbology.PermQuoteRef
+domain: reference
+description: This table provides detailed reference information about quotes.
+update_cadence: Every 15 minutes, Monday to Friday
+columns:
+- name: QuotePermID
+  type: BIGINT
+  nullable: false
+  description: PermId of the quote.
+- name: Status
+  type: varchar(2)
+  nullable: true
+  description: 'Indicates the status assigned to a given financial instrument. For example, ‘Active’, ‘De-activated.’ Population
+    of this field is mandatory for an Asset, which cannot be edited manually. The field should hold a valid status classification
+    for the Asset in question: – AC – Active – CA – Called – DC – De-activated – DE – Defaulted – EX – Exchanged – MA – Matured
+    – ME – Merged – NA – Not applicable – RE – Redenominated'
+- name: IsPrimary
+  type: BOOLEAN
+  nullable: true
+  description: Indicates if it is a primary financial instrument.
+- name: TypeCode
+  type: varchar(400)
+  nullable: true
+  description: This is a legacy field. Reference the RCSAssetCla field in the PermQuoteInfo and PermInstrInfo tables.
+- name: CurrPermID
+  type: BIGINT
+  nullable: true
+  description: The currency in which the quote asset is quoted.
+- name: ExchCode
+  type: varchar(400)
+  nullable: true
+  description: Exchange code for the given quote asset – includes both real world and pseudo exchange codes (allocated on
+    IDN).
+- name: InstrPermID
+  type: BIGINT
+  nullable: true
+  description: The field should hold a correct, valid PermId representing the correct Issue Asset for the instrument in question.
+    An Issue Asset can have zero or many Quote Assets. A Quote Asset can have zero or a maximum of one Issue Assets.
+- name: Mic
+  type: varchar(4)
+  nullable: true
+  description: Market Identifier Code. This is a four-character alpha code assigned by the London Stock Exchange that indicates
+    the exchange or market where an instrument is traded. It is delivered in conjunction with the SEDOL and all RIC codes
+    reporting a SEDOL should have a MIC code.
+- name: Ticker
+  type: varchar(25)
+  nullable: true
+  description: Tickers and Symbols will be stored in this property against Quotes. No other storage will be provided for Tickers
+    and Symbols. Local exchange quote identifier.
+- name: ComName
+  type: varchar(400)
+  nullable: true
+  description: For instruments sourced from IDN, the Common Name in the DISPLAY NAME field on IDN (FID 3), as processed by
+    the PEN feed. This value may be overwritten by Data Operations according to a detailed set of standards.
+- name: PriEstPermID
+  type: BIGINT
+  nullable: true
+  description: Primary Estimate ID.
+- name: LotSize
+  type: FLOAT
+  nullable: true
+  description: Lot Size. Database Schema for Symbology 12
+---
+table: qa_symbology.PermQuoteInfo
+domain: reference
+description: This table provides information about the quote.
+update_cadence: Every 15 minutes, Monday to Friday
+columns:
+- name: QuotePermID
+  type: BIGINT
+  nullable: false
+  description: PermId of the quote
+- name: Category
+  type: varchar(400)
+  nullable: true
+  description: This is a legacy field. Use the RSCAssetCla field to identify the correct classification of a security.
+- name: RCSAssetCla
+  type: varchar(400)
+  nullable: true
+  description: LSEG Classification Scheme classification. Cross- reference RCSAssetCla with RDCDesc.Code where RDCDesc.Type_=
+    60.
+- name: Opol
+  type: varchar(4)
+  nullable: true
+  description: Official Place of Listing. This is the same as the MIC code and is assigned to the financial instrument decreed
+    by the LSE to be the Official Place of Listing in a particular country. For countries with one exchange, users will see
+    SEDOL, MIC, and OPOL but for countries with regional exchanges (e.g. Japan, Germany, USA) DataScope users will see SEDOL
+    and MIC for all RICs on an issue but only see an OPOL code attached to one RIC only.
+- name: ShortName
+  type: varchar(400)
+  nullable: true
+  description: 'This field is not mandatory. It is populated principally for Quote Asset records sourced from IDN and should
+    hold the contents of the DISPLAY NAME field (FID 3). No formal standard has been set for this field other than: the name
+    must be a maximum 20 characters (minimum 2); the name is normally upper case (but mixed case entries are acceptable);
+    nonstandard, non-English and/or accented characters are not acceptable.'
+- name: TrdWhenIssued
+  type: BOOLEAN
+  nullable: true
+  description: 'Indicates whether a Security is traded when issued or not. This flag is for Equity Assets only. (Values: Y/NULL)
+    for ‘active’ quote assets of type EQUITY.'
+- name: Is144aReg
+  type: BOOLEAN
+  nullable: true
+  description: '144A Registered Flag. 144a Registered securities are ‘controlled and restricted '' securities that are allowed
+    to be sold for a particular length of time before Registration. (Values: Y/NULL) for ‘active’ quote assets of NDA asset
+    sub-categories: CPR, UNT, EIW, ORD, DRC, PRF.'
+- name: RetireDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: Retire Date.
+- name: DsQuoteNumber
+  type: char(6)
+  nullable: true
+  description: Datastream Quote Number. Database Schema for Symbology 13
+---
+table: qa_symbology.PermCode
+domain: reference
+description: This lookup table contains translations for codes of both integer and string datatype.
+update_cadence: Every 15 minutes, Monday to Friday
+columns:
+- name: CodeType
+  type: INTEGER
+  nullable: false
+  description: The type of code (e.g. Org, Address); full list available under CodeType = 0.
+- name: Code
+  type: varchar(100)
+  nullable: false
+  description: The coded value.
+- name: Description
+  type: varchar(300)
+  nullable: true
+  description: The full description of the coded value.
+---
+table: qa_symbology.PermCusipData
+domain: reference
+description: This table provides information on all the current and historic Cusip values for a financial instrument.
+update_cadence: Every 15 minutes, Monday to Friday
+columns:
+- name: InstrPermID
+  type: BIGINT
+  nullable: false
+  description: PermId of the Entity.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: The date from which validity of the attribute value begins.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date when validity of the attribute value ends.
+- name: Cusip
+  type: varchar(9)
+  nullable: true
+  description: Cusip.
+---
+table: qa_symbology.PermCinCusipData
+domain: reference
+description: This table provides information on all current and historic CinCusip values for an instrument.
+update_cadence: Every 15 minutes, Monday to Friday
+columns:
+- name: InstrPermID
+  type: BIGINT
+  nullable: false
+  description: PermId of the Entity.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: The date from which validity of the attribute value begins.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date when validity of the attribute value ends.
+- name: CinCusip
+  type: varchar(9)
+  nullable: true
+  description: A CINS number is an extension to the CUSIP numbering system, which is used to uniquely identify securities
+    offered outside of the United States and Canada. Database Schema for Symbology 14
+---
+table: qa_symbology.PermISINData
+domain: reference
+description: This table provides information on all the current and historic ISIN values for a financial instrument.
+update_cadence: Every 15 minutes, Monday to Friday
+columns:
+- name: InstrPermID
+  type: BIGINT
+  nullable: false
+  description: PermId of the Entity
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: The date from which validity of the attribute value begins
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date when validity of the attribute value ends
+- name: ISIN
+  type: varchar(12)
+  nullable: true
+  description: ISIN
+---
+table: qa_symbology.PermSedolData
+domain: reference
+description: This table provides information on all the current and historic Sedol values for a Quote.
+update_cadence: Every 15 minutes, Monday to Friday
+columns:
+- name: QuotePermID
+  type: BIGINT
+  nullable: false
+  description: PermId of the Entity
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: The date from which validity of the attribute value begins
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date when validity of the attribute value ends
+- name: Sedol
+  type: varchar(7)
+  nullable: true
+  description: Sedol
+---
+table: qa_symbology.PermRICData
+domain: reference
+description: This table provides information on all the current and historic RIC values for a Quote.
+update_cadence: Every 15 minutes, Monday to Friday
+columns:
+- name: QuotePermID
+  type: BIGINT
+  nullable: false
+  description: PermId of the Entity
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: The date from which validity of the attribute value begins
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date when validity of the attribute value ends
+- name: RIC
+  type: varchar(400)
+  nullable: true
+  description: LSEG Instrument Code - market level identifier key, used to identify instruments and pricing sources. Database
+    Schema for Symbology 15
+---
+table: qa_symbology.PermSecMapX
+domain: reference
+description: This table provides mapping to vendor codes including ranking and time series.
+update_cadence: Every 15 minutes, Monday to Friday
+columns:
+- name: RegCode
+  type: TINYINT
+  nullable: false
+  description: Indicates the region where 0 is Global and 1 is NA/CAN.
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: Security Code that links across the master tables. This is same as SecCode from SecMapX GSecMapX tables.
+- name: EntType
+  type: SMALLINT
+  nullable: false
+  description: Indicates whether the security is Quote (55) or Instrument (49).
+- name: Rank
+  type: SMALLINT
+  nullable: false
+  description: EntPermID/SecCode is ranked based on StartDate/EndDate time series of SecCode.
+- name: EntPermID
+  type: BIGINT
+  nullable: true
+  description: Based on EntType, the PermID will either be QuotePermID or InstrPermID.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: StartDate is the first date issuer information is valid.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the last date issuer information is valid. Database Schema for Symbology Copyright © 2023 London
+    Stock Exchange Group plc and its group of companies (LSEG) and/or its affiliates. All rights reserved. The LSEG content
+    received through this service is the intellectual property of LSEG or its third party suppliers. Republication or redistribution
+    of content provided by LSEG is expressly prohibited without the prior written consent of LSEG, except where permitted
+    by the terms of the relev

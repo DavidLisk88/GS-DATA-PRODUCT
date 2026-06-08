@@ -1,0 +1,3321 @@
+table: qa_datastream.Ds2Company
+domain: pricing
+description: Company-level Information | This is an information table for company-level data.
+columns:
+- name: DsCmpyCode
+  type: INTEGER
+  nullable: false
+  description: DsCmpyCode is the LSEG Quantitative Analytics internal company code.
+- name: DsCompCode
+  type: varchar(13)
+  nullable: true
+  description: DsCompCode is the Datastream company code.
+- name: DsCmpyName
+  type: varchar(91)
+  nullable: true
+  description: DsCmpyName is the company name.
+- name: CmpyCtryCode
+  type: varchar(7)
+  nullable: true
+  description: CmpyCtryCode indicates the country where the company's main activities are. In some cases, this field indicates
+    where the prime quote is listed. Ds2Company.CmpyCtryCode cross-references with DS2XRef.Code where Type_ = 1006. To get
+    descriptions for the three-letter country codes, cross-reference with DS2XRef.Code where Type_ = 1004.
+- name: CmpyCtryType
+  type: SMALLINT
+  nullable: true
+  description: 'CmpyCtryType is the company country type. It may be: – 1 (ISO Region) – (Datastream Region) – 3 (Index Region)
+    LSEG Quantitative Analytics Database Schema for Datastream 11'
+- name: IndusIsDef
+  type: varchar(2)
+  nullable: true
+  description: IndusIsDef indicates whether an industry code was supplied by Industry Classification Benchmark (ICB). Y indicates
+    the code was supplied by ICB; N indicates that it was not.
+---
+table: qa_datastream.Ds2CtryQtInfo
+domain: pricing
+description: Country-level Identifiers | This table contains information about country-level identifiers. This table maps
+  to the master tables SECMAPX
+columns:
+- name: InfoCode
+  type: INTEGER
+  nullable: false
+  description: InfoCode is the Quantitative Analytics internal code for Datastream tables. InfoCode is the primary mapping
+    code for country-level identifiers. InfoCode cross- references with DS2CtryQtInfo.
+- name: DsCode
+  type: varchar(13)
+  nullable: true
+  description: DsCode is the Datastream code.
+- name: DsSecCode
+  type: INTEGER
+  nullable: true
+  description: DsSecCode is the Quantitative Analytics internal security code.
+- name: Region
+  type: varchar(7)
+  nullable: true
+  description: Region is the region or country code indicating where the security is traded. Cross- reference Region with
+    Ds2Region.Region.
+- name: RegCodeTypeId
+  type: SMALLINT
+  nullable: true
+  description: 'RegCodeTypeId is the region type code identifier. It may be: – 1 = ISO country code (for example, US = United
+    States, NO = Norway) – 2 = Datastream region code (for example, 07 = international) – 3 = index region (for example, AMADVE
+    = Advanced Emerging, FTSE index region)'
+- name: IsPrimQt
+  type: TINYINT
+  nullable: true
+  description: IsPrimQt flags whether this is the primary country-level quote. This field can have a value of 1 (yes) or 0
+    (no).
+- name: DsQtName
+  type: varchar(91)
+  nullable: true
+  description: DsQtName contains the name of the name of country-level quote.
+- name: DsLocalCode
+  type: varchar(13)
+  nullable: true
+  description: DsLocalCode is the country code combined with the exchange ticker. For example, US:IBM is the U.S. country
+    code combined with the exchange ticker for IBM.
+- name: DsMnem
+  type: varchar(13)
+  nullable: true
+  description: DsMnem is the Datastream mnemonic for the equity.
+- name: CovergCode
+  type: char(1)
+  nullable: true
+  description: 'CovergCode indicates the type of coverage. CovergCode may be: – C (Unlisted Shares) – D (Dead quotes) – E
+    (Emerging - Unadjusted prices only) – F (Full Coverage; Research + Company Accounts) – L (Foreign Quotes) – R (Research)
+    – W (Temporary/Detached/Dummy/Unlisted security part of index constituents list added by source due to corporate action
+    like spin off or demerger.)'
+- name: StatusCode
+  type: char(1)
+  nullable: true
+  description: 'StatusCode is the status code indicating the status of the item. StatusCode may be: LSEG Quantitative Analytics
+    Database Schema for Datastream 12'
+- name: PermID
+  type: varchar(11)
+  nullable: true
+  description: PermID is the permanent country-level ID associated with the item.
+- name: TypeCode
+  type: varchar(5)
+  nullable: true
+  description: TypeCode is the code indicating the type of equity. Cross-reference TypeCode with Ds2XRef.Code where Type_
+    = 2.
+- name: PrimISOCurrCode
+  type: char(3)
+  nullable: true
+  description: PrimISOCurrCode is the three-character primary ISO currency code of the security’s country of origin. Cross-reference
+    PrimISOCurrCode with DS2XRef.Code where Type_ = 3.
+- name: DelistDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: DelistDate is the delisting date.
+---
+table: qa_datastream.Ds2CusipChg
+domain: pricing
+description: CUSIP Changes | This table contains historical CUSIP changes.
+columns:
+- name: InfoCode
+  type: INTEGER
+  nullable: false
+  description: InfoCode is the Quantitative Analytics internal code for Datastream tables. InfoCode is the primary mapping
+    code for country-level identifiers. InfoCode cross-references with DS2CtryQtInfo.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the first date from which the CUSIP is valid.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the last date on which the CUSIP is valid.
+- name: Cusip
+  type: varchar(8)
+  nullable: true
+  description: Cusip is the security-level CUSIP.
+- name: CusipChk
+  type: char(1)
+  nullable: true
+  description: CusipChk is the CUSIP checksum digit.
+join_hints:
+- to: DS2CtryQtInfo
+  evidence: InfoCode cross-references with DS2CtryQtInfo.
+  type: cross_reference
+---
+table: qa_datastream.Ds2Exchange
+domain: pricing
+description: Datastream Exchanges | This table contains descriptive information on exchanges, such as the name of the exchange
+  and the country
+columns:
+- name: ExchIntCode
+  type: SMALLINT
+  nullable: false
+  description: ExchIntCode is the integer code for the exchange.
+- name: DsExchCode
+  type: char(2)
+  nullable: true
+  description: DsExchCode is the Datastream code for the exchange.
+- name: ExchType
+  type: char(4)
+  nullable: true
+  description: 'ExchType indicates the type of exchange. Types may be: – EXCH (exchange) – MFID (electronic exchange) – ROOM
+    (trading medium, or room within an exchange)'
+- name: ExchName
+  type: varchar(91)
+  nullable: true
+  description: ExchName is the exchange name.
+- name: ExchMnem
+  type: char(3)
+  nullable: true
+  description: ExchMnem is the three-letter mnemonic of the exchange.
+- name: ExchCtryCode
+  type: varchar(7)
+  nullable: true
+  description: ExchCtryCode is the exchange country code. Cross-reference ExchCtryCode with Ds2Region.Region.
+- name: CtryCodeType
+  type: SMALLINT
+  nullable: true
+  description: 'CtryCodeType is the country code type. CtryCodeType may be: – 1 (ISO Region) – 2 (Datastream Region) – 3 (Index
+    Region) LSEG Quantitative Analytics Database Schema for Datastream 13'
+---
+table: qa_datastream.DS2ExchQtInfo
+domain: pricing
+description: Datastream Exchange Quote Information | This is the information table for exchange-level quotes.
+columns:
+- name: InfoCode
+  type: INTEGER
+  nullable: false
+  description: InfoCode is the Quantitative Analytics internal code for Datastream tables. InfoCode is the primary mapping
+    code for country-level identifiers. InfoCode cross-references with DS2CtryQtInfo.
+- name: ExchIntCode
+  type: SMALLINT
+  nullable: false
+  description: ExchIntCode is the integer code for the exchange. Cross-reference ExchIntCode with Ds2Exchange.
+- name: ISOCurrCode
+  type: char(3)
+  nullable: true
+  description: ISOCurrCode is the code for the currency of the country of origin of the security. Cross- reference ISOCurrCode
+    with Ds2XRef.Code where Type_ = 3.
+- name: DsQtName
+  type: varchar(91)
+  nullable: true
+  description: DsQtName is the name of country-level quote identifier.
+- name: IsPrimExchQt
+  type: char(1)
+  nullable: true
+  description: IsPrimExchQt indicates whether the quote is a primary exchange-level quote (Y), or is not (N).
+- name: PriceUnit
+  type: varchar(7)
+  nullable: true
+  description: PriceUnit number of units. A value of E+00 represents a 1:1 unit basis. A value of E-02 means the currency
+    is in hundredths and must be divided by 100.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: StartDate is the date Datastream created the record.
+- name: GAltDsCode
+  type: varchar(13)
+  nullable: true
+  description: AltDsCode is the alternate Datastream code.
+- name: MIC
+  type: char(4)
+  nullable: true
+  description: Market Identification Code (MIC) is the ISO exchange code.
+- name: MICDesc
+  type: varchar(20)
+  nullable: true
+  description: Description of the market.
+- name: QtPermID
+  type: varchar(13)
+  nullable: true
+  description: QtPermID is the permanent quote-level ID. (Reserved for future development).
+- name: LicFlag
+  type: SMALLINT
+  nullable: true
+  description: LicFlag is the bitmap license flag. This indicates the license to which the record belongs. Cross-reference
+    LicFlag with Ds2Xref.Code where Type_ = 1002.
+join_hints:
+- to: DS2CtryQtInfo
+  evidence: InfoCode cross-references with DS2CtryQtInfo.
+  type: cross_reference
+---
+table: qa_datastream.DS2ICBChg
+domain: pricing
+description: Historical ICB Codes | Use this table to retrieve historical Industry Classification Benchmark (ICB) codes for
+  a company.
+columns:
+- name: DsCmpyCode
+  type: INTEGER
+  nullable: false
+  description: DsCmpyCode is the Quantitative Analytics internal company code.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the first date from which the code is valid.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the last date from which the code is valid.
+- name: ICBCode
+  type: varchar(9)
+  nullable: true
+  description: ICBCode is the ICB Code. It indicates the industry classification of the company. Cross- reference ICBCode
+    with Ds2XRef.Code where Type_ = 1.
+---
+table: qa_datastream.Ds2IsinChg
+domain: pricing
+description: Historical ISIN Changes | This table contains historical ISIN changes.
+columns:
+- name: DsSecCode
+  type: INTEGER
+  nullable: false
+  description: DsSecCode is the Quantitative Analytics internal security code. DsSecCode cross- references with DS2Security.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the Datastream change date. LSEG Quantitative Analytics Database Schema for Datastream 14
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the last date the ISIN was valid.
+- name: ISIN
+  type: varchar(12)
+  nullable: true
+  description: ISIN is the identifier that is valid between the StartDate and the EndDate.
+- name: ISIN2
+  type: varchar(12)
+  nullable: true
+  description: ISIN2 is the identifier that is valid between the StartDate and the EndDate. The ISIN2 foreign quotes are traded.
+- name: LicFlagC
+  type: TINYINT
+  nullable: true
+  description: This field identifies CUSIP-based ISINs. A value of 1 indicates that the first two characters of the ISIN are
+    United States or Canadian. Otherwise, if the ISIN is non-North American, LicFlagC is 2. Cross-reference LicFlagC with
+    Ds2Xref.Code where Type_ = 1003.
+---
+table: qa_datastream.Ds2LocalCodeChg
+domain: pricing
+description: Datastream Local Code Changes | This table contains historical DsLocalCode changes.
+columns:
+- name: InfoCode
+  type: INTEGER
+  nullable: false
+  description: InfoCode is the Quantitative Analytics internal code for Datastream tables. InfoCode is the primary mapping
+    code for country-level identifiers. InfoCode cross-references with DS2CtryQtInfo.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the first date the identifier is valid.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the last date the identifier is valid.
+- name: DsLocalCode
+  type: varchar(13)
+  nullable: true
+  description: DsLocalCode is the Datastream local code of the security during the given point in time.
+---
+table: qa_datastream.Ds2MnemChg
+domain: pricing
+description: Historical Datastream Mnemonic Changes | This table contains historical DsMnem changes.
+columns:
+- name: InfoCode
+  type: INTEGER
+  nullable: false
+  description: InfoCode is the Quantitative Analytics internal code for Datastream tables. InfoCode is the primary mapping
+    code for country-level identifiers. InfoCode cross-references with DS2CtryQtInfo.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the first date from which the identifier is valid.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the last date on which the identifier is valid.
+- name: DsMnem
+  type: varchar(13)
+  nullable: true
+  description: DsMnem is the Datastream mnemonic for the equity.
+- name: Ticker
+  type: varchar(13)
+  nullable: true
+  description: This field is derived from DsMnem. Special characters or prefixes are removed to display the actual ticker.
+join_hints:
+- to: DS2CtryQtInfo
+  evidence: InfoCode cross-references with DS2CtryQtInfo.
+  type: cross_reference
+- to: DS2CtryQtInfo
+  evidence: InfoCode cross-references with DS2CtryQtInfo.
+  type: cross_reference
+---
+table: qa_datastream.DS2PrimExchQtChg
+domain: pricing
+description: Primary Exchange Changes | This table tracks primary exchange changes historically.
+columns:
+- name: InfoCode
+  type: INTEGER
+  nullable: false
+  description: InfoCode is the Quantitative Analytics internal code for Datastream tables. InfoCode is the primary mapping
+    code for country-level identifiers. InfoCode cross-references with DS2CtryQtInfo.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the first date from which the identifier is valid.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the last date on which the identifier is valid.
+- name: ExchIntCode
+  type: SMALLINT
+  nullable: true
+  description: ExchIntCode is the integer code for the exchange. ExchIntCode cross-references with DS2Exchange.
+- name: DsExchCode
+  type: char(2)
+  nullable: true
+  description: DsExchCode is the Datastream code for the exchange.
+- name: LicFlag
+  type: SMALLINT
+  nullable: true
+  description: LicFlag is the bitmap license flag. This indicates the license to which the record belongs. Cross-reference
+    LicFlag with Ds2Xref.Code where Type_ = 1002.
+join_hints:
+- to: DS2Exchange
+  evidence: ExchIntCode cross-references with DS2Exchange.
+  type: cross_reference
+---
+table: qa_datastream.Ds2QtNameChg
+domain: pricing
+description: 'Historical Name Changes | This table contains historical quotation name changes. | NOTE: The files used to support
+  the following table were discontinued in June 2010. Instead of making this table obsolete,'
+columns:
+- name: InfoCode
+  type: INTEGER
+  nullable: false
+  description: InfoCode is the Quantitative Analytics internal code for Datastream tables. InfoCode is the primary mapping
+    code for country-level identifiers. InfoCode cross-references with DS2CtryQtInfo.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the first date from which the identifier is valid.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the last date on which the identifier is valid.
+- name: DSQtName
+  type: varchar(91)
+  nullable: true
+  description: DSQtName is the current quotation name.
+join_hints:
+- to: DS2CtryQtInfo
+  evidence: InfoCode cross-references with DS2CtryQtInfo.
+  type: cross_reference
+- to: DS2CtryQtInfo
+  evidence: InfoCode cross-references with DS2CtryQtInfo.
+  type: cross_reference
+---
+table: qa_datastream.Ds2Region
+domain: pricing
+description: Country Codes Descriptions | This table contains descriptions for country codes.
+columns:
+- name: Region
+  type: varchar(7)
+  nullable: false
+  description: Region is the country code.
+- name: RegCodeTypeId
+  type: SMALLINT
+  nullable: false
+  description: 'RegCodeTypeId is the region type code identifier. It may be: – 1 = ISO country code (for example, US = United
+    States, NO = Norway) – 2 = Datastream region code (for example, 07 = international) – 3 = index region (for example, AMADVE
+    = Advanced Emerging, FTSE index region)'
+- name: Name_
+  type: varchar(91)
+  nullable: true
+  description: Name is the name of country-level quote identifier.
+- name: DsGeoCode
+  type: char(2)
+  nullable: true
+  description: DsGeoCode is the Datastream geographical code.
+- name: ISOCurrCode
+  type: char(3)
+  nullable: true
+  description: ISOCurrCode is the currency code of the security’s country of origin. LSEG Quantitative Analytics Database
+    Schema for Datastream 16
+- name: PermRegion
+  type: char(16)
+  nullable: true
+  description: (Reserved for internal use.)
+---
+table: qa_datastream.Ds2Security
+domain: pricing
+description: Security-level Information | This is the information table for security-level data.
+columns:
+- name: DsSecCode
+  type: INTEGER
+  nullable: false
+  description: DsSecCode is the Quantitative Analytics internal security code.
+- name: DsSctyCode
+  type: varchar(13)
+  nullable: true
+  description: DsSctyCode is the Datastream security code.
+- name: DsCmpyCode
+  type: INTEGER
+  nullable: true
+  description: DsCmpyCode is the Quantitative Analytics internal company code.
+- name: IsMajorSec
+  type: char(2)
+  nullable: true
+  description: IsMajorSec indicates whether this security is the company's primary security. Y indicates that it is the primary
+    security. N indicates that it is not.
+- name: DsSecName
+  type: varchar(91)
+  nullable: true
+  description: DsSecName is the security name.
+- name: ISOCurrCode
+  type: char(3)
+  nullable: true
+  description: ISOCurrCode is the code for the currency of the country of origin of the security. Cross-reference ISOCurrCode
+    with Ds2XRef.Code where Type_ = 3.
+- name: DivUnit
+  type: varchar(7)
+  nullable: true
+  description: DivUnit is the dividend units. A value of E+00 represents a 1:1 unit basis. A value of E-02 means the currency
+    is in hundredths and must be divided by 100.
+- name: PrimQtSedol
+  type: varchar(7)
+  nullable: true
+  description: PrimQtSedol is the SEDOL of the security's primary quote.
+- name: PrimExchMnem
+  type: char(3)
+  nullable: true
+  description: PrimExchMnem is the primary exchange code of the security. Cross-reference PrimExchMnem with Ds2Exchange.ExchMnem.
+- name: PrimQtInfoCode
+  type: INTEGER
+  nullable: true
+  description: PrimQtInfoCode is the Quantitative Analytics internal InfoCode of a security's primary quote.
+- name: WSSctyPPI
+  type: varchar(13)
+  nullable: true
+  description: WSSctyPPI is the Worldscope Security ID.
+- name: IBESTicker
+  type: varchar(13)
+  nullable: true
+  description: IBESTicker is the I/B/E/S ticker.
+- name: WSSctyPPI2
+  type: varchar(13)
+  nullable: true
+  description: WSSctyPPI2 is the secondary Worldscope Security ID.
+- name: IBESTicker2
+  type: varchar(13)
+  nullable: true
+  description: IBESTicker2 is the secondary I/B/E/S ticker.
+- name: DelistDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: DelistDate is the delisting date.
+---
+table: qa_datastream.Ds2SedolChg
+domain: pricing
+description: Historical SEDOL Changes | This table contains historical SEDOL changes.
+columns:
+- name: InfoCode
+  type: INTEGER
+  nullable: false
+  description: InfoCode is the Quantitative Analytics internal code for Datastream tables. InfoCode is the primary mapping
+    code for country-level identifiers. InfoCode cross-references with DS2CtryQtInfo.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the first date from which the SEDOL is valid.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the last date on which the SEDOL is valid.
+- name: Sedol
+  type: varchar(6)
+  nullable: true
+  description: Sedol is the country quote-level SEDOL.
+- name: SedolChk
+  type: char(1)
+  nullable: true
+  description: SedolChk is the SEDOL checksum digit. LSEG Quantitative Analytics Database Schema for Datastream 17
+join_hints:
+- to: DS2CtryQtInfo
+  evidence: InfoCode cross-references with DS2CtryQtInfo.
+  type: cross_reference
+---
+table: qa_datastream.Ds2StatusChg
+domain: pricing
+description: 'StatusCode Changes | NOTE: This table is no longer maintained. It is described for your reference, but using
+  this table is not recommended. Instead, | This table tracks StatusCode changes going forward.'
+columns:
+- name: InfoCode
+  type: INTEGER
+  nullable: false
+  description: InfoCode is the Quantitative Analytics internal code for Datastream tables. InfoCode is the primary mapping
+    code for country-level identifiers. InfoCode cross-references with DS2CtryQtInfo.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the first date from which the StatusCode is valid.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the last date on which the StatusCode is valid.
+- name: StatusCode
+  type: char(1)
+  nullable: true
+  description: StatusCode indicates whether the security is active (A), suspended (S), or dead (D).
+join_hints:
+- to: DS2CtryQtInfo
+  evidence: InfoCode cross-references with DS2CtryQtInfo.
+  type: cross_reference
+---
+table: qa_datastream.Ds2XRef
+domain: pricing
+description: Reference Types | This table contains descriptive information for the reference types.
+columns:
+- name: Type_
+  type: SMALLINT
+  nullable: false
+  description: Type_ identifies the reference type. Types are defined where Type_ = 0 and Code identifies Type_.
+- name: Code
+  type: varchar(13)
+  nullable: false
+  description: Code is described by Desc_. Code is cross-referenced from other Datastream (version 2) tables.
+- name: Desc_
+  type: varchar(91)
+  nullable: true
+  description: Desc_ is the description of Code. LSEG Quantitative Analytics Database Schema for Datastream 18 DS2 Corporate
+    Action Tables This diagram illustrates the DS2 corporate action tables. These tables link to DS2CtryQtInfo on InfoCode.
+    PK InfoCode int PK AdjType tinyint PK AdjDate datetime EndAdjDate datetime AdjFator float CumAdjFactor float LicFlag smallint
+    PK InfoCode int PK ValDate datetime FreeFloatPct float GovtHeldPct float FamilyHeldPct float EmplyHeldPct float CmpyHeldPct
+    float PortHeldPct fl
+join_hints:
+- to: other
+  evidence: Code is cross-referenced from other Datastream (version 2) tables.
+  type: cross_reference
+---
+table: qa_datastream.Ds2Adj
+domain: pricing
+description: Adjustment Factors | This table contains the adjustment factors for splits and spinoffs. Datastream data is stored
+  unadjusted, but
+columns:
+- name: InfoCode
+  type: INTEGER
+  nullable: false
+  description: InfoCode is the Quantitative Analytics internal code for Datastream tables. InfoCode is the primary mapping
+    code for country-level identifiers. InfoCode cross-references with DS2CtryQtInfo.
+- name: AdjType
+  type: TINYINT
+  nullable: false
+  description: AdjType identifies the type of adjustment factor where 1 indicates that the adjustment includes splits only,
+    and 2 indicates that it includes everything.
+- name: AdjDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: AdjDate is the date of adjustment.
+- name: EndAdjDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndAdjDate is the date the adjustment period ended.
+- name: AdjFactor
+  type: FLOAT
+  nullable: true
+  description: AdjFactor is the actual factor used for adjustment. It provides a time series of the discrete adjustment factors
+    applied for each capital event in the stock history. The factors are not accumulated.
+- name: CumAdjFactor
+  type: FLOAT
+  nullable: true
+  description: 'CumAdjFactor is a time series of accumulated adjustment factors. The latest value is always 1, and historic
+    adjustment factors are accumulated in reverse chronological order. As a result, the most recent AdjFactor = 1 and the
+    oldest AdjFactor = 1 multiplied by the product of all adjustment factors. Example: If BASEDATE 30/06/90 EVENT 1 30/06/95
+    AdjFactor = 0.5 LSEG Quantitative Analytics Database Schema for Datastream 19'
+- name: LicFlag
+  type: SMALLINT
+  nullable: true
+  description: LicFlag is the bitmap license flag. This indicates the license to which the record belongs. Cross-reference
+    LicFlag with Ds2Xref.Code where Type_ = 1002.
+join_hints:
+- to: DS2CtryQtInfo
+  evidence: InfoCode cross-references with DS2CtryQtInfo.
+  type: cross_reference
+---
+table: qa_datastream.Ds2CapEvent
+domain: pricing
+description: Corporate Actions | This table contains information about corporate actions.
+columns:
+- name: InfoCode
+  type: INTEGER
+  nullable: false
+  description: InfoCode is the Quantitative Analytics internal code for Datastream tables. InfoCode is the primary mapping
+    code for country-level identifiers. InfoCode cross- references with DS2CtryQtInfo.
+- name: EventNum
+  type: INTEGER
+  nullable: false
+  description: EventNum is an internal Quantitative Analytics sequence code assigned to each corporate action held against
+    a security.
+- name: ActionTypeCode
+  type: char(4)
+  nullable: true
+  description: ActionTypeCode is the code indicating the type of corporate action. Cross- reference ActionTypeCode with Ds2XRef.Code
+    where Type_ = 6.
+- name: EventStatusCode
+  type: char(4)
+  nullable: true
+  description: EventStatusCode indicates the current status of the identifier. This field applies to only to takeovers and
+    mergers. Cross-reference EventStatusCode with Ds2XRef.Code where Type_ = 7.
+- name: ResInfoCode
+  type: INTEGER
+  nullable: true
+  description: ResInfoCode is the Quantitative Analytics internal code identifier of instrument resulting from a capital event.
+    ResInfoCode cross-references with DS2CtryQtInfo.InfoCode.
+- name: RenMarker
+  type: char(1)
+  nullable: true
+  description: 'RenMarker indicates whether the issue is renounceable. RenMarker may be: – N (Non-Renounceable; for example,
+    an open offer) – Y (Renounceable) – X (Not applicable)'
+- name: NumNewShares
+  type: FLOAT
+  nullable: true
+  description: NumNewShares indicates the number of new shares that will be received for the given number of old shares held.
+- name: NumOldShares
+  type: FLOAT
+  nullable: true
+  description: NumOldShares indicates the number of old shares held to receive the given new shares.
+- name: ISOCurrCode
+  type: char(3)
+  nullable: true
+  description: ISOCurrCode is the symbol used for the country’s currency when cash terms constitute part of the issue. This
+    field is blank or null if not applicable. Cross- reference ISOCurrCode with Ds2XRef.Code where Type_ = 3.
+- name: CashAmt
+  type: FLOAT
+  nullable: true
+  description: CashAmt is the amount of cash received for the given number of old shares.
+- name: MultiIssueMarker
+  type: char(1)
+  nullable: true
+  description: 'MultiIssueMarker indicates whether there are multiple issues on a single ex-date or effective date, and if
+    so, whether the event applies to the original holding or the new holding. MultiIssueMarker may be: LSEG Quantitative Analytics
+    Database Schema for Datastream 20'
+- name: CmplxIssueMarker
+  type: char(1)
+  nullable: true
+  description: 'CmplxIssueMarker flags issues to indicate whether the capital change record provides enough detail to reverse
+    engineer an adjustment factor for the security on the adjustment date (AdjDate), where: – N (Explains adjustment factor)
+    – X (Not applicable) – Y (Does not explain adjustment factor)'
+- name: OfferCmpyName
+  type: varchar(91)
+  nullable: true
+  description: OfferCmpyName contains the name of the offerer when terms are cash only. This
+- name: AnnouncedDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: AnnouncedDate is the date the corporate action was announced.
+- name: RecordDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: RecordDate is the date by which a shareholder must officially hold the shares to be entitled to the corporate
+    action.
+- name: EffectiveDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EffectiveDate is the ex-date or effective date of the issue.
+- name: ExpiryDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: ExpiryDate is the termination date of an exercisable privilege, according to the terms of the issue. In the
+    case of a rights issue, this is the end of the subscription period of the first call.
+- name: UnmatchDsCode
+  type: varchar(13)
+  nullable: true
+  description: UnmatchDsCode is an automatically generated six character field unique to each Datastream code.
+- name: LicFlag
+  type: SMALLINT
+  nullable: true
+  description: LicFlag is the bitmap license flag. This indicates the license to which the record belongs. Cross-reference
+    LicFlag with Ds2Xref.Code where Type_ = 1002.
+join_hints:
+- to: DS2CtryQtInfo
+  evidence: ResInfoCode cross-references with DS2CtryQtInfo.InfoCode.
+  type: cross_reference
+---
+table: qa_datastream.DS2Div
+domain: pricing
+description: 'Datastream Dividend Information | This table contains information about dividends. | NOTE: This table supplements
+  the DS2XRef table descriptions where applicable. Not all codes have supplemental information.'
+columns:
+- name: InfoCode
+  type: INTEGER
+  nullable: false
+  description: InfoCode is the Quantitative Analytics internal code for Datastream tables. InfoCode is the primary mapping
+    code for country-level identifiers. InfoCode cross-references with DS2CtryQtInfo.
+- name: EventNum
+  type: INTEGER
+  nullable: false
+  description: EventNum is an automatically generated, sequential six character field, unique to each Datastream code.
+- name: DivTypeCode
+  type: char(3)
+  nullable: true
+  description: DivTypeCode is the type of dividend paid. DivTypeCodes are described in the table, DivTypeCode Supplemental
+    Descriptions, below.
+- name: TaxMarker
+  type: char(1)
+  nullable: true
+  description: TaxMarker is Net (N) or Gross (G) of withholding tax, dividends reported as announced.
+- name: DivRate
+  type: FLOAT
+  nullable: true
+  description: DivRate is the amount of cash to be paid, as dividend per share.
+- name: PayDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: PayDate is the date upon which the cash will be paid.
+- name: PayDateEstFlag
+  type: char(1)
+  nullable: true
+  description: PayDateEstFlag is a marker to notify whether the associated PayDate field is an actual date (A) or an estimated
+    date (E).
+- name: ISOCurrCode
+  type: char(3)
+  nullable: true
+  description: ISOCurrCode is the three character ISO currency code in which the cash dividend is paid. Cross-reference ISOCurrCode
+    with Ds2XRef.Code where Type_ = 3.
+- name: PaymentUnitFlag
+  type: char(1)
+  nullable: true
+  description: PaymentUnitFlag indicates if the DivRate is not a cash amount. For cash dividends the field is null. Where
+    the dividend is a percentage the field is P. LSEG Quantitative Analytics Database Schema for Datastream 21
+- name: AnnouncedDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: AnnouncedDate is the date on which the dividend issuer announces the dividend entitlement event.
+- name: AnnDateEstFlag
+  type: char(1)
+  nullable: true
+  description: AnnDateEstFlag is a marker to notify whether the associated AnnouncedDate field is an Actual date (A) or an
+    Estimated date (E).
+- name: RecordDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: RecordDate is the date by which a shareholder must be the registered owner of a share to be entitled to a dividend.
+- name: RecDateEstFlag
+  type: char(1)
+  nullable: true
+  description: RecDateEstFlag is a marker to notify whether the associated RecordDate
+- name: EffectiveDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EffectiveDate is the first date that the shares trade without a right to receive a dividend.
+- name: EffDateEstFlag
+  type: char(1)
+  nullable: true
+  description: EffDateEstFlag indicates whether the associated EffectiveDate field is an actual date (A) or an estimated date
+    (E).
+- name: LicFlag
+  type: SMALLINT
+  nullable: true
+  description: 'LicFlag is the bitmap license flag. This indicates the license to which the record belongs. Cross-reference
+    LicFlag with Ds2XRef.Code where Type_ = 1002. DivTypeCode Supplemental Descriptions Indicates the type of dividend paid.
+    DivTypeCode cross-references DS2XRef.Code where Type_ = 8. NOTE: This table supplements the DS2XRef table descriptions
+    where applicable. Not all codes have supplemental information. DivTypeCode Description Supplemental information ARR Payment
+    in arrears BRK Broken period'
+join_hints:
+- to: DS2CtryQtInfo
+  evidence: InfoCode cross-references with DS2CtryQtInfo.
+  type: cross_reference
+---
+table: qa_datastream.Dividend
+domain: pricing
+---
+table: qa_datastream.DS2DPS
+domain: pricing
+description: Dividend per Share Information | This table contains information about trailing twelve months (TTM) dividends
+  per share.
+columns:
+- name: InfoCode
+  type: INTEGER
+  nullable: false
+  description: InfoCode is the Quantitative Analytics internal code for Datastream tables. InfoCode is the primary mapping
+    code for country-level identifiers. InfoCode cross-references with DS2CtryQtInfo.
+- name: EventDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: EventDate is the date that the DPS was entered into the Datastream mainframe.
+- name: DPS
+  type: FLOAT
+  nullable: true
+  description: DPS is the unadjusted TTM dividends per share value.
+- name: LicFlag
+  type: SMALLINT
+  nullable: true
+  description: LicFlag is the bitmap license flag. This indicates the license to which the record belongs. Cross-reference
+    LicFlag with Ds2Xref.Code where Type_ = 1002.
+---
+table: qa_datastream.Ds2NumShares
+domain: pricing
+description: Number of Shares Outstanding | Use this table to retrieve the number of shares outstanding.
+columns:
+- name: InfoCode
+  type: INTEGER
+  nullable: false
+  description: InfoCode is the Quantitative Analytics internal code for Datastream tables. InfoCode is the primary mapping
+    code for country-level identifiers. InfoCode cross-references with DS2CtryQtInfo.
+- name: EventDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: EventDate is the date the shares are entered into the Datastream mainframe.
+- name: NumShrs
+  type: FLOAT
+  nullable: true
+  description: NumShrs is the number of shares outstanding/issued/listed, expressed in thousands.
+- name: LicFlag
+  type: SMALLINT
+  nullable: true
+  description: LicFlag is the bitmap license flag. This indicates the license to which the record belongs. Cross-reference
+    LicFlag with Ds2Xref.Code where Type_ = 1002. LSEG Quantitative Analytics Database Schema for Datastream 23
+join_hints:
+- to: DS2CtryQtInfo
+  evidence: InfoCode cross-references with DS2CtryQtInfo.
+  type: cross_reference
+- to: DS2CtryQtInfo
+  evidence: InfoCode cross-references with DS2CtryQtInfo.
+  type: cross_reference
+---
+table: qa_datastream.Ds2ShareHldgs
+domain: pricing
+description: Share Holdings Information | Use this table to retrieve historical share holdings for a security.
+columns:
+- name: InfoCode
+  type: INTEGER
+  nullable: false
+  description: InfoCode is the Quantitative Analytics internal code for Datastream tables. InfoCode is the primary mapping
+    code for country-level identifiers. InfoCode cross-references with DS2CtryQtInfo.
+- name: ValDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: ValDate is the date of the share holdings.
+- name: FreeFloatPct
+  type: FLOAT
+  nullable: true
+  description: FreeFloatPct is the free float shares where strategic holdings are broadly defined as holdings of 5% or more.
+    There are some types of holders, such as hedge funds, that are excluded.
+- name: GovtHeldPct
+  type: FLOAT
+  nullable: true
+  description: GovtHeldPct is the government shares held.
+- name: EmplyHeldPct
+  type: FLOAT
+  nullable: true
+  description: EmplyHeldPct is the employee shares held.
+- name: CmpyHeldPct
+  type: FLOAT
+  nullable: true
+  description: CmpyHeldPct is the company shares held.
+- name: PensionFundHeldPct
+  type: FLOAT
+  nullable: true
+  description: PensionFundHeldPct is the pension fund shares held.
+- name: InvstCmpHeldPct
+  type: FLOAT
+  nullable: true
+  description: InvstCmpHeldPct is the investment company shares held.
+- name: ForeignHeldPct
+  type: FLOAT
+  nullable: true
+  description: ForeignHeldPct is the foreign shares held.
+- name: Otherheldpct
+  type: FLOAT
+  nullable: true
+  description: Otherheldpct is the other foreign shares held.
+- name: StratHoldPct
+  type: FLOAT
+  nullable: true
+  description: StratHoldPct is the strategic holdings.
+- name: FreeFloatAltPct
+  type: FLOAT
+  nullable: true
+  description: FreeFloatAltPct is the alternative free float shares where strategic holdings are identified as not investing
+    for investment management purposes, but for strategic stakes in companies.
+- name: LicFlag
+  type: SMALLINT
+  nullable: true
+  description: LicFlag is the bitmap license flag. This indicates the license to which the record belongs. Cross-reference
+    LicFlag with Ds2Xref.Code where Type_ = 1002. LSEG Quantitative Analytics Database Schema for Datastream 24 DS2 Pricing
+    Tables This diagram illustrates the DS2 pricing exchange rate tables. PK ExRateIntCode int ExRateCode varchar(13) FromCurrCode
+    char(3) ToCurrCode char(3) SourceCode varchar(5) RateTypeCode varchar(5) ExRateDesc varchar(91) PK,FK1 ExRateIntCode int
+    PK ExRateDate datetime M
+join_hints:
+- to: DS2CtryQtInfo
+  evidence: InfoCode cross-references with DS2CtryQtInfo.
+  type: cross_reference
+---
+table: qa_datastream.DS2FxCode
+domain: pricing
+description: Datastream Exchange Rate Contracts | This table contains information on exchange rate contracts.
+columns:
+- name: ExRateIntCode
+  type: INTEGER
+  nullable: false
+  description: ExRateIntCode is the internal InfoCode for a given exchange rate contract. Cross- reference ExRateIntCode with
+    DS2FxRate.
+- name: ExRateCode
+  type: varchar(13)
+  nullable: true
+  description: ExRateCode is the Datastream code for a given exchange rate contract. LSEG Quantitative Analytics Database
+    Schema for Datastream 25
+- name: FromCurrCode
+  type: char(3)
+  nullable: true
+  description: FromCurrCode is the ISO currency code of the “from currency,” or originating currency. Cross-reference FromCurrCode
+    with Ds2XRef.Code where Type_ = 3.
+- name: ToCurrCode
+  type: char(3)
+  nullable: true
+  description: ToCurrCode is the ISO currency code of the “to currency,” or the destination currency. Cross-reference ToCurrCode
+    with Ds2XRef.Code where Type_ = 3.
+- name: SourceCode
+  type: varchar(5)
+  nullable: true
+  description: SourceCode is the Integer code for the source of the data. Cross-reference SourceCode with Ds2XRef.Code where
+    Type_ = 4.
+- name: RateTypeCode
+  type: varchar(5)
+  nullable: true
+  description: RateTypeCode is the type of contract for the exchange rate. Cross-reference RateTypeCode with Ds2XRef.Code
+    where Type_ = 5.
+- name: ExRateDesc
+  type: varchar(91)
+  nullable: true
+  description: ExRateDesc is the description of the contract.
+---
+table: qa_datastream.DS2FxRate
+domain: pricing
+description: Datastream Exchange Rate Data | Use this table to retrieve exchange rate data for a given exchange rate contract.
+columns:
+- name: ExRateIntCode
+  type: INTEGER
+  nullable: false
+  description: ExRateIntCode is the internal InfoCode for a given exchange rate contract. Cross-reference ExRateIntCode with
+    DS2FxCode.
+- name: ExRateDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: ExRateDate is the date of the historical exchange rate data.
+- name: MidRate
+  type: FLOAT
+  nullable: true
+  description: MidRate is the mid rate for contract on the given date.
+- name: BidRate
+  type: FLOAT
+  nullable: true
+  description: BidRate is the bid rate for contract on the given date.
+- name: OfferRate
+  type: FLOAT
+  nullable: true
+  description: OfferRate is the offer rate for contract on the given date.
+- name: LicFlag
+  type: SMALLINT
+  nullable: true
+  description: 'LicFlag is the bitmap license flag. This indicates the license to which the record belongs. Cross-reference
+    LicFlag with Ds2Xref.Code where Type_ = 1023. Note: deployed servers will require a rebuild, release 7.24.'
+---
+table: qa_datastream.Ds2MktVal
+domain: pricing
+description: Market Value Data | This table contains consolidated market value data.
+---
+table: qa_datastream.Ds2PrimQtPrc
+domain: pricing
+description: Primary Exchange Quote Pricing | This table contains pricing information for the primary exchange quote. For
+  US traded securities, this table
+columns:
+- name: InfoCode
+  type: INTEGER
+  nullable: false
+  description: InfoCode is the Quantitative Analytics internal code for Datastream tables. InfoCode is the primary mapping
+    code for country-level identifiers. InfoCode cross-references with DS2CtryQtInfo.
+- name: ValDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: ValDate is the date of the share holdings.
+- name: ConsolNumShrs
+  type: FLOAT
+  nullable: true
+  description: ConsolNumShrs is the consolidated number of shares, in thousands, outstanding for the entire company.
+- name: ConsolMktVal
+  type: FLOAT
+  nullable: true
+  description: ConsolMktVal is the consolidated market value, in millions, for the entire company.
+- name: LicFlag
+  type: SMALLINT
+  nullable: true
+  description: LicFlag is the bitmap license flag. This indicates the license to which the record belongs. Cross-reference
+    LicFlag with Ds2Xref.Code where Type_ = 1002. LSEG Quantitative Analytics Database Schema for Datastream 26
+- name: InfoCode
+  type: INTEGER
+  nullable: false
+  description: InfoCode is the Quantitative Analytics internal code for Datastream tables. InfoCode is the primary mapping
+    code for country-level identifiers. InfoCode cross-references with DS2CtryQtInfo.
+- name: MarketDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: MarketDate is the date of the price.
+- name: ExchIntCode
+  type: SMALLINT
+  nullable: true
+  description: ExchIntCode is the integer code for the exchange. Cross-reference ExchIntCode with Ds2Exchange.
+- name: ISOCurrCode
+  type: char(3)
+  nullable: true
+  description: ISOCurrCode is the ISO Currency Code for the currency upon which the series is calculated. Cross-reference
+    ISOCurrCode with Ds2Xref.Code where Type_ = 3.
+- name: RefPrcTypCode
+  type: TINYINT
+  nullable: true
+  description: RefPrcTypCode identifies whether the price is final. A value of 1 indicates the price is final, and 2 indicates
+    an interim (snapshot) price. RefPrcTypCode cross-references with Ds2XRef where Type_ = 1000.
+- name: Open_
+  type: FLOAT
+  nullable: true
+  description: Open_ is the opening price for a security on a given date.
+- name: High
+  type: FLOAT
+  nullable: true
+  description: High is the high price for the security on a given date or date range.
+- name: Low
+  type: FLOAT
+  nullable: true
+  description: Low is the low price for the security on a given date or date range.
+- name: Close_
+  type: FLOAT
+  nullable: true
+  description: Close_ is the closing price of the security on the given date.
+- name: Volume
+  type: FLOAT
+  nullable: true
+  description: Volume is the unadjusted volume.
+- name: Bid
+  type: FLOAT
+  nullable: true
+  description: Bid is the bid price for the security on the given date quoted at close of market.
+- name: Ask
+  type: FLOAT
+  nullable: true
+  description: Ask is the ask price for the security on the given date quoted at close of market.
+- name: VWAP
+  type: FLOAT
+  nullable: true
+  description: VWAP is the volume-weighted average price.
+- name: MostTrdPrc
+  type: FLOAT
+  nullable: true
+  description: MostTrdPrc is the most traded price.
+- name: ConsolVol
+  type: FLOAT
+  nullable: true
+  description: ConsolVol is consolidated volume and returns values across all exchanges of a specific market, which applies
+    to Japan, Germany, and India. Consolidated Volume is calculated and generated automatically from data already stored.
+    It will be available only if the stock is trading in multiple exchanges of a single market like Germany and Japan. The
+    history start dates for the relevant markets are 1/4/1984 (Japan), 1/2/1989 (Germany), and 8/13/1991 (India).
+- name: MostTrdVol
+  type: FLOAT
+  nullable: true
+  description: MostTrdVol is most traded volume.
+- name: LicFlag
+  type: SMALLINT
+  nullable: true
+  description: LicFlag is the bitmap license flag. This indicates the license to which the record belongs. Cross-reference
+    LicFlag with Ds2Xref.Code where Type_ = 1002.
+join_hints:
+- to: DS2CtryQtInfo
+  evidence: InfoCode cross-references with DS2CtryQtInfo.
+  type: cross_reference
+- to: Ds2XRef
+  evidence: RefPrcTypCode cross-references with Ds2XRef where Type_ = 1000.
+  type: cross_reference
+---
+table: qa_datastream.Ds2PrimQtRI
+domain: pricing
+description: Primary Exchange Quote Return Index Information | This table contains return index information for the primary
+  exchange quote. For US traded securities, this table
+columns:
+- name: InfoCode
+  type: INTEGER
+  nullable: false
+  description: InfoCode is the Quantitative Analytics internal code for Datastream tables. InfoCode is the primary mapping
+    code for country-level identifiers. InfoCode cross-references with DS2CtryQtInfo.
+- name: MarketDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: MarketDate is the price date.
+- name: ExchIntCode
+  type: SMALLINT
+  nullable: true
+  description: ExchIntCode is the integer code for the exchange. Cross-reference ExchIntCode with Ds2Exchange.
+- name: RI
+  type: FLOAT
+  nullable: true
+  description: RI is the return index for the security.
+- name: LicFlag
+  type: SMALLINT
+  nullable: true
+  description: LicFlag is the bitmap license flag. This indicates the license to which the record belongs. Cross-reference
+    LicFlag with Ds2Xref.Code where Type_ = 1002. LSEG Quantitative Analytics Database Schema for Datastream 27
+join_hints:
+- to: DS2CtryQtInfo
+  evidence: InfoCode cross-references with DS2CtryQtInfo.
+  type: cross_reference
+- to: DS2CtryQtInfo
+  evidence: InfoCode cross-references with DS2CtryQtInfo.
+  type: cross_reference
+---
+table: qa_datastream.DS2ScdQtPrc
+domain: pricing
+description: Secondary Exchange Quote Pricing | This table contains pricing information for all secondary exchange quotes.
+columns:
+- name: InfoCode
+  type: INTEGER
+  nullable: false
+  description: InfoCode is the Quantitative Analytics internal code for Datastream tables. InfoCode is the primary mapping
+    code for country-level identifiers. InfoCode cross-references with DS2CtryQtInfo.
+- name: MarketDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: MarketDate is the price date.
+- name: ExchIntCode
+  type: SMALLINT
+  nullable: false
+  description: ExchIntCode is the integer code for the exchange. Cross-reference ExchIntCode with Ds2Exchange.
+- name: ISOCurrCode
+  type: char(3)
+  nullable: true
+  description: ISOCurrCode is the three character ISO currency code for the currency of the security country of origin. Cross-reference
+    ISOCurrCode with Ds2XRef.Code where Type_ = 3.
+- name: RefPrcTypCode
+  type: TINYINT
+  nullable: true
+  description: RefPrcTypCode identifies whether the price is final. A value of 1 indicates the price is final, and 2 indicates
+    an interim (snapshot) price. RefPrcTypCode cross-references with Ds2XRef where Type_ = 1000.
+- name: Open_
+  type: FLOAT
+  nullable: true
+  description: Open_ is the opening price for a security on a given date.
+- name: High
+  type: FLOAT
+  nullable: true
+  description: High is the high price for the security on a given date or date range.
+- name: Low
+  type: FLOAT
+  nullable: true
+  description: Low is the low price for the security on a given date or date range.
+- name: Close_
+  type: FLOAT
+  nullable: true
+  description: Closing_ is the closing price of the security on the given date.
+- name: Volume
+  type: FLOAT
+  nullable: true
+  description: Volume is the unadjusted volume.
+- name: Bid
+  type: FLOAT
+  nullable: true
+  description: Bid is the bid price for the security on the given date quoted at close of market.
+- name: Ask
+  type: FLOAT
+  nullable: true
+  description: Ask is the ask price for the security on the given date quoted at close of market.
+- name: VWAP
+  type: FLOAT
+  nullable: true
+  description: WAP is the volume-weighted average price.
+- name: MostTrdPrice
+  type: FLOAT
+  nullable: true
+  description: MostTrdPrice is the most traded price.
+- name: ConsolVol
+  type: FLOAT
+  nullable: true
+  description: ConsolVol is consolidated volume and returns values across all exchanges of a specific market, which applies
+    to Japan, Germany, and India. Consolidated Volume is calculated and generated automatically from data already stored.
+    It will be available only if the stock is trading in multiple exchanges of a single market like Germany and Japan. The
+    history start dates for the relevant markets are 1/4/1984 (Japan), 6/13/1988 (Germany), and 9/18/1984 (India).
+- name: MostTrdVol
+  type: FLOAT
+  nullable: true
+  description: MostTrdVol is most traded volume.
+- name: LicFlag
+  type: SMALLINT
+  nullable: true
+  description: LicFlag is the bitmap license flag. This indicates the license to which the record belongs. Cross-reference
+    LicFlag with Ds2Xref.Code where Type_ = 1002.
+join_hints:
+- to: Ds2XRef
+  evidence: RefPrcTypCode cross-references with Ds2XRef where Type_ = 1000.
+  type: cross_reference
+---
+table: qa_datastream.DS2ScdQtRI
+domain: pricing
+description: Secondary Exchange Quote Return Information | This table contains return index information for all secondary
+  exchange quotes.
+columns:
+- name: InfoCode
+  type: INTEGER
+  nullable: false
+  description: InfoCode is the Quantitative Analytics internal code for Datastream tables. InfoCode is the primary mapping
+    code for country-level identifiers. InfoCode cross-references with DS2CtryQtInfo.
+- name: MarketDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: MarketDate is the price date.
+- name: ExchIntCode
+  type: SMALLINT
+  nullable: false
+  description: ExchIntCode is the integer code for the exchange. Cross-reference ExchIntCode with Ds2Exchange.
+- name: RI
+  type: FLOAT
+  nullable: true
+  description: RI is the return index for the security.
+- name: LicFlag
+  type: SMALLINT
+  nullable: true
+  description: LicFlag is the bitmap license flag. This indicates the license to which the record belongs. Cross-reference
+    LicFlag with Ds2Xref.Code where Type_ = 1002. LSEG Quantitative Analytics Database Schema for Datastream 28 DS2 Index
+    Tables The following diagram illustrates the DS2 index tables.
+join_hints:
+- to: DS2CtryQtInfo
+  evidence: InfoCode cross-references with DS2CtryQtInfo.
+  type: cross_reference
+- to: DS2CtryQtInfo
+  evidence: InfoCode cross-references with DS2CtryQtInfo.
+  type: cross_reference
+---
+table: qa_datastream.Ds2DataType
+domain: pricing
+description: Datastream Data Types | This table is a metadata table containing all available data types for Datastream indices
+  and equities. | TableName varchar(31) Y TableName is the name of the table containing data for that data type.
+columns:
+- name: DataTypeMnem
+  type: varchar(13)
+  nullable: false
+  description: DataTypeMnem is the mnemonic of the data type.
+- name: EntityTypeId
+  type: SMALLINT
+  nullable: false
+  description: 'EntityTypeId indicates the type of entity described. EntityTypeId can be: – 1 (Equity) – 3 (Equity Index)
+    – 6 (Commodities) – 8 (Futures)'
+- name: TableName
+  type: varchar(31)
+  nullable: true
+  description: TableName is the name of the table containing data for that data type.
+- name: ColnName
+  type: varchar(51)
+  nullable: true
+  description: ColnName is the column name to reference for the data type.
+- name: Descn
+  type: varchar(91)
+  nullable: true
+  description: Descn is the description of the data type. PK DataTypeMnem varchar(13) PK EntityTypeId smallint TableName varchar(31)
+    ColnName varchar(51) Descn varchar(91) PK,FK1 DataTypeMnem varchar(13) PK,FK2 DSIndexCode int EntityTypeID smallint ISOCurrCode
+    char(3) Frequency varchar(5) LicFlag smallint PK,FK1 DataTypeMnem varchar(13) PK,FK1,FK2 DSIndexCode int PK ValueDate
+    datetime DataTypeValue float LicFlag smallint PK DSIndexCode int DSIndexMnem varchar(13) Region varchar(7) RegCodeTypeID
+    smallint IndexD
+---
+table: qa_datastream.Ds2EquityIndex
+domain: pricing
+description: Equity Index Information | This table is the information table for index identifiers.
+columns:
+- name: DSIndexCode
+  type: INTEGER
+  nullable: false
+  description: DSIndexCode is the Quantitative Analytics internal index code. This
+- name: DSIndexMnem
+  type: varchar(13)
+  nullable: true
+  description: DSIndexMnem is the Datastream Index Mnemonic.
+- name: Region
+  type: varchar(7)
+  nullable: true
+  description: Region is the region or country code where the quote is traded. Cross-reference Region with Ds2Region.Region.
+- name: RegCodeTypeID
+  type: SMALLINT
+  nullable: true
+  description: 'RegCodeTypeId is the region type code identifier. It may be: – 1 = ISO country code (for example, US = United
+    States, NO = Norway) – 2 = Datastream region code (for example, 07 = international) – 3 = index region (for example, AMADVE
+    = Advanced Emerging, FTSE index region)'
+- name: IndexDesc
+  type: varchar(255)
+  nullable: true
+  description: IndexDesc is the description of the index.
+- name: LDB
+  type: char(3)
+  nullable: true
+  description: LDB is the Index Constituent License category.
+- name: SourceCode
+  type: varchar(5)
+  nullable: true
+  description: SourceCode identifies the index source. Source cross-references with Ds2XRef.Code where Type_ = 4.
+- name: IndexListCode
+  type: INTEGER
+  nullable: true
+  description: IndexListCode is the index constituent list mnemonic.
+- name: BaseDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: BaseDate is the beginning date for the index values.
+- name: ISOCurrencyCode
+  type: char(3)
+  nullable: true
+  description: ISOCurrencyCode is the code for the currency of the country of origin of the security. Cross-reference ISOCurrencyCode
+    with Ds2XRef.Code where Type_ = 3.
+- name: IsLocalCurrency
+  type: char(1)
+  nullable: true
+  description: IsLocalCurrency indicates whether the index values are in local currency. Y indicates that they are local;
+    N indicates they are not.
+- name: IndexStatusCode
+  type: char(1)
+  nullable: true
+  description: 'IndexStatusCode is the status code indicating the status of the index. StatusCode may be: – A (Active) – D
+    (Dead) – S (Suspended)'
+- name: LicFlag
+  type: SMALLINT
+  nullable: true
+  description: LicFlag is the bitmap license flag. This indicates the license to which the record belongs. Cross-reference
+    LicFlag with Ds2Xref.Code where Type_ = 1002.
+---
+table: qa_datastream.Ds2IndexAddlData
+domain: pricing
+description: Historical Index Pricing and Fundamentals | This table contains historical index pricing and fundamental data.
+columns:
+- name: DataTypeMnem
+  type: varchar(13)
+  nullable: false
+  description: DataTypeMnem is the mnemonic of the data type. Cross-reference DataTypeMnem with DS2DataType. LSEG Quantitative
+    Analytics Database Schema for Datastream 30
+- name: DSIndexCode
+  type: INTEGER
+  nullable: false
+  description: DSIndexCode is the Quantitative Analytics internal index code. This field links across the DS2Index* tables.
+- name: ValueDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: ValueDate is the date of the pricing index value.
+- name: DataTypeValue
+  type: FLOAT
+  nullable: true
+  description: DataTypeValue is the index value for a given data type.
+- name: LicFlag
+  type: SMALLINT
+  nullable: true
+  description: LicFlag is the bitmap license flag. This indicates the license to which the record belongs. Cross-reference
+    LicFlag with Ds2Xref.Code where Type_ = 1002.
+---
+table: qa_datastream.Ds2IndexData
+domain: pricing
+description: 'Index-level Data | This table contains the three most common index level data items: Price Index, Total Return
+  Index, and Market'
+columns:
+- name: DSIndexCode
+  type: INTEGER
+  nullable: false
+  description: DSIndexCode is the Quantitative Analytics internal index code. This field links across the DS2Index* tables.
+- name: ValueDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: ValueDate is the date of the pricing index value.
+- name: PI_
+  type: FLOAT
+  nullable: true
+  description: PI_ is the DataTypeValue for the price index.
+- name: RI
+  type: FLOAT
+  nullable: true
+  description: RI is the DataTypeValue for the total return index.
+- name: MV
+  type: FLOAT
+  nullable: true
+  description: MV is the DataTypeValue for the market value. Market value is displayed in millions of units.
+- name: LicFlag
+  type: SMALLINT
+  nullable: true
+  description: LicFlag is the bitmap license flag. This indicates the license to which the record belongs. Cross-reference
+    LicFlag with Ds2Xref.Code where Type_ = 1002.
+---
+table: qa_datastream.Ds2IndexDataType
+domain: pricing
+description: Index Pricing and Fundamentals | This table contains index pricing and fundamental data.
+columns:
+- name: DataTypeMnem
+  type: varchar(13)
+  nullable: false
+  description: DataTypeMnem is the mnemonic of the data type. Cross-reference DataTypeMnem with DS2DataType.
+- name: DSIndexCode
+  type: INTEGER
+  nullable: false
+  description: DSIndexCode is the Quantitative Analytics internal index code. This field links across the DS2Index* tables.
+- name: EntityTypeId
+  type: SMALLINT
+  nullable: true
+  description: 'EntityTypeId indicates the type of entity described. EntityTypeId can be: – 1 (Equity) – 3 (Equity Index)
+    – 6 (Commodities) – 8 (Futures)'
+- name: ISOCurrCode
+  type: char(3)
+  nullable: true
+  description: ISOCurrCode is the three character ISO currency code for the currency of the security country of origin. Cross-reference
+    ISOCurrCode with Ds2XRef.Code where Type_ = 3.
+- name: Frequency
+  type: varchar(5)
+  nullable: true
+  description: Frequency indicates the data type frequency. (This field is not currently populated.)
+- name: LicFlag
+  type: SMALLINT
+  nullable: true
+  description: LicFlag is the bitmap license flag. This indicates the license to which the record belongs. Cross-reference
+    LicFlag with Ds2Xref.Code where Type_ = 1002. LSEG Quantitative Analytics Database Schema for Datastream 31 DS2 Index
+    Constituents Tables The following diagram shows the relationships between the DS2 Index Constituents tables. PK,FK1 IndexListIntCode
+    int PK ConstIntCode int PK StartDate int EndDate int ConstCode varchar(13) InfoCode int LicFlag smallint PK IndexListIntCode
+    int PK,FK1 Const
+---
+table: qa_datastream.Ds2ConstDataDly
+domain: pricing
+description: Datastream Daily Constituent Data | This table contains the daily constituent data for each index.
+update_cadence: Daily
+columns:
+- name: IndexListIntCode
+  type: INTEGER
+  nullable: false
+  description: IndexListIntCode is the integer code for index lists. This code is generated by TRDW.
+- name: ConstIntCode
+  type: INTEGER
+  nullable: false
+  description: ConstIntCode is the integer code for constituents. This code is generated by TRDW.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the date the data is valid.
+- name: Close_
+  type: FLOAT
+  nullable: true
+  description: Close_ is the constituent's closing price for the day.
+- name: Weight
+  type: FLOAT
+  nullable: true
+  description: Weight is the constituent's weight for the day.
+- name: FFFactor
+  type: FLOAT
+  nullable: true
+  description: FFFactor is the free float factor.
+- name: Shares
+  type: FLOAT
+  nullable: true
+  description: Shares is the total number of shares of this security in the index.
+- name: FFShares
+  type: FLOAT
+  nullable: true
+  description: FFShares is the number of shares available for trading in the secondary market.
+- name: MktVal
+  type: FLOAT
+  nullable: true
+  description: MktVal is the market value of the security in the index.
+- name: FFMktVal
+  type: FLOAT
+  nullable: true
+  description: FFMktVal is the free float market value of the security.
+- name: AdjFactor
+  type: FLOAT
+  nullable: true
+  description: AdjFactor is the actual factor used for adjustment.
+- name: CapFactor
+  type: FLOAT
+  nullable: true
+  description: CapFactor is the numeric capping factor.
+- name: InfoCode
+  type: INTEGER
+  nullable: true
+  description: InfoCode is the code that assists Quantitative Analytics in function performance.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag identifies the license to which each index list belongs. This field cross-references with DS2XRef.Code
+    where Type_ = 1010.
+---
+table: qa_datastream.Ds2ConstDataMth
+domain: pricing
+description: Datastream Monthly Constituent Data | This table contains the monthly constituent data for each index.
+update_cadence: Daily
+columns:
+- name: IndexListIntCode
+  type: INTEGER
+  nullable: false
+  description: IndexListIntCode is the integer code for index lists. This code is generated by TRDW.
+- name: ConstIntCode
+  type: INTEGER
+  nullable: false
+  description: ConstIntCode is the integer code for constituents. This code is generated by TRDW.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the date the data is valid.
+- name: Close_
+  type: FLOAT
+  nullable: true
+  description: Close_ is the constituent's closing price for the day.
+- name: Weight
+  type: FLOAT
+  nullable: true
+  description: Weight is the constituent's weight for the day.
+- name: FFFactor
+  type: FLOAT
+  nullable: true
+  description: FFFactor is the free float factor.
+- name: PartFFFactor
+  type: FLOAT
+  nullable: true
+  description: PartFFFactor is the partial free float factor.
+- name: Shares
+  type: FLOAT
+  nullable: true
+  description: Shares is the total number of shares of this security in the index.
+- name: FFShares
+  type: FLOAT
+  nullable: true
+  description: FFShares is the number of shares available for trading in the secondary market.
+- name: MktVal
+  type: FLOAT
+  nullable: true
+  description: MktVal is the market value of the security in the index. LSEG Quantitative Analytics Database Schema for Datastream
+    33
+- name: FFMktVal
+  type: FLOAT
+  nullable: true
+  description: FFMktVal is the free float market value of the security.
+- name: AdjFactor
+  type: FLOAT
+  nullable: true
+  description: AdjFactor is the actual factor used for adjustment.
+- name: CapFactor
+  type: FLOAT
+  nullable: true
+  description: CapFactor is the numeric capping factor.
+- name: InfoCode
+  type: INTEGER
+  nullable: true
+  description: InfoCode is the code that assists Quantitative Analytics in function performance.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag identifies the license to which each index list belongs. This field cross-references with DS2XRef.Code
+    where Type_ = 1010.
+---
+table: qa_datastream.Ds2ConstDly
+domain: pricing
+description: Datastream Daily Constituent Lists | This table contains daily constituent lists for each index.
+update_cadence: Daily
+columns:
+- name: IndexListIntCode
+  type: INTEGER
+  nullable: false
+  description: IndexListIntCode is the integer code for index lists. This code is generated by TRDW.
+- name: ConstIntCode
+  type: INTEGER
+  nullable: false
+  description: ConstIntCode is the integer code for constituents. This code is generated by TRDW.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the first date the constituent is part of the index.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the last date the constituent is part of the index.
+- name: ConstCode
+  type: varchar(13)
+  nullable: true
+  description: ConstCode is usually a DsCode, but depending on the context, it may be the index-specific identifier.
+- name: InfoCode
+  type: INTEGER
+  nullable: true
+  description: InfoCode is the integer identifier code for a DsCode. This code is generated by TRDW.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag identifies the license to which each index list belongs. This field cross-references with DS2XRef.Code
+    where Type_ = 1010.
+---
+table: qa_datastream.Ds2ConstMth
+domain: pricing
+description: Datastream Monthly Constituent Lists | This table contains monthly constituent lists for each index.
+update_cadence: 'Daily Adjusted: Unadjusted'
+columns:
+- name: IndexListIntCode
+  type: INTEGER
+  nullable: false
+  description: IndexListIntCode is the integer code for index lists. This code is generated by TRDW.
+- name: ConstIntCode
+  type: INTEGER
+  nullable: false
+  description: ConstIntCode is the integer code for constituents. This code is generated by TRDW.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the first date the constituent appears in the index. This date is generated from the ValueDate.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the last date the constituent appears in the index, which will be the latest month end date for
+    current constituents.
+- name: ConstCode
+  type: varchar(13)
+  nullable: true
+  description: ConstCode is usually a DsCode, but depending on the context, it may be the index-specific identifier.
+- name: InfoCode
+  type: INTEGER
+  nullable: true
+  description: InfoCode is the integer identifier code for a DsCode. This code is generated by TRDW.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag identifies the license to which each index list belongs. This field cross-references with DS2XRef.Code
+    where Type_ = 1010. LSEG Quantitative Analytics Database Schema for Datastream 34
+---
+table: qa_datastream.Ds2IndexList
+domain: pricing
+description: Datastream Index List Descriptions | This table contains descriptive information about the index lists available
+  from Datastream.
+update_cadence: Daily
+columns:
+- name: IndexListIntCode
+  type: INTEGER
+  nullable: false
+  description: IndexListIntCode is the integer code for index lists. Ds2IndexList.IndexListIntCode cross-references with DS2XRef.Code
+    where Type_ = 1001.
+- name: PermitLevelCode
+  type: char(3)
+  nullable: false
+  description: PermitLevelCode is the licensing type code. It can be daily, monthly, or monthly with weights.
+- name: IndexListMnem
+  type: varchar(13)
+  nullable: true
+  description: IndexListMnem is the Datastream mnemonic for the index list.
+- name: IndexListDesc
+  type: varchar(255)
+  nullable: true
+  description: IndexListDesc is the Datastream textual description for the index list.
+- name: ListStatusCode
+  type: char(1)
+  nullable: true
+  description: ListStatusCode indicates whether the index is active (A) or dead (D).
+- name: LDB
+  type: char(3)
+  nullable: true
+  description: LDB is the licensing indicator for index lists. This field cross-references with DS2XRef.Code where Type_ =
+    1012. LSEG Quantitative Analytics Database Schema for Datastream 35 3. Datastream Futures The following diagram shows
+    the relationships between the Datastream Futures tables. All Datastream Futures tables described in this chapter are unadjusted
+    and updated daily. LSEG Quantitative Analytics Database Schema for Datastream 36
+---
+table: qa_datastream.DSFutCalcSerExtVal
+domain: pricing
+description: Datastream Futures Continuous Extended | Use this table to retrieve time series data for all non-standard data
+  types for a given continuous future series.
+columns:
+- name: CalcSeriesCode
+  type: INTEGER
+  nullable: false
+  description: CalcSeriesCode is the LSEG generated ID for a Datastream mnemonic. This
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the market date.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is the LSEG generated integer equivalent for each Datastream mnemonic. This field cross-references with
+    DSFutItem.Item.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the time series value.
+---
+table: qa_datastream.DSFutCalcSerInfo
+domain: pricing
+description: Datastream Futures Continuous Series
+---
+table: qa_datastream.Information
+domain: pricing
+description: level of contracts. This table describes Datastream mnemonics for these series.
+columns:
+- name: CalcSeriesCode
+  type: INTEGER
+  nullable: false
+  description: CalcSeriesCode is the LSEG generated ID for a Datastream mnemonic. This field is cross-referenced by other
+    Datastream Futures tables.
+- name: ClsCode
+  type: INTEGER
+  nullable: false
+  description: ClsCode is the LSEG generated ID for a Datastream class code. This field is cross-referenced by other Datastream
+    Futures tables.
+- name: DSMnem
+  type: varchar(12)
+  nullable: true
+  description: DSMnem is the unique Datastream mnemonic for a futures continuous series.
+- name: CalcSeriesName
+  type: varchar(90)
+  nullable: true
+  description: CalcSeriesName is the description of the series.
+- name: ISOCurrCode
+  type: char(3)
+  nullable: true
+  description: ISOCurrCode is the ISO Currency Code for the currency upon which the series is calculated. ISOCurrCode cross-references
+    with DSFutDesc.Code where DSFutDesc.Type_ = 2.
+- name: RollMethodCode
+  type: TINYINT
+  nullable: true
+  description: RollMethodCode is the roll method used for the calculation. RollMethodCode cross-references with DSFutCode.Code
+    where DSFutCode.Type_ = 4.
+- name: PositionFwdCode
+  type: TINYINT
+  nullable: true
+  description: PositionFwdCode is the position forward. If a contract trades four quarters, a continuous series may show data
+    from the most recent month, second most recent, third most recent, and so on. This field indicates which position is used.
+    Cross-reference PositionFwdCode with DSFutCode.Code where DSFutCode.Type_ = 5.
+- name: CalcMthCode
+  type: char(1)
+  nullable: true
+  description: CalcMthCode is the calculation month code. The calculation month code may be S (traded for all months) or T
+    (traded for specific months). LSEG Quantitative Analytics Database Schema for Datastream 37
+join_hints:
+- to: DSFutDesc
+  evidence: ISOCurrCode cross-references with DSFutDesc.Code where DSFutDesc.Type_ = 2.
+  type: cross_reference
+- to: DSFutCode
+  evidence: RollMethodCode cross-references with DSFutCode.Code where DSFutCode.Type_ = 4.
+  type: cross_reference
+---
+table: qa_datastream.DSFutCalcSerMth
+domain: pricing
+description: Datastream Continuous Series Calculation | Use this table to retrieve the months for which the continuous series
+  are available. A null value means that all
+columns:
+- name: CalcSeriesCode
+  type: INTEGER
+  nullable: false
+  description: CalcSeriesCode is the LSEG generated ID for a Datastream mnemonic. This field cross-references with DSFutCalcSerInfo.CalcSeriesCode.
+- name: MthNum
+  type: INTEGER
+  nullable: false
+  description: MthNum is the month for which continuous series are available.
+---
+table: qa_datastream.DSFutCalcSerVal
+domain: pricing
+description: Datastream Futures Continuous Series Values | This table contains time series data for all standard data types
+  for a given continuous future series.
+columns:
+- name: CalcSeriesCode
+  type: INTEGER
+  nullable: false
+  description: CalcSeriesCode is the LSEG generated ID for a Datastream mnemonic. This field cross-references with DSFutCalcSerInfo.CalcSeriesCode.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the market date.
+- name: Open_
+  type: FLOAT
+  nullable: true
+  description: Open_ is the open price. The open price value is exchange calculated, is the first trade price, or if there
+    were no trades on the market date, then this is the settlement price.
+- name: High
+  type: FLOAT
+  nullable: true
+  description: High is the high price. The high price either is the highest trade price, or if
+- name: there
+  type: were
+  nullable: false
+  description: trades on the market date, then this is the Settlement Price.
+- name: Low
+  type: FLOAT
+  nullable: true
+  description: Low is the low price. The low price either is the lowest trade price, or if
+- name: there
+  type: were
+  nullable: false
+  description: trades on the market date, then this is the settlement price.
+- name: Volume
+  type: FLOAT
+  nullable: true
+  description: Volume is the number of contracts traded.
+- name: Settlement
+  type: FLOAT
+  nullable: true
+  description: Settlement is the settlement price as published by exchange. If no figure is published by the exchange then
+    the last trade is used.
+- name: OpenInterest
+  type: FLOAT
+  nullable: true
+  description: OpenInterest is the number of contracts not closed.
+---
+table: qa_datastream.DSFutClass
+domain: pricing
+description: Datastream Futures Contract Class Information | Use this table to retrieve futures contracts according to the
+  platform upon which they were traded (class), for
+columns:
+- name: ClsCode
+  type: INTEGER
+  nullable: false
+  description: ClsCode is the LSEG generated ID for a Datastream class code. This field cross-references with DSFutCalcSerInfo.ClsCode.
+- name: ContrCode
+  type: INTEGER
+  nullable: true
+  description: ContrCode is the LSEG generated ID for a Datastream contract code. This
+- name: DSClsID
+  type: char(3)
+  nullable: true
+  description: DSClsID is a three-letter class code for a contract.
+- name: TrdPlatformCode
+  type: varchar(4)
+  nullable: true
+  description: TrdPlatformCode indicates the trading platform. Cross-reference TrdPlatformCode with DSFutDesc.Code where DSFutDesc.Type_
+    = 4.
+- name: TrdStatCode
+  type: char(1)
+  nullable: true
+  description: TrdStatCode is the trade status code. The trade status may be active (A) or dead (D). LSEG Quantitative Analytics
+    Database Schema for Datastream 38
+---
+table: qa_datastream.DSFutCode
+domain: pricing
+description: Datastream Futures Integer Codes | Use this table to translate futures integer codes.
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Type_ is the data type identifier. Types are defined where Type_ = 0 and Code identifies the type.
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is described by Desc_. Code is cross-referenced from other Datastream tables.
+- name: Desc_
+  type: varchar(90)
+  nullable: true
+  description: Desc_ is the full name or description of Code + Type_.
+join_hints:
+- to: other
+  evidence: Code is cross-referenced from other Datastream tables.
+  type: cross_reference
+---
+table: qa_datastream.DSFutContr
+domain: pricing
+description: Datastream Futures Contracts | Use this table to retrieve general futures contract information including the
+  contract name, type (forwards or
+columns:
+- name: ContrCode
+  type: INTEGER
+  nullable: false
+  description: ContrCode is the LSEG generated ID for a Datastream contract code. This
+- name: DSContrID
+  type: varchar(12)
+  nullable: true
+  description: DSContrID is the Datastream code for a contract.
+- name: SrcCode
+  type: INTEGER
+  nullable: true
+  description: SrcCode is the source code. Source or exchange code indicating the exchange in which the contract is trading.
+    Cross-reference SrcCode with DSFutCode.Code where DSFutCode.Type_ = 1.
+- name: ContrTypeCode
+  type: char(3)
+  nullable: true
+  description: ContrTypeCode indicates the contract type. ContrTypeCode cross- references with DSFutDesc.Code where DSFutDesc.Type_
+    = 1
+- name: UndrInstrCode
+  type: INTEGER
+  nullable: true
+  description: UndrInstrCode is the Underlying Instrument Code. Cross-reference UndrInstrCode with DSFutCode.Code where DSFutCode.Type_
+    = 2.
+- name: ContrName
+  type: varchar(90)
+  nullable: true
+  description: ContrName is the contract name.
+- name: ExchTickerSymb
+  type: varchar(12)
+  nullable: true
+  description: ExchTickerSymb is the security ticker or symbol provided by the exchange.
+---
+table: qa_datastream.DsFutContrChg
+domain: pricing
+description: Datastream Futures Contract Changes | Use this table to retrieve general futures contract change information.
+columns:
+- name: FutCode
+  type: INTEGER
+  nullable: false
+  description: FutCode is a LSEG ID for a Datastream mnemonic.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is the LSEG generated integer equivalent for each Datastream mnemonic. This field cross-references with
+    DSFutItem.Item.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the first trading date of the series. If the series is active, then this is the latest market
+    date.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the contract value.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the last trading date of the series. EndDate is null if the series is active. LSEG Quantitative
+    Analytics Database Schema for Datastream 39
+---
+table: qa_datastream.DSFutContrExtVal
+domain: pricing
+description: Datastream Futures Extended Value | This table contains the time series data for all non-standard, exchange-specific
+  data types.
+columns:
+- name: FutCode
+  type: INTEGER
+  nullable: false
+  description: FutCode is a LSEG ID for a Datastream mnemonic.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the market date.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is the LSEG generated integer equivalent for each Datastream mnemonic. This field cross-references with
+    DSFutItem.Item.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the time series value.
+---
+table: qa_datastream.DSFutContrInfo
+domain: pricing
+description: Datastream Futures Contract Information | Use this table to retrieve the static attributes of a futures series.
+  Separate series mnemonics are generated for
+columns:
+- name: FutCode
+  type: INTEGER
+  nullable: false
+  description: FutCode is a LSEG ID for a Datastream mnemonic.
+- name: ContrCode
+  type: INTEGER
+  nullable: true
+  description: ContrCode is the LSEG generated ID for a Datastream contract code.
+- name: ClsCode
+  type: INTEGER
+  nullable: true
+  description: ClsCode is the LSEG code for a Datastream class code.
+- name: DSMnem
+  type: varchar(10)
+  nullable: true
+  description: DSMnem is the Datastream mnemonic.
+- name: LDB
+  type: char(3)
+  nullable: true
+  description: 'LDB is the logical database code. Datastream Futures content may be: – FUT (US Financial Futures) – LIF (Non-US
+    Financial Futures) – COM (US Commodity Futures) – CIE (Non-US Commodity Futures)'
+- name: ContrDate
+  type: varchar(12)
+  nullable: true
+  description: ContrDate is the contract date in the format MMYY and indicates the futures expiration month and year.
+- name: ContrDateFmt
+  type: varchar(8)
+  nullable: true
+  description: (Reserved for future development.)
+- name: ISOCurrCode
+  type: char(3)
+  nullable: true
+  description: ISOCurrCode is the ISO Currency Code for the currency upon which the series is calculated. ISOCurrCode cross-references
+    with DSFutDesc.Code where DSFutDesc.Type_ = 2.
+- name: CurrUnitCode
+  type: varchar(4)
+  nullable: true
+  description: CurrUnitCode indicates the unit of currency. A value of E+00 represents a 1:1 unit basis. A value of E-02 means
+    the currency is in hundredths and must be divided by 100.
+- name: UnitCode
+  type: INTEGER
+  nullable: true
+  description: UnitCode indicates the units of a futures contract, for example, carats, cubic meters, or bushels. Cross-reference
+    UnitCode with DSFutCode.Code where Type_ = 3.
+- name: TrdStatCode
+  type: char(1)
+  nullable: true
+  description: TrdStatCode is the status code and indicates whether the contract is Active (A) or whether it has been Discontinued
+    (D).
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: StartDate indicates the date from which Datastream stores data. In some cases, contracts may have been eligible
+    for trading before this date.
+- name: LastTrdDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: LastTrdDate is the date on which the contract expires.
+- name: SttlmntDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date when the contract is settled and buyer must make payment.
+- name: ExpirationDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: (Reserved for future development.)
+- name: FirstNoticeDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The day after which an investor who has purchased a futures contract may be required to take physical delivery
+    of the contract's underlying commodity.
+- name: LastNoticeDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: (Reserved for future development.)
+- name: FirstDelvryDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: (Reserved for future development.) LSEG Quantitative Analytics Database Schema for Datastream 40
+- name: TickSizeUnitCode
+  type: INTEGER
+  nullable: true
+  description: (Reserved for future development.)
+join_hints:
+- to: DSFutDesc
+  evidence: ISOCurrCode cross-references with DSFutDesc.Code where DSFutDesc.Type_ = 2.
+  type: cross_reference
+---
+table: qa_datastream.DSFutContrVal
+domain: pricing
+description: Datastream Futures Values | Use this table to retrieve time series data for a futures series.
+columns:
+- name: FutCode
+  type: INTEGER
+  nullable: false
+  description: FutCode is a LSEG ID for a Datastream mnemonic.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the market date.
+- name: Open_
+  type: FLOAT
+  nullable: true
+  description: Open_ is the opening value of a contract. This value is either exchange calculated or the first trade value.
+    If there were no trades, then this is the settlement price.
+- name: High
+  type: FLOAT
+  nullable: true
+  description: High is the high value of a contract trade. If there were no trades, then this is the settlement price.
+- name: Low
+  type: FLOAT
+  nullable: true
+  description: Low is the low value of a contract trade. If there were no trades, then this is the settlement price.
+- name: Volume
+  type: FLOAT
+  nullable: true
+  description: Volume is the trade volume for the given date.
+- name: Settlement
+  type: FLOAT
+  nullable: true
+  description: Settlement is the settlement price as published by the exchange. Settlement price is defined by the exchange,
+    and is used to mark a particular contract. If no settlement figure is published by the exchange, then this is the last
+    trade price.
+- name: OpenInterest
+  type: FLOAT
+  nullable: true
+  description: OpenInterest is the total number of contracts entered but not liquidated. This is the total purchase or sales
+    commitment, or the number of contracts outstanding.
+---
+table: qa_datastream.DSFutCOTRepVal
+domain: pricing
+description: Datastream Future COT Report Value | Use this table to retrieve COT (Commitment of Traders) report series attributes
+  and values. A COT report is sent | This table is defined at a contract level.
+columns:
+- name: ContrCode
+  type: INTEGER
+  nullable: false
+  description: ContrCode is the LSEG generated ID for a Datastream contract code.
+- name: RepMnemCode
+  type: INTEGER
+  nullable: false
+  description: RepMnemCode indicates the report type. To identify the report type, cross-reference RepMnemCode with DSFutCode
+    where RepMnemCode = DSFutCode.Code and Type_ = 6. Then cross- reference DSFutCode.Desc_ with DSFutDesc.Code where Type_
+    = 3.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the market date.
+- name: DSMnem
+  type: varchar(12)
+  nullable: true
+  description: DSMnem is the Datastream mnemonic.
+- name: NumTrades
+  type: INTEGER
+  nullable: true
+  description: NumTrades is the number of traders holding open positions.
+- name: OpenInterest
+  type: INTEGER
+  nullable: true
+  description: OpenInterest is the total number of contracts entered but not liquidated. This is the total purchase or sales
+    commitment, or the number of contracts outstanding. LSEG Quantitative Analytics Database Schema for Datastream 41
+---
+table: qa_datastream.DSFutDesc
+domain: pricing
+description: Datastream Futures Varchar Codes | Use this table to translate futures varchar codes.
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Type_ is the data type identifier. Types are defined where Type_ = 0 and Code identifies the type.
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is described by Desc_. Code is cross-referenced from other Datastream tables.
+- name: Desc_
+  type: varchar(90)
+  nullable: true
+  description: Desc_ is the full name or description of Code + Type_.
+join_hints:
+- to: other
+  evidence: Code is cross-referenced from other Datastream tables.
+  type: cross_reference
+---
+table: qa_datastream.DSFutItem
+domain: pricing
+description: Datastream Futures Data Items | This table contains descriptive information about Datastream futures items.
+columns:
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is the LSEG generated integer equivalent for each Datastream mnemonic. This field is cross-referenced
+    from other tables.
+- name: Mnemonic
+  type: varchar(12)
+  nullable: true
+  description: Mnemonic is the mnemonic for each of the time series data items.
+- name: Desc_
+  type: varchar(30)
+  nullable: true
+  description: Desc_ is the description of each of the time series data items.
+- name: CodeNum
+  type: INTEGER
+  nullable: true
+  description: CodeNum is the Type_ code to reference in DSFutCode.
+- name: DataTypeCode
+  type: INTEGER
+  nullable: true
+  description: DataTypeCode indicates the item data type. Cross-reference DataTypeCode with DSFutCode.Code where Type_ = 8.
+- name: Table_
+  type: INTEGER
+  nullable: true
+  description: Table_ is the bit mask value of the associated tables. Table_ cross- references with DSFutCode.Code where Type_
+    = 7. In the event that the item is associated with two tables, Table_ is the sum of the applicable DSFutCode.Code values.
+---
+table: qa_datastream.DSFutTrdCycle
+domain: pricing
+description: Datastream Futures Trading Cycle | Use this table to map the months in which a given future contract class trades.
+columns:
+- name: ClsCode
+  type: INTEGER
+  nullable: false
+  description: ClsCode is the LSEG generated ID for a Datastream class code. This field cross-references with DSFutCalcSerInfo.ClsCode.
+- name: TrdMth
+  type: char(3)
+  nullable: false
+  description: TrdMth indicates the trading months associated with a contract class, abbreviated as a three-letter code. For
+    contracts which trade all year, ALL is displayed.
+---
+table: qa_datastream.DSFutUndrMap
+domain: pricing
+description: Datastream Underlying Series | This table contains the Datastream mnemonic of the underlying series to which
+  the future series belongs. This is
+columns:
+- name: FutCode
+  type: INTEGER
+  nullable: false
+  description: FutCode is a LSEG ID for a Datastream mnemonic. LSEG Quantitative Analytics Database Schema for Datastream
+    42
+- name: DSMnem
+  type: varchar(20)
+  nullable: false
+  description: DSMnem is the Datastream mnemonic.
+- name: UndrInstrCode
+  type: INTEGER
+  nullable: true
+  description: UndrInstrCode is the underlying asset class code. Cross-reference UndrInstrCode with DSFutCode.Code where Type_
+    = 2. LSEG Quantitative Analytics Database Schema for Datastream 43 4. Datastream Commodities The Datastream commodities
+    tables contain time series data for spot commodities and commodity indices. All these tables are unadjusted and updated
+    daily.
+---
+table: qa_datastream.DSCmCode
+domain: pricing
+description: Datastream Commodities Integer Codes | This table contains definitions for integer code fields cross-referenced
+  from other Datastream commodities tables.
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Type_ identifies the type. Types are defined where Type_ = 0 and Code identifies Type_.
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is described by Desc_. Code is cross-referenced from other Datastream tables.
+- name: Desc_
+  type: varchar(90)
+  nullable: true
+  description: 'Desc_ is the description of Code. NOTE: See also DSCmDesc: Datastream Commodities Character Codes on this
+    page.'
+---
+table: qa_datastream.DSCmDesc
+domain: pricing
+description: Datastream Commodities Character Codes | This table contains definitions for varchar code fields cross-referenced
+  from other Datastream commodities
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Type_ identifies the type. Types are defined where Type_ = 0 and Code identifies the Type.
+- name: Code
+  type: varchar(30)
+  nullable: false
+  description: Code is described by Desc_. Code is cross-referenced from other Datastream tables.
+- name: Desc_
+  type: varchar(90)
+  nullable: true
+  description: 'Desc_ is the description of Code. NOTE: See also DSCmCode: Datastream Commodities Integer Codes.'
+join_hints:
+- to: other
+  evidence: Code is cross-referenced from other Datastream tables.
+  type: cross_reference
+- to: other
+  evidence: Code is cross-referenced from other Datastream tables.
+  type: cross_reference
+---
+table: qa_datastream.DSCmExtVal
+domain: pricing
+description: Datastream Commodities Extended Data | This table is an extension of the DSCmVal table described on page 46.
+  This table contains additional time series
+columns:
+- name: ComCode
+  type: INTEGER
+  nullable: false
+  description: ComCode is the commodity code. This is an automatically generated identifier for a commodity. Cross-reference
+    ComCode with DSCmInfo.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is the item code. This is an identifier for special data such as Official Price, Inventory Volume, and
+    so on. Cross reference Item with DSCmItem. LSEG Quantitative Analytics Database Schema for Datastream 44
+- name: Date_
+  type: INTEGER
+  nullable: false
+  description: Date_ is the price transaction date.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the time series value for a commodity.
+- name: LicFlag
+  type: INTEGER
+  nullable: false
+  description: LicFlag is the bitmap license flag. This indicates the license to which the record belongs. Cross-reference
+    LicFlag with DSCmLicFlagCode.
+---
+table: qa_datastream.DSCmInfo
+domain: pricing
+description: Datastream Commodities Information | This table contains descriptive information on spot commodities and commodity
+  indices.
+columns:
+- name: ComCode
+  type: INTEGER
+  nullable: false
+  description: ComCode is the commodity code. This is an automatically generated internal identifier for a commodity. This
+    field is cross-referenced by other Datastream Commodities tables.
+- name: DSMnemonic
+  type: varchar(10)
+  nullable: false
+  description: DSMnemonic is the Datastream mnemonic for a commodity.
+- name: CreatorCode
+  type: INTEGER
+  nullable: true
+  description: CreatorCode is the identifier for the commodity data creator. Cross-reference CreatorCode with DSCmCode.Code
+    where Type_ = 1.
+- name: ComType
+  type: varchar(12)
+  nullable: true
+  description: For a spot commodity, ComType indicates the first-level sector. in this case, cross-reference ComType with
+    DSCmDesc.Code where Type_ = 2. For a commodity index, ComType indicates the method of calculating index value. In this
+    case, cross-reference ComType with DSCmDesc.Code where Type_ = 1.
+- name: ISOCur
+  type: varchar(3)
+  nullable: true
+  description: ISOCur is the ISO currency code. ISOCur indicates the primary currency of the country where the commodity is
+    traded. Cross-reference ISCCur with DSCmDesc.Code where Type_ = 3.
+- name: CurUnit
+  type: varchar(4)
+  nullable: true
+  description: CurUnit indicates the unit of currency. A value of E+00 represents a 1:1 unit basis. A value of E-02 means
+    the currency is in hundredths and must be divided by 100.
+- name: UnitCode
+  type: varchar(3)
+  nullable: true
+  description: UnitCode indicates the units of a spot commodity, for example, carats, cubic meters, or bushels. Cross-reference
+    UnitCode with DSCmDesc.Code where Type_ = 4.
+- name: RegCode
+  type: INTEGER
+  nullable: true
+  description: RegCode is the region code indicating the country or region to which an index belongs. (This field is not currently
+    populated.)
+- name: Status
+  type: INTEGER
+  nullable: true
+  description: Status indicates whether the commodity is Active (A) or whether it has been discontinued (D). This field cross-references
+    DSCmDesc.Code where Type_ = 5.
+- name: StatusDate
+  type: INTEGER
+  nullable: true
+  description: StatusDate is the status date. StatusDate indicates the date the status of the commodity changed.
+- name: BaseDate
+  type: INTEGER
+  nullable: true
+  description: BaseDate is the base date. This indicates the date the notational value was set.
+- name: BaseValue
+  type: FLOAT
+  nullable: true
+  description: BaseValue indicates the base value. This is the value of the index at the base date. (This field is not currently
+    populated.)
+- name: BaseDateFmt
+  type: varchar(8)
+  nullable: true
+  description: BaseDateFmt indicates the format of the base date. For example, the format may be YYYYMMDD, YYYYMM, or YYYY.
+    (This field is not currently populated.)
+- name: FreqCode
+  type: INTEGER
+  nullable: true
+  description: FreqCode is the frequency code, indicating the series frequency. (This field is not currently populated.)
+- name: Name_
+  type: varchar(150)
+  nullable: true
+  description: Name_ is the expanded name of the commodity.
+- name: DSName
+  type: varchar(40)
+  nullable: true
+  description: DSName is the Datastream name of the commodity.
+- name: FreightCond
+  type: varchar(255)
+  nullable: true
+  description: FreightCond indicates the freight condition defined in the commodity contract for the delivery of the commodity.
+    (This field is not currently populated.)
+- name: StartDate
+  type: INTEGER
+  nullable: true
+  description: StartDate indicates the start date for a series.
+- name: SeriesType
+  type: char(1)
+  nullable: true
+  description: SeriesType indicates whether the series is a Spot commodity (S), or a commodity Index (I). This field cross-references
+    DSCmDesc.Code where Type_ = 6. LSEG Quantitative Analytics Database Schema for Datastream 45
+- name: LicFlag
+  type: INTEGER
+  nullable: false
+  description: LicFlag is the bitmap license flag. This indicates the license to which the record belongs. Cross-reference
+    LicFlag with DSCmLicFlagCode.
+join_hints:
+- to: DSCmDesc
+  evidence: ComType varchar(12) Y For a spot commodity, ComType indicates the first-level sector. in this case, cross-reference
+    ComType with DSCmDesc.Code where Type_ = 2.
+  type: cross_reference
+---
+table: qa_datastream.DSCmItem
+domain: pricing
+description: 'Datastream Commodities Items | This table describes the data type Item, referenced in DSCmExtVal: Datastream
+  commodities extended data on page'
+columns:
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is an identifier generated by Quantitative Analytics. This field is cross- referenced from DSCmExtVal.
+- name: DataTypeMnem
+  type: varchar(10)
+  nullable: false
+  description: DataTypeMnem is the mnemonic for Item.
+- name: Desc_
+  type: varchar(90)
+  nullable: true
+  description: Desc_ is a description of Item.
+---
+table: qa_datastream.DSCmLicFlagCode
+domain: pricing
+description: Datastream Commodities License Flags | Use this table to retrieve license bit mask values.
+columns:
+- name: ProviderId
+  type: INTEGER
+  nullable: false
+  description: ProviderId is the identifier for the data provider. Cross-reference ProviderId with DSCmCode.Code where Type_
+    = 5, then translate by cross-referencing the value in Desc_ with DSCmCode.Code where Type_ = 1.
+- name: LDBId
+  type: INTEGER
+  nullable: false
+  description: LDBId indicates the license code. Cross-reference LDBId with DSCmCode.Code where Type_ = 4.
+- name: LicFlag
+  type: INTEGER
+  nullable: false
+  description: LicFlag is the bitmap license flag. This indicates the license to which the record belongs. This field is cross-referenced
+    by other Datastream Commodities tables.
+---
+table: qa_datastream.DSCmLoc
+domain: pricing
+description: Datastream Commodities Locations | Use this table to retrieve information about commodities locations.
+columns:
+- name: ComCode
+  type: INTEGER
+  nullable: false
+  description: ComCode is the commodity code. This is an automatically generated internal identifier for a commodity. Cross-reference
+    ComCode with DSCmInfo.
+- name: RegCode
+  type: INTEGER
+  nullable: false
+  description: RegCode is the region code indicating the country or region to which an index belongs. (This field is not currently
+    populated.) RelTypeCode int N
+---
+table: qa_datastream.DSCmReg
+domain: pricing
+description: Datastream Commodities Regions | Use this table to retrieve information about commodities regions.
+columns:
+- name: RegCode
+  type: INTEGER
+  nullable: false
+  description: RegCode is the region code indicating the country or region to which an index belongs. (This field is not currently
+    populated.)
+- name: RegID
+  type: varchar(7)
+  nullable: true
+  description: RegID is the region identifier.
+- name: RegName
+  type: varchar(91)
+  nullable: true
+  description: RegName is the region name. DSRegCode varchar(7) Y
+- name: ISOCur
+  type: varchar(4)
+  nullable: true
+  description: ISOCur is the ISO currency.
+---
+table: qa_datastream.DSCmVal
+domain: pricing
+description: Datastream Commodities Data | Use this table to retrieve time series data related to spot commodities and commodity
+  indices.
+columns:
+- name: ComCode
+  type: INTEGER
+  nullable: false
+  description: ComCode is the commodity code. This is an automatically generated internal identifier for a commodity. Cross-reference
+    ComCode with DSCmInfo.
+- name: Date_
+  type: INTEGER
+  nullable: false
+  description: Date_ is the market date, in YYYYMMDD format. This is the date on which the commodity index time series value
+    is available.
+- name: Open_
+  type: FLOAT
+  nullable: true
+  description: Open_ is the opening value of a commodity for the given date.
+- name: Close_
+  type: FLOAT
+  nullable: true
+  description: Close_ is the closing value of a commodity for the given date.
+- name: High
+  type: FLOAT
+  nullable: true
+  description: High is the high value of the commodity for the given date.
+- name: Low
+  type: FLOAT
+  nullable: true
+  description: Low is the low value of the commodity for the given date.
+- name: Volume
+  type: FLOAT
+  nullable: true
+  description: Volume is the trade volume for the given date.
+- name: DSP
+  type: FLOAT
+  nullable: true
+  description: DSP is the Datastream Mid-Price. This is the calculated mid value of either Bid/Ask or High/Low.
+- name: LicFlag
+  type: INTEGER
+  nullable: false
+  description: 'LicFlag is the bitmap license flag. This indicates the license to which the record belongs. Cross-reference
+    LicFlag with DSCmLicFlagCode. NOTE See also DSCmExtVal: Datastream Commodities Extended Data on page 43. LSEG Quantitative
+    Analytics Database Schema for Datastream 47 5. Datastream Economics All Datastream Economics tables in this chapter are
+    unadjusted and updated daily.'
+---
+table: qa_datastream.EcoAttrData
+domain: pricing
+description: Economics Attribute Data | Use this table to retrieve attribute data for a specified economic series.
+columns:
+- name: EcoSeriesID
+  type: INTEGER
+  nullable: false
+  description: EcoSeriesID is the Datastream identifier. Cross-reference this field with EcoInfo.
+- name: MsgSeq
+  type: INTEGER
+  nullable: false
+  description: MsgSeq indicates the message sequence. Starting at 0, this field increments for every data insertion for the
+    given queue.
+- name: LastUpdDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: LastUpdDate is the date on which the series value is last updated.
+- name: LastUpdTime
+  type: INTEGER
+  nullable: true
+  description: LastUpdTime is the time on which the series value is last updated.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the latest observation or time point available for a series.
+- name: BasePeriod
+  type: varchar(31)
+  nullable: true
+  description: BasePeriod describes the nature of the time series. This is a specific time period used as a benchmark in measuring
+    economic data.
+- name: SeriesActionFlag
+  type: varchar(11)
+  nullable: true
+  description: 'SeriesActionFlag indicates the effect in the series. For example, the flag may be: New, Change, Replace, Discontinue,
+    Deleted.'
+---
+table: qa_datastream.EcoClsCode
+domain: pricing
+description: Economics Classification Codes | This table contains economic series classification data. | table from the EcoClsLvlMap
+  table.
+columns:
+- name: ClsID
+  type: INTEGER
+  nullable: false
+  description: ClsID is the classification identification code. Use this field to cross-reference this table from the EcoClsLvlMap
+    table.
+- name: ClsCode
+  type: varchar(3)
+  nullable: true
+  description: ClsCode is the classification code.
+- name: ClsDesc
+  type: varchar(91)
+  nullable: true
+  description: ClsDesc is the classification description.
+- name: ClsLevel
+  type: TINYINT
+  nullable: true
+  description: ClsLevel is the classification level. (This field is not currently populated.)
+- name: ClsType
+  type: char(1)
+  nullable: true
+  description: ClsType indicates the classification type. ClsType may be E (EDIS) or H (HYDRA). LSEG Quantitative Analytics
+    Database Schema for Datastream 48
+---
+table: qa_datastream.EcoClsLvlMap
+domain: pricing
+description: Economics Classification-Level Mapping | Use this table to retrieve classification-level mapping information
+  for economics tables. | ClsId int N ClsId is the classification identification code. Use this field to cross-reference this
+  table
+columns:
+- name: ClsId
+  type: INTEGER
+  nullable: false
+  description: ClsId is the classification identification code. Use this field to cross-reference this table from the EcoClsLvlMap
+    table.
+- name: SubClsId
+  type: INTEGER
+  nullable: false
+  description: SubClsId subsidiary classification identification code.
+---
+table: qa_datastream.EcoCode
+domain: pricing
+description: Economics Codes | Use this table to translate code values from other Datastream economics tables.
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Type_ identifies the type. Types are defined where Type_ = 0 and Code identifies Type_.
+- name: Code
+  type: varchar(51)
+  nullable: false
+  description: Code is described by Description. Code is cross-referenced from other Datastream tables.
+- name: Description
+  type: varchar(101)
+  nullable: true
+  description: Description is the description of Code.
+join_hints:
+- to: other
+  evidence: Code is cross-referenced from other Datastream tables.
+  type: cross_reference
+---
+table: qa_datastream.EcoData
+domain: pricing
+description: Economics Series Value Data | Use this table to retrieve the value of a series.
+columns:
+- name: EcoSeriesID
+  type: INTEGER
+  nullable: false
+  description: EcoSeriesID is the economics series identifier. Cross-reference this field with EcoInfo.
+- name: ChangeSeq
+  type: INTEGER
+  nullable: false
+  description: ChangeSeq indicates changes in the existing values of the series. ChangeSeq increments when there has been
+    a change.
+- name: PeriodDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: PeriodDate is the value date of the series. PeriodDate is calculated on the basis of frequency.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ indicates the value of the series.
+- name: MsgSeq
+  type: INTEGER
+  nullable: true
+  description: MsgSeq indicates the message sequence. Starting at 0, this field increments for every data insertion for the
+    given queue.
+- name: AnnouncedDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: AnnouncedDate is the date on which the economic series was entered into the Datastream database. This supports
+    an as-reported structure.
+---
+table: qa_datastream.EcoInfo
+domain: pricing
+description: Economic Indicator Information | Use this table to retrieve information about an economic indicator.
+columns:
+- name: EcoSeriesID
+  type: INTEGER
+  nullable: false
+  description: EcoSeriesID is the Datastream identifier. This field is cross- referenced by other Datastream Economics tables.
+- name: DSNumber
+  type: varchar(21)
+  nullable: true
+  description: DSNumber is the unique Datastream code number for each series.
+- name: DSMnemonic
+  type: varchar(10)
+  nullable: true
+  description: DSMnemonic is the Datastream series mnemonic.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: StartDate indicates the date of the beginning observation for a series.
+- name: IsPadding
+  type: TINYINT
+  nullable: true
+  description: IsPadding indicates whether the series is displayed as a percent change (1), or as an actual change (0). For
+    example, the Annual Inflation rate is a percentage, so IsPadding = 1 to indicate the series is displayed as a percentage
+    change.
+- name: PreDSNumber
+  type: varchar(21)
+  nullable: true
+  description: PreDSNumber indicates the previous Datastream number. This
+- name: field
+  type: is
+  nullable: true
+  description: unless a series been discontinued, then re-started by a new series. If a new series exists, then this field
+    contains the previous series number.
+- name: IsForecast
+  type: TINYINT
+  nullable: true
+  description: IsForecast indicates whether the series is a Forecast series (1) or a Historical series (0).
+- name: IsKeyIndicator
+  type: TINYINT
+  nullable: true
+  description: IsKeyIndicator indicates whether the series is a Key Indicator (1), or not (0).
+- name: MktCode
+  type: varchar(3)
+  nullable: true
+  description: MktCode is the market code. MktCode indicates the geographic location of the economic series. Cross-reference
+    MktCode with EcoCode.Code where Type_ = 5.
+- name: CurrCode
+  type: varchar(3)
+  nullable: true
+  description: CurrCode is the currency code. CurrCode indicates the currency of the given series. Cross-reference CurrCode
+    with EcoCode.Code where Type_ = 3.
+- name: AdjCode
+  type: char(1)
+  nullable: true
+  description: AdjCode is the seasonal adjustment indicator. Cross-reference AdjCode with EcoCode.Code where Type_ = 1.
+- name: StatCode
+  type: varchar(51)
+  nullable: true
+  description: StatCode indicates the status of the series. Status may be Active, Discontinued, or Deleted. Cross-reference
+    StatCode with EcoCode.Code where Type_ = 9.
+- name: ScaleCode
+  type: varchar(51)
+  nullable: true
+  description: ScaleCode indicates the unit of scale for the series. Cross- reference ScaleCode with EcoCode.Code where Type_
+    = 6.
+- name: IsDataSetNational
+  type: TINYINT
+  nullable: true
+  description: IsDataSetNational indicates whether the dataset is from national sources (1), or international sources (0).
+- name: SeriesTypeCode
+  type: varchar(51)
+  nullable: true
+  description: SeriesTypeCode indicates if the series is an actual series (ACT) or if the series has been derived (DER). Cross-reference
+    SeriesTypeCode with EcoCode.Code where Type_ = 7.
+- name: UnitCode
+  type: varchar(51)
+  nullable: true
+  description: UnitCode indicates the unit of a series. For example, UnitCode may indicate that the series is an index, that
+    the series is reported as a native currency, or that the series is reported in a unit of measure such as meters, liters,
+    or megawatts. Cross- reference UnitCode with EcoCode.Code where Type_ = 10.
+- name: FreqCode
+  type: varchar(51)
+  nullable: true
+  description: FreqCode is the frequency code, indicating how often the series is updated. Cross-reference FreqCode with EcoCode.Code
+    where Type_ = 4.
+- name: SrcCode
+  type: varchar(51)
+  nullable: true
+  description: SrcCode indicates the source of a particular series. Cross- reference SrcCode with EcoCode.Code where Type_
+    = 8.
+- name: DSLDBCode
+  type: varchar(51)
+  nullable: true
+  description: DSLDBCode is an internal Datastream licensing code. Cross- reference this DSLDBCode with EcoCode.Code where
+    Type_ = 11. LSEG Quantitative Analytics Database Schema for Datastream 50
+- name: CnvCode
+  type: varchar(51)
+  nullable: true
+  description: CnvCode indicates the method used to calculate one periodic figure from another periodic figure. For example,
+    CnvCode describes how an annual figure is calculated from a monthly figure, or how a quarterly figure is calculated from
+    a monthly figure. Cross-reference CnvCode with EcoCode where Type_ = 2.
+- name: ClsType1
+  type: INTEGER
+  nullable: true
+  description: ClsType1 is the first classification level for a given economic series. Cross-reference ClsType1 with EcoClsCode.ClsID.
+- name: ClsType2
+  type: INTEGER
+  nullable: true
+  description: ClsType2 is the economic sub-category of the series. Cross- reference ClsType2 with EcoClsCode.ClsID.
+- name: EcoClsLvl1
+  type: INTEGER
+  nullable: true
+  description: EcoClsLvl1 is the HYDRA classification level-1 value. (This field is not currently populated.)
+- name: EcoClsLvl2
+  type: INTEGER
+  nullable: true
+  description: EcoClsLvl2is the HYDRA classification level-2value. (This field is not currently populated.)
+- name: Desc_English
+  type: varchar(1001)
+  nullable: true
+  description: 'Desc_English is the English language description of the series. NOTE: See also EcoLanguageDesc: Economics
+    European Language Series Descriptions on page 50.'
+---
+table: qa_datastream.EcoLanguageDesc
+domain: pricing
+description: 'Economics European Language Series | Use this table to retrieve French, German, and Spanish series descriptions.
+  This table supplements EcoInfo:'
+columns:
+- name: EcoSeriesID
+  type: INTEGER
+  nullable: false
+  description: EcoSeriesID is the economics series identifier. Cross-reference this
+- name: ExpandedName
+  type: varchar(1001)
+  nullable: true
+  description: ExpandedName includes additional information for a given series.
+- name: Desc_French
+  type: varchar(1001)
+  nullable: true
+  description: Desc_French is the French language description of the series. If no French description exists, then the field
+    contains the English description.
+- name: Desc_German
+  type: varchar(1001)
+  nullable: true
+  description: Desc_German is the German language description of the series. If no German description exists, then the field
+    contains the English description.
+- name: Desc_Spanish
+  type: varchar(1001)
+  nullable: true
+  description: Desc_Spanish is the Spanish language description of the series. LSEG Quantitative Analytics Database Schema
+    for Datastream 51 6. SQL Views A library of sophisticated SQL Views, developed by the LSEG Support Team, will be available
+    to the clients. The SQL Views provide simplified calls that run complex SQL code and address key data nuances and mapping
+    requests in the LSEG Quantitative Analytics database, making it much easier to access data through LSEG Quantitative Analytics.
+    Clients will be abl
+---
+table: qa_datastream.vw_Ds2Mapping
+domain: pricing
+description: Underlying Table Index Fields
+columns:
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode links across the core master tables.
+- name: Typ
+  type: INTEGER
+  nullable: false
+  description: North America = 1, Global = 6. Used to join with vw_SecurityMasterX
+- name: Rank
+  type: SMALLINT
+  nullable: false
+  description: Rank is the issue rank for issuers with multiple issues.
+- name: Exchange
+  type: SMALLINT
+  nullable: true
+  description: Exchange identifies whether the security is a United States security (1) or a Canadian security (2). A value
+    of 0 indicates that this field is not applicable.
+- name: VenCode
+  type: INTEGER
+  nullable: true
+  description: 'VenCode maps to the InfoCode column across Datastream tables and views. InfoCode is the Quantitative Analytics
+    internal code for Datastream tables. Example Use Case: Searching for vendor ID of a given QAID select ms.id, map.SecCode,
+    map.Typ, map.Rank, map.Exchange, map.VenCode from vw_securityMasterX ms join vw_Ds2mapping map on map.SecCode = ms.SecCode
+    and map.Typ = ms.Typ where ms.id = ''TOC'' --THOMSON REUTERS and map.Exchange = 1 --select the US traded security LSEG
+    Quantitative Analytics Data'
+---
+table: qa_datastream.vw_Ds2SecInfo
+domain: pricing
+description: Underlying Table Index Fields
+---
+table: qa_datastream.InfoCode
+domain: pricing
+description: Underlying Table Index Fields
+columns:
+- name: InfoCode
+  type: INTEGER
+  nullable: false
+  description: InfoCode is the Quantitative Analytics internal code for Datastream tables. InfoCode is the primary mapping
+    code for country-level identifiers.
+- name: DsSecCode
+  type: INTEGER
+  nullable: true
+  description: DsSecCode is the Datastream Security-level code.
+- name: DsQtName
+  type: varchar
+  nullable: true
+  description: DsQtName contains the name of the name of country-level quote.
+- name: IsPrimQt
+  type: TINYINT
+  nullable: true
+  description: IsPrimQt flags whether this is the primary country-level quote. This field can have a value of 1 (yes) or 0
+    (no).
+- name: PrimExchIntCode
+  type: SMALLINT
+  nullable: true
+  description: PrimExchIntCode is the integer code for the primary exchange.
+- name: PrimaryExchange
+  type: varchar
+  nullable: true
+  description: PrimaryExchange is the exchange name of the primary exchange.
+- name: CountryTradingIn
+  type: varchar
+  nullable: true
+  description: CountryTradingIn is the country code indicating where the security is traded on its primary exchange.
+- name: CountryTradingInName
+  type: varchar
+  nullable: true
+  description: CountryTradingInName is the country name where the security is traded on its primary exchange.
+- name: StatusCode
+  type: char
+  nullable: true
+  description: – A (Active) – D (Dead) – S (Suspended)
+- name: StatusDescription
+  type: varchar
+  nullable: true
+  description: StatusDescription is the description of the StatusCode item.
+- name: EquityTypeCode
+  type: varchar
+  nullable: true
+  description: EquityTypeCode is the code indicating the type of equity.
+- name: EquityTypeDescription
+  type: varchar
+  nullable: true
+  description: 'EquityTypeDescription is the description of the type of equity. Example Use Case: Retrieving basic information
+    for a single security select * from vw_Ds2secinfo where InfoCode = 66353 --Thomson Reuters (NYS) This view returns pricing
+    data for all exchanges associated with a DS InfoCode. Pricing and volume values are adjusted (or unadjusted) according
+    to the adjustment type (AdjType) column. Underlying Table Index Fields InfoCode, AdjType, MarketDate, ExchIntCode, IsPrimExchQt,
+    DsCode Unique Key '
+- name: InfoCode
+  type: INTEGER
+  nullable: false
+  description: InfoCode is the Quantitative Analytics internal code for Datastream tables. InfoCode is the primary mapping
+    code for country-level identifiers.
+- name: DsCode
+  type: varchar
+  nullable: true
+  description: DsCode is the Datastream code. LSEG Quantitative Analytics Database Schema for Datastream 53
+- name: MarketDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: MarketDate is the date of the price.
+- name: ExchIntCode
+  type: SMALLINT
+  nullable: true
+  description: ExchIntCode is the integer code for the exchange.
+- name: IsPrimExchQt
+  type: char
+  nullable: true
+  description: IsPrimExchQt indicates whether the quote is a primary exchange- level quote (Y), or is not (N).
+- name: ExchName
+  type: varchar
+  nullable: true
+  description: ExchName is the exchange name
+- name: AdjType
+  type: INTEGER
+  nullable: false
+  description: AdjType identifies the type of adjustment factor where 1 indicates that the adjustment includes splits only,
+    and 2 indicates that it includes everything. 0 Indicates that the pricing is unadjusted.
+- name: CumAdjFactor
+  type: FLOAT
+  nullable: true
+  description: 'CumAdjFactor is a time series of accumulated adjustment factors. The latest value is always 1, and historic
+    adjustment factors are accumulated in reverse chronological order. As a result, the most recent AdjFactor = 1 and the
+    oldest AdjFactor = 1 multiplied by the product of all adjustment factors. Example: If BASEDATE 30/06/90 EVENT 1 30/06/95
+    AdjFactor = 0.5 EVENT 2 30/06/00 AdjFactor = 0.8 EVENT 3 30/06/05 AdjFactor = 1.1 Then CumAdjFactor 30/06/90 – 29/06/95
+    = 1 * 0.5 * 0.8 * 1.1 30/06/95 – '
+- name: PriceUnitAdjustment
+  type: varchar
+  nullable: true
+  description: PriceUnitAdjustment number of units in the underlying pricing table. A value of E+00 represents a 1:1 unit
+    basis. A value of E-02 means the currency is in hundredths. The view automatically performs the currency normalization
+    for all prices, e.g. dividing pence by 100 to convert into pounds.
+- name: Open_
+  type: FLOAT
+  nullable: true
+  description: Open_ is the opening price for a security on a given date.
+- name: High
+  type: FLOAT
+  nullable: true
+  description: High is the high price for the security on a given date or date range.
+- name: Low
+  type: FLOAT
+  nullable: true
+  description: Low is the low price for the security on a given date or date range.
+- name: Close_
+  type: FLOAT
+  nullable: true
+  description: Close_ is the closing price of the security on the given date.
+- name: Bid
+  type: FLOAT
+  nullable: true
+  description: Bid is the bid price for the security on the given date quoted at close of market.
+- name: Ask
+  type: FLOAT
+  nullable: true
+  description: Ask is the ask price for the security on the given date quoted at close of market.
+- name: VWAP
+  type: FLOAT
+  nullable: true
+  description: VWAP is the volume-weighted average price
+- name: Volume
+  type: FLOAT
+  nullable: true
+  description: Volume is the trade volume in shares.
+- name: ConsolVol
+  type: FLOAT
+  nullable: true
+  description: ConsolVol is the consolidated volume in shares of the security.
+- name: Currency
+  type: char(3)
+  nullable: true
+  description: 'Currency is the ISO Currency Code for the currency upon which the series is calculated. Example Use Case:
+    Retrieving the adjusted primary-exchange price history for a security. Example automatically applies price unit adjustment
+    of .01 for Pounds/Pence. select InfoCode, DsCode, exchintcode, MarketDate, AdjType, ExchName, Close_, PriceUnitAdjustment
+    from vw_Ds2Pricing LSEG Quantitative Analytics Database Schema for Datastream 54 where InfoCode = 48535 -- VODAFONE and
+    AdjType = 2 -- split & spinof'
+---
+table: qa_datastream.vw_Ds2TotalReturn
+domain: pricing
+description: Underlying Table Index Fields
+columns:
+- name: InfoCode
+  type: INTEGER
+  nullable: false
+  description: InfoCode is the Quantitative Analytics internal code for Datastream tables. InfoCode is the primary mapping
+    code for country-level identifiers.
+- name: DsCode
+  type: varchar
+  nullable: true
+  description: DsCode is the Datastream code.
+- name: MarketDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: MarketDate is the date of the price.
+- name: ExchIntCode
+  type: SMALLINT
+  nullable: true
+  description: ExchIntCode is the integer code for the exchange.
+- name: IsPrimExchQt
+  type: char
+  nullable: true
+  description: IsPrimExchQt indicates whether the quote is a primary exchange-level quote (Y), or is not (N).
+- name: ExchName
+  type: varchar
+  nullable: true
+  description: ExchName is the exchange name
+- name: RI
+  type: INTEGER
+  nullable: true
+  description: 'RI is the return index for the security. Example Use Case: Retrieving the primary-exchange total return index
+    history for a single security. Example tracks a single exchange, IBIS (XETRA), despite historical changes in primary exchange
+    in underlying tables. select InfoCode, DsCode, MarketDate, ExchName, RI from vw_Ds2TotalReturn where InfoCode = 276096
+    -- STABILUS and IsPrimExchQt = ''Y'' -- primary exchange pricing order by marketdate'
+---
+table: qa_datastream.vw_Ds2FxCross
+domain: pricing
+description: Underlying Table Index Fields
+columns:
+- name: SourceCode
+  type: varchar
+  nullable: false
+  description: SourceCode is the Integer code for the source of the data. Cross- reference SourceCode with Ds2XRef.Code where
+    Type_ = 4.
+- name: FXMethodology
+  type: varchar
+  nullable: false
+  description: Sourcecode of 861 references WM/Reuters and 1231 refers to the LSEG rates. LSEG Quantitative Analytics Database
+    Schema for Datastream 55
+- name: FromCurrCode
+  type: char(3)
+  nullable: true
+  description: FromCurrCode is the ISO currency code of the “from currency,” or originating currency.
+- name: ToCurrCode
+  type: char(3)
+  nullable: true
+  description: ToCurrCode is the ISO currency code of the “to currency,” or the destination currency.
+- name: RateType
+  type: varchar(5)
+  nullable: true
+  description: RateType is the type of contract for the exchange rate.
+- name: ExRateDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: ExRateDate is the date of the historical exchange rate data.
+- name: Midrate
+  type: FLOAT
+  nullable: true
+  description: MidRate is the mid rate for contract on the given date.
+- name: BidRate
+  type: FLOAT
+  nullable: true
+  description: BidRate is the bid rate for contract on the given date.
+- name: OfferRate
+  type: INTEGER
+  nullable: true
+  description: 'OfferRate is the offer rate for contract on the given date. Example Use Case: Retrieving the FX spot history
+    between two currencies select exratedate, fromCurrCode, toCurrcode, rateType, midRate, bidRate, offerRate from vw_Ds2fxCross
+    where rateType = ''SPOT'' and fromcurrcode = ''USD'' and toCurrCode = ''EUR'' Example Use Case: Converting a stock’s price
+    history into another currency select p.InfoCode, p.DsCode, fx.exratedate, fx.fromCurrCode, fx.toCurrcode, fx.rateType,
+    fx.midRate, p.Close_ as Close_'
+- name: InfoCode
+  type: INTEGER
+  nullable: false
+  description: InfoCode is the Quantitative Analytics internal code for Datastream tables. InfoCode is the primary mapping
+    code for country-level identifiers.
+- name: EventDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EventDate is the date that the DPS was entered into the Datastream mainframe.
+- name: AdjType
+  type: INTEGER
+  nullable: false
+  description: AdjType identifies the type of adjustment factor where 1 indicates that the adjustment includes splits only,
+    and 2 indicates that it includes everything. 0 Indicates that the pricing is unadjusted.
+- name: CumAdjFactor
+  type: FLOAT
+  nullable: true
+  description: 'CumAdjFactor is a time series of accumulated adjustment factors. The latest value is always 1, and historic
+    adjustment factors are accumulated in reverse chronological order. As a result, the most recent AdjFactor = 1 and the
+    oldest AdjFactor = 1 multiplied by the product of all adjustment factors. Example: If BASEDATE 30/06/90 EVENT 1 30/06/95
+    AdjFactor = 0.5 EVENT 2 30/06/00 AdjFactor = 0.8 EVENT 3 30/06/05 AdjFactor = 1.1 Then CumAdjFactor 30/06/90 – 29/06/95
+    = 1 * 0.5 * 0.8 * 1.1 30/06/95 – '
+- name: DPS
+  type: FLOAT
+  nullable: true
+  description: DPS is the adjusted/unadjusted dividend per share value. (based on AdjType column)
+- name: Currency
+  type: char(3)
+  nullable: true
+  description: 'Currency is the currency of the dividend, based on the country of origin of the security. LSEG Quantitative
+    Analytics Database Schema for Datastream 57 Example Use Case: Retrieving the ds DPS dividend events for select InfoCode,
+    EventDate, dps, AdjType, currency from vw_Ds2DPS where InfoCode = 66353 --THOMSON REUTERS (NYS) and AdjType = 2 --Split
+    & Spinoff adjusted prices and EventDate between ''2013-12-31'' and ''2014-12-31'' This view calculates the dividend yield
+    for a datastream security. Unadju'
+- name: SourceCode
+  type: varchar
+  nullable: false
+  description: SourceCode is the Integer code for the source of the data. Cross- reference SourceCode with Ds2XRef.Code where
+    Type_ = 4.
+- name: FXMethodology
+  type: varchar
+  nullable: false
+  description: Sourcecode of 861 references WM/Reuters and 1231 refers to the LSEG rates.
+- name: InfoCode
+  type: INTEGER
+  nullable: false
+  description: InfoCode is the Quantitative Analytics internal code for Datastream tables. InfoCode is the primary mapping
+    code for country-level identifiers.
+- name: DsCode
+  type: varchar
+  nullable: true
+  description: DsCode is the Datastream code.
+- name: MarketDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: MarketDate is the date of the price.
+- name: UnadjClose
+  type: FLOAT
+  nullable: true
+  description: UnadjClose is the unadjusted closing price of the security on the given date.
+- name: PrimExchIntCode
+  type: SMALLINT
+  nullable: true
+  description: PrimExchIntCode is the integer code for the primary exchange.
+- name: PrimaryExchange
+  type: varchar
+  nullable: true
+  description: PrimaryExchange is the exchange name of the primary exchange.
+- name: PriceCurrency
+  type: char(3)
+  nullable: true
+  description: PriceCurrency is the ISO Currency Code for the currency upon which the closing price series is calculated.
+- name: DivCurrency
+  type: char(3)
+  nullable: true
+  description: DivCurrency is the ISO Currency Code for the currency of the dividend, based on the country of origin of the
+    security. LSEG Quantitative Analytics Database Schema for Datastream 58
+- name: FxRate
+  type: FLOAT
+  nullable: true
+  description: FxRate is the mid FX rate for contract on the given MarketDate from divCurrency to priceCurrency.
+- name: UnadjDPS
+  type: FLOAT
+  nullable: true
+  description: UnadjDPS is the unadjusted dividend per share value.
+- name: DivEventDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: DivEventDate is the date that the DPS was entered into the Datastream mainframe.
+- name: DivYield
+  type: FLOAT
+  nullable: true
+  description: 'DivYield is the calculated dividend yield. It is calculated as the (dps / fxRate) / Close_, and then adjusted
+    for priceUnit if necessary. Example Use Case: Retrieving the daily dividend yield of a stock for a given date range. Example
+    returns the proper primary DsCode for Siemens in the view despite the existence of two DsCodes for one Sedol in the underlying
+    tables. select SourceCode, FXMethodology, InfoCode, DsCode, marketdate, unadjClose, unadjdps, diveventDate, divYield from
+    vw_Ds2DivYield w'
+---
+table: qa_datastream.vw_Ds2MktCap
+domain: pricing
+description: Underlying Table Index Fields | derived from the underlying table value by multiplying by 1,000.
+columns:
+- name: InfoCode
+  type: INTEGER
+  nullable: false
+  description: InfoCode is the Quantitative Analytics internal code for Datastream tables. InfoCode is the primary mapping
+    code for country-level identifiers.
+- name: MarketDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: MarketDate is the date of the price.
+- name: PrimExchIntCode
+  type: SMALLINT
+  nullable: false
+  description: PrimExchIntCode is the integer code for the primary exchange.
+- name: PrimaryExchange
+  type: varchar
+  nullable: true
+  description: PrimaryExchange is the exchange name of the primary exchange
+- name: UnadjClose
+  type: FLOAT
+  nullable: true
+  description: UnadjClose is the unadjusted closing price of the security on the given MarketDate.
+- name: NumShrs
+  type: FLOAT
+  nullable: true
+  description: NumShrs is the unadjusted number of shares outstanding. It is derived from the underlying table value by multiplying
+    by 1,000.
+- name: MktCap
+  type: FLOAT
+  nullable: true
+  description: MktCap is market cap, calculated as NumShrs * UnadjClose
+- name: Currency
+  type: char(3)
+  nullable: true
+  description: Currency is the ISO Currency Code for the currency upon which the closing price series is calculated.
+- name: EventDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: 'EventDate is the date that the number of shares outstanding is entered into the Datastream Mainframe. Example
+    Use Case: Retrieving the market cap history of a stock select InfoCode, MarketDate, UnadjClose, NumShrs, MktCap, Currency,
+    EventDate from vw_Ds2MktCap where InfoCode = 66353 --THOMSON REUTERS (NYS) order by MarketDate LSEG Quantitative Analytics
+    Database Schema for Datastream 59'
+---
+table: qa_datastream.vw_Ds2FreeFloatMktCap
+domain: pricing
+description: Underlying Table Index Fields | underlying table value and multiplied by 1,000.
+columns:
+- name: InfoCode
+  type: INTEGER
+  nullable: false
+  description: InfoCode is the Quantitative Analytics internal code for Datastream tables. InfoCode is the primary mapping
+    code for country-level identifiers.
+- name: MarketDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: MarketDate is the date of the price.
+- name: PrimExchIntCode
+  type: SMALLINT
+  nullable: false
+  description: PrimExchIntCode is the integer code for the primary exchange.
+- name: PrimaryExchange
+  type: varchar
+  nullable: true
+  description: PrimaryExchange is the exchange name of the primary exchange
+- name: UnadjClose
+  type: FLOAT
+  nullable: true
+  description: UnadjClose is the unadjusted closing price of the security on the given MarketDate.
+- name: NumShrs
+  type: FLOAT
+  nullable: true
+  description: NumShrs is the number of shares outstanding. It is derived from the underlying table value and multiplied by
+    1,000.
+- name: ShrsEventDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: S hrsEventDate is the date that the number of shares outstanding is entered into the Datastream Mainframe.
+- name: FreeFloatPct
+  type: FLOAT
+  nullable: true
+  description: FreeFloatPct is the free float shares where strategic holdings are broadly defined as holdings of 5% or more.
+    There are some types of holders, such as hedge funds, that are excluded.
+- name: FreeFloatValDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: FreeFloatValDate is the date of the share holdings.
+- name: FreeFloatMktCap
+  type: FLOAT
+  nullable: true
+  description: MktCap is market cap, calculated as NumShrs * UnadjClose * FreeFloatPct / 100
+- name: Currency
+  type: char(3)
+  nullable: true
+  description: 'Currency is the ISO Currency Code for the currency upon which the closing price series is calculated. Example
+    Use Case: Retrieving the free float market cap of a stock on a given date InfoCode, MarketDate, primExchIntCode, UnadjClose,
+    NumShrs, freeFloatPct, freeFloatMktCap, currency from vw_Ds2FreeFloatMktCap where InfoCode = 66353 --THOMSON REUTERS (NYS)
+    and MarketDate = ''2014-12-31'''
+---
+table: qa_datastream.vw_Ds2ConsolidatedMktCap
+domain: pricing
+description: Underlying Table Index Fields | maintained by Datastream. The view adjusts the underlying table value by
+columns:
+- name: InfoCode
+  type: INTEGER
+  nullable: false
+  description: InfoCode is the Quantitative Analytics internal code for Datastream tables. InfoCode is the primary mapping
+    code for country-level identifiers.
+- name: ValDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: ValDate is the date of the share holdings. LSEG Quantitative Analytics Database Schema for Datastream 60
+- name: ConsolMktVal
+  type: FLOAT
+  nullable: true
+  description: ConsolMktVal is the consolidated market value for the entire company, maintained by Datastream. The view adjusts
+    the underlying table value by multiplying by 1,000,000.
+- name: Currency
+  type: char(3)
+  nullable: true
+  description: Currency is the three-character primary ISO currency code of the security’s country of origin. Example Use
+    Case:] Retrieving the consolidated market cap history of a stock select InfoCode, ValDate, consolMktVal, currency from
+    vw_Ds2ConsolidatedMktCap where InfoCode = 66353 --THOMSON REUTERS (NYS) Order by ValDate LSEG Quantitative Analytics Database
+    Schema for Datastream Copyright © 2025 London Stock Exchange Group plc and its group of companies (LSEG) and/or its affiliates.
+    All rights reserved.

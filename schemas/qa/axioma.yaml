@@ -1,0 +1,1397 @@
+table: qa_axioma.AxFactor
+domain: risk_models
+columns:
+- name: FactID
+  type: INTEGER
+  nullable: false
+  description: FactID is a factor code defined in the AxFactor table.
+- name: Mnem
+  type: varchar(50)
+  nullable: true
+  description: Mnem is the mnemonic with which the factor is identified.
+- name: Type_
+  type: varchar(50)
+  nullable: true
+  description: Type_ is the item type for the factor.
+---
+table: qa_axioma.AxCode
+domain: risk_models
+description: Numeric Codes | This table contains descriptions of Axioma numeric codes.
+update_cadence: Daily
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Type_ is a numeric code for a type of data.
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is a coded value for an element of Type_. When Type_ = 0, Code is the numeric code for each Type_ other
+    than 0 and Desc_ is a description of each Type_.
+- name: Desc_
+  type: varchar(100)
+  nullable: true
+  description: Desc_ is a plain-language description of the element defined by Type_ and Code.
+---
+table: qa_axioma.AxCusipChg
+domain: risk_models
+description: CUSIP Values | This table contains CUSIP values for each Axioma ID when provided in the feed.
+update_cadence: Daily
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: SecID is the unique identifier derived by Quantitative Data Warehouse (QDW) against every unique Axioma ID
+    that is provided by the vendor.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the earliest date associated with the value. This date is system- generated.
+- name: Cusip8
+  type: varchar(8)
+  nullable: true
+  description: Cusip8 is the CUSIP without check digit.
+- name: CChkDgt
+  type: char(1)
+  nullable: true
+  description: CChkDgt is the CUSIP check digit.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the date on which a change is made to the existing CUSIP.
+- name: LicFlag
+  type: TINYINT
+  nullable: true
+  description: LicFlag is a license flag based on country/region. This field cross-references with AxCode.Code where Type_
+    = 2.
+---
+table: qa_axioma.AxDesc
+domain: risk_models
+description: Character Codes | This table contains descriptions of Axioma character codes.
+update_cadence: Daily
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Type_ is a numeric code for a type of data.
+- name: Code
+  type: varchar(50)
+  nullable: false
+  description: Code is a coded value for an element of Type_. When Type_ = 0, Code is the numeric code for each Type_ other
+    than 0 and Desc_ is a description of each Type_.
+- name: Desc_
+  type: varchar(100)
+  nullable: true
+  description: Desc_ is a plain-language description of the element defined by Type_ and Code.
+---
+table: qa_axioma.AxFactHolding
+domain: risk_models
+description: Factor-Related Information | This table contains factor-related information.
+update_cadence: Daily
+columns:
+- name: ModelID
+  type: TINYINT
+  nullable: false
+  description: ModelID is the unique integer that identifies each model. This field cross- references with AxCode.Code where
+    Type_ = 1.
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: SecID is a unique identifier derived by Quantitative Data Warehouse (QDW) against every unique Axioma ID that
+    is provided by the vendor.
+- name: FactID
+  type: SMALLINT
+  nullable: false
+  description: FactID is a factor code defined in the AxFactor table.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the file date.
+- name: Value_
+  type: varchar(20)
+  nullable: true
+  description: Value_ is the security exposure to the fundamental value factor. LSEG Quantitative Analytics Database Schema
+    for Axioma 10
+---
+table: qa_axioma.AxFactor
+domain: risk_models
+description: Input File Factors | This table contains the various factors in the input file, including Style, Industry, Country,
+  Currency, Statistical,
+update_cadence: Daily
+columns:
+- name: FactID
+  type: INTEGER
+  nullable: false
+  description: FactID is a factor code defined in the AxFactor table.
+- name: Mnem
+  type: varchar(50)
+  nullable: true
+  description: Mnem is the mnemonic with which the factor is identified.
+- name: Type_
+  type: varchar(50)
+  nullable: true
+  description: Type_ is the item type for the factor.
+---
+table: qa_axioma.AxFxRate
+domain: risk_models
+description: Foreign Exchange Details | This table contains the ISO currency code and its exchange rate and risk-free rate
+  details.
+update_cadence: Daily
+columns:
+- name: CurrCode
+  type: INTEGER
+  nullable: false
+  description: CurrCode is the integer code corresponding to the three-letter ISO Currency Code. This field cross-references
+    with AxCode.Code where Type_ = 9.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the file date.
+- name: ExchRate
+  type: FLOAT
+  nullable: true
+  description: ExchRate is the exchange rate to the base currency.
+- name: RskFreeRate
+  type: FLOAT
+  nullable: true
+  description: RskFreeRate is the annualized risk-free rate.
+- name: CumRFR
+  type: FLOAT
+  nullable: true
+  description: CumRFR is the cumulative risk-free rate.
+---
+table: qa_axioma.AxIndustryMap
+domain: risk_models
+description: Industry Hierarchy | This table contains information about the industry hierarchy.
+update_cadence: Daily
+columns:
+- name: SectorID
+  type: INTEGER
+  nullable: false
+  description: SectorID is the sector ID. This is the name of the node/factor. This field cross-references with AxCode.Code
+    where Type_ = 5.
+- name: IndGrpID
+  type: INTEGER
+  nullable: false
+  description: IndGrpID is the industry group ID. This is the name of the parent node. This field cross- references with AxCode.Code
+    where Type_ = 6.
+- name: IndID
+  type: INTEGER
+  nullable: false
+  description: IndID is the industry ID. This is the optional name of the hierarchy level. This field cross- references with
+    AxCode.Code where Type_ = 7. LSEG Quantitative Analytics Database Schema for Axioma 11
+---
+table: qa_axioma.AxIsinChg
+domain: risk_models
+description: Ex-North American ISIN Values | This table contains ex-North American ISIN values for each Axioma ID provided
+  in the feed. ISIN values that are
+update_cadence: Daily
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: SecID is the unique identifier derived by Quantitative Data Warehouse (QDW) for every unique Axioma ID that
+    is provided by the vendor.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the earliest date associated with the value. This date is system- generated.
+- name: ISIN
+  type: varchar(12)
+  nullable: true
+  description: ISIN is the ISIN value.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the date on which a change is made to the existing ISIN.
+- name: LicFlag
+  type: TINYINT
+  nullable: true
+  description: LicFlag is a license flag based on country/region. This field cross-references with AxCode.Code where Type_
+    = 2.
+---
+table: qa_axioma.AxIsinChgC
+domain: risk_models
+description: North American ISIN Values | This table contains North American ISIN values for each Axioma ID provided in the
+  feed. These are derived from
+update_cadence: Daily
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: SecID is the unique identifier derived by Quantitative Data Warehouse (QDW) for every unique Axioma ID that
+    is provided by the vendor.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the earliest date associated with the value. This date is system- generated.
+- name: ISIN
+  type: varchar(12)
+  nullable: true
+  description: ISIN is the ISIN value.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the date on which a change is made to the existing ISIN.
+- name: LicFlag
+  type: TINYINT
+  nullable: true
+  description: LicFlag is a license flag based on country/region. This field cross-references with AxCode.Code where Type_
+    = 2.
+---
+table: qa_axioma.AxItem
+domain: risk_models
+description: Data Item Information | This table contains the item code assigned to the individual identifiers.
+update_cadence: Daily
+columns:
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item is a unique integer code that identifies an item. It joins to AxSecInfoChg.Item.
+- name: Mnem
+  type: varchar(50)
+  nullable: true
+  description: Mnemonic is a single-word, alphanumeric coded name for the item. This code name is as received in the feed
+    file.
+- name: Desc_
+  type: varchar(100)
+  nullable: true
+  description: Desc_ is a short description of the item. LSEG Quantitative Analytics Database Schema for Axioma 12
+---
+table: qa_axioma.AxSecInfo_V4
+domain: risk_models
+description: Security-Level Details | This table contains the security-level information provided by Axioma. The identifiers
+  like CUSIP, SEDOL, and
+update_cadence: Daily
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: SecID is the unique identifier derived by Quantitative Data Warehouse (QDW) for every unique Axioma ID that
+    is provided by the vendor.
+- name: AxiomaID
+  type: varchar(9)
+  nullable: false
+  description: AxiomaID is the unique identifier provided by the vendor.
+- name: Ticker
+  type: varchar(12)
+  nullable: true
+  description: Ticker is the ticker value provided in the input file by the vendor.
+- name: SecName
+  type: varchar(128)
+  nullable: true
+  description: SecName is the security name provided in the input file.
+- name: CntryCode
+  type: char(2)
+  nullable: true
+  description: CntryCode is the ISO country code provided in the input file. This field cross-references with AxDesc.Code
+    where Type_ = 1.
+- name: CurrCode
+  type: char(3)
+  nullable: true
+  description: CurrCode is the ISO currency code provided in the input file. This field cross-references with AxDesc.Code
+    where Type_ = 2.
+- name: ExchCode
+  type: SMALLINT
+  nullable: true
+  description: ExchCode is the stock exchange detail provided in the input file. This
+- name: CmpID
+  type: varchar(9)
+  nullable: true
+  description: CmpID is the permanent issuer identifier assigned by Axioma.
+- name: AssetClassCode
+  type: TINYINT
+  nullable: true
+  description: Tier 2 of Axioma Security Type Classification (e.g., Depository Receipt-C).
+- name: AssetSubClassCode
+  type: TINYINT
+  nullable: true
+  description: Tier 3 of Axioma Security Type Classification (e.g., ADR-S).
+- name: AssetTypeCode
+  type: TINYINT
+  nullable: true
+  description: Tier 1 of Axioma Security Type Classification (e.g., Equities-T).
+- name: CmpName
+  type: varchar(200)
+  nullable: true
+  description: Issuer Name assigned by Axioma.
+- name: MIC
+  type: char(4)
+  nullable: true
+  description: Market Identifier Code (MIC).
+- name: LicFlag
+  type: TINYINT
+  nullable: true
+  description: LicFlag is a license flag based on country/region. This field cross- references with AxDesc.Code where Type_
+    = 2.
+---
+table: qa_axioma.AxSecAttr_V4
+domain: risk_models
+description: Security Market-Level Attributes | This table contains the market-level attributes associated with a particular
+  security.
+update_cadence: Daily
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: SecID is a unique identifier derived by Quantitative Data Warehouse (QDW) against every unique Axioma ID that
+    is provided by the vendor.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the file date.
+- name: CurrCode
+  type: char(3)
+  nullable: true
+  description: CurrCode is the ISO currency code value provided in the input file.
+- name: Price
+  type: FLOAT
+  nullable: true
+  description: Price is the closing price expressed in the currency of quotation.
+- name: MktCap
+  type: BIGINT
+  nullable: true
+  description: MktCap is the market capitalization.
+- name: RollOverFlag
+  type: TINYINT
+  nullable: true
+  description: A RollOverFlag value of 1 indicates that no official price was available. In this case, the price rollover
+    from the most official closing price is used.
+- name: AvgDlyVol20D
+  type: BIGINT
+  nullable: true
+  description: AvgDlyVol20D is the 20-day average daily trading volume.
+- name: DlyTotRet
+  type: FLOAT
+  nullable: true
+  description: DlyTotRet is the daily total return percentage expressed in currency of quotation. LSEG Quantitative Analytics
+    Database Schema for Axioma 13
+- name: AvgDlyVol60D
+  type: BIGINT
+  nullable: true
+  description: AvgDlyVol60D is the 60-day average daily trading volume.
+- name: LicFlag
+  type: TINYINT
+  nullable: true
+  description: LicFlag is the license flag, which is based on country/region. This field cross- references with AxCode.Code
+    where Type_ = 2.
+---
+table: qa_axioma.AxSecRskData_V4
+domain: risk_models
+description: Security Risk Data | This table contains the risk related-details associated with a particular security in a
+  particular model.
+update_cadence: Daily
+columns:
+- name: ModelID
+  type: TINYINT
+  nullable: false
+  description: ModelID is the unique integer that identifies each model. This field cross- references with AxCode.Code where
+    Type_ = 1.
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: SecID is the unique identifier derived by Quantitative Data Warehouse (QDW) for every unique Axioma ID that
+    is provided by the vendor.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the file date.
+- name: SpRisk
+  type: FLOAT
+  nullable: true
+  description: SpRisk is the specific risk of the asset.
+- name: HistBeta
+  type: FLOAT
+  nullable: true
+  description: HistBeta is the historical beta against the local market.
+- name: IndustrySrc
+  type: TINYINT
+  nullable: true
+  description: IndustrySrc is the data source of the industry membership. This field cross-references with AxCode.Code where
+    Type_ = 8.
+- name: EstmnUniv
+  type: TINYINT
+  nullable: true
+  description: An EstmnUniv value of 1 indicates that the assets were used in estimating the factor returns.
+- name: EstmnUnivWgt
+  type: FLOAT
+  nullable: true
+  description: EstmnUnivWgt is the weight of assets in the estimation universe; this field is blank if the asset is not in
+    the estimation universe.
+- name: SpRet
+  type: FLOAT
+  nullable: true
+  description: SpRet is the daily specific return.
+- name: TotRsk
+  type: FLOAT
+  nullable: true
+  description: TotRsk is the total risk of the asset.
+---
+table: qa_axioma.AxFactReturns_V4
+domain: risk_models
+description: Factor Return Values | This table contains the return values for each of the factors.
+update_cadence: Daily
+columns:
+- name: ModelID
+  type: TINYINT
+  nullable: false
+  description: ModelID is the unique integer that identifies each model. This field cross- references with AxCode.Code where
+    Type_ = 1.
+- name: FactID
+  type: SMALLINT
+  nullable: false
+  description: FactID is a factor code defined in the AxFactor table.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the file date.
+- name: Ret
+  type: FLOAT
+  nullable: true
+  description: Ret is the daily factor return.
+- name: CumRet
+  type: FLOAT
+  nullable: true
+  description: CumRet is the cumulative factor return. LSEG Quantitative Analytics Database Schema for Axioma 14
+---
+table: qa_axioma.AxFactCovar_V4
+domain: risk_models
+description: Covariance Values | This table contains covariance values for pairs of factors in each model.
+update_cadence: Daily
+columns:
+- name: ModelID
+  type: TINYINT
+  nullable: false
+  description: ModelID is the unique integer that identifies each model. This field cross- references with AxCode.Code where
+    Type_ = 1.
+- name: FactID1
+  type: INTEGER
+  nullable: false
+  description: FactID1 and FactID2 are factor codes defined in the AxFactor table. FactID2 int N
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the file date.
+- name: Covar
+  type: FLOAT
+  nullable: true
+  description: Covar is the covariance between the two factors.
+---
+table: qa_axioma.AxSecCovar_V4
+domain: risk_models
+description: Covariance Values | This table contains the covariance values for a pair of securities in each model.
+update_cadence: Daily
+columns:
+- name: ModelID
+  type: TINYINT
+  nullable: false
+  description: ModelID is the unique integer that identifies each model. This field cross- references with AxCode.Code where
+    Type_ = 1.
+- name: SecID1
+  type: INTEGER
+  nullable: false
+  description: SecID1 and SecID2 are unique identifiers dervied by Quantitative Data Warehouse (QDW) against every unique
+    Axioma ID that is provided by the vendor. SecID2 int N
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the file date.
+- name: Covar
+  type: FLOAT
+  nullable: true
+  description: Covar is the specific covariance between the two securities.
+---
+table: qa_axioma.AxSecInfoChg
+domain: risk_models
+description: Historical Security-Level Details | This table contains the historical details of all the identifiers.
+update_cadence: Daily
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: SecID is the unique identifier derived by Quantitative Data Warehouse (QDW) for every unique Axioma ID that
+    is provided by the vendor.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item is a unique integer code that identifies an item.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the earliest date associated with the value. This date is system- generated.
+- name: Value_
+  type: varchar(150)
+  nullable: true
+  description: Value_ is the value that corresponds to the item.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the date on which the value associated with the item changes.
+- name: LicFlag
+  type: TINYINT
+  nullable: true
+  description: LicFlag is a license flag based on country/region. This field cross-references with AxCode.Code where Type_
+    = 2. LSEG Quantitative Analytics Database Schema for Axioma 15
+---
+table: qa_axioma.AxSecModelMap
+domain: risk_models
+description: Security and Model Identification | This table contains the SecID and the corresponding ModelID.
+update_cadence: Daily
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: SecID is the unique identifier derived by Quantitative Data Warehouse (QDW) for every unique Axioma ID that
+    is provided by the vendor.
+- name: ModelID
+  type: TINYINT
+  nullable: false
+  description: ModelID is the unique integer that identifies each model. This field cross-references with AxCode.Code where
+    Type_ = 1.
+- name: LicFlag
+  type: TINYINT
+  nullable: true
+  description: LicFlag is a license flag based on country/region. This field cross-references with AxCode.Code where Type_
+    = 2.
+---
+table: qa_axioma.AxSedolChg
+domain: risk_models
+description: SEDOL Values | This table contains SEDOL values for each Axioma ID when provided in the feed.
+update_cadence: Daily
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: SecID is the unique identifier derived by Quantitative Data Warehouse (QDW) for every unique Axioma ID that
+    is provided by the vendor.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the earliest date associated with the value. This date is system- generated.
+- name: Sedol6
+  type: varchar(6)
+  nullable: true
+  description: Sedol6 is the SEDOL without check digit.
+- name: SChkDgt
+  type: char(1)
+  nullable: true
+  description: SChkDgt is the SEDOL check digit.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the date on which a change is made to the existing SEDOL.
+- name: LicFlag
+  type: TINYINT
+  nullable: true
+  description: 'LicFlag is a license flag based on country/region. This field cross-references with AxCode.Code where Type_
+    = 2. Axioma Style Factor Summary Axioma describes their style factors as follows: – Exchange-Rate Sensitivity – This is
+    a measure of a stock''s sensitivity to exchange rates as measured relative to a basket of currencies. Stocks with a positive
+    Exchange-Rate Sensitivity score move in line with a basket of currencies, indicating that a larger proportion of business
+    may come from non-domestic'
+---
+table: qa_axioma.AxUS4MHStatExpDly
+domain: risk_models
+description: Daily Exposure Details for U.S. – Medium | This table contains daily exposure details for U.S. – Medium Horizon
+  statistical factors.
+update_cadence: 'Daily Adjusted: N/A'
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: Unique identifier derived by TRDW against every unique Axioma ID that is provided by the vendor.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: File Date.
+- name: StatFact1
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 1.
+- name: StatFact2
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 2.
+- name: StatFact3
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 3.
+- name: StatFact4
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 4.
+- name: StatFact5
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 5.
+- name: StatFact6
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 6.
+- name: StatFact7
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 7.
+- name: StatFact8
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 8.
+- name: StatFact9
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 9.
+- name: StatFact10
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 10.
+- name: StatFact11
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 11.
+- name: StatFact12
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 12.
+- name: StatFact13
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 13.
+- name: StatFact14
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 14.
+- name: StatFact15
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 15. LSEG Quantitative Analytics Database Schema for Axioma 17
+---
+table: qa_axioma.AxUS4MHStyleExp
+domain: risk_models
+description: Exposure Details for U.S. – Medium Horizon | This table contains exposure details for U.S. – Medium Horizon fundamental
+  factors, which do not change on a
+update_cadence: As needed (checked daily; updated when there is a change)
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: Unique identifier derived by TRDW against every unique Axioma ID that is provided by the vendor.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: The earliest date when the data was made available for this factor.
+- name: IndID
+  type: TINYINT
+  nullable: true
+  description: IndID is the code for the industry.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date at which a change is effective to either of the values present in this table.
+---
+table: qa_axioma.AxUS4MHStyleExpDly
+domain: risk_models
+description: Daily Exposure Details for U.S. – Medium | This table contains daily exposure details for U.S. – Medium Horizon
+  style factors. For details about Axioma's
+update_cadence: Daily
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: Unique identifier derived by TRDW against every unique Axioma ID that is provided by the vendor.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: File Date.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the value that corresponds to the item.
+- name: Leverage
+  type: FLOAT
+  nullable: true
+  description: Total debt (current and long-term liabilities) to total assets
+- name: Growth
+  type: FLOAT
+  nullable: true
+  description: Sales growth, estimated sales growth, earnings growth, estimated earnings growth
+- name: Size_
+  type: FLOAT
+  nullable: true
+  description: Natural logarithm of market capitalization
+- name: MedTermMomentum
+  type: FLOAT
+  nullable: true
+  description: Cumulative return over past year excluding most recent month
+- name: MidCap
+  type: FLOAT
+  nullable: true
+  description: TBD
+- name: Volatility
+  type: FLOAT
+  nullable: true
+  description: 6 month average of absolute returns over cross-sectional standard deviation, partially orthogonalized to Market
+    Sensitivity
+- name: Liquidity
+  type: FLOAT
+  nullable: true
+  description: Ln 3 month average daily volume over market capitalization
+- name: ExRateSensitivity
+  type: FLOAT
+  nullable: true
+  description: Two year weekly beta to returns of currency basket containing USD, EUR, GBP, JPY
+- name: MktSensitivity
+  type: FLOAT
+  nullable: true
+  description: 1 year daily beta
+- name: DivYield
+  type: FLOAT
+  nullable: true
+  description: Ratio of sum of the dividends paid (excluding non-recurring, special dividends) over the most recent year to
+    average market capitalization
+- name: EarnYield
+  type: FLOAT
+  nullable: true
+  description: Earnings-to-price and estimated earnings-to-price
+- name: Profitability
+  type: FLOAT
+  nullable: true
+  description: Return-on-equity, return-on-assets, cash flow to assets, cash flow to income, gross margin, and sales-to-assets
+- name: MktIntercept
+  type: BOOLEAN
+  nullable: true
+  description: TBD LSEG Quantitative Analytics Database Schema for Axioma 18
+---
+table: qa_axioma.AxUS4SHStatExpDly
+domain: risk_models
+description: Daily Exposure Details for U.S. – Short | This table contains daily exposure details for U.S. – Short Horizon
+  statistical factors.
+update_cadence: Daily
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: Unique identifier derived by TRDW against every unique Axioma ID that is provided by the vendor.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: File Date.
+- name: StatFact1
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 1.
+- name: StatFact2
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 2.
+- name: StatFact3
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 3.
+- name: StatFact4
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 4.
+- name: StatFact5
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 5.
+- name: StatFact6
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 6.
+- name: StatFact7
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 7.
+- name: StatFact8
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 8.
+- name: StatFact9
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 9.
+- name: StatFact10
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 10.
+- name: StatFact11
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 11.
+- name: StatFact12
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 12.
+- name: StatFact13
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 13.
+- name: StatFact14
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 14.
+- name: StatFact15
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 15.
+---
+table: qa_axioma.AxUS4SHStyleExp
+domain: risk_models
+description: Exposure Details for U.S. – Short Horizon | This table contains exposure details for U.S. – Short Horizon fundamental
+  factors, which do not change on a daily
+update_cadence: As needed (checked daily; updated when there is a change)
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: Unique identifier derived by TRDW against every unique Axioma ID that is provided by the vendor.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: File Date.
+- name: IndID
+  type: TINYINT
+  nullable: true
+  description: IndID is the code for the industry.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date at which a change is effective to either of the values present in this table. LSEG Quantitative Analytics
+    Database Schema for Axioma 19
+---
+table: qa_axioma.AxUS4SHStyleExpDly
+domain: risk_models
+description: Daily Exposure Details for U.S. – Medium | This table contains daily exposure details for U.S. – Medium Horizon
+  style factors. For details about Axioma's
+update_cadence: Daily
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: Unique identifier derived by TRDW against every unique Axioma ID that is provided by the vendor.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: File Date.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the value that corresponds to the item.
+- name: Leverage
+  type: FLOAT
+  nullable: true
+  description: Total debt (current and long-term liabilities) to total assets
+- name: Growth
+  type: FLOAT
+  nullable: true
+  description: Sales growth, estimated sales growth, earnings growth, estimated earnings growth
+- name: Size_
+  type: FLOAT
+  nullable: true
+  description: Natural logarithm of market capitalization
+- name: ShortTermMomentum
+  type: FLOAT
+  nullable: true
+  description: Cumulative return over past month
+- name: MedTermMomentum
+  type: FLOAT
+  nullable: true
+  description: Cumulative return over past year excluding most recent month
+- name: MidCap
+  type: FLOAT
+  nullable: true
+  description: TBD
+- name: Volatility
+  type: FLOAT
+  nullable: true
+  description: 3 month average of absolute returns over cross-sectional standard deviation, partially orthogonalized to Market
+    Sensitivity
+- name: Liquidity
+  type: FLOAT
+  nullable: true
+  description: Ln 1 month average daily volume over market capitalization
+- name: ExRateSensitivity
+  type: FLOAT
+  nullable: true
+  description: One year weekly beta to returns of currency basket containing USD, EUR, GBP, JPY
+- name: MktSensitivity
+  type: FLOAT
+  nullable: true
+  description: 6 month daily beta
+- name: DivYield
+  type: FLOAT
+  nullable: true
+  description: Ratio of sum of the dividends paid (excluding non-recurring, special dividends) over the most recent year to
+    average market capitalization
+- name: EarnYield
+  type: FLOAT
+  nullable: true
+  description: Earnings-to-price and estimated earnings-to-price
+- name: Profitability
+  type: FLOAT
+  nullable: true
+  description: Return-on-equity, return-on-assets, cash flow to assets, cash flow to income, gross margin, and sales-to-assets
+- name: MrktIntercept
+  type: BOOLEAN
+  nullable: true
+  description: TBD
+---
+table: qa_axioma.AxWW4MHStatExp
+domain: risk_models
+description: Exposure Details for World Wide – Medium | This table contains exposure details for World Wide – Medium Horizon
+  statistical factors, which do not change on
+update_cadence: 'As needed (checked daily; updated when there is a change) Adjusted: N/A'
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: Unique identifier derived by TRDW against every unique Axioma ID that is provided by the vendor.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: File Date.
+- name: CurrCode
+  type: char(3)
+  nullable: true
+  description: Interger Code corresponding to three letter ISO Currency Code.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date at which a change is effective to either of the values present in this table. LSEG Quantitative Analytics
+    Database Schema for Axioma 20
+---
+table: qa_axioma.AxWW4MHStatExpDly
+domain: risk_models
+description: Daily Exposure Details for World Wide – | This table contains daily exposure details for World Wide – Medium
+  Horizon statistical factors.
+update_cadence: Daily
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: Unique identifier derived by TRDW against every unique Axioma ID that is provided by the vendor.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: File Date.
+- name: StatFact1
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 1.
+- name: StatFact2
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 2.
+- name: StatFact3
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 3.
+- name: StatFact4
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 4.
+- name: StatFact5
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 5.
+- name: StatFact6
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 6.
+- name: StatFact7
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 7.
+- name: StatFact8
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 8.
+- name: StatFact9
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 9.
+- name: StatFact10
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 10.
+- name: StatFact11
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 11.
+- name: StatFact12
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 12.
+- name: StatFact13
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 13.
+- name: StatFact14
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 14.
+- name: StatFact15
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 15.
+- name: StatFact16
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 16.
+- name: StatFact17
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 17.
+- name: StatFact18
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 18.
+- name: StatFact19
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 19.
+- name: StatFact20
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 20.
+---
+table: qa_axioma.AxWW4MHStyleExp
+domain: risk_models
+description: Exposure Details for World Wide – Medium | This table contains exposure details for World Wide – Medium Horizon
+  fundamental factors, which do not change
+update_cadence: As needed (checked daily; updated when there is a change)
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: Unique identifier derived by TRDW against every unique Axioma ID that is provided by the vendor.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: File Date.
+- name: IndID
+  type: TINYINT
+  nullable: true
+  description: IndID is the code for the industry. LSEG Quantitative Analytics Database Schema for Axioma 21
+- name: CurrCode
+  type: char(3)
+  nullable: true
+  description: Interger Code corresponding to three letter ISO Currency Code.
+- name: CntryCode
+  type: char(3)
+  nullable: true
+  description: Two letter ISO country code.
+- name: GlobalMkt
+  type: TINYINT
+  nullable: true
+  description: Regression intercept term; all assets have unit exposure. Allows the model to better distinguish between country
+    and industry risk contribution effects.
+- name: DomesticChina
+  type: TINYINT
+  nullable: true
+  description: 'Meant to capture strong residual structure in certain markets not captured by other factors. The model currently
+    has one such factor: Domestic China.'
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date at which a change is effective to either of the values present in this table.
+---
+table: qa_axioma.AxWW4MHStyleExpDly
+domain: risk_models
+description: Daily Exposure Details for World Wide – | This table contains daily exposure details for World Wide – Medium
+  Horizon style factors. For details about
+update_cadence: Daily
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: Unique identifier derived by TRDW against every unique Axioma ID that is provided by the vendor.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the file date.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the value that corresponds to the item.
+- name: Leverage
+  type: FLOAT
+  nullable: true
+  description: Total debt (current and long-term liabilities) to total assets
+- name: Growth
+  type: FLOAT
+  nullable: true
+  description: Sales growth, estimated sales growth, earnings growth, estimated earnings growth
+- name: Size_
+  type: FLOAT
+  nullable: true
+  description: Natural logarithm of market capitalization
+- name: MedTermMomentum
+  type: FLOAT
+  nullable: true
+  description: Cumulative return over past year excluding most recent month
+- name: Volatility
+  type: FLOAT
+  nullable: true
+  description: 6 month average of absolute returns over cross-sectional standard deviation, partially orthogonalized to Market
+    Sensitivity
+- name: Liquidity
+  type: FLOAT
+  nullable: true
+  description: Natural logarithm of the ratio of 3-month average daily volume and 1-month average market capitalization, inverse
+    of 6-month Amihud illiquidity ratio, and proportion of returns-traded over last calendar
+- name: ExRateSensitivity
+  type: FLOAT
+  nullable: true
+  description: Two year weekly beta to returns of currency basket containing USD, EUR, GBP, JPY
+- name: MktSensitivity
+  type: FLOAT
+  nullable: true
+  description: 2-year weekly beta versus the global market
+- name: DivYield
+  type: FLOAT
+  nullable: true
+  description: Ratio of sum of the dividends paid (excluding non-recurring, special dividends) over the most recent year to
+    average market
+- name: EarnYield
+  type: FLOAT
+  nullable: true
+  description: Earnings-to-price and estimated earnings-to-price
+- name: Profitability
+  type: FLOAT
+  nullable: true
+  description: Return-on-equity, return-on-assets, cash flow to assets, cash flow to income, gross margin, and sales-to-assets
+    LSEG Quantitative Analytics Database Schema for Axioma 22
+---
+table: qa_axioma.AxWW4SHStatExp
+domain: risk_models
+description: Exposure Details for World Wide – Short | This table contains exposure details for World Wide – Short Horizon
+  statistical factors, which do not change on a
+update_cadence: 'As needed (checked daily; updated when there is a change) Adjusted: N/A'
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: Unique identifier derived by TRDW against every unique Axioma ID that is provided by the vendor.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: File Date.
+- name: CurrCode
+  type: char(3)
+  nullable: true
+  description: Interger Code corresponding to three letter ISO Currency Code.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date at which a change is effective to either of the values present in this table.
+---
+table: qa_axioma.AxWW4SHStatExpDly
+domain: risk_models
+description: Daily Exposure Details for World Wide – | This table contains daily exposure details for World Wide – Short Horizon
+  statistical factors.
+update_cadence: 'Daily Adjusted: N/A'
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: Unique identifier derived by TRDW against every unique Axioma ID that is provided by the vendor.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the file date.
+- name: StatFact1
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 1.
+- name: StatFact2
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 2.
+- name: StatFact3
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 3.
+- name: StatFact4
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 4.
+- name: StatFact5
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 5.
+- name: StatFact6
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 6.
+- name: StatFact7
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 7.
+- name: StatFact8
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 8.
+- name: StatFact9
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 9.
+- name: StatFact10
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 10.
+- name: StatFact11
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 11.
+- name: StatFact12
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 12.
+- name: StatFact13
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 13.
+- name: StatFact14
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 14.
+- name: StatFact15
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 15.
+- name: StatFact16
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 16.
+- name: StatFact17
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 17.
+- name: StatFact18
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 18.
+- name: StatFact19
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 19.
+- name: StatFact20
+  type: FLOAT
+  nullable: true
+  description: Statistical Factor 20. LSEG Quantitative Analytics Database Schema for Axioma 23
+---
+table: qa_axioma.AxWW4SHStyleExp
+domain: risk_models
+description: Exposure Details for World Wide – Short | This table contains exposure details for World Wide – Short Horizon
+  fundamental factors, which do not change on
+update_cadence: As needed (checked daily; updated when there is a change)
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: Unique identifier derived by TRDW against every unique Axioma ID that is provided by the vendor.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: File Date.
+- name: IndID
+  type: TINYINT
+  nullable: true
+  description: IndID is the code for the industry.
+- name: CurrCode
+  type: char(3)
+  nullable: true
+  description: Interger Code corresponding to three letter ISO Currency Code.
+- name: CntryCode
+  type: char(3)
+  nullable: true
+  description: Two letter ISO country code.
+- name: GlobalMkt
+  type: TINYINT
+  nullable: true
+  description: Regression intercept term; all assets have unit exposure. Allows the model to better distinguish between country
+    and industry risk contribution effects.
+- name: DomesticChina
+  type: TINYINT
+  nullable: true
+  description: 'Meant to capture strong residual structure in certain markets not captured by other factors. The model currently
+    has one such factor: Domestic China.'
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date at which a change is effective to either of the values present in this table.
+---
+table: qa_axioma.AxWW4SHStyleExpDly
+domain: risk_models
+description: Daily Exposure Details for World Wide – | This table contains daily exposure details for World Wide – Short Horizon
+  style factors. For details about
+update_cadence: Daily
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: Unique identifier derived by TRDW against every unique Axioma ID that is provided by the vendor.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the file date.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the value that corresponds to the item.
+- name: Leverage
+  type: FLOAT
+  nullable: true
+  description: Total debt (current and long-term liabilities) to total assets
+- name: Growth
+  type: FLOAT
+  nullable: true
+  description: Sales growth, estimated sales growth, earnings growth, estimated earnings growth
+- name: Size_
+  type: FLOAT
+  nullable: true
+  description: Natural logarithm of market capitalization
+- name: ShortTermMomentum
+  type: FLOAT
+  nullable: true
+  description: Cumulative return over past month
+- name: MedTermMomentum
+  type: FLOAT
+  nullable: true
+  description: Cumulative return over past year excluding most recent month
+- name: Volatility
+  type: FLOAT
+  nullable: true
+  description: 3 month average of absolute returns over cross-sectional standard deviation, partially orthogonalized to Market
+    Sensitivity
+- name: Liquidity
+  type: FLOAT
+  nullable: true
+  description: Natural logarithm of the ratio of 1-month average daily volume and 1- month average market capitalization,
+    inverse of 3-month Amihud LSEG Quantitative Analytics Database Schema for Axioma 24
+- name: ExRateSensitivity
+  type: FLOAT
+  nullable: true
+  description: One year weekly beta to returns of currency basket containing USD, EUR, GBP, JPY
+- name: MktSensitivity
+  type: FLOAT
+  nullable: true
+  description: 1-year weekly beta versus the global market
+- name: DivYield
+  type: FLOAT
+  nullable: true
+  description: Ratio of sum of the dividends paid (excluding non-recurring, special dividends) over the most recent year to
+    average market capitalization
+- name: EarnYield
+  type: FLOAT
+  nullable: true
+  description: Earnings-to-price and estimated earnings-to-price
+- name: Profitability
+  type: FLOAT
+  nullable: true
+  description: 'Return-on-equity, return-on-assets, cash flow to assets, cash flow to income, gross margin, and sales-to-assets
+    LSEG Quantitative Analytics Database Schema for Axioma Copyright © 2024 London Stock Exchange Group plc and its group
+    of companies (LSEG) and/or its affiliates. All rights reserved. The LSEG content received through this service is the
+    intellectual property of LSEG or its third party suppliers. Republication or redistribution of content provided by LSEG
+    is expressly prohibited without '

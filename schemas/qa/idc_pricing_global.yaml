@@ -1,0 +1,1720 @@
+table: qa_idc_global.Gprcadj
+domain: pricing
+description: Global Pricing Adjustment Factors | This table contains adjustment factors used to adjust daily pricing from
+  the Gprcval table.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all Gprc* tables.
+- name: StartDate
+  type: smalldatetime
+  nullable: false
+  description: StartDate is the first date the adjustment is applied.
+- name: EndDate
+  type: smalldatetime
+  nullable: true
+  description: EndDate is the last date the adjustment is applied.
+- name: Rate
+  type: FLOAT
+  nullable: true
+  description: Rate is the rate of the capital event.
+- name: Factor
+  type: FLOAT
+  nullable: true
+  description: 'Factor is the cumulative adjustment factor over time. Sample Query – adjusted pricing history The following
+    query takes a given ID and returns the market cap history for the security: DECLARE @ID VARCHAR(20) SET @ID = ''@HONDA9''
+    -- Honda Motor SELECT S.ID AS ID , S.NAME , S.SEDOL , V.DATE_ , (V.CLOSE_ * A.FACTOR) AS ADJ_CLOSING_PRICE_LOCAL , (V.CLOSE_
+    * A.FACTOR) / X.RATE AS ADJ_CLOSING_PRICE_USD FROM QAI.DBO.GSECMSTRX S JOIN QAI.DBO.GSECMAPX M ON M.SECCODE = S.SECCODE
+    AND M.VENTYPE = 1 -- Global'
+---
+table: qa_idc_global.Gprccap
+domain: pricing
+description: Global Pricing Capital Changes | Use this table to retrieve global capital changes data. This table is supplemented
+  by the data in Gprccapa and
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary reference across all Gprc* tables.
+- name: Number
+  type: INTEGER
+  nullable: false
+  description: Number is the method used to identify capital change records that are uniquely from the vendor. Number is used
+    for database updates only.
+- name: ExDate
+  type: smalldatetime
+  nullable: true
+  description: ExDate is the ex-date.
+- name: RecDate
+  type: smalldatetime
+  nullable: true
+  description: RecDate is the record date.
+- name: PayDate
+  type: smalldatetime
+  nullable: true
+  description: PayDate is the date on which payment is made.
+- name: EntDate
+  type: smalldatetime
+  nullable: true
+  description: EntDate is the entry date.
+- name: RevDate
+  type: smalldatetime
+  nullable: true
+  description: RevDate is the revision date.
+- name: Rate
+  type: FLOAT
+  nullable: true
+  description: Rate represents the factor applied towards OldShares.
+- name: OldShares
+  type: FLOAT
+  nullable: true
+  description: OldShares is the share count before capital action.
+- name: NewShares
+  type: FLOAT
+  nullable: true
+  description: NewShares is the share count after capital action.
+- name: IssuePrice
+  type: FLOAT
+  nullable: true
+  description: IssuePrice is the price of the shares distributed.
+- name: Currency_
+  type: SMALLINT
+  nullable: true
+  description: Currency_ is the OldShare currency code. To convert to US dollars, cross- reference Currency_ with Gprcexr
+    where Currency_ = Gprcexr.Currency_ and ExDate = Gprcexr.Date_.
+- name: ChangeType
+  type: varchar(1)
+  nullable: true
+  description: ChangeType can be cross-referenced with Gprccode where ChangeType = Gprccode.Code and Gprccode.Type_ = 81.
+join_hints:
+- to: Gprccode
+  evidence: ChangeType varchar(1) Y ChangeType can be cross-referenced with Gprccode where ChangeType = Gprccode.Code and
+    Gprccode.Type_ = 81.
+  type: cross_reference
+---
+table: qa_idc_global.Gprccapa
+domain: pricing
+description: Global Pricing Capital Changes – Additional Fields (A) | This table contains additional information for the global
+  pricing capital changes data in Gprccap and GprcCapB.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary reference across all Gprc* tables.
+- name: Number
+  type: INTEGER
+  nullable: false
+  description: Number is the method used to identify capital change records uniquely from the vendor. Number is used only
+    for database updates.
+- name: RevDate
+  type: smalldatetime
+  nullable: true
+  description: RevDate is the revision date. LSEG Quantitative Analytics Database Schema for IDC Equity Pricing (Global) 10
+- name: IssueQualA
+  type: varchar(1)
+  nullable: true
+  description: IssueQualA represents issue qualification marker A. When more than one marker is needed, this item is the highest
+    priority (see IssueQualB, below). Cross-reference IssueQualA with Gprccode where IssueQualA = Gprccode.Code and Gprccode.Type_
+    = 90.
+- name: LastRenDate
+  type: smalldatetime
+  nullable: true
+  description: LastRenDate is the last date on which allotment letters or renounceable certificates can be traded.
+- name: CompleteFlag
+  type: TINYINT
+  nullable: true
+  description: CompleteFlag details the complete indicator.
+- name: LastCumPrice
+  type: FLOAT
+  nullable: true
+  description: LastCumPrice represents the mid price (for UK securities) or the closing/last-traded price (for non-UK securities)
+    quoted immediately prior to the capital change effective date, and the currency code.
+- name: LastCumCurr
+  type: SMALLINT
+  nullable: true
+  description: LastCumCurr represents the mid price (for UK securities) or the closing/last-traded price (for non-UK securities)
+    quoted immediately prior to the capital change effective date, and the currency code. Cross-reference LastCumCurr with
+    Gprccode where LastCumCurr = Gprccode.Code and Gprccode.Type_ = 6.
+- name: FirstExPrice
+  type: FLOAT
+  nullable: true
+  description: FirstExPrice represents the mid price (for UK securities) or the closing/last-traded price (for non-UK securities)
+    quoted immediately prior to the capital change effective date, and the currency code.
+- name: FirstExCurr
+  type: SMALLINT
+  nullable: true
+  description: FirstExCurr represents the mid price (for UK securities) or the closing/last-traded price (for non-UK securities)
+    quoted immediately prior to the capital change effective date, and the currency code. Cross-reference FirstExCurr with
+    Gprccode where FirstExCurr = Gprccode.Code and Gprccode.Type_ = 6.
+- name: LastCumDate
+  type: smalldatetime
+  nullable: true
+  description: LastCumDate is the last trading date prior to the ex-date. This applies to UK securities only.
+- name: LastSplitDate
+  type: smalldatetime
+  nullable: true
+  description: LastSplitDate is the last date that the security can be split for trading purposes.
+- name: NumCalls
+  type: TINYINT
+  nullable: true
+  description: NumCalls is the number of calls or installments associated with an issue.
+- name: CallAmt1
+  type: FLOAT
+  nullable: true
+  description: CallAmt1 is the first amount payable on application for a partly-paid security.
+- name: CallCurr1
+  type: SMALLINT
+  nullable: true
+  description: CallCurr1 is the currency code associated with CallAmt1. Cross- reference CallCurr1 with Gprccode.Code where
+    Type_ = 6.
+- name: CallDate1
+  type: smalldatetime
+  nullable: true
+  description: CallDate1 is the date associated with CallAmt1.
+- name: CallAmt2
+  type: FLOAT
+  nullable: true
+  description: CallAmt2 is the second amount payable on application for a partly-paid security.
+- name: CallCurr2
+  type: SMALLINT
+  nullable: true
+  description: CallCurr2 is the currency code associated with CallAmt2. Cross- reference CallCurr2 with Gprccode.Code where
+    Type_ = 6.
+- name: CallDate2
+  type: smalldatetime
+  nullable: true
+  description: CallDate2 is the date associated with CallAmt2.
+- name: CallAmt3
+  type: FLOAT
+  nullable: true
+  description: CallAmt3 is the third amount payable on application for a partly-paid security.
+- name: CallCurr3
+  type: SMALLINT
+  nullable: true
+  description: CallCurr3 is the currency code associated with CallAmt3. Cross- reference CallCurr3 with Gprccode.Code where
+    Type_ = 6.
+- name: CallDate3
+  type: smalldatetime
+  nullable: true
+  description: CallDate3 is the date associated with CallAmt3.
+- name: CallAmt4
+  type: FLOAT
+  nullable: true
+  description: CallAmt4 is the fourth amount payable on application for a partly-paid security.
+- name: CallCurr4
+  type: SMALLINT
+  nullable: true
+  description: CallCurr4 is the currency code associated with CallAmt4. Cross- reference CallCurr4 with Gprccode.Code where
+    Type_ = 6.
+- name: CallDate4
+  type: smalldatetime
+  nullable: true
+  description: CallDate4 is the date associated with CallAmt4.
+- name: XRefMarkA
+  type: varchar(1)
+  nullable: true
+  description: XRefMarkA is a capitalization change cross-reference marker. This capital change, and the SEDOL or FTEX code
+    of the previous tradable line. Cross-reference XRefMarkA with Gprccode where XRefMarkA = Gprccode.Code and Gprccode.Type_
+    = 91.
+- name: XRefSedolA
+  type: varchar(6)
+  nullable: true
+  description: XRefSedolA is a capitalization change cross-reference marker. This LSEG Quantitative Analytics Database Schema
+    for IDC Equity Pricing (Global) 11
+- name: XRefMarkB
+  type: varchar(1)
+  nullable: true
+  description: XRefMarkB is a capitalization change cross-reference marker. This capital change, and the SEDOL or FTEX code
+    of the previous tradable line. Cross-reference XRefMarkA with Gprccode where XRefMarkA = Gprccode.Code and Gprccode.Type_
+    = 91.
+- name: XRefSedolB
+  type: varchar(6)
+  nullable: true
+  description: XRefSedolB is a capitalization change cross-reference marker. This capital change, and the SEDOL or FTEX code
+    of the previous tradable line.
+- name: NumComponents
+  type: TINYINT
+  nullable: true
+  description: NumComponents represents the number of individual components that make up multiple concurrent capital changes.
+    A value of 0 indicates it is not applicable.
+- name: MECalcBasis
+  type: varchar(1)
+  nullable: true
+  description: MECalcBasis is the multiple event calculation basis. It describes the rating basis between the individual components
+    shown in second and third issue items. Cross-reference MECalcBasis with Gprccode where MECalcBasis = Gprccode.Code and
+    Gprccode.Type_ = 92.
+- name: NewShrRights
+  type: varchar(1)
+  nullable: true
+  description: NewShrRights describes the dividend ranking right of new shares for the parent security. Similar information
+    on the new security can be found in Gprcpay.DivGenMarkB and Gprcpay.DivGenMarkBDate. Cross-reference NewShrRights with
+    Gprccode where NewShrRights = Gprccode.Code and Gprccode.Type_ = 93.
+- name: NewShrDate
+  type: smalldatetime
+  nullable: true
+  description: NewShrDate describe the dividend ranking right of new shares for the parent security. Similar information on
+    the new security can be found in Gprcpay.DivGenMarkB and Gprcpay.DivGenMarkBDate.
+- name: NewSecType
+  type: varchar(2)
+  nullable: true
+  description: NewSecType identifies the new type of security being issued in a capitalization change.
+- name: LastBonusDate
+  type: smalldatetime
+  nullable: true
+  description: LastBonusDate is the last trading date for subscription or bonus rights.
+- name: SpecMarker
+  type: varchar(1)
+  nullable: true
+  description: SpecMarker is the special situation marker. Together with SpecDate, it describes the ranking right of new shares.
+    Cross-reference SpecMarker with Gprccode where SpecMarker = Gprccode.Code and Gprccode.Type_ = 94.
+- name: SpecDate
+  type: smalldatetime
+  nullable: true
+  description: SpecDate is the special situation date. Together with SpecMarker, it describes the ranking right of new shares.
+- name: IssueQualB
+  type: varchar(1)
+  nullable: true
+  description: IssueQualB represents issue qualification marker B. When more than one marker is needed, IssueQualA is the
+    highest priority (see IssueQualA, above). Cross-reference IssueQualB with Gprccode where IssueQualB = Gprccode.Code and
+    Gprccode.Type_ = 90.
+- name: METype1
+  type: varchar(1)
+  nullable: true
+  description: METype1 represents the issue type of the first component of multiple concurrent capital changes.
+- name: MENewQuant1
+  type: FLOAT
+  nullable: true
+  description: MENewQuant1 represents the number of new shares or the amount of the first component involved in the capital
+    change.
+- name: MENewCurr1
+  type: SMALLINT
+  nullable: true
+  description: MENewCurr1 represents the new currency code of the first component of multiple concurrent capital changes.
+    Cross-reference this field with Gprccode where MENewCurr1 = Gprccode.Code and Gprccode.Type_ = 6.
+- name: MEOldQuant1
+  type: FLOAT
+  nullable: true
+  description: MEOldQuant1 represents the number of old shares or the amount of the first component involved in the capital
+    change.
+- name: MEOldCurr1
+  type: SMALLINT
+  nullable: true
+  description: MEOldCurr1 represents the old currency codes of the first component of multiple concurrent capital changes.
+    Cross-reference these fields with Gprccode where MEOldCurr1 = Gprccode.Code and Gprccode.Type_ = 6.
+- name: MEPrice1
+  type: FLOAT
+  nullable: true
+  description: MEPrice1 represents the price payable for each unit or amount of the security described above in MENewQuant1.
+- name: MEPriceCurr1
+  type: SMALLINT
+  nullable: true
+  description: MEPriceCurr1 represents the currency code associated with MEPrice1. Cross-reference this field with Gprccode
+    where MEPriceCurr1 = Gprccode.Code and Gprccode.Type_ = 6.
+- name: METype2
+  type: varchar(1)
+  nullable: true
+  description: METype2 represents the issue type of the second component of multiple concurrent capital changes. LSEG Quantitative
+    Analytics Database Schema for IDC Equity Pricing (Global) 12
+- name: MENewQuant2
+  type: FLOAT
+  nullable: true
+  description: MENewQuant2 represents the number of new shares or the amount of the second component involved in the capital
+    change.
+- name: MENewCurr2
+  type: SMALLINT
+  nullable: true
+  description: MENewCurr2 represents the new currency code of the second component of multiple concurrent capital changes.
+    Cross-reference this field with Gprccode where MENewCurr2 = Gprccode.Code and Gprccode.Type_ = 6.
+- name: MEOldQuant2
+  type: FLOAT
+  nullable: true
+  description: MEOldQuant2 represents the number of old shares or the amount of the second component involved in the capital
+    change.
+- name: MEOldCurr2
+  type: SMALLINT
+  nullable: true
+  description: MEOldCurr2 represents the old currency codes of the second component of multiple concurrent capital changes.
+    Cross-reference these fields with Gprccode where MEOldCurr2 = Gprccode.Code and Gprccode.Type_ = 6.
+- name: MEPrice2
+  type: FLOAT
+  nullable: true
+  description: MEPrice2 represents the price payable for each unit or amount of the security described above in MENewQuant2.
+- name: MEPriceCurr2
+  type: SMALLINT
+  nullable: true
+  description: MEPriceCurr2 represents the currency code associated with MEPrice2. Cross-reference this field with Gprccode
+    where MEPriceCurr2 = Gprccode.Code and Gprccode.Type_ = 6.
+- name: METype3
+  type: varchar(1)
+  nullable: true
+  description: METype3 represents the issue type of the third component of multiple concurrent capital changes.
+- name: MENewQuant3
+  type: FLOAT
+  nullable: true
+  description: MENewQuant3 represents the number of new shares or the amount of the third component involved in the capital
+    change.
+- name: MENewCurr3
+  type: SMALLINT
+  nullable: true
+  description: MENewCurr3 represents the new currency code of the third component of multiple concurrent capital changes.
+    Cross-reference this field with Gprccode where MENewCurr3 = Gprccode.Code and Gprccode.Type_ = 6.
+- name: MEOldQuant3
+  type: FLOAT
+  nullable: true
+  description: MEOldQuant3 represents the number of old shares or the amount of the third component involved in the capital
+    change.
+- name: MEOldCurr3
+  type: SMALLINT
+  nullable: true
+  description: MEOldCurr3 represents the old currency codes of the third component of multiple concurrent capital changes.
+    Cross-reference these fields with Gprccode where MEOldCurr3 = Gprccode.Code and Gprccode.Type_ = 6.
+- name: MEPrice3
+  type: FLOAT
+  nullable: true
+  description: MEPrice3 represents the price payable for each unit or amount of the security described above in MENewQuant3.
+- name: MEPriceCurr3
+  type: SMALLINT
+  nullable: true
+  description: MEPriceCurr3 represents the currency code associated with MEPrice3. Cross-reference this field with Gprccode
+    where MEPriceCurr3 = Gprccode.Code and Gprccode.Type_ = 6.
+- name: METype4
+  type: varchar(1)
+  nullable: true
+  description: METype4 represents the issue type of the fourth component of multiple concurrent capital changes.
+- name: MENewQuant4
+  type: FLOAT
+  nullable: true
+  description: MENewQuant4 represents the number of new shares or the amount of the fourth component involved in the capital
+    change.
+- name: MENewCurr4
+  type: SMALLINT
+  nullable: true
+  description: MENewCurr4 represents the new currency code of the fourth component of multiple concurrent capital changes.
+    Cross-reference this field with Gprccode where MENewCurr4 = Gprccode.Code and Gprccode.Type_ = 6.
+- name: MEOldQuant4
+  type: FLOAT
+  nullable: true
+  description: MEOldQuant4 represents the number of old shares or the amount of the fourth component involved in the capital
+    change.
+- name: MEOldCurr4
+  type: SMALLINT
+  nullable: true
+  description: MEOldCurr4 represents the old currency codes of the fourth component of multiple concurrent capital changes.
+    Cross-reference these fields with Gprccode where MEOldCurr4 = Gprccode.Code and Gprccode.Type_ = 6.
+- name: MEPrice4
+  type: FLOAT
+  nullable: true
+  description: MEPrice4 represents the price payable for each unit or amount of the security described above in MENewQuant4.
+- name: MEPriceCurr4
+  type: SMALLINT
+  nullable: true
+  description: MEPriceCurr4 represents the currency code associated with MEPrice4. Cross-reference this field with Gprccode
+    where MEPriceCurr4 = Gprccode.Code and Gprccode.Type_ = 6. LSEG Quantitative Analytics Database Schema for IDC Equity
+    Pricing (Global) 13
+---
+table: qa_idc_global.GprcCapB
+domain: pricing
+description: Global Pricing Capital Changes – Additional Fields (B) | This table contains additional information for the global
+  pricing capital changes data in Gprccap and Gprccapa.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all Gprc* tables.
+- name: Number
+  type: INTEGER
+  nullable: false
+  description: Number is the sequence number.
+- name: RateCurr
+  type: SMALLINT
+  nullable: true
+  description: RateCurr is the EXTEL currency of split equivalent ratio of the capital change. Cross-reference RateCurr with
+    Gprccode where RateCurr = Gprccode.Code and Gprccode.Type_ = 6.
+- name: NewSharesCurr
+  type: SMALLINT
+  nullable: true
+  description: NewSharesCurr is the EXTEL currency of post-split shares.
+- name: OldSharesCurr
+  type: SMALLINT
+  nullable: true
+  description: OldSharesCurr is the EXTEL currency of pre-split shares.
+---
+table: qa_idc_global.Gprcchg
+domain: pricing
+description: Global Pricing SEDOL Changes | This table contains the SEDOL history per security.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary reference across all Gprc* tables.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date associated with Sedol.
+- name: Sedol
+  type: varchar(6)
+  nullable: true
+  description: Sedol represents the SEDOL change for a particular unique ID.
+---
+table: qa_idc_global.GprcCnv
+domain: pricing
+description: Global Pricing Conversion Data | This table provides data of securities that can be converted into other security
+  types.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary reference across all Gprc* tables.
+- name: Number
+  type: INTEGER
+  nullable: false
+  description: Number is the sequence number of the conversion.
+- name: SectionMarker
+  type: varchar(1)
+  nullable: true
+  description: SectionMarker is described in the SectionMarker section on page 15.
+- name: OldCnvUnitAmt
+  type: FLOAT
+  nullable: true
+  description: OldCnvUnitAmt is the amount/number of shares surrendered upon conversion.
+- name: OldCnvUnitAmtCurr
+  type: SMALLINT
+  nullable: true
+  description: OldCnvUnitAmtCurr is the EXTEL currency code of surrendered amount/shares. Cross-reference this with Gprccode
+    where OldCnvUnitAmtCurr = Gprccode.code and Gprccode.Type_ = 6. LSEG Quantitative Analytics Database Schema for IDC Equity
+    Pricing (Global) 14
+- name: NextAssetSecType
+  type: varchar(2)
+  nullable: true
+  description: NextAssetSecType is the type of security obtained from conversion. Cross-reference with Gprccode where NextAssetSecType
+    = Gprccode.code and Gprccode.Type_ = 76.
+- name: NextResultAsset
+  type: varchar(7)
+  nullable: true
+  description: NextResultAsset is the SEDOL of the security obtained from conversion.
+- name: CnvOpMarker
+  type: varchar(1)
+  nullable: true
+  description: CnvOpMarker is described in the CnvOpMarker section on page 15.
+- name: LastCnvDate
+  type: smalldatetime
+  nullable: true
+  description: LastCnvDate is the date of the final onversion/subscription opportunity.
+- name: PartCnvPercent
+  type: SMALLINT
+  nullable: true
+  description: PartCnvPercent is the partial conversion percentage.
+- name: PerStartDate
+  type: smalldatetime
+  nullable: true
+  description: PerStartDate is the first date the conversion rights can be exercised.
+- name: PerEndDate
+  type: smalldatetime
+  nullable: true
+  description: PerEndDate is the last date the conversion rights can be exercised.
+- name: FirstCnvDate
+  type: smalldatetime
+  nullable: true
+  description: FirstCnvDate is the date of the first/next conversion/subscription opportunity.
+- name: FirstCnvType
+  type: varchar(1)
+  nullable: true
+  description: FirstCnvType is the section marker of first conversion/subscription opportunity.
+- name: FirstOpNewShares
+  type: FLOAT
+  nullable: true
+  description: FirstOpNewShares is the number of shares obtainable at first conversion opportunity.
+- name: FirstOpNewSharesCurr
+  type: SMALLINT
+  nullable: true
+  description: FirstOpNewSharesCurr is the EXTEL currency code of shares.
+- name: FirstOpAdjMarker
+  type: varchar(1)
+  nullable: true
+  description: FirstOpAdjMarker is the first conversion adjustment marker describing whether security has been adjusted/receipts
+    or units share basis changed.
+- name: FirstOpPrice
+  type: FLOAT
+  nullable: true
+  description: FirstOpPrice is the price per share payable at the first conversion.
+- name: FirstOpPriceCurr
+  type: SMALLINT
+  nullable: true
+  description: FirstOpPriceCurr is the EXTEL currency code of first price per share.
+- name: FirstCashSubAmt
+  type: FLOAT
+  nullable: true
+  description: FirstCashSubAmt is the cash per share payable at first subscription opportunity.
+- name: FirstCashSubAmtCurr
+  type: SMALLINT
+  nullable: true
+  description: FirstCashSubAmtCurr is the EXTEL currency code of cash per share.
+- name: FirstNextResultAsset
+  type: varchar(7)
+  nullable: true
+  description: FirstNextResultAsset is the SEDOL of next resultant asset of first conversion.
+- name: SecondCnvDate
+  type: smalldatetime
+  nullable: true
+  description: SecondCnvDate is the date of the second conversion/subscription opportunity.
+- name: SecondCnvType
+  type: varchar(1)
+  nullable: true
+  description: SecondCnvType is the section marker of second conversion/subscription opportunity.
+- name: SecondOpNewShares
+  type: FLOAT
+  nullable: true
+  description: SecondOpNewShares is the number of shares obtainable at second conversion opportunity.
+- name: SecondOpNewSharesCurr
+  type: SMALLINT
+  nullable: true
+  description: SecondOpNewSharesCurr is the EXTEL currency code of shares.
+- name: SecondOpAdjMarker
+  type: varchar(1)
+  nullable: true
+  description: SecondOpAdjMarker is the second conversion adjustment marker and describes whether security has been adjusted/receipts
+    or units share basis changed.
+- name: SecondOpPrice
+  type: FLOAT
+  nullable: true
+  description: SecondOpPrice is the price per share payable at the second conversion.
+- name: SecondOpPriceCurr
+  type: SMALLINT
+  nullable: true
+  description: SecondOpPriceCurr is the EXTEL currency code of second price per share.
+- name: SecondCashSubAmt
+  type: FLOAT
+  nullable: true
+  description: SecondCashSubAmt is the cash per share payable at second subscription opportunity.
+- name: SecondCashSubAmtCurr
+  type: SMALLINT
+  nullable: true
+  description: SecondCashSubAmtCurr is the EXTEL currency code of cash per share.
+- name: SecondNextResultAsse
+  type: varchar(7)
+  nullable: true
+  description: SecondNextResultAsse is the SEDOL of next resultant asset of second conversion. LSEG Quantitative Analytics
+    Database Schema for IDC Equity Pricing (Global) 15
+- name: ModDate
+  type: smalldatetime
+  nullable: true
+  description: 'ModDate is the date on which the security was last modified. SectionMarker defines available conversion data
+    and the kind of conversion or subscription rights. SectionMarker can be: Code Description 0 No data available 1 Fully
+    convertible into underlying asset 2 Partially convertible into underlying asset 3 Optionally partially convertible into
+    underlying asset 4 Security has subscription rights. 5 Alternative subscription rights: security has choice of conversion
+    or subscription rights 6 Warran'
+---
+table: qa_idc_global.Gprccode
+domain: pricing
+description: Global Pricing Code Descriptions | Use this table to retrieve code descriptions for global pricing data.
+update_cadence: Daily
+columns:
+- name: Type_
+  type: SMALLINT
+  nullable: false
+  description: 'The combination of Type_ and Code provide descriptions (Desc_) to support the Gprc* tables. To see a list
+    of available types, use this query: select * from gprccode where type_ = 1 Code varchar(4) N Desc_ varchar(127) Y'
+---
+table: qa_idc_global.Gprcdiv
+domain: pricing
+description: Global Pricing Dividends | This table contains information on global pricing dividends. This table is supplemented
+  by the data in GprcDivA.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary reference across all Gprc* tables.
+- name: DivNumb
+  type: INTEGER
+  nullable: false
+  description: DivNumb is the TRQA unique key for keeping track of transactions per Code.
+- name: ExDate
+  type: smalldatetime
+  nullable: true
+  description: ExDate is the ex-date.
+- name: RecDate
+  type: smalldatetime
+  nullable: true
+  description: RecDate is the record date.
+- name: PayDate
+  type: smalldatetime
+  nullable: true
+  description: PayDate is the date on which payment is made.
+- name: EntDate
+  type: smalldatetime
+  nullable: true
+  description: EntDate is the entry date.
+- name: RevDate
+  type: smalldatetime
+  nullable: true
+  description: RevDate is the revision date.
+- name: GrossRate
+  type: FLOAT
+  nullable: true
+  description: GrossRate is the amount of the dividend/interest payment as qualified by TaxMarker. GrossRate is stored in
+    local currency.
+- name: NetRate
+  type: FLOAT
+  nullable: true
+  description: NetRate is stored in local currency.
+- name: DivType
+  type: SMALLINT
+  nullable: true
+  description: 'DivType has two classifications: non-cash dividend (0) and cash dividend (1).'
+- name: Currency_
+  type: SMALLINT
+  nullable: true
+  description: Currency_ is based on EXTEL codes. Gprccode provides EXTEL to ISO translation. To translate the EXTEL currency
+    code to the currency description, cross- reference Currency_ with Gprccode where Currency_ = Gprccode.Code and Gprccode.Type_
+    = 6. To translate the EXTEL currency code to the ISO currency code, cross- reference Currency_ with Gprccode where Currency_
+    = Gprccode.Code and Gprccode.Type_ = 8.
+- name: PayType
+  type: varchar(2)
+  nullable: true
+  description: PayType defines the dividend/interest payment data. Cross-reference PayType with Gprccode where PayType = Gprccode.Code
+    and Gprccode.Type_ = 78.
+- name: ValMarker
+  type: varchar(1)
+  nullable: true
+  description: ValMarker further qualifies the dividend/interest payment data. Cross-reference ValMarker with Gprccode where
+    ValMarker = Gprccode.Code and Gprccode.Type_ = 80.
+- name: TaxMarker
+  type: varchar(2)
+  nullable: true
+  description: TaxMarker is the dividend tax marker, if any. Cross-reference TaxMarker with Gprccode where TaxMarker = Gprccode.Code
+    and Gprccode.Type_ = 79. LSEG Quantitative Analytics Database Schema for IDC Equity Pricing (Global) 17
+---
+table: qa_idc_global.GprcDivA
+domain: pricing
+description: Global Pricing Dividends – Additional Fields | This table contains global pricing dividend data. The data in
+  this table supplements the data in Gprcdiv.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all Gprc* tables.
+- name: DivNumb
+  type: INTEGER
+  nullable: false
+  description: DivNumb is the TRQA unique key for keeping track of transactions per Code.
+- name: AdjValue
+  type: FLOAT
+  nullable: true
+  description: AdjValue is the adjustment value.
+- name: AdjValueCurr
+  type: SMALLINT
+  nullable: true
+  description: AdjValueCurr is the EXTEL currency of the adjustment value. Cross-reference AdjValueCurr with Gprccode.Code
+    where Type_ = 6.
+- name: CouponNum
+  type: SMALLINT
+  nullable: true
+  description: CouponNum is the coupon number.
+- name: GrossCurr
+  type: SMALLINT
+  nullable: true
+  description: GrossCurr is the EXTEL currency of the gross rate.
+- name: IncTaxQualCode
+  type: varchar(1)
+  nullable: true
+  description: IncTaxQualCode is the Income Tax Qualification code. Cross-reference IncTaxQualCode with Gprccode.Code where
+    Type_ = 147.
+- name: UnAdjTaxCredit
+  type: FLOAT
+  nullable: true
+  description: UnAdjTaxCredit is the unadjusted tax credit.
+- name: UnAdjTaxCreditCurr
+  type: SMALLINT
+  nullable: true
+  description: UnAdjTaxCreditCurr is the EXTEL currency of the unadjusted tax credit. Cross-reference UnAdjTaxCreditCurr with
+    Gprccode.Code where Type_ = 6.
+- name: PeriodEndDate
+  type: smalldatetime
+  nullable: true
+  description: PeriodEndDate is the Period end date.
+- name: PeriodEndDateMarker
+  type: varchar(1)
+  nullable: true
+  description: PeriodEndDateMarker defines the dividend or interest payment period and data stored for that period. It also
+    provides the end date for the period. Cross-reference PeriodEndDateMarker with Gprccode.Code where Type_ = 148.
+---
+table: qa_idc_global.Gprcern
+domain: pricing
+description: Global Pricing Earnings Data | This table contains actual earnings data information.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary reference across all Gprc* tables.
+- name: ModDate
+  type: smalldatetime
+  nullable: true
+  description: ModDate is the date on which the security was last modified.
+- name: EarnAmt
+  type: FLOAT
+  nullable: true
+  description: EarnAmt is the most recent annualized earnings per share.
+- name: EarnAmtCurr
+  type: SMALLINT
+  nullable: true
+  description: EarnAmtCurr is the currency code associated with EarnAmt. Cross- reference EarnAmtCurr with Gprccode where
+    EarnAmtCurr = Gprccode.Code and Gprccode.Type_ = 6. LSEG Quantitative Analytics Database Schema for IDC Equity Pricing
+    (Global) 18
+- name: EarnAmtMark
+  type: varchar(1)
+  nullable: true
+  description: EarnAmtMark describes the source, calculation basis, and conditions affecting the EarnAmt. Cross-reference
+    EarnAmtMark with Gprccode where EarnAmtMark = Gprccode.Code and Gprccode.Type_ = 137.
+- name: EarnQualMark
+  type: varchar(1)
+  nullable: true
+  description: EarnQualMark gives information on the security’s corporate tax status. Cross-reference EarnQuaMark with Gprccode
+    where EarnQualMark = Gprccode.Code and Gprccode.Type_ = 138.
+- name: BalSheetDate
+  type: smalldatetime
+  nullable: true
+  description: BalSheetDate is the date on which the company reported its balance sheet information.
+- name: EarnAmt12M
+  type: FLOAT
+  nullable: true
+  description: EarnAmt12M is the rolling 12-month earnings per share figure for UK securities, calculated by EXSHARE using
+    the latest available figures.
+- name: EarnAmtCurr12M
+  type: SMALLINT
+  nullable: true
+  description: EarnAmtCurr12M is the currency code associated with EarnAmt12M. Cross-reference EarnAmtCurr12M with Gprccode
+    where EarnAmtCurr12M = Gprccode.Code and Gprccode.Type_ = 6.
+- name: EarnAmtMark12M
+  type: varchar(1)
+  nullable: true
+  description: EarnAmtMark12M provides the basis of the earnings calculation for EarnAmt12M. Cross-reference EarnAmtMark12M
+    with Gprccode where EarnAmtMark12M = Gprccode.Code and Gprccode.Type_ = 137.
+- name: EarnQualMark12M
+  type: varchar(1)
+  nullable: true
+  description: EarnQualMark12M further qualifies EarnAmt12M and EarnAmtMark12M by providing information on the security’s
+    corporate tax status. Cross-reference EarnQualMark12M with Gprccode where EarnQualMark12M = Gprccode.Code and Gprccode.Type_
+    = 138.
+- name: EarnDate12M
+  type: smalldatetime
+  nullable: true
+  description: EarnDate12M is the period end date used to calculate EarnAmt12M.
+- name: BookVal
+  type: FLOAT
+  nullable: true
+  description: BookVal is the net asset value (book value) of the security.
+- name: BookValCurr
+  type: SMALLINT
+  nullable: true
+  description: BookValCurr is the currency code associated with BookVal. Cross- reference BookValCurr with Gprccode where
+    BookValCurr = Gprccode.Code and Gprccode.Type_ = 6.
+- name: BookValDate
+  type: smalldatetime
+  nullable: true
+  description: BookValDate is the date associated with BookVal.
+- name: BookValMark
+  type: varchar(1)
+  nullable: true
+  description: BookValMark indicates whether BookVal is calculated by EXSHARE (P) or is published by the company (Q).
+---
+table: qa_idc_global.Gprcexr
+domain: pricing
+description: Global Pricing Exchange Rates | Use this table to retrieve spot rates data.
+update_cadence: Daily
+columns:
+- name: Currency_
+  type: SMALLINT
+  nullable: false
+  description: Currency_ is based on EXTEL codes. Gprccode provides EXTEL to ISO translation.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date associated with the exchange rate change.
+- name: Rate
+  type: FLOAT
+  nullable: true
+  description: Rate is the USD equivalent provided by WM/Refinitiv with the rates fixed at 16:00 UK time. Prices in Gprcval
+    are stored in the local currency, so to get the USD equivalent you must divide the price by the Gprcexr.Rate. LSEG Quantitative
+    Analytics Database Schema for IDC Equity Pricing (Global) 19
+---
+table: qa_idc_global.GprcFwr
+domain: pricing
+description: Global Pricing Currency Forward Rates | Use this table to retrieve forward currency rates data.
+update_cadence: Daily
+columns:
+- name: Currency_
+  type: SMALLINT
+  nullable: false
+  description: Currency_ is based on EXTEL codes. Gprccode provides EXTEL to ISO translation.
+- name: Period
+  type: varchar(3)
+  nullable: false
+  description: Period is described in the Period section on page 19.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date of the forward rate.
+- name: BidRate
+  type: FLOAT
+  nullable: true
+  description: BidRate is the bid rate.
+- name: AskRate
+  type: FLOAT
+  nullable: true
+  description: AskRate is the ask rate.
+- name: MidRate
+  type: FLOAT
+  nullable: true
+  description: MidRate is the mid rate.
+- name: Periodicity
+  type: varchar(1)
+  nullable: true
+  description: Periodicity is the periodicity indicator. Periodicity can be daily (D) or weekly (W).
+- name: RptCalcMarker
+  type: varchar(1)
+  nullable: true
+  description: 'RptCalcMarker is the reported/calculated marker. RptCalcMarker can be reported (R) or calculated (C). Period
+    is the forward period for the rate given in AskRate, BidRate, or MidRate. Period can be: Code Description OVN Overnight
+    TNX Tomorrow next 01W 1 week 01M 1 month 02M 2 months 03M 3 months 06M 6 months 09M 9 months 12M 12 months 02Y 2 years
+    05Y 5 years'
+---
+table: qa_idc_global.Gprcinfa
+domain: pricing
+description: Global Pricing Security Information – Additional Fields | This table includes security information supplemental
+  to Gprcinfo2.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary reference across all Gprc* tables.
+- name: ModDate
+  type: smalldatetime
+  nullable: true
+  description: ModDate is the date on which the security was last modified. LSEG Quantitative Analytics Database Schema for
+    IDC Equity Pricing (Global) 20
+- name: UncLiab
+  type: FLOAT
+  nullable: true
+  description: UncLiab is the total amount outstanding (issued capital – total amount of calls paid) for nil-paid and temporary,
+    partly-paid securities.
+- name: UncLiabCurr
+  type: SMALLINT
+  nullable: true
+  description: UncLiabCurr is the currency code associated with UncLiab. Cross-reference UncLiabCurr with Gprccode where UncLiabCurr
+    = Gprccode.Code and Gprccode.Type_ = 6.
+- name: PrevName
+  type: varchar(18)
+  nullable: true
+  description: PrevName is the name of Gprcinfo2.Issuer prior to the last name change, if any.
+- name: PrevNameDate
+  type: smalldatetime
+  nullable: true
+  description: PrevNameDate is the date of the last name change, if any.
+- name: InsertDate
+  type: smalldatetime
+  nullable: true
+  description: InsertDate is the date when EXSHARE added the security to its service.
+- name: StatusDate
+  type: smalldatetime
+  nullable: true
+  description: StatusDate is the date of the last change to the marker or of the specific action.
+- name: XRefA
+  type: varchar(1)
+  nullable: true
+  description: XRefA provides a forward reference to the next tradable security in an issue (origin, parents, predecessors,
+    successors, etc.). Cross-reference XRefA with Gprccode.Code where Type_ = 169.
+- name: XRefADate
+  type: smalldatetime
+  nullable: true
+  description: XRefADate is described in the XRefADate section on page 22.
+- name: XRefASedol
+  type: varchar(6)
+  nullable: true
+  description: XRefASedol is the SEDOL/FTEX code of securities referenced by XRefA. See XRefASedol, XrefBSedol, and XRefCSedol
+    Codes on page 22.
+- name: XRefB
+  type: varchar(1)
+  nullable: true
+  description: XRefB provides a forward reference to the next tradable security in an issue (origin, parents, predecessors,
+    successors, etc.). XRefB provides information about partly-paid securities. Cross-reference XRefB with Gprccode.Code where
+    Type_ = 169.
+- name: XRefBSedol
+  type: varchar(6)
+  nullable: true
+  description: XRefBSedol is the SEDOL/FTEX code of securities referenced by XRefB. See XRefASedol, XrefBSedol, and XRefCSedol
+    Codes on page 22.
+- name: XRefC
+  type: varchar(1)
+  nullable: true
+  description: XRefC provides a forward reference to the next tradable security in an issue (origin, parents, predecessors,
+    successors, etc.). XRefC provides information about fully-paid securities. Cross-reference XRefC with Gprccode.Code where
+    Type_ = 169.
+- name: XRefCSedol
+  type: varchar(6)
+  nullable: true
+  description: XRefCSedol is the SEDOL/FTEX code of securities referenced by XRefC. See XRefASedol, XrefBSedol, and XRefCSedol
+    Codes on page 22.
+- name: QuoteCtryDate
+  type: smalldatetime
+  nullable: true
+  description: QuoteCtryDate is the date of the most recent change to the country code.
+- name: ExchDate
+  type: smalldatetime
+  nullable: true
+  description: ExchDate is the date of the latest change to Gprcinfo2.exchange.
+- name: LocBrdInd
+  type: varchar(2)
+  nullable: true
+  description: LocBrdInd is a code identifying the primary industry in which the company operates.
+- name: ExchSect
+  type: varchar(2)
+  nullable: true
+  description: ExchSect identifies the exchange or section of an exchange (if an exchange is multi-tiered) in which a security
+    is quoted, or the type of fund or the type/period of rate for non-security groups (unit funds, interest rates, and exchange
+    rates).
+- name: AccrIntBasis
+  type: varchar(1)
+  nullable: true
+  description: AccrIntBasis describes how the accrued interest period should be calculated. Cross-reference AccrIntBasis with
+    Gprccode where AccrIntBasis = Gprccode.Code and Gprccode.Type_ = 114.
+- name: InstForm
+  type: varchar(1)
+  nullable: true
+  description: InstForm identifies the form in which the security is quoted, how it is traded and settled, how title is transferred,
+    and how the rights are conferred to the holder. Cross-reference InstForm with Gprccode where InstForm = Gprccode.Code
+    and Gprccode.Type_ = 115.
+- name: FTSEIdxCon
+  type: varchar(1)
+  nullable: true
+  description: FTSEIdxCon identifies constituents of the FTSE world index. It can be 0 (not applicable) or 1 (constituent).
+- name: LocIdxCon
+  type: varchar(1)
+  nullable: true
+  description: LocIdxCon identifies a security as a constituent of one of ten indexes. Cross-reference LocIdxCon with Gprccode
+    where LocIdxCon = Gprccode.Code and Gprccode.Type_ = 116.
+- name: FTSEIdxGrp
+  type: varchar(3)
+  nullable: true
+  description: FTSEIdxGrp is the FTSE World Index industry group classification code. Cross-reference FTSEIdxGrp with Gprccode
+    where FTSEIdxGrp = Gprccode.Code and Gprccode.Type_ = 117.
+- name: AccrIntPrc
+  type: varchar(1)
+  nullable: true
+  description: AccrIntPrc indicates whether the accrued interest is included in the quotation price. LSEG Quantitative Analytics
+    Database Schema for IDC Equity Pricing (Global) 21
+- name: VoteRgts
+  type: varchar(1)
+  nullable: true
+  description: VoteRgts describes the status of voting rights for a security. Cross-reference VoteRgts with Gprccode where
+    VoteRgts = Gprccode.Code and Gprccode.Type_ = 119.
+- name: FTSEIdxEcon
+  type: varchar(3)
+  nullable: true
+  description: FTSEIdxEcon is the FTSE World Index economic sector classification code. Cross-reference FTSEIdxEcon with Gprccode
+    where FTSEIdxEcon = Gprccode.Code and Gprccode.Type_ = 120.
+- name: FTSEIdxInd
+  type: varchar(3)
+  nullable: true
+  description: FTSEIdxInd is the FTSE World Index industry sector classification code. Cross-reference FTSEIdxInd with Gprccode
+    where FTSEIdxInd = Gprccode.Code and Gprccode.Type_ = 121.
+- name: LocIdxCon1
+  type: varchar(1)
+  nullable: true
+  description: LocIdxCon1 identifies securities as constituents of certain indices. Cross-reference LocIdxCon1 with Gprccode
+    where LocIdxCon1 = Gprccode.Code and Gprccode.Type_ = 122.
+- name: LocIdxCon2
+  type: varchar(1)
+  nullable: true
+  description: LocIdxCon2 identifies securities as constituents of certain indices. Cross-reference LocIdxCon2 with Gprccode
+    where LocIdxCon2 = Gprccode.Code and Gprccode.Type_ = 123.
+- name: LocIdxCon3
+  type: varchar(1)
+  nullable: true
+  description: LocIdxCon3 identifies securities as constituents of certain indices. Cross-reference LocIdxCon3 with Gprccode
+    where LocIdxCon3 = Gprccode.Code and Gprccode.Type_ = 124.
+- name: LocIdxCon4
+  type: varchar(1)
+  nullable: true
+  description: LocIdxCon4 identifies securities as constituents of certain indices. Cross-reference LocIdxCon4 with Gprccode
+    where LocIdxCon4 = Gprccode.Code and Gprccode.Type_ = 125.
+- name: LocIdxCon5
+  type: varchar(1)
+  nullable: true
+  description: LocIdxCon5 identifies securities as constituents of certain indices. Cross-reference LocIdxCon5 with Gprccode
+    where LocIdxCon5 = Gprccode.Code and Gprccode.Type_ = 126.
+- name: ScrTrade
+  type: varchar(1)
+  nullable: true
+  description: ScrTrade identifies whether a security is now de-materialized – trading scripless/paperless (1) or is still
+    materialized (0).
+- name: ScrDate
+  type: smalldatetime
+  nullable: true
+  description: ScrDate is the date a security was first tradable on a scripless basis.
+- name: TradReg
+  type: varchar(1)
+  nullable: true
+  description: TradReg indicates various general market trading restrictions or regulations imposed on a security where 1
+    = 144A and 2 = Regulation S.
+- name: MktLbl
+  type: varchar(2)
+  nullable: true
+  description: MktLbl is description by which a security is most commonly known. Cross-reference MktLbl with Gprccode.Code
+    where Type_ = 129.
+- name: Cusip
+  type: varchar(8)
+  nullable: true
+  description: Cusip is the current CUSIP/CINS number.
+- name: LocalCodeB
+  type: varchar(6)
+  nullable: true
+  description: LocalCodeB is the local identification code designated by the exchange quoting the security (up to 6 characters).
+- name: LocalCodeA
+  type: varchar(12)
+  nullable: true
+  description: LocalCodeA is the local identification code designated by the exchange quoting the security (up to 12 characters).
+- name: SettleIsin
+  type: varchar(12)
+  nullable: true
+  description: SettleIsin is the ISIN used by the London Stock Exchange for processing. When an ISIN has not yet been adopted,
+    a “dummy” settlement code is used (4 spaces + SEDOL + 1 space).
+- name: EuroClear
+  type: varchar(9)
+  nullable: true
+  description: EuroClear is the common Euroclear/CEDEL code.
+- name: Wertpapier
+  type: varchar(6)
+  nullable: true
+  description: Wertpapier is the German identifier for a security.
+- name: Belgian
+  type: varchar(6)
+  nullable: true
+  description: Belgian is the Belgian SVM number for a security.
+- name: IssuerCode
+  type: varchar(6)
+  nullable: true
+  description: IssuerCode is the London Stock Exchange code denoting the issuer of a security.
+- name: TickerCode
+  type: varchar(15)
+  nullable: true
+  description: 'TickerCode is the ticker ID of the security. LSEG Quantitative Analytics Database Schema for IDC Equity Pricing
+    (Global) 22 XRefADate is the date associated with the latest change to XRefA. XRefADate can be: Code Description C Supersession
+    date D Succession date E Takeover effective date G Takeover effective date H Takeover effective date J Supersession date
+    K Supersession date L Last tradable date M Date temporary line expires N Succession date O Ex-dividend date P First tradable
+    date Q Reinsta'
+---
+table: qa_idc_global.Gprcinfo2
+domain: pricing
+description: Global Pricing Security Information | This table contains security information and is supplemented by the data
+  in Gprcinfa.
+update_cadence: Daily
+columns:
+- name: Sedol
+  type: varchar(6)
+  nullable: true
+  description: Sedol is the SEDOL of the security.
+- name: Ticker
+  type: varchar(12)
+  nullable: true
+  description: This field is not supported. Instead, refer to the TickerCode, LocalCodeA, or LocalCodeB field in the Gprcinfa
+    table.
+- name: Isin
+  type: varchar(12)
+  nullable: true
+  description: Isin is the ISIN of the security.
+- name: Issuer
+  type: varchar(18)
+  nullable: true
+  description: Issuer is the name of the Issuer. Note that because the description is limited to 18 characters, abbreviations
+    may be used.
+- name: Issue
+  type: varchar(35)
+  nullable: true
+  description: Issue is a brief, differentiating description of the issue. Note that because the description is limited to
+    35 characters, abbreviations may be used.
+- name: QuoteCtry
+  type: varchar(2)
+  nullable: true
+  description: QuoteCtry returns the two-letter EXTEL country code for the country in which the security price is quoted.
+    Cross-reference QuoteCtry with Gprccode.Code where Type_ = 2.
+- name: Exchange
+  type: varchar(1)
+  nullable: true
+  description: Exchange returns the one-letter exchange code indicating where a security is traded. Cross-reference Exchange
+    with Gprccode where QuoteCtry + Exchange = Gprccode.Code and Gprccode.Type_ = 75.
+- name: IssueCtry
+  type: varchar(2)
+  nullable: true
+  description: IssueCtry returns the two-letter EXTEL country code identifying the country of incorporation for the issuer
+    of the security. Cross-reference IssueCtry with Gprccode .Code where Type_ = 2.
+- name: SecType
+  type: varchar(2)
+  nullable: true
+  description: SecType returns the two-digit security type code. Cross-reference SecType with Gprccode.Code where Type_ =
+    76.
+- name: Industry
+  type: varchar(4)
+  nullable: true
+  description: Industry returns the relevant country's industry code for the company underlying the issue. Cross-reference
+    Industry with Gprccode where QuoteCtry code = (%%) of Gprccode.Desc_ and Gprccode.Type_ = 1. For example, if QuoteCtry
+    is FJ, the corresponding Type_ 1 code is 36. To perform the industry description lookup, cross-reference Industry with
+    Gprccode where Industry = Gprccode.Code and Type_ = 36.
+- name: Status
+  type: varchar(1)
+  nullable: true
+  description: Status returns the Issue Status Code which is a one-character code for a detailed description related to an
+    issue's status. For example, Q = “Reason for extinction is no market maker” can be found by cross- referencing Gprccode
+    where Status = Gprccode.Code and Type_ = 77.
+- name: Health
+  type: varchar(1)
+  nullable: true
+  description: Health is the live/dead indicator. Cross-reference Health with Gprccode where Health = Gprccode.Code and Type_
+    = 82.
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary reference across all Gprc* tables.
+- name: ModDate
+  type: smalldatetime
+  nullable: true
+  description: ModDate is the last date on which changes were made within the table. LSEG Quantitative Analytics Database
+    Schema for IDC Equity Pricing (Global) 24
+---
+table: qa_idc_global.Gprcnom
+domain: pricing
+description: Global Pricing Nominal Values | Use this table to retrieve the most recent nominal value of shares.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary reference across all Gprc* tables.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is either the face or par value of the security.
+- name: Currency_
+  type: SMALLINT
+  nullable: true
+  description: Currency_ is the currency code associated with Value_. Cross-reference Currency_ with Gprccode where Currency_
+    = Gprccode.Code and Gprccode.Type_ = 6.
+- name: Marker
+  type: varchar(1)
+  nullable: true
+  description: Marker describes Value_. Marker can be cross-referenced with Gprccode where Marker = Gprccode.Code and Gprccode.Type_
+    = 88.
+join_hints:
+- to: Gprccode
+  evidence: Marker can be cross-referenced with Gprccode where Marker = Gprccode.Code and Gprccode.Type_ = 88.
+  type: cross_reference
+---
+table: qa_idc_global.Gprcpay
+domain: pricing
+description: Global Pricing Dividend/Interest Payment Data | This table contains global dividends and interest payment data.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary reference across all Gprc* tables.
+- name: ModDate
+  type: smalldatetime
+  nullable: true
+  description: ModDate is the date on which the security was last modified.
+- name: TotDiv
+  type: FLOAT
+  nullable: true
+  description: TotDiv is the estimated/forecast annual dividend for equities, or the annual interest rate for fixed/variable
+    interest securities.
+- name: TotDivCurr
+  type: SMALLINT
+  nullable: true
+  description: TotDivCurr is the currency code associated with TotDiv. Cross- reference TotDivCurr with Gprccode where TotDivCurr
+    = Gprccode.Code and Gprccode.Type_ = 6.
+- name: TotDivMarker
+  type: varchar(1)
+  nullable: true
+  description: TotDivMarker provides information on the company’s estimated total annual dividend. This marker specifies which
+    dividend amount is used and identifies any limiting conditions surrounding the dividend forecast. Cross-reference TotDivMarker
+    with Gprccode where TotDivMarker = Gprccode.Code and Gprccode.Type_ = 130.
+- name: DivRuleNumb
+  type: varchar(2)
+  nullable: true
+  description: DivRuleNumb identifies the rule applied in the calculation of TotDiv. Cross-reference DivRuleNumb with Gprccode
+    where DivRuleNumb = Gprccode.Code and Gprccode.Type_ = 131. For most non-UK securities, the value is “00” because the
+    forecast method is unknown.
+- name: DivGenMarkA
+  type: varchar(1)
+  nullable: true
+  description: DivGenMarkA provides security-level information about the current status of dividend/interest payments in general.
+    Cross-reference DivGenMarkA with Gprccode where DivGenMarkA = Gprccode.Code and Gprccode.Type_ = 132.
+- name: DivGenMarkB
+  type: varchar(1)
+  nullable: true
+  description: DivGenMarkB provides additional security-level information about the current status of dividend/interest payments
+    in general. Cross- reference DivGenMarkB with Gprccode where DivGenMarkB = Gprccode.Code and Gprccode.Type_ = 133.
+- name: DivGenMarkBDate
+  type: smalldatetime
+  nullable: true
+  description: DivGenMarkBDate is the date associated with DivGenMarkB. Cross-reference DivGenMarkDate with Gprccode where
+    DivGenMarkDate = Gprccode.Code and Gprccode.Type_ = 134. LSEG Quantitative Analytics Database Schema for IDC Equity Pricing
+    (Global) 25
+- name: DivTaxMark
+  type: varchar(1)
+  nullable: true
+  description: DivTaxMark identifies the tax implications of the dividend. Cross- reference DivTaxMark with Gprccode where
+    DivTaxMark = Gprccode.Code and Gprccode.Type_ = 135.
+- name: PayDate1
+  type: SMALLINT
+  nullable: true
+  description: PayDate1 is the first date (ddmm) of the year on which interest/dividends are usually paid. If interest/dividends
+    are paid more frequently, this is the first date.
+- name: PayDate2
+  type: SMALLINT
+  nullable: true
+  description: PayDate2 is the second date (ddmm) of the year on which interest/dividends are usually paid. If interest/dividends
+    are paid more frequently, this is the second date.
+- name: PayDate3
+  type: SMALLINT
+  nullable: true
+  description: PayDate3 is the third date (ddmm) of the year on which interest/dividends are usually paid. If interest/dividends
+    are paid more frequently, this is the third date.
+- name: PayDate4
+  type: SMALLINT
+  nullable: true
+  description: PayDate4 is the fourth date (ddmm) of the year on which interest/dividends are usually paid. If interest/dividends
+    are paid more frequently, this is the fourth date.
+- name: PayFreq
+  type: varchar(1)
+  nullable: true
+  description: PayFreq indicates the interest/dividend frequency of PayDate1-4. Cross-reference PayFreq with Gprccode where
+    PayFreq = Gprccode.Code and Gprccode.Type_ = 136.
+---
+table: qa_idc_global.GPrcQBM
+domain: pricing
+description: Global Pricing Quote Basis Marker | This table returns the quotation basis for a given security. The default
+  is per share. | Use this table to find the per-share value of a security when an exchange quotes on a basis other than per-share.
+update_cadence: Daily
+columns:
+- name: Vendor
+  type: has
+  nullable: false
+  description: QBM data prior to 1995. LSEG Quantitative Analytics Database Schema for IDC Equity Pricing (Global) 26
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary reference across all Gprc* tables.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the first date for which the QBM is effective. To avoid overlap or conflicting dates, total return
+    calculations use StartDate only.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the last date for which the QBM is effective.
+- name: QBM
+  type: varchar(2)
+  nullable: true
+  description: QBM cross-references Gprccode where GPrcQBM.QBM = Gprccode.CODE and Gprccode.TYPE_=154. QBM cross-references
+    the divisor where GPrcQBM.QBM = Gprccode.CODE and Gprccode.TYPE_=166.
+---
+table: qa_idc_global.Gprcret
+domain: pricing
+description: Global Pricing Total Returns | This table stores composite total returns values.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary reference across all Gprc* tables.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date associated with TotRet.
+- name: TotRet
+  type: FLOAT
+  nullable: true
+  description: TotRet is the gross total return as a percent of the first close price. It is an index starting at 100 from
+    the IPO date or, if the company history goes beyond the date the data has been stored, it is 100 from the point at which
+    the data starts in the MQA database. TotalRet takes into account price movement, dividends, spin-offs, and takeovers.
+---
+table: qa_idc_global.GPrcSecChg
+domain: pricing
+description: Global Pricing Sedol, Name, and Isin Changes | This table is for LSEG internal use only. | This table returns
+  security change information.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary reference across all Gprc* tables.
+- name: StartDate
+  type: smalldatetime
+  nullable: false
+  description: StartDate is the effective date of the change.
+- name: EndDate
+  type: smalldatetime
+  nullable: true
+  description: EndDate is the last date before the change.
+- name: Cusip
+  type: varchar(8)
+  nullable: true
+  description: Cusip is the CUSIP of the security.
+- name: Sedol
+  type: varchar(6)
+  nullable: true
+  description: Sedol is the SEDOL of the security. LSEG Quantitative Analytics Database Schema for IDC Equity Pricing (Global)
+    27
+- name: Isin
+  type: varchar(12)
+  nullable: true
+  description: Isin is the ISIN of the security.
+- name: Ticker
+  type: varchar(12)
+  nullable: true
+  description: Ticker is the ticker ID of the security.
+- name: Exchange
+  type: varchar(1)
+  nullable: true
+  description: Exchange returns the one-letter exchange code indicating where a security is traded. Cross-reference Exchange
+    with Gprccode where QuoteCtry + Exchange = Gprccode.Code and Gprccode.Type_ = 75.
+- name: QuoteCtry
+  type: varchar(2)
+  nullable: true
+  description: QuoteCtry returns the two-letter EXTEL country code for the country in which the security price is quoted.
+    Cross-reference QuoteCtry with Gprccode.Code where Type_ = 2.
+- name: Issuer
+  type: varchar(18)
+  nullable: true
+  description: Issuer is the name of the Issuer. Note that because the description is limited to 18 characters, abbreviations
+    may be used.
+- name: IssueCtry
+  type: varchar(2)
+  nullable: true
+  description: IssueCtry returns the two-letter EXTEL country code identifying the country of incorporation for the issuer
+    of the security. Cross-reference IssueCtry with Gprccode .Code where Type_ = 2.
+---
+table: qa_idc_global.GprcShr
+domain: pricing
+description: Global Pricing Shares Outstanding | Use this table to retrieve the shares outstanding per security. This table
+  is supplemented by GprcShrA.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary reference across all Gprc* tables.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date of the change in shares outstanding.
+- name: Shares
+  type: FLOAT
+  nullable: true
+  description: Shares are the number of shares outstanding. When the global history is loaded, the shares outstanding have
+    a monthly entry unless the shares out change. After the history is loaded, it is only updated by IDC if it changes. Brazilian
+    QuoteCtry shares are divided by 1000 when calculating market cap.
+---
+table: qa_idc_global.GprcShrA
+domain: pricing
+description: Global Pricing Shares Outstanding – Additional Fields | This table contains shares outstanding information supplemental
+  to GprcShr.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary reference across all Gprc* tables.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date of the change in shares outstanding.
+- name: LastChgShares
+  type: FLOAT
+  nullable: true
+  description: LastChgShares is the last change in shares.
+- name: LastChgReason
+  type: varchar(1)
+  nullable: true
+  description: LastChgReason is the reason code for the last change in shares. LSEG Quantitative Analytics Database Schema
+    for IDC Equity Pricing (Global) 28
+---
+table: qa_idc_global.Gprctom
+domain: pricing
+description: Global Pricing Takeovers and Mergers | This table contains the global pricing takeovers and mergers data.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary reference across all Gprc* tables.
+- name: Number
+  type: SMALLINT
+  nullable: false
+  description: Number provides a unique reference to each individual event. The number will increase in increments of one
+    and will remain following the removal of the associated event details.
+- name: Date_
+  type: smalldatetime
+  nullable: true
+  description: Date_ is the date associated with Marker or the effective date of the situation.
+- name: ModDate
+  type: smalldatetime
+  nullable: true
+  description: ModDate is the date on which the security was last modified.
+- name: Marker
+  type: varchar(1)
+  nullable: true
+  description: Marker provides the type and current status of the takeover/merger. Cross-reference Marker with Gprccode where
+    Marker = Gprccode.Code and Gprccode.Type_ = 140.
+- name: QualCode
+  type: varchar(1)
+  nullable: true
+  description: QualCode further qualifies Marker. Cross-reference QualCode with Gprccode where QualCode = Gprccode.Code and
+    Gprccode.Type_ = 141.
+- name: StartDate
+  type: smalldatetime
+  nullable: true
+  description: StartDate is the date on which the offer started.
+- name: OfferUnit
+  type: INTEGER
+  nullable: true
+  description: OfferUnit is the minimum number of shares or amount of debt related to the offer terms.
+- name: OfferCurr
+  type: SMALLINT
+  nullable: true
+  description: OfferCurr is the currency code associated with OfferUnit. Cross-reference OfferCurr with Gprccode where OfferCurr
+    = Gprccode.Code and Gprccode.Type_ = 6.
+- name: MultInd
+  type: varchar(1)
+  nullable: true
+  description: MultInd indicates if multiple securities or cash amounts are offered in a merger or takeover attempt. When
+    more than one security is offered, details of the equity or main equity are given in OfferedSedol1, OfferedType1, and
+    StockAmt1. Cross-reference MultInd with Gprccode where MultInd = Gprccode.Code and Gprccode.Type_ = 142.
+- name: PartMarker
+  type: varchar(1)
+  nullable: true
+  description: PartMarker indicates if the takeover is a partial acquisition (A) or a 100% acquisition (blank).
+- name: PartPct
+  type: FLOAT
+  nullable: true
+  description: PartPct is the percentage offered in a proposed partial acquisition.
+- name: AcceptPct
+  type: FLOAT
+  nullable: true
+  description: AcceptPct is the total percentage of shareholders accepting a partial takeover offer.
+- name: OfferingSedol1
+  type: varchar(6)
+  nullable: true
+  description: OfferingSedol1 is the SEDOL/FTEX of the primary company making the offer.
+- name: OfferedSedol1
+  type: varchar(6)
+  nullable: true
+  description: OfferedSedol1 is the SEDOL/FTEX of the first or only security offered.
+- name: OfferedType1
+  type: varchar(2)
+  nullable: true
+  description: OfferedType1 is the type of the first or only security offered. Cross- reference OfferedType1 with Gprccode
+    where OfferedType1 = Gprccode.Code and Gprccode.Type_ = 76.
+- name: StockAmt1
+  type: FLOAT
+  nullable: true
+  description: StockAmt1 is the number of shares or the amount of debt securities being offered.
+- name: StockCurr1
+  type: SMALLINT
+  nullable: true
+  description: StockCurr1 is the currency code associated with StockAmt1. Cross- reference StockCurr1 with Gprccode where
+    StockCurr1 = Gprccode.Code and Gprccode.Type_ = 6.
+- name: CashAmt1
+  type: FLOAT
+  nullable: true
+  description: CashAmt1 is the amount of cash offered as a direct part of the offer.
+- name: CashCurr1
+  type: SMALLINT
+  nullable: true
+  description: CashCurr1 is the currency code associated with CashAmt1. CashCurr1 can be cross-referenced with Gprccode where
+    CashCurr1 = Gprccode.Code and Gprccode.Type_ = 6.
+- name: OfferingSedol2
+  type: varchar(6)
+  nullable: true
+  description: OfferingSedol2 is the SEDOL/FTEX of the second company making the offer.
+- name: OfferedSedol2
+  type: varchar(6)
+  nullable: true
+  description: OfferedSedol2 is the SEDOL/FTEX of the second security offered. LSEG Quantitative Analytics Database Schema
+    for IDC Equity Pricing (Global) 29
+- name: OfferedType2
+  type: varchar(2)
+  nullable: true
+  description: OfferedType2 is the type of the second security offered. Cross-reference OfferedType2 with Gprccode where OfferedType2
+    = Gprccode.Code and Gprccode.Type_ = 76.
+- name: StockAmt2
+  type: FLOAT
+  nullable: true
+  description: StockAmt2 is the number of shares or the amount of a second security offered.
+- name: StockCurr2
+  type: SMALLINT
+  nullable: true
+  description: StockCurr2 is the currency code associated with StockAmt2. Cross- reference StockCurr2 with Gprccode where
+    StockCurr2 = Gprccode.Code and Gprccode.Type_ = 6.
+- name: CashAmt2
+  type: FLOAT
+  nullable: true
+  description: CashAmt2 is the second amount of cash offered.
+- name: CashCurr2
+  type: SMALLINT
+  nullable: true
+  description: CashCurr2 is the currency code associated with CashAmt2. Cross- reference CashCurr2 with Gprccode where CashCurr2
+    = Gprccode.Code and Gprccode.Type_ = 6.
+- name: OfferingName1
+  type: varchar(18)
+  nullable: true
+  description: OfferingName1 is the name of the primary offering company.
+- name: OfferingName2
+  type: varchar(18)
+  nullable: true
+  description: OfferingName2 is the name of the secondary offering company.
+join_hints:
+- to: Gprccode
+  evidence: CashCurr1 can be cross-referenced with Gprccode where CashCurr1 = Gprccode.Code and Gprccode.Type_ = 6.
+  type: cross_reference
+---
+table: qa_idc_global.Gprcval
+domain: pricing
+description: Global Pricing Exchange Specific Pricing | This table contains exchange-specific global pricing data. This table
+  is supplemented by GprcValA.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary reference across all Gprc* tables.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date associated with the price.
+- name: Open_
+  type: FLOAT
+  nullable: true
+  description: Open_ is the first price at which a security was traded on a given date.
+- name: High
+  type: FLOAT
+  nullable: true
+  description: High is the highest price at which a security was traded.
+- name: Low
+  type: FLOAT
+  nullable: true
+  description: Low is the lowest price at which a security was traded.
+- name: Close_
+  type: FLOAT
+  nullable: true
+  description: Close_ is the price at the close of the market. For stocks that do not trade on any given trading day, Close_
+    is an average of Bid and Ask.
+- name: Bid
+  type: FLOAT
+  nullable: true
+  description: Bid contains the most recent bid price. For equities in which only a current ask price is available, this field
+    is zero-filled.
+- name: Ask
+  type: FLOAT
+  nullable: true
+  description: Ask contains the most recent ask price. For equities where only a current bid price is available, this field
+    is zero-filled.
+- name: Volume
+  type: FLOAT
+  nullable: true
+  description: Volume is the number of shares traded on a given day.
+- name: Currency_
+  type: SMALLINT
+  nullable: true
+  description: Currency_ is based on EXTEL codes. Gprccode provides EXTEL to ISO translation.
+- name: Flags
+  type: SMALLINT
+  nullable: true
+  description: Flags is obsolete and should not be used.
+- name: Exchange
+  type: varchar(3)
+  nullable: true
+  description: Exchange returns the three-character Exchange Codes. The first two letters are the EXTEL country code for the
+    exchange, and the third letter is the one- letter abbreviation for the exchange. Exchange cross-references with Gprccode
+    where Exchange = Gprccode.Code and Gprccode.Type_ = 75. LSEG Quantitative Analytics Database Schema for IDC Equity Pricing
+    (Global) 30
+join_hints:
+- to: Gprccode
+  evidence: Exchange cross-references with Gprccode where Exchange = Gprccode.Code and Gprccode.Type_ = 75.
+  type: cross_reference
+---
+table: qa_idc_global.GprcValA
+domain: pricing
+description: Global Pricing Exchange Specific Pricing – Additional | This table contains additional descriptions of the Gprcval
+  records.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary reference across all Gprc* tables.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ indicates the date on which the Bid or Ask price last changed.
+- name: QuoteCurr
+  type: SMALLINT
+  nullable: true
+  description: QuoteCurr is the EXTEL currency of the Bid or Ask. Cross-reference QuoteCurr with Gprccode where QuoteCurr
+    = Gprccode.code and Gprccode.Type_ = 6.
+- name: IncomeMarker
+  type: varchar(1)
+  nullable: true
+  description: 'IncomeMarker indicates entitlement or non-entitlement to a dividend payment or capital change (other than
+    a regular dividend). IncomeMarker can be: Not Applicable; marker set on day after the payment date of dividend (0) Cum-dividend;
+    marker set on date when declared dividend is first input (1) Ex-dividend; marker set on the ex-dividend date (2)'
+- name: EventMarker
+  type: varchar(1)
+  nullable: true
+  description: EventMarker identifies whether a capital change is pending and if the security is trading Cum or Ex rights
+    to change. It cross-references Gprccode where EventMarker = Gprccode.Code and Gprccode.Type_ = 151.
+- name: PrcCondMarker
+  type: varchar(1)
+  nullable: true
+  description: PrcCondMarker is the price condition marker and indicates if the prices are normally reported. PrcCondMarker
+    cross-references Gprccode where PrcCondMarker = Gprccode.Code and Gprccode.Type_ = 152.
+- name: VolMarker
+  type: varchar(1)
+  nullable: true
+  description: VolMarker defines the reported volume. It cross-references Gprccode where VolMarker = Gprccode.Code and Gprccode.Type_
+    = 153.
+- name: QuoteBasisMarker
+  type: varchar(1)
+  nullable: true
+  description: QuoteBasisMarker describes how bid, ask, and close prices are quoted. It cross-references Gprccode where QuoteBasisMarker
+    = Gprccode.Code and Gprccode.Type_ = 154.
+- name: QuoteTypeCode
+  type: varchar(1)
+  nullable: true
+  description: QuoteTypeCode describes the bid or ask provided, or why no price is available. QuoteTypeCode cross-references
+    Gprccode where QuoteTypeCode = Gprccode.Code and Gprccode.Type_ = 155.
+- name: CloseTypeCode
+  type: varchar(1)
+  nullable: true
+  description: CloseTypeCode describes the close price provided, or why no price is available. Cross-reference CloseTypeCode
+    with Gprccode where CloseTypeCode = Gprccode.Code and Gprccode.Type_ = 155.
+- name: HighLowTypeCode
+  type: varchar(1)
+  nullable: true
+  description: HighLowTypeCode describes the high or low provided, or why no price is available. Cross-reference HighLowTypeCode
+    Gprccode where HighLowTypeCode = Gprccode.Code and Gprccode.Type_ = 155. LSEG Quantitative Analytics Database Schema for
+    IDC Equity Pricing (Global) Copyright © 2024 London Stock Exchange Group plc and its group of companies (LSEG) and/or
+    its affiliates. All rights reserved. The LSEG content received through this service is the intellectual property of LSEG
+    or its third party supplie

@@ -1,0 +1,1328 @@
+table: qa_starmine.Sm2Code
+domain: analytics
+description: StarMine Code Descriptions | This table contains Code field descriptions for SM2* tables.
+update_cadence: Daily
+columns:
+- name: Type_
+  type: TINYINT
+  nullable: false
+  description: Type_ is the type identifier. Types are defined where Type_ = 0 and Code identifies the Type.
+- name: Code
+  type: varchar(10)
+  nullable: false
+  description: Code is described by Desc_. Code is cross-referenced from other SM2* tables.
+- name: Desc_
+  type: varchar(100)
+  nullable: false
+  description: Desc_ is the full name of Code.
+- name: Adjust
+  type: TINYINT
+  nullable: false
+  description: Adjust identifies which measures and preferred earnings are affected by stock splits.
+join_hints:
+- to: other
+  evidence: Code is cross-referenced from other SM2* tables.
+  type: cross_reference
+---
+table: qa_starmine.Sm2DInfo
+domain: analytics
+description: StarMine Securities Information | This table contains security information for securities included in the daily
+  feed. | The table below provides the PermRegion Codes and corresponding PermRegion Names.
+update_cadence: Daily
+columns:
+- name: SecId
+  type: INTEGER
+  nullable: false
+  description: SecId is the StarMine security identifier.
+- name: CuSed
+  type: varchar(10)
+  nullable: true
+  description: CuSed is the SEDOL or CUSIP, depending on the region.
+- name: VenTicker
+  type: varchar(12)
+  nullable: true
+  description: VenTicker is the ticker identifier used by LSEG to identify the security. Database Schema for Starmine Data
+    9
+- name: RepNo
+  type: varchar(15)
+  nullable: true
+  description: RepNo is the Reuters Fundamental identifier for the security.
+- name: CmpName
+  type: varchar(50)
+  nullable: true
+  description: CmpName is the company name.
+- name: Ticker
+  type: varchar(11)
+  nullable: true
+  description: Ticker is the ticker symbol of the security.
+- name: Cusip
+  type: varchar(8)
+  nullable: true
+  description: Cusip is the CUSIP of the security, if available.
+- name: Sedol
+  type: varchar(6)
+  nullable: true
+  description: Sedol is the SEDOL of the security, if available.
+- name: CmpCtry
+  type: char(2)
+  nullable: true
+  description: CmpCtry indicates the country of the company’s headquarters. The two- character code cross-references Sm2Code
+    where Sm2Code.Type_ = 1 and Sm2Code.Code = Sm2DInfo.CmpCtry.
+- name: SecCtry
+  type: char(2)
+  nullable: true
+  description: SecCtry is the country in which the security trades. SecCtry cross- references Sm2Code where Sm2Code.Type_
+    = 1 and Sm2Code.Code = Sm2DInfo.SecCtry.
+- name: ADRFlag
+  type: TINYINT
+  nullable: true
+  description: ADRFlag indicates a security that trades in the United States as an American Depository Receipt. This applies
+    only to United States securities.
+- name: PermRegion
+  type: TINYINT
+  nullable: true
+  description: PermRegion is the permission region. There are multiple Smart Holdings regions that fit into a single permission
+- name: ModDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: ModDate is the date of the most recent record update. The table below provides the PermRegion Codes and corresponding
+    PermRegion Names. Type_ Code Desc_ Adjust 19 1 Americas 0 19 2 Asia Pacific 0 19 3 EMEA 0
+---
+table: qa_starmine.Sm2Item
+domain: analytics
+description: StarMine Item Identifiers | Use this table to retrieve item identifiers and descriptions.
+update_cadence: Daily
+columns:
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item is the unique numeric identifier for the item. This field cross- references Sm2ItemDesc.
+- name: Mnemonic
+  type: varchar(40)
+  nullable: true
+  description: Mnemonic is the unique character identifier for the item.
+- name: ItemName
+  type: varchar(50)
+  nullable: true
+  description: ItemName is the full item name. Database Schema for Starmine Data 10
+- name: Model
+  type: TINYINT
+  nullable: true
+  description: Model identifies the model to which the item belongs. Model cross- references Sm2Code where Sm2Code.Type_ =
+    3 and Sm2Code.Code = Sm2Item.Model.
+- name: Table_
+  type: TINYINT
+  nullable: true
+  description: Table_ identifies the corresponding table. Table_ cross-references Sm2Code where Sm2Code.Type_ = 13 and Sm2Code.Code
+    = Sm2Item.Table_.
+- name: DataType
+  type: TINYINT
+  nullable: true
+  description: DataType identifies the data type. DataType cross-references Sm2Code where Sm2Code.Type_ = 4 and Sm2Code.Code
+    = Sm2Item.DataType.
+- name: Category
+  type: TINYINT
+  nullable: true
+  description: Category identifies the StarMine category of the item. Category cross- references Sm2Code where Sm2Code.Type_
+    = 5 and Sm2Code.Code = Sm2Item.Category.
+- name: Scalable
+  type: TINYINT
+  nullable: true
+  description: Scalable is the Million/Billion flag. It identifies whether the data is in whole number terms of millions or
+    billions. A value of 1 indicates that the flag applies.
+- name: Adjust
+  type: TINYINT
+  nullable: true
+  description: 'Adjust identifies how the item is affected by stock splits. Adjust may be: Not Applicable (0) Split Adjust
+    (1) Dependent on Measure (2) When Sm2Item.Adjust = 2, to refine your results: 1. Cross-reference Sm2Item.Item with Sm2DArm*.Item
+    to identify the appropriate Measure code. 2. Then cross-reference Sm2DArm*.Measure with Sm2Code.Code where Sm2Code.Type_
+    = 12. Adjust is defined as above. 3. When Sm2Code.Adjust = 2 at Type_ = 12, the adjustment is dependent on the preferred
+    earnings type. Preferr'
+- name: DFlag
+  type: SMALLINT
+  nullable: true
+  description: 'DFlag indicates which fields, or combination of fields, from the data model tables apply to the item. Applicable
+    fields may be: Fiscal Period, Change Period, or Measure. DFlag cross- references with Sm2Code where Sm2Code.Type_ = 17
+    and Sm2Code.Code = Sm2Item.DFlag. Database Schema for Starmine Data 11'
+---
+table: qa_starmine.Sm2ItemDesc
+domain: analytics
+description: StarMine Item Description | Use this table to retrieve the full description of the item.
+update_cadence: Daily
+columns:
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item is the unique numeric identifier for the item. This field cross- references Sm2Item.
+- name: ItemDesc
+  type: varchar(max)
+  nullable: true
+  description: ItemDesc is the detailed description of the item.
+---
+table: qa_starmine.Sm2Region
+domain: analytics
+description: 'StarMine Regions | Use this table to retrieve entitlement and model-specific regions and their relationships.
+  | – ARM (Analyst Revision Models): table names begin with Sm2DArm* | – CRM (Credit Risk Models): table names begin with
+  Sm2DCRM* | – EQ (Earnings Quality): table names begin with Sm2DEq* | – IV (Intrinsic Value): table names begin with Sm2DIv*
+  | – Smart Holdings: table names begin with Sm2DSH* | – Val-Mo (Value Momentum) and Price-Mo (Price Momentum): table names
+  begin with Sm2DVMo*. | –'
+update_cadence: Daily
+columns:
+- name: RegionCode
+  type: SMALLINT
+  nullable: false
+  description: RegionCode is the numeric code that corresponds to Region. This can be cross-referenced with Starmine item
+    181 – Region Code.
+- name: Region
+  type: varchar(30)
+  nullable: true
+  description: Region is the name of the geographical region.
+- name: PermRegion
+  type: varchar(15)
+  nullable: true
+  description: 'PermRegion is the permission region. There are multiple ARM, EQ, and IV regions that fit into a single permission
+    Database Schema for Starmine Data 12 3. StarMine Regional Data Model Tables StarMine data is organized first by data model,
+    and then by region. Availability of data depends on your data license. Data Models The StarMine data models are: – ARM
+    (Analyst Revision Models): table names begin with Sm2DArm* – CRM (Credit Risk Models): table names begin with Sm2DCRM*
+    – EQ (Earnings Quality):'
+---
+table: qa_starmine.Measure
+domain: analytics
+description: 'These table contain the daily CRM (Credit Risk Model) data. This description includes: | These tables contain
+  the daily Smart Holdings rankings data. Each table contains ranking data for a given region. | Table SHORT'
+update_cadence: Monthly. Updates are maintained on a six-month rolling history. Data older than six months is
+columns:
+- name: Item
+  type: smallin
+  nullable: false
+  description: Item is the unique numeric identifier for the item. This field cross- references Sm2Item and Sm2ItemDesc.
+- name: SecI
+  type: INTEGER
+  nullable: false
+  description: SecId is the StarMine security identifier. This field cross- references Sm2DInfo.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate, with EndDate, provides the time frame for which the identifier applies.
+- name: FscPeriod
+  type: TINYINT
+  nullable: false
+  description: FscPeriod is the fiscal period for which the data applies. FscPeriod cross- references Sm2Code where Sm2Code.Type_
+    = 6 and Sm2Code.Code = Sm2DArm*.FscPeriod.
+- name: ChgPeriod
+  type: TINYINT
+  nullable: false
+  description: ChgPeriod is the change period for the given point in time. ChgPeriod cross-references Sm2Code where Sm2Code.Type_
+    = 7 and Sm2Code.Code = Sm2DArm*.ChgPeriod.
+- name: Measure
+  type: TINYINT
+  nullable: false
+  description: Measure is the applicable measure of the item, for example EPS or revenue. Measure cross-references Sm2Code
+    where Sm2Code.Type_ = 12 and Sm2Code.Code = Sm2DArm*.Measure.
+- name: FscPerDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: FscPerDate is the end date of the fiscal period for which the data applies.
+- name: LstRptDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: LstRptDate is the last report date as of the data through date which is reported in StartDate.
+- name: ExpRptDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: ExpRptDate is the expected report date for the fiscal period date which is reported by FscPerDate.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: 'Value_ is the item value. Database Schema for Starmine Data 15 Sm2DArmA*: StarMine Daily ARM Summary Data
+    These tables contain a daily historical time series of a subset of ARM (Analyst Revision Model) rankings and components.
+    This description includes: – Sm2DArmAAm – StarMine daily ARM Americas summary data – Sm2DArmAAp – StarMine daily ARM Asia
+    Pacific summary data – Sm2DArmAEa – StarMine daily ARM Europe, Middle East, and Africa summary data'
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item is the unique numeric identifier for the item. This field cross- references Sm2Item and Sm2ItemDesc.
+- name: SecId
+  type: INTEGER
+  nullable: false
+  description: SecId is the StarMine security identifier. This field cross- references Sm2DInfo.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate, with EndDate, provides the time frame for which the identifier applies.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the item value.
+- name: EstCurr
+  type: char(3)
+  nullable: true
+  description: 'EstCurr is the company-level currency for estimates. EstCurr corresponds to the per-share measures. EstCurr
+    cross-references Sm2Code where Sm2Code.Type_ = 2 and Sm2Code.Code = Sm2DArmA*.EstCurr. Note: For companies with EstCurr
+    set to BPN, the non-per-share estimates are reported in GBP. This field is not populated from history files.'
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: 'EndDate, with StartDate, provides the time frame for which the identifier applies. Database Schema for Starmine
+    Data 16 SM2DCRM*: StarMine Daily Credit Risk Model Data Items These table contain the daily CRM (Credit Risk Model) data.
+    This description includes: – SM2DCRMAm – StarMine daily CRM Americas data – SM2DCRMAp – StarMine daily CRM Asia Pacific
+    data – SM2DCRMEa – StarMine daily CRM Europe, Middle East, and Africa data'
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is the unique numeric identifier for the item. This field cross- references Sm2Item and Sm2ItemDesc.
+- name: SecId
+  type: INTEGER
+  nullable: false
+  description: SecId is the StarMine security identifier. This field cross- references Sm2DInfo.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate, with EndDate, provides the time frame for which the identifier applies.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the item value.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: 'EndDate, with StartDate, provides the time frame for which the identifier applies. Sm2DEq*: StarMine Daily
+    EQ Data Items These tables contain daily EQ (Earnings Quality) data. This description includes: – Sm2DEqAm – StarMine
+    daily EQ Americas data – Sm2DEqAp – StarMine daily EQ Asia Pacific data – Sm2DEqEa – StarMine daily EQ Europe, Middle
+    East, and Africa data'
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item is the unique numeric identifier for the item. This field cross- references Sm2Item and Sm2ItemDesc.
+- name: SecId
+  type: INTEGER
+  nullable: false
+  description: 'SecId is the StarMine security identifier. This field cross- references Sm2DInfo. Database Schema for Starmine
+    Data 17 Sm2DIv*: StarMine Daily IV Data Items These tables contain the daily IV (Intrinsic Value) and Relative Value data.
+    This description includes: – Sm2DIvAm – StarMine daily IV Americas data – Sm2DIvEa – StarMine daily IV Europe, Middle
+    East, and Africa data – Sm2DIvAp – StarMine daily IV Asia Pacific data'
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item is the unique numeric identifier for the item. This field cross- references Sm2Item and Sm2ItemDesc.
+- name: SecId
+  type: INTEGER
+  nullable: false
+  description: SecId is the StarMine security identifier. This field cross- references Sm2DInfo.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate, with EndDate, provides the time frame for which the identifier applies.
+- name: FscPeriod
+  type: TINYINT
+  nullable: false
+  description: FscPeriod is the fiscal period for which the data applies. FscPeriod cross- references Sm2Code where Sm2Code.Type_
+    = 6 and Sm2Code.Code = Sm2DIv*.FscPeriod.
+- name: FndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: FndDate is the data through date for the fundamentals. This is the date of the most recent update of the financial
+    statement for a security.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate, with EndDate, provides the time frame for which the identifier applies.
+- name: FscPeriod
+  type: TINYINT
+  nullable: false
+  description: FscPeriod is the fiscal period for which the data applies. FscPeriod cross- references Sm2Code where Sm2Code.Type_
+    = 6 and Sm2Code.Code = Sm2DEq*.FscPeriod.
+- name: ChgPeriod
+  type: TINYINT
+  nullable: false
+  description: ChgPeriod is the change period for the given point in time. ChgPeriod cross-references Sm2Code where Sm2Code.Type_
+    = 7 and Sm2Code.Code = Sm2DEq*.ChgPeriod.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the item value.
+- name: LstQtrDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: LstQtrDate is the end date of the prior quarter.
+- name: LstAnnDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: LstAnnDate is the end date of the prior annual period.
+- name: FncCurr
+  type: char(3)
+  nullable: true
+  description: FncCurr is the currency of the item values.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate, with StartDate, provides the time frame for which the identifier applies. Database Schema for Starmine
+    Data 18
+- name: LstFYDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: LstFYDate is the date of the previous fiscal year end.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the item value.
+- name: IVProjCurr
+  type: varchar(3)
+  nullable: true
+  description: IVProjCurr is the currency used for intrinsic value projections.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: 'EndDate, with StartDate, provides the time frame for which the identifier applies. Sm2DVMo*: StarMine Daily
+    Val-Mo and Price-Mo Data Items These tables contain a daily historical time series of items from the Val-Mo and Price-Mo
+    models. This description includes: – Sm2DVMoAm – StarMine Daily Val-Mo and Price-Mo Data Items – Americas – Sm2DVMoAp
+    – StarMine Daily Val-Mo and Price-Mo Data Items – Asia Pacific – Sm2DVMoEa – StarMine Daily Val-Mo and Price-Mo Data Items
+    – Europe, Middle East, and Afr'
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item is the unique numeric identifier for the item. This field cross- references Sm2Item and Sm2ItemDesc.
+- name: SecId
+  type: INTEGER
+  nullable: false
+  description: SecId is the StarMine security identifier.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate, with EndDate, provides the time frame for which the identifier applies.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate, with StartDate, provides the time frame for which the identifier applies.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the item value.
+- name: LicFlag
+  type: TINYINT
+  nullable: false
+  description: 'LicFlag identifies whether the data item is part of the Val-Mo model (1) or the Price-Mo model (2). Database
+    Schema for Starmine Data 19 SM2DSH*: Daily Smart Holdings Data These tables contain the daily Smart Holdings rankings
+    data. Each table contains ranking data for a given region. This description includes: – SM2DSHAm - StarMine Daily Smart
+    Holdings data for Americas region – SM2DSHAp - StarMine Daily Smart Holdings data for Asia Pacific region – SM2DSHEa -
+    StarMine Daily Smart Holdings data'
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: TRDW derived item code for the fields in Smart Holding Model
+- name: SecId
+  type: INTEGER
+  nullable: false
+  description: A numeric id to identify a security
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date from which the value is valid
+- name: Value_
+  type: INTEGER
+  nullable: false
+  description: Value of the field
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: Date when the value expires. For the latest value EndDate will be null Database Schema for Starmine Data 20
+    4. StarMine Historical Data The historical data tables are common to all StarMine licenses and contain basic historical
+    information. purged. This diagram illustrates how the StarMine historical tables relate to each other, and to the Sm2Item
+    table. PK,FK1 InfoCode int CuSed varchar(10) VenTicker varchar(15) RepNo varchar(15) Ticker varchar(12) Sedol varchar(6)
+    CmpName varchar(50) SecCtry v
+---
+table: qa_starmine.Sm2HArm
+domain: analytics
+description: StarMine Historical ARM Data | This table contains a subset of ARM (Analyst Revision Model) items on a historical
+  basis.
+update_cadence: Monthly
+columns:
+- name: SecId
+  type: INTEGER
+  nullable: false
+  description: SecId is the StarMine security identifier. This field cross- references Sm2DInfo.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item is the unique numeric identifier for the item. This field cross- references Sm2Item and Sm2ItemDesc.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the data through date for the analyst.
+- name: Value_
+  type: INTEGER
+  nullable: true
+  description: Value_ is the item value.
+---
+table: qa_starmine.Sm2HEq
+domain: analytics
+description: StarMine Historical EQ Data | This table contains a subset of EQ (Earnings Quality) items on a historical basis.
+update_cadence: Monthly
+columns:
+- name: SecId
+  type: INTEGER
+  nullable: false
+  description: SecId is the StarMine security identifier. This field cross- references Sm2DInfo.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item is the unique numeric identifier for the item. This field cross- references Sm2Item and Sm2ItemDesc.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the data through date for the analyst.
+- name: Value_
+  type: INTEGER
+  nullable: true
+  description: Value_ is the item value. Database Schema for Starmine Data 22
+---
+table: qa_starmine.Sm2HIdentChg
+domain: analytics
+description: StarMine Change History | This table contains security change history information.
+update_cadence: Monthly
+columns:
+- name: SecId
+  type: INTEGER
+  nullable: false
+  description: SecId is the StarMine security identifier. This field cross- references Sm2DInfo.
+- name: IdentType
+  type: SMALLINT
+  nullable: false
+  description: IdentType is a unique number representing the type of identifier for which changes are tracked, for example,
+    CUSIP or SEDOL, Ticker, or name changes. IdentType cross-references with Sm2Code where Sm2Code.Type_ = 15 and Sm2Code.Code
+    = Sm2HIdentChg.IdentType.
+- name: Exch
+  type: TINYINT
+  nullable: false
+  description: Exch identifies the exchange. Exch cross-references Sm2Code where Sm2Code.Type_ = 16 and Sm2Code.Code = Sm2HIdentChg.Exch.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate, with EndDate, provides the time frame for which the identifier applies.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate, with StartDate, provides the time frame for which the identifier applies.
+- name: Ident
+  type: varchar(15)
+  nullable: false
+  description: Ident is the value of the identifier during that period. For example, Ident may be the CUSIP, SEDOL, or ticker.
+join_hints:
+- to: Sm2Code
+  evidence: IdentType cross-references with Sm2Code where Sm2Code.Type_ = 15 and Sm2Code.Code = Sm2HIdentChg.IdentType.
+  type: cross_reference
+---
+table: qa_starmine.Sm2HInfo
+domain: analytics
+description: StarMine Historical Security Information | This table contains historical information on securities included
+  in the historical feed. | The table below provides the PermRegion Codes and corresponding PermRegion Names.
+update_cadence: Monthly
+columns:
+- name: SecId
+  type: INTEGER
+  nullable: false
+  description: SecId is the StarMine security identifier. This field cross- references Sm2DInfo.
+- name: CuSed
+  type: varchar(10)
+  nullable: true
+  description: CuSed is the SEDOL or CUSIP, depending on the region.
+- name: VenTicker
+  type: varchar(15)
+  nullable: true
+  description: VenTicker is the ticker identifier used by Thomson to identify the security.
+- name: RepNo
+  type: varchar(15)
+  nullable: true
+  description: RepNo is the Reuters Fundamental identifier for the security. Database Schema for Starmine Data 23 The table
+    below provides the PermRegion Codes and corresponding PermRegion Names. Type_ Code Desc_ Adjust 19 1 Americas 0 19 2 Asia
+    Pacific 0 19 3 EMEA 0
+---
+table: qa_starmine.Sm2HIv
+domain: analytics
+description: StarMine Historical IV Data | This table contains a subset of IV (Intrinsic Value) and Relative Value items on
+  a historical basis.
+update_cadence: Monthly
+columns:
+- name: SecId
+  type: INTEGER
+  nullable: false
+  description: SecId is the StarMine security identifier. This field cross- references Sm2DInfo.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item is the unique numeric identifier for the item. This field cross- references Sm2Item and Sm2ItemDesc.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the data through date.
+- name: FscPeriod
+  type: INTEGER
+  nullable: false
+  description: FscPeriod is the fiscal period for which the data applies. FscPeriod cross-references Sm2Code where Sm2Code.Type_
+    = 6 and Sm2Code.Code = Sm2HIv.FscPeriod.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the item value.
+- name: IVProjCurr
+  type: varchar(3)
+  nullable: true
+  description: IVProjCurr is the currency used for intrinsic value projections.
+- name: Ticker
+  type: varchar(12)
+  nullable: true
+  description: Ticker is the ticker symbol of the security.
+- name: Sedol
+  type: varchar(6)
+  nullable: true
+  description: Sedol is the SEDOL of the item.
+- name: CmpName
+  type: varchar(50)
+  nullable: true
+  description: CmpName is the company name.
+- name: SecCtry
+  type: char(2)
+  nullable: true
+  description: SecCtry is the country in which the security trades. SecCtry cross- references Sm2Code where Sm2Code.Type_
+    = 1 and Sm2Code.Code = Sm2HInfo.SecCtry.
+- name: CmpCtry
+  type: char(2)
+  nullable: true
+  description: CmpCtry indicates the country of the company’s headquarters. The two- character code cross-references Sm2Code
+    where Sm2Code.Type_ = 1 and Sm2Code.Code = Sm2DInfo.CmpCtry.
+- name: PermRegion
+  type: TINYINT
+  nullable: true
+  description: PermRegion is the permission region. There are multiple Smart Holdings regions that fit into a single permission
+    region.
+- name: ModDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: ModDate is the date of the most recent record update. Database Schema for Starmine Data 24
+---
+table: qa_starmine.Sm2HVMo
+domain: analytics
+description: StarMine Historical Val-Mo and Price-Mo Data | This table contains the historical data items for both the Val-Mo
+  and Price-Mo models on a monthly basis.
+update_cadence: Daily
+---
+table: qa_starmine.SM2HSH
+domain: analytics
+description: Monthly Smart Holdings Data | This table stores Smart Holdings monthly historic rankings data.
+update_cadence: Monthly
+columns:
+- name: SecId
+  type: INTEGER
+  nullable: false
+  description: A numeric id to identify a security
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: TRDW derived item code for the fields in Smart Holding Model
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date from which the value is valid
+- name: Value_
+  type: INTEGER
+  nullable: false
+  description: Value of the field
+- name: SecId
+  type: INTEGER
+  nullable: false
+  description: SecId is the StarMine security identifier. This field cross- references Sm2DInfo.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item is the unique numeric identifier for the item. This field cross- references Sm2Item and Sm2ItemDesc.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the data through date.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the item value. Database Schema for Starmine Data 25 5. SQL Views The SQL Views1 provide simplified
+    calls that run complex SQL code and address key data nuances and mapping requests in the LSEG Quantitative Analytics database,
+    making it much easier to access data through LSEG Quantitative Analytics. Customers are able to see the underlying SQL
+    code and modify/customize it as required, as well as being able to save the modified code as their proprietary code. The
+    LSEG Support Team is av
+---
+table: qa_starmine.vw_SM2MappingDaily
+domain: analytics
+columns:
+- name: seccode
+  type: INTEGER
+  nullable: false
+  description: SecCode links across the master tables.
+- name: typ
+  type: INTEGER
+  nullable: false
+  description: 6 for Global and 1 for North America.
+- name: rank
+  type: SMALLINT
+  nullable: false
+  description: Rank is the issue rank for issuers with multiple issues.
+- name: exchange
+  type: SMALLINT
+  nullable: true
+  description: Exchange identifies whether the security is a United States security (1) or a Canadian security (2). A value
+    of 0 indicates that this field is not applicable.
+- name: vencode
+  type: INTEGER
+  nullable: true
+  description: Vencode is the corresponding StarMine Daily unique code. select aa.SecCode, bb.Exchange, bb.Rank, cc.CmpName,
+    cc.Ticker, cc.SecId from vw_SecurityMasterX aa join vw_SM2MappingDaily bb on bb.seccode = aa.seccode and bb.Typ = aa.typ
+    join SM2DInfo cc on cc.SecId = bb.VenCode where aa.id = 'TOC' and bb.exchange = 2 -- Canadian record of Thomson Reuters
+    Database Schema for Starmine Data 26 This view can be used to map to the Monthly Historical StarMine Model data (ventype
+    24). Index Fields SecCode, T
+---
+table: qa_starmine.vw_SM2Items
+domain: analytics
+columns:
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item is the unique numeric identifier for the item.
+- name: Mnemonic
+  type: varchar
+  nullable: false
+  description: Mnemonic is the unique character identifier for the item.
+- name: ItemName
+  type: varchar
+  nullable: false
+  description: ItemName is the full item name.
+- name: ItemDesc
+  type: varchar
+  nullable: true
+  description: ItemDesc is the detailed description of the item.
+- name: Model
+  type: TINYINT
+  nullable: false
+  description: Model identifies the model to which the item belongs.
+- name: ModelDesc
+  type: varchar
+  nullable: true
+  description: The description of the Model.
+- name: seccode
+  type: INTEGER
+  nullable: false
+  description: SecCode links across the master tables.
+- name: typ
+  type: INTEGER
+  nullable: false
+  description: 6 for Global and 1 for North America.
+- name: rank
+  type: SMALLINT
+  nullable: false
+  description: Rank is the issue rank for issuers with multiple issues.
+- name: exchange
+  type: SMALLINT
+  nullable: true
+  description: Exchange identifies whether the security is a United States security (1) or a Canadian security (2). A value
+    of 0 indicates that this field is not applicable.
+- name: vencode
+  type: INTEGER
+  nullable: true
+  description: Vencode is the corresponding StarMine Historical unique code. select aa.SecCode, bb.Exchange, bb.Rank, cc.CmpName,
+    cc.Ticker, cc.SecId from vw_SecurityMasterX aa join vw_SM2MappingHist bb on bb.seccode = aa.seccode and bb.Typ = aa.typ
+    join SM2HInfo cc on cc.SecId = bb.VenCode where aa.id = 'TOC' and bb.exchange = 2 -- Canadian record of Thomson Reuters
+    Database Schema for Starmine Data 27
+- name: Table_
+  type: TINYINT
+  nullable: false
+  description: Table_ identifies the corresponding table.
+- name: TableName
+  type: varchar
+  nullable: true
+  description: The description of Table.
+- name: DataType
+  type: TINYINT
+  nullable: false
+  description: DataType identifies the data type.
+- name: DataTypeDesc
+  type: varchar
+  nullable: true
+  description: The description of DataType.
+- name: Category
+  type: TINYINT
+  nullable: false
+  description: Category identifies the StarMine category of the item.
+- name: CategoryDesc
+  type: varchar
+  nullable: true
+  description: The description of Category.
+- name: Scalable
+  type: TINYINT
+  nullable: false
+  description: Scalable is the Million/Billion flag. It identifies whether the data is in whole number terms of millions or
+    billions. A value of 1 indicates that the flag applies.
+- name: Adjust
+  type: TINYINT
+  nullable: false
+  description: 'Adjust identifies how the item is affected by stock splits. Adjust may be: Not Applicable (0) or Split Adjust
+    (1) or Dependent on Measure (2). When Sm2Item.Adjust = 2, to refine your results: 1. Cross- reference Sm2Item.Item with
+    Sm2DArm*.Item to identify the appropriate Measure code. 2. Then cross- reference Sm2DArm*.Measure with Sm2Code.Code where
+    Sm2Code.Type_ = 12. Adjust is defined as above. 3. When Sm2Code.Adjust = 2 at Type_ = 12, the adjustment is dependent
+    on the preferred earnings type'
+- name: AdjustDesc
+  type: varchar
+  nullable: true
+  description: The description of Adjust.
+- name: DFlag
+  type: TINYINT
+  nullable: false
+  description: 'DFlag indicates which fields, or combination of fields, from the data model tables apply to the item. Applicable
+    fields may be: Fiscal Period, Change Period, or Measure.'
+- name: DFlagDesc
+  type: varchar
+  nullable: true
+  description: 'The description of Dflag. Example Use Case: Return all items across all models that are "margin" related:
+    select aa.Item, aa.ItemDesc, aa.ModelDesc, aa.DataTypeDesc, aa.CategoryDesc, aa.AdjustDesc, aa.DFlagDesc , aa.tableName
+    from vw_SM2Items aa where aa.ItemDesc like ''%margin%'' -- Find all the “margin” items. Database Schema for Starmine Data
+    28'
+---
+table: qa_starmine.vw_SM2HistMulti
+domain: analytics
+---
+table: qa_starmine.Holdings
+domain: analytics
+columns:
+- name: SecId
+  type: INTEGER
+  nullable: false
+  description: SecId is the StarMine security identifier.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item is the unique numeric identifier for the item.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the data through date for the analyst.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the item value.
+- name: Model
+  type: varchar
+  nullable: false
+  description: The StarMine model.
+- name: Mnemonic
+  type: varchar
+  nullable: false
+  description: Mnemonic is the unique character identifier for the item.
+- name: ItemName
+  type: varchar
+  nullable: false
+  description: 'ItemName is the full item name. Example Use Case: This query returns the monthly Analyst Revision Score (ARM
+    Model) for Thomson Reuters: select aa.SecCode, bb.Exchange, cc.CmpName, cc.Ticker, cc.SecId, dd.Date_, dd.Value_, dd.ItemName
+    from vw_SecurityMasterX aa join vw_SM2MappingHist bb on bb.seccode = aa.seccode and bb.Typ = aa.typ join SM2HInfo cc on
+    cc.SecId = bb.VenCode join vw_SM2HistMulti dd on dd.SecId = cc.SecId where aa.id = ''TOC'' and bb.exchange = 2 -- Canadian
+    record of Thomson Reuter'
+---
+table: qa_starmine.vw_SM2HistIV
+domain: analytics
+columns:
+- name: SecId
+  type: INTEGER
+  nullable: false
+  description: SecId is the StarMine security identifier.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item is the unique numeric identifier for the item. This
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the data through date for the analyst.
+- name: FscPeriod
+  type: INTEGER
+  nullable: false
+  description: FscPeriod is the fiscal period for which the data applies.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the item value.
+- name: IVProjCurr
+  type: char
+  nullable: true
+  description: IVProjCurr is the currency used for intrinsic value projections.
+- name: IVProjCurrDesc
+  type: varchar
+  nullable: true
+  description: Description of IVProjCurr.
+- name: Model
+  type: varchar
+  nullable: false
+  description: The StarMine model.
+- name: Mnemonic
+  type: varchar
+  nullable: false
+  description: Mnemonic is the unique character identifier for the item.
+- name: ItemName
+  type: varchar
+  nullable: false
+  description: ItemName is the full item name.
+- name: Scale
+  type: varchar
+  nullable: true
+  description: 'The scale of the value; present only if required. Example Use Case: This query returns the monthly dividend
+    projects for Thomson Reuters: select aa.SecCode, bb.Exchange, cc.CmpName, cc.Ticker, cc.SecId, dd.ItemName, dd.Date_,
+    dd.FscPeriod, dd.IVProjCurrDesc, dd.Value_, dd.Scale, dd.Model from vw_SecurityMasterX aa join vw_SM2MappingHist bb on
+    bb.seccode = aa.seccode and bb.Typ = aa.typ join SM2HInfo cc on cc.SecId = bb.VenCode join vw_SM2HistIV dd on dd.SecId
+    = cc.SecId where aa.id = ''TOC'' and b'
+---
+table: qa_starmine.vw_SM2DARM
+domain: analytics
+columns:
+- name: SecId
+  type: INTEGER
+  nullable: false
+  description: SecId is the StarMine security identifier.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item is the unique numeric identifier for the item. This
+- name: Mnemonic
+  type: varchar
+  nullable: true
+  description: Mnemonic is the unique character identifier for the item.
+- name: ItemName
+  type: varchar
+  nullable: true
+  description: ItemName is the full item name.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate, with EndDate, provides the time frame for which the identifier applies.
+- name: FscPeriod
+  type: TINYINT
+  nullable: false
+  description: FscPeriod is the fiscal period for which the data applies.
+- name: FscPeriodDesc
+  type: varchar
+  nullable: true
+  description: The description of FscPeriod.
+- name: ChgPeriod
+  type: TINYINT
+  nullable: false
+  description: ChgPeriod is the change period for the given point in time.
+- name: ChgPeriodDesc
+  type: varchar
+  nullable: true
+  description: The description of ChgPeriod.
+- name: Measure
+  type: TINYINT
+  nullable: false
+  description: Measure is the applicable measure of the item, for example EPS or revenue.
+- name: MeasureDesc
+  type: varchar
+  nullable: true
+  description: The description of Measure.
+- name: FscPerDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: FscPerDate is the end date of the fiscal period for which the data applies.
+- name: LstRptDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: LstRptDate is the last report date as of the data through date which is reported in StartDate.
+- name: ExpRptDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: ExpRptDate is the expected report date for the fiscal period date which is reported by FscPerDate.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the item value.
+- name: EstCurr
+  type: char
+  nullable: true
+  description: EstCurr is the company-level currency for estimates. EstCurr corresponds to the per-share measures.
+- name: EstCurrDesc
+  type: varchar
+  nullable: true
+  description: The description of EstCurr.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate, with StartDate, provides the time frame for which the identifier applies.
+- name: Reg
+  type: varchar
+  nullable: false
+  description: The Region of the world. AM for Americas, AP for Asia- Pacific, EA for EMEA.
+- name: Scale
+  type: varchar
+  nullable: true
+  description: 'The scale of the value; present only if required. Database Schema for Starmine Data 31 Example Use Case: This
+    query returns the average revision % (ARM Model) for various fiscal periods:'
+---
+table: qa_starmine.vw_SM2DARMA
+domain: analytics
+columns:
+- name: SecId
+  type: INTEGER
+  nullable: false
+  description: SecId is the StarMine security identifier.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item is the unique numeric identifier for the item. This
+- name: Mnemonic
+  type: varchar
+  nullable: false
+  description: Mnemonic is the unique character identifier for the item.
+- name: ItemName
+  type: varchar
+  nullable: false
+  description: ItemName is the full item name.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate, with EndDate, provides the time frame for which the identifier applies.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the item value.
+- name: EstCurr
+  type: char
+  nullable: true
+  description: EstCurr is the company-level currency for estimates. EstCurr corresponds to the per-share measures.
+- name: EstCurrDesc
+  type: varchar
+  nullable: true
+  description: The Description of EstCurr.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate, with StartDate, provides the time frame for which the identifier applies.
+- name: Reg
+  type: varchar
+  nullable: false
+  description: The Region of the world. AM for Americas, AP for Asia- Pacific, EA for EMEA.
+- name: Scale
+  type: varchar
+  nullable: true
+  description: The scale of the value; present only if required. select aa.SecCode, bb.Exchange, cc.CmpName, cc.Ticker, cc.SecId,
+    dd.ItemName, dd.StartDate, dd.EndDate, dd.FscPeriodDesc, dd.ChgPeriodDesc, dd.MeasureDesc, dd.FscPerDate, dd.LstRptDate,
+    dd.ExpRptDate, dd.Value_, dd.Scale, dd.EstCurrDesc from vw_SecurityMasterX aa join vw_SM2MappingDaily bb on bb.seccode
+    = aa.seccode and bb.Typ = aa.typ join SM2DInfo cc on cc.SecId = bb.VenCode join vw_SM2DARM dd on dd.SecId = cc.SecId where
+    aa.id = 'TOC' and bb.e
+---
+table: qa_starmine.vw_SM2DCRM
+domain: analytics
+columns:
+- name: SecId
+  type: INTEGER
+  nullable: false
+  description: SecId is the StarMine security identifier.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is the unique numeric identifier for the item.
+- name: Mnemonic
+  type: varchar
+  nullable: false
+  description: Mnemonic is the unique character identifier for the item.
+- name: ItemName
+  type: varchar
+  nullable: false
+  description: ItemName is the full item name.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate, with EndDate, provides the time frame for which the identifier applies.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the item value.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate, with StartDate, provides the time frame for which the identifier applies.
+- name: Reg
+  type: varchar
+  nullable: false
+  description: The Region of the world. AM for Americas, AP for Asia- Pacific, EA for EMEA. select aa.SecCode, bb.Exchange,
+    cc.CmpName, cc.Ticker, cc.SecId, dd.ItemName, dd.StartDate, dd.EndDate, dd.Value_, dd.Scale, dd.EstCurrDesc from vw_SecurityMasterX
+    aa join vw_SM2MappingDaily bb on bb.seccode = aa.seccode and bb.Typ = aa.typ join SM2DInfo cc on cc.SecId = bb.VenCode
+    join vw_SM2DARMA dd on dd.SecId = cc.SecId where aa.id = 'TOC' and bb.exchange = 2 -- Canadian record of Thomson Reuters
+    and dd.Item = 44 or
+---
+table: qa_starmine.vw_SM2DEQ
+domain: analytics
+columns:
+- name: SecId
+  type: SMALLINT
+  nullable: false
+  description: SecId is the StarMine security identifier.
+- name: Item
+  type: varchar
+  nullable: false
+  description: Item is the unique numeric identifier for the item.
+- name: Mnemonic
+  type: varchar
+  nullable: true
+  description: Mnemonic is the unique character identifier for the item.
+- name: ItemName
+  type: TIMESTAMP(6)
+  nullable: true
+  description: ItemName is the full item name.
+- name: StartDate
+  type: TINYINT
+  nullable: false
+  description: StartDate, with EndDate, provides the time frame for which the identifier applies.
+- name: FscPeriod
+  type: varchar
+  nullable: false
+  description: FscPeriod is the fiscal period for which the data applies.
+- name: FscPeriodDesc
+  type: TINYINT
+  nullable: true
+  description: The description of FscPeriod.
+- name: ChgPeriod
+  type: varchar
+  nullable: false
+  description: ChgPeriod is the change period for the given point in time.
+- name: ChgPeriodDesc
+  type: FLOAT
+  nullable: true
+  description: The description of ChgPeriod.
+- name: Value_
+  type: TIMESTAMP(6)
+  nullable: true
+  description: Value_ is the item value.
+- name: LstQtrDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: LstQtrDate is the end date of the prior quarter.
+- name: LstAnnDate
+  type: char
+  nullable: true
+  description: LstAnnDate is the end date of the prior annual period.
+- name: FncCurr
+  type: TIMESTAMP(6)
+  nullable: true
+  description: FncCurr is the currency of the item values. select aa.SecCode, bb.Exchange, cc.CmpName, cc.Ticker, cc.SecId,
+    dd.ItemName, dd.StartDate, dd.EndDate, dd.Value_ from vw_SecurityMasterX aa join vw_SM2MappingDaily bb on bb.seccode =
+    aa.seccode and bb.Typ = aa.typ join SM2DInfo cc on cc.SecId = bb.VenCode join vw_SM2DCRM dd on dd.SecId = cc.SecId where
+    aa.id = 'TOC' and bb.exchange = 2 -- Canadian record of Thomson Reuters and dd.Item = 169 order by dd.StartDate Database
+    Schema for Starmine Data 34
+- name: EndDate
+  type: varchar
+  nullable: true
+  description: EndDate, with StartDate, provides the time frame for which the identifier applies.
+- name: Reg
+  type: SMALLINT
+  nullable: false
+  description: 'The Region of the world. AM for Americas, AP for Asia- Pacific, EA for EMEA. Example Use Case: This query
+    returns the daily % Of Long Term Debt to Total Capital (EQ Model) for'
+---
+table: qa_starmine.vw_SM2DIV
+domain: analytics
+columns:
+- name: SecId
+  type: INTEGER
+  nullable: false
+  description: SecId is the StarMine security identifier.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item is the unique numeric identifier for the item. This
+- name: Mnemonic
+  type: varchar
+  nullable: true
+  description: Mnemonic is the unique character identifier for the item.
+- name: ItemName
+  type: varchar
+  nullable: true
+  description: ItemName is the full item name.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate, with EndDate, provides the time frame for which the identifier applies.
+- name: FscPeriod
+  type: TINYINT
+  nullable: false
+  description: FscPeriod is the fiscal period for which the data applies.
+- name: FscPeriodDesc
+  type: varchar
+  nullable: true
+  description: The description of FscPeriod. select aa.SecCode, bb.Exchange, cc.CmpName, cc.Ticker, cc.SecId, dd.ItemName,
+    dd.StartDate, dd.EndDate, dd.FscPeriodDesc, dd.ChgPeriodDesc, dd.Value_, dd.LstQtrDate, dd.LstAnnDate, dd.FncCurr from
+    vw_SecurityMasterX aa join vw_SM2MappingDaily bb on bb.seccode = aa.seccode and bb.Typ = aa.typ join SM2DInfo cc on cc.SecId
+    = bb.VenCode join vw_SM2DEQ dd on dd.SecId = cc.SecId where aa.id = 'TOC' and bb.exchange = 2 -- Canadian record of Thomson
+    Reuters and dd.Item = 51
+- name: FndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: FndDate is the data through date for the fundamentals. This is the date of the most recent update of the financial
+    statement for a security.
+- name: LstFYDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: LstFYDate is the date of the previous fiscal year end.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the item value.
+- name: IVProjCurr
+  type: char
+  nullable: true
+  description: IVProjCurr is the currency used for intrinsic value projections.
+- name: IVProjCurrDesc
+  type: varchar
+  nullable: true
+  description: The description of IVProjCurr.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate, with StartDate, provides the time frame for which the identifier applies.
+- name: Reg
+  type: varchar
+  nullable: false
+  description: The Region of the world. AM for Americas, AP for Asia-Pacific, EA for EMEA.
+- name: Scale
+  type: varchar
+  nullable: true
+  description: 'The scale of the value; present only if required. Example Use Case: This query returns the daily Intrinsic
+    Value (IV Model) for Thomson Reuters: select aa.SecCode, bb.Exchange, cc.CmpName, cc.Ticker, cc.SecId, dd.ItemName, dd.StartDate,
+    dd.EndDate, dd.FscPeriodDesc, dd.FndDate, dd.LstFYDate, dd.Value_, dd.Scale, dd.IVProjCurrDesc from vw_SecurityMasterX
+    aa join vw_SM2MappingDaily bb on bb.seccode = aa.seccode and bb.Typ = aa.typ join SM2DInfo cc on cc.SecId = bb.VenCode
+    join vw_SM2DIV dd on dd.S'
+---
+table: qa_starmine.vw_SM2DVMo
+domain: analytics
+columns:
+- name: SecId
+  type: INTEGER
+  nullable: false
+  description: SecId is the StarMine security identifier.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item is the unique numeric identifier for the item. This
+- name: Mnemonic
+  type: varchar
+  nullable: false
+  description: Mnemonic is the unique character identifier for the item.
+- name: ItemName
+  type: varchar
+  nullable: false
+  description: ItemName is the full item name.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate, with EndDate, provides the time frame for which the identifier applies.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate, with StartDate, provides the time frame for which the identifier applies.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the item value.
+- name: LicFlag
+  type: TINYINT
+  nullable: false
+  description: LicFlag identifies whether the data item is part of the Val-Mo model (1) or the Price-Mo model (2).
+- name: Reg
+  type: varchar
+  nullable: false
+  description: 'The Region of the world. AM for Americas, AP for Asia- Pacific, EA for EMEA. Example Use Case: This query
+    returns the daily Val-Mo Region Rank (Val-Mo Model) for Thomson Reuters: select aa.SecCode, bb.Exchange, cc.CmpName, cc.Ticker,
+    cc.SecId, dd.ItemName, dd.StartDate, dd.EndDate, dd.Value_ from vw_SecurityMasterX aa join vw_SM2MappingDaily bb on bb.seccode
+    = aa.seccode and bb.Typ = aa.typ join SM2DInfo cc on cc.SecId = bb.VenCode join vw_SM2DVMo dd on dd.SecId = cc.SecId where
+    aa.id = ''TOC'' an'
+---
+table: qa_starmine.vw_SM2HIdentChg
+domain: analytics
+columns:
+- name: SecId
+  type: INTEGER
+  nullable: false
+  description: SecId is the StarMine security identifier.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item is the unique numeric identifier for the item. This
+- name: Mnemonic
+  type: varchar
+  nullable: false
+  description: Mnemonic is the unique character identifier for the item.
+- name: ItemName
+  type: varchar
+  nullable: false
+  description: ItemName is the full item name.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate, with EndDate, provides the time frame for which the identifier applies.
+- name: Value_
+  type: INTEGER
+  nullable: false
+  description: Value_ is the item value.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate, with StartDate, provides the time frame for which the identifier applies.
+- name: Reg
+  type: varchar
+  nullable: false
+  description: The Region of the world. AM for Americas, AP for Asia- Pacific, EA for EMEA. select aa.SecCode, bb.Exchange,
+    cc.CmpName, cc.Ticker, cc.SecId, dd.ItemName, dd.StartDate, dd.EndDate, dd.Value_ from vw_SecurityMasterX aa join vw_SM2MappingDaily
+    bb on bb.seccode = aa.seccode and bb.Typ = aa.typ join SM2DInfo cc on cc.SecId = bb.VenCode join vw_SM2DSH dd on dd.SecId
+    = cc.SecId where aa.id = 'TOC' and bb.exchange = 2 -- Canadian record of Thomson Reuters and dd.Item = 170 order by dd.StartDate
+    Databas
+- name: SecId
+  type: INTEGER
+  nullable: false
+  description: SecId is the StarMine security identifier.
+- name: IdentType
+  type: SMALLINT
+  nullable: false
+  description: IdentType is a unique number representing the type of identifier for which changes are tracked, for example,
+    CUSIP or SEDOL, Ticker, or name changes.
+- name: Exch
+  type: TINYINT
+  nullable: false
+  description: Exch identifies the exchange. Exch cross-references Sm2Code where Sm2Code.Type_ = 16 and Sm2Code.Code = Sm2HIdentChg.Exch.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate, with EndDate, provides the time frame for which the identifier applies.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate, with StartDate, provides the time frame for which the identifier applies.
+- name: Ident
+  type: varchar
+  nullable: false
+  description: Ident is the value of the identifier during that period.
+- name: IdentDesc
+  type: varchar
+  nullable: true
+  description: The description of the identifier.
+- name: CmpName
+  type: varchar
+  nullable: true
+  description: CmpName is the company name.
+- name: SecCtry
+  type: char
+  nullable: true
+  description: SecCtry is the country in which the security trades. SecCtry cross-references Sm2Code where Sm2Code.Type_ =
+    1 and Sm2Code.Code = Sm2HInfo.SecCtry.
+- name: CmpCtry
+  type: char
+  nullable: true
+  description: CmpCtry indicates the country of the company’s headquarters. The two-character code cross- references Sm2Code
+    where Sm2Code.Type_ = 1 and Sm2Code.Code = Sm2DInfo.CmpCtry.
+- name: PermRegionDesc
+  type: varchar
+  nullable: true
+  description: PermRegion is the permission region. There are multiple Smart Holdings regions that fit into a single permission
+    region. select aa.SecCode, bb.Exchange, cc.CmpName, cc.Ticker, cc.SecId, dd.StartDate, dd.EndDate, dd.IdentDesc, dd.Exch,
+    dd.Ident from vw_SecurityMasterX aa join vw_SM2MappingHist bb on bb.seccode = aa.seccode and bb.Typ = aa.typ join SM2HInfo
+    cc on cc.SecId = bb.VenCode join vw_SM2HIdentChg dd on dd.SecId = cc.SecId and dd.IdentType = 2 where aa.id = 'TOC' and
+    bb.exchange = 2 -- Can

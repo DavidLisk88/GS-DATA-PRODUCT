@@ -1,0 +1,1343 @@
+table: qa_barra.BaAstEif
+domain: risk_models
+description: Barra Asset Equity Index Futures (EIF) | As of 01 September 2011, this table is discontinued as part of the BIME301
+  release. | This table contains asset EIF contract data.
+update_cadence: Thrice daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: In most cases, Code is a self-generated numeric value and is referred against a BarrId in underlying data.
+    In certain other cases, Code may have a more specific meaning. In these cases, Code is described in the
+- name: ExchType_2
+  type: varchar(6)
+  nullable: true
+  description: ExchType_2 is the exchange where the contract is held.
+- name: ContractSize
+  type: INTEGER
+  nullable: true
+  description: ContractSize is the contract size.
+- name: LastTradingDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: LastTradingDate is the last trading date of the asset.
+- name: SettlementDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: SettlementDate is the settlement date of the asset.
+---
+table: qa_barra.BaAstIdent
+domain: risk_models
+description: Barra Asset Identifiers | This table contains asset identification data, including the asset type.
+update_cadence: Thrice daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: In most cases, Code is a self-generated numeric value and is referred against a BarrId in underlying data.
+    In certain other cases, Code may have a more specific meaning. In these cases, Code is described in the field description
+    section.
+- name: AstIdentType_2
+  type: INTEGER
+  nullable: false
+  description: 'AstIdentType_2 is the asset identifier type, for example, CUSIP, SEDOL, or ISIN. AstIdentType_2 cross-references
+    BaBimeCode where Type_ = 2, and can have the values: LSEG Quantitative Analytics Database Schema for Barra 10'
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the date the data begins. For example, if this field is for an asset identifier, it is the date
+    the ID began. If the field is for asset coverage, it is the date the asset coverage ended. This date is in the format
+    YYYYMMDD.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the date the related data concludes. For example, if this field is for an asset identifier, it is
+    the date the ID ended. If the field is for asset coverage, it is the date the asset coverage ended.
+- name: AssetId
+  type: varchar(51)
+  nullable: true
+  description: AssetId is the asset identifier. For example, this is the actual SEDOL number.
+---
+table: qa_barra.BaAstInfo
+domain: risk_models
+description: Barra Asset Information | This table contains general asset information such as the asset name, asset type values
+  (CUSIP, SEDOL, ISIN or
+update_cadence: Thrice daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: In most cases, Code is a self-generated numeric value and is referred against a BarrId in underlying data.
+    In certain other cases, Code may have a more specific meaning. In these cases, Code is described in the field description
+    section.
+- name: BarrId
+  type: varchar(33)
+  nullable: true
+  description: BarrId is a unique asset ID assigned by Barra.
+- name: Name
+  type: varchar(51)
+  nullable: true
+  description: Name is the full name of the asset or other related data.
+- name: Cusip
+  type: varchar(9)
+  nullable: true
+  description: Cusip is the CUSIP.
+- name: Sedol
+  type: varchar(7)
+  nullable: true
+  description: Sedol is the SEDOL.
+- name: ISIN
+  type: varchar(16)
+  nullable: true
+  description: ISIN is the ISIN.
+- name: CIN
+  type: varchar(16)
+  nullable: true
+  description: CIN is the CUSIP International Number.
+- name: InstrmntType_7
+  type: INTEGER
+  nullable: true
+  description: InstrmntType_7 is described in the InstrmntType_7 section on page Error! Bookmark not defined..
+- name: IssuerId
+  type: varchar(7)
+  nullable: true
+  description: IssuerId is the ID of issuing company.
+- name: ISOCntryType_3
+  type: varchar(4)
+  nullable: true
+  description: ISOCntryType_3 is the ISO country code. LSEG Quantitative Analytics Database Schema for Barra 11
+- name: ISOCcyType_4
+  type: varchar(4)
+  nullable: true
+  description: ISOCcyType_4 is the ISO currency code.
+- name: RootId
+  type: varchar(33)
+  nullable: true
+  description: RootId is the Barra ID of the underlying asset.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: StartDate is the date the data begins. For example, if this field is for an asset identifier, it is the date
+    the ID began. If the field is for asset coverage, it is the date the asset coverage ended. This date is in the format
+    YYYYMMDD.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the date the related data concludes. For example, if this field is for an asset identifier, it is
+    the date the ID ended. If the field is for asset coverage, it is the date the asset coverage ended.
+- name: LastModDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: 'LastModDate is the last modification date. InstrmntType_7 is the security type. InstrmntType_7 cross-references
+    BaBimeCode where Type_ = 7, and can be: – 1 (STOCK) – 2 (ETF) – 3 (EIF) – 4 (ADR) – 5 (GDR) – 6 (UEA) – 7 (CROSS) – 8
+    (COMMODITY) – 9 (INDEX) – 10 (CROSS_LIST) – 11 (SYNTHETIC)'
+---
+table: qa_barra.BaBimeAstPrc
+domain: risk_models
+description: Barra BIMe Asset Price | This table includes the daily asset price and capitalization.
+update_cadence: Thrice daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: In most cases, Code is a self-generated numeric value and is referred against a BarrId in underlying data.
+    In certain other cases, Code may have a more specific meaning. In these cases, Code is described in the field description
+    section.
+- name: Price
+  type: FLOAT
+  nullable: true
+  description: Price is the price, in units of currency.
+- name: Capt
+  type: FLOAT
+  nullable: true
+  description: Capt is the capitalization, in units of currency.
+- name: CcyType_4
+  type: varchar(4)
+  nullable: true
+  description: CcyType_4 is the ISO currency code.
+- name: DlyRetPrcnt
+  type: FLOAT
+  nullable: true
+  description: DlyRetPrcnt is the daily asset return.
+- name: DataDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DataDate is the year, month, and day of the data.
+- name: RelDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: RelDate is the date the data was released. Use this field to locate final, corrected data. LSEG Quantitative
+    Analytics Database Schema for Barra 12
+---
+table: qa_barra.BaBimeCntryModel
+domain: risk_models
+description: Barra BIMe Country Model | This table contains sub-model data by ISO country code.
+update_cadence: As needed
+columns:
+- name: BIMeVer
+  type: varchar(7)
+  nullable: false
+  description: BIMeVer is the BIMe version.
+- name: ISOCntryType_3
+  type: varchar(4)
+  nullable: false
+  description: ISOCntryType_3 is the ISO country code.
+- name: Model
+  type: SMALLINT
+  nullable: false
+  description: Model is the model code generated against each of the Barra model names. Model cross-references ModelShort
+    in BaBimeModels.
+---
+table: qa_barra.BaBimeCode
+domain: risk_models
+description: Barra BIMe Code | This table cross-references with all Quantitative Analytics Barra data types.
+update_cadence: As needed
+columns:
+- name: Type_
+  type: SMALLINT
+  nullable: false
+  description: 'Type_ is the type of code stored for internal numeric mapping. TYPE_ is defined where TYPE_ = 1, and can be:
+    – 1 (Bime Codes) – 2 (Asset Id Types) – 3 (Country Codes) – 4 (Currency Codes) – 5 (Industry Codes) – 6 (Factor Groups)
+    – 7 (Instrument Codes) – 8 (ExpTable Codes)'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: In most cases, Code is a self-generated numeric value and is referred against a BarrId in underlying data.
+    In certain other cases, Code may have a more specific meaning. In these cases, Code is described in the field description
+    section.
+- name: Desc_
+  type: varchar(31)
+  nullable: true
+  description: Desc_ is the description of the Code within Type_.
+---
+table: qa_barra.BaBimeCurrFactors
+domain: risk_models
+description: Barra BIMe Currency Factors | This table contains the data currency factor by ISO country code.
+update_cadence: As needed
+columns:
+- name: ISOCcyType_4
+  type: varchar(4)
+  nullable: false
+  description: ISOCcyType_4 is the ISO currency code.
+- name: Factor
+  type: varchar(21)
+  nullable: false
+  description: Factor is the numeric code generated against each Factor. For example, where the data is currency, the factor
+    code is the currency factor code.
+---
+table: qa_barra.BaBimeFactors
+domain: risk_models
+description: Barra BIMe Factors | This table contains factors in sub-models.
+update_cadence: As needed
+columns:
+- name: Factor
+  type: SMALLINT
+  nullable: false
+  description: Factor is the numeric code generated against each Factor. For example, where the data is currency, the factor
+    code is the currency factor code.
+- name: Mnemonic
+  type: varchar(21)
+  nullable: true
+  description: Mnemonic is the string value of the factor.
+- name: Model
+  type: SMALLINT
+  nullable: true
+  description: Model is the model code generated against each of the Barra model names. Model cross-references ModelShort
+    in BaBimeModels.
+- name: FactorDisplayName
+  type: varchar(51)
+  nullable: true
+  description: FactorDisplayName is the name displayed for the factor.
+- name: FactorGrpType_6
+  type: INTEGER
+  nullable: true
+  description: 'FactorGrpType_6 is the factor group. FactorGrpType_6 can be: – 1 (1-Risk Indices) – 2 (2-Industries) – 3 (3-Currencies)
+    – 4 (4-Countries) – 5 (1-World) – 10 (1-Europe) – 11 (2-Risk Indices) – 12 (3-Industries) – 13 (5-Currencies) – 14 (4-Currencies)
+    – 15 (3-Countries) – 16 (5-Market) – 17 (1-Asia Equity)'
+- name: FactorNum
+  type: SMALLINT
+  nullable: true
+  description: FactorNum is the factor number within a factor group.
+- name: ParentFactor
+  type: SMALLINT
+  nullable: true
+  description: The Parent factor code represents the combined factor code for long and short horizons. For example, GEM3L_SIZE
+    factor code is 3885 and GEM3S_SIZE factor code is 4085 but both will share parent factor GEM3_SIZE having code 20000.
+- name: ParentModel
+  type: SMALLINT
+  nullable: true
+  description: The Parent model code represents the combined model code for long and short horizons. For example, AUE4L model
+    code is 83 and AUE4S model code is 84 but both will share parent model code=73.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: StartDate is the date the data begins. For example, if this field is for an asset identifier, it is the date
+    the ID began. If the field is for asset coverage, it is the date the asset coverage ended. This date is in the format
+    YYYYMMDD. LSEG Quantitative Analytics Database Schema for Barra 14
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the date the related data concludes. For example, if this asset coverage, it is the date the asset
+    coverage ended.
+---
+table: qa_barra.BaBimeModels
+domain: risk_models
+description: Barra BIMe Models | This table contains details about sub-models comprising a version of BIMe. | ExpTableCode
+  tinyint Y This field signifies which *Exp table to go to for the given model.
+update_cadence: As needed
+columns:
+- name: Model
+  type: SMALLINT
+  nullable: false
+  description: Model is the model code generated against each of the Barra model names. Model cross-references ModelShort
+    in BaBimeModels.
+- name: ModelShort
+  type: varchar(20)
+  nullable: true
+  description: ModelShort is the actual string value of a model.
+- name: ModelVer
+  type: varchar(4)
+  nullable: true
+  description: ModelVer is the version of the model.
+- name: BIMeVer
+  type: varchar(7)
+  nullable: true
+  description: BIMeVer is the BIMe version.
+- name: ModelName
+  type: varchar(51)
+  nullable: true
+  description: ModelName is the name of the model.
+- name: NumFactor
+  type: SMALLINT
+  nullable: true
+  description: NumFactor is the number of factors.
+- name: ParentModel
+  type: SMALLINT
+  nullable: true
+  description: The Parent model code represents the combined model code for long and short horizons. For example, AUE4L model
+    code is 83 and AUE4S model code is 84 but both will share parent model code=73.
+- name: ExpTableCode
+  type: TINYINT
+  nullable: true
+  description: 'This field signifies which *Exp table to go to for the given model. To see a list of available codes, use
+    this query: select * from babimecode where Type_ = 8'
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: StartDate is the date the data begins. For example, if this field is for an asset identifier, it is the date
+    the ID began. If the field is for asset coverage, it is the date the asset coverage ended. This date is in the format
+    YYYYMMDD.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the date the related data concludes. For example, if this field is for an asset identifier, it is
+    the date the ID ended. If the field is for asset coverage, it is the date the asset coverage ended.
+---
+table: qa_barra.BaBimeModEstu
+domain: risk_models
+description: Barra BIMe Model Estimate Universe | This table contains model estimation universe data.
+update_cadence: 'Thrice daily Adjusted: N/A'
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: In most cases, Code is a self-generated numeric value and is referred against a BarrId in underlying data.
+    In certain other cases, Code may have a more specific meaning. In these cases, Code is described in the field description
+    section.
+- name: Model
+  type: SMALLINT
+  nullable: false
+  description: Model is the model code generated against each of the Barra model names. Model cross-references ModelShort
+    in BaBimeModels.
+- name: Shares
+  type: BIGINT
+  nullable: true
+  description: Shares is the value calculated as price divided by capitalization.
+- name: RelDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: RelDate is the date the data was released. Use this field to locate final, corrected data. LSEG Quantitative
+    Analytics Database Schema for Barra 15
+---
+table: qa_barra.BaBimeModEstuHist
+domain: risk_models
+description: Barra BIMe Model Estimate Universe History | This table contains model estimation universe history data.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: In most cases, Code is a self-generated numeric value and is referred against a BarrId in underlying data.
+    In certain other cases, Code may have a more specific meaning. In these cases, Code is described in the field description
+    section.
+- name: Model
+  type: SMALLINT
+  nullable: false
+  description: Model is the model code generated against each of the Barra model names. Model cross-references ModelShort
+    in BaBimeModels.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the date from which the validity of the shares begins.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the date when validity of the shares ends.
+- name: Shares
+  type: BIGINT
+  nullable: true
+  description: Number of shares of the stock considered in the estimation universe.
+---
+table: qa_barra.BaBimeRelease
+domain: risk_models
+description: Barra BIMe Release | As of 01 September 2011, this table is discontinued as part of the BIME301 release. | This
+  table contains log data of BIMe version releases.
+update_cadence: As needed
+columns:
+- name: BIMeVer
+  type: varchar(7)
+  nullable: false
+  description: BIMeVer is the BIMe version.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: StartDate is the date the data begins. For example, if this field is for an asset identifier, it is the date
+    the ID began. If the field is for asset coverage, it is the date the asset coverage ended. This date is in the format
+    YYYYMMDD.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the date the related data concludes. For example, if this field is for an asset identifier, it is
+    the date the ID ended. If the field is for asset coverage, it is the date the asset coverage ended.
+- name: Comment
+  type: varchar(151)
+  nullable: true
+  description: Comment is the description describing the action performed during a particular BIMe version.
+---
+table: qa_barra.BaBimeVarCode
+domain: risk_models
+description: Barra BIMe Var Code | This table contains Barra cross-references for their varchar fields.
+update_cadence: As needed
+columns:
+- name: Type_
+  type: SMALLINT
+  nullable: false
+  description: Type_ is the type of different codes stored for internal numeric mapping.
+- name: Code
+  type: varchar(9)
+  nullable: false
+  description: In most cases, Code is a self-generated numeric value and is referred against a BarrId in underlying data.
+    In certain other cases, Code may have a more specific meaning. In these cases, Code is described in the field description
+    section.
+- name: Desc_
+  type: varchar(31)
+  nullable: true
+  description: Desc_ is the description of the string code within a particular type.
+---
+table: qa_barra.BaRates
+domain: risk_models
+description: Barra Rates | This table contains exchange rates and risk-free rate data.
+update_cadence: Thrice daily
+columns:
+- name: CcyType_4
+  type: INTEGER
+  nullable: false
+  description: CcyType_4 is the ISO Currency code.
+- name: USDxrate
+  type: FLOAT
+  nullable: true
+  description: USDxrate is the exchange rate multiplied by 100, in U.S. currency.
+- name: RFRate
+  type: FLOAT
+  nullable: true
+  description: RFRate is the risk free rate.
+- name: DataDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DataDate is the year, month, and day of the data.
+---
+table: qa_barra.BaUpdtRelease
+domain: risk_models
+description: Barra Update Release | This table contains a log of releases and data corrections by model.
+update_cadence: Thrice daily
+columns:
+- name: Model
+  type: SMALLINT
+  nullable: false
+  description: Model is the model code generated against each of the Barra model names. Model cross-references ModelShort
+    in BaBimeModels.
+- name: ModelVer
+  type: varchar(4)
+  nullable: false
+  description: ModelVer is the model version.
+- name: DataDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DataDate is the year, month, and day of the data.
+- name: ActionDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: ActionDate is the action taken date.
+- name: ActionTime
+  type: TIMESTAMP(6)
+  nullable: false
+  description: ActionTime is the action taken time.
+- name: Action_
+  type: varchar(16)
+  nullable: true
+  description: 'Action_ is the action, which can be: – Release – Correction – Repost'
+- name: Comment
+  type: varchar(151)
+  nullable: true
+  description: Comment is the comment on action. LSEG Quantitative Analytics Database Schema for Barra 17 4 Barra BIMe Data
+    – Global This chapter describes the Quantitative Analytics database schema for Barra BIMe data that is available for Barra
+    Global model subscriptions.
+---
+table: qa_barra.BaBimeGlCovar
+domain: risk_models
+description: Barra BIMe Global Covariance | This table contains factor variances for all global factors in BIMe.
+update_cadence: Monthly
+columns:
+- name: GLFactor1
+  type: SMALLINT
+  nullable: false
+  description: GLFactor1 is the factor code of the first global factor.
+- name: GLFactor2
+  type: SMALLINT
+  nullable: false
+  description: GLFactor2 is the factor code of the second global factor.
+- name: Variance
+  type: FLOAT
+  nullable: true
+  description: Variance is the covariance between factors, or it is the variance if the factors match.
+- name: DataDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DataDate is the year, month, and day of the data.
+- name: RelDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: RelDate is the date the data was released. Use this field to locate final, corrected data.
+---
+table: qa_barra.BaBimeGlFacRet
+domain: risk_models
+description: Barra BIMe Global Factor Returns | This table contains Barra global factor return data.
+update_cadence: Monthly
+columns:
+- name: GLFactor
+  type: SMALLINT
+  nullable: false
+  description: GLFactor is the global factor code.
+- name: Return_
+  type: FLOAT
+  nullable: true
+  description: Return_ is the return of the code or factor for the period.
+- name: DataMonth
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DataMonth is the year, month, and day till when the data is valid.
+- name: RelDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: RelDate is the date the data was released. Use this field to locate final, corrected data. LSEG Quantitative
+    Analytics Database Schema for Barra 18
+---
+table: qa_barra.BaBimeGlFacExp
+domain: risk_models
+description: Barra BIMe Global Factors Exposures | This table contains Barra global factor exposure data.
+update_cadence: Monthly
+columns:
+- name: GLFactor
+  type: SMALLINT
+  nullable: false
+  description: GLFactor is the global factor code.
+- name: Factor
+  type: SMALLINT
+  nullable: false
+  description: Factor is the numeric code generated against each Factor. For example, where the data is currency, the factor
+    code is the currency factor code.
+- name: Exposure
+  type: FLOAT
+  nullable: true
+  description: Exposure is the exposure value of the data. For example, where this relates to global factors, this is the
+    global factor exposure.
+- name: DataDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DataDate is the year, month, and day of the data.
+- name: RelDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: RelDate is the date the data was released. Use this field to locate final, corrected data.
+---
+table: qa_barra.BaBimeScaling
+domain: risk_models
+description: Barra BIMe Scaling | This table contains matrix scaling exposures of local factors to global factors. The matrix
+  block is diagonal and is
+update_cadence: Thrice daily
+columns:
+- name: Factor1
+  type: SMALLINT
+  nullable: false
+  description: Factor1 is the factor code of the first factor.
+- name: Factor2
+  type: SMALLINT
+  nullable: false
+  description: Factor2 is the factor code of the second factor.
+- name: Adjust
+  type: FLOAT
+  nullable: true
+  description: Adjust is the adjustment factor for a factor exposure.
+- name: DataDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DataDate is the year, month, and day of the data.
+- name: RelDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: RelDate is the date the data was released. Use this field to locate final, corrected data.
+---
+table: qa_barra.BaBimeGlScGlFacExp
+domain: risk_models
+description: Barra BIMe Scaled Global Factor Exposure | This table contains scaled exposures of sub-model factors to global
+  factors for a given BIMe version (BIMEVER).
+update_cadence: Monthly
+columns:
+- name: GLFactor
+  type: SMALLINT
+  nullable: false
+  description: GLFactor is the global factor code.
+- name: Factor
+  type: SMALLINT
+  nullable: false
+  description: Factor is the numeric code generated against each Factor. For example, where the data is currency, the factor
+    code is the currency factor code.
+- name: Exposure
+  type: FLOAT
+  nullable: true
+  description: Exposure is the exposure value of the data. For example, where this relates to global factors, this is the
+    global factor exposure.
+- name: DataDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DataDate is the year, month, and day of the data.
+- name: RelDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: RelDate is the date the data was released. Use this field to locate final, corrected data.
+---
+table: qa_barra.BaBimeGlFactors
+domain: risk_models
+description: Barra BIMe Global Factors | This table contains descriptions of global factors.
+update_cadence: Monthly
+columns:
+- name: GLFactor
+  type: SMALLINT
+  nullable: false
+  description: GLFactor is the global factor code.
+- name: Mnemonic
+  type: varchar(26)
+  nullable: true
+  description: Mnemonic is the string value of the factor.
+- name: FactDisplayName
+  type: varchar(51)
+  nullable: true
+  description: FactDisplayName is the global factor name.
+- name: FactorGrpType_6
+  type: INTEGER
+  nullable: true
+  description: 'FactorGrpType_6 is the factor group Type_. FactorGrpType_6 cross- references with BaBimeCode where Type_ =
+    6, and may be: – 1 (1-Risk Indices) – 2 (2-Industries) – 14 (4-Currencies) – 15 (3-Countries) – 16 (5-Market)'
+- name: FactorNum
+  type: TINYINT
+  nullable: true
+  description: FactorNum is the factor number within a factor group.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: StartDate is the date the data begins. For example, if this field is for an asset identifier, it is the date
+    the ID began. If the field is for asset coverage, it is the date the asset coverage ended. This date is in the format
+    YYYYMMDD.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the date the related data concludes. For example, if this field is for an asset identifier, it is
+    the date the ID ended. If the field is for asset coverage, it is the date the asset coverage ended. LSEG Quantitative
+    Analytics Database Schema for Barra 20 5 Barra BIMe Data – Model This chapter describes the Quantitative Analytics database
+    schema for Barra BIMe data that is available to Barra BIMe model subscribers.
+---
+table: qa_barra.BaBimeModAstData
+domain: risk_models
+description: Barra BIMe Model Asset Data | This table contains yield and specific risk data for sub-models from a BIMe version.
+update_cadence: Thrice daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: In most cases, Code is a self-generated numeric value and is referred against a BarrId in underlying data.
+    In certain other cases, Code may have a more specific meaning. In these cases, Code is described in the field description
+    section.
+- name: Yield
+  type: FLOAT
+  nullable: true
+  description: Yield is the dividend yield.
+- name: TotalRisk
+  type: FLOAT
+  nullable: true
+  description: TotalRisk is the predicted total risk.
+- name: SpecificRisk
+  type: FLOAT
+  nullable: true
+  description: SpecificRisk is the predicted specific risk.
+- name: HistBeta
+  type: FLOAT
+  nullable: true
+  description: HistBeta is the historical beta.
+- name: PredBeta
+  type: FLOAT
+  nullable: true
+  description: PredBeta is the predicted beta.
+- name: DataDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DataDate is the year, month, and day of the data.
+- name: Model
+  type: SMALLINT
+  nullable: false
+  description: Model is the model code generated against each of the Barra model names. Model cross-references ModelShort
+    in BaBimeModels.
+- name: RelDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: RelDate is the date the data was released. Use this field to locate final, corrected data.
+---
+table: qa_barra.BaBimeModAstExp
+domain: risk_models
+description: Barra BIMe Model Asset Exposure | This table contains data on asset exposure for each sub-model factor. Exposures
+  are based on the model implied
+update_cadence: Thrice daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: In most cases, Code is a self-generated numeric value and is referred against a BarrId in underlying data.
+    In certain other cases, Code may have a more specific meaning. In these cases, Code is described in the field description
+    section.
+- name: Factor
+  type: SMALLINT
+  nullable: false
+  description: Factor is the numeric code generated against each Factor. For example, where the data is currency, the factor
+    code is the currency factor code.
+- name: Exposure
+  type: FLOAT
+  nullable: true
+  description: Exposure is the exposure value of the data. For example, where this relates to global factors, this is the
+    global factor exposure.
+- name: DataDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DataDate is the year, month, and day of the data.
+- name: Model
+  type: SMALLINT
+  nullable: false
+  description: Model is the model code generated against each of the Barra model names. Model cross-references ModelShort
+    in BaBimeModels.
+- name: RelDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: RelDate is the date the data was released. Use this field to locate final, corrected data.
+---
+table: qa_barra.BaGEM3ModAstExp
+domain: risk_models
+description: Barra GEM3 Model Asset Exposure | This table contains data on asset exposure for GEM3 model factor.
+update_cadence: Thrice daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: In most cases, Code is a self-generated numeric value and is referred against a BarrId in underlying data.
+    In certain other cases, Code may have a more specific meaning. In these cases, Code is described in the field description
+    section.
+- name: ParentFactor
+  type: SMALLINT
+  nullable: false
+  description: The Parent factor code represents the combined factor code for long and short horizons. For example, GEM3L_SIZE
+    factor code is 3885 and GEM3S_SIZE factor code is 4085 but both will share parent factor GEM3_SIZE having code 20000.
+- name: DataDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DataDate is the year, month, and day of the data.
+- name: Exposure
+  type: FLOAT
+  nullable: true
+  description: Exposure is the exposure value of the data. For example, where this relates to global factors, this is the
+    global factor exposure.
+- name: RelDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: RelDate is the date the data was released. Use this field to locate final, corrected data.
+---
+table: qa_barra.BaUSE4ModAstExp
+domain: risk_models
+description: Barra USE4 Models Asset Exposure | This table contains data on asset exposure for USE4 models.
+update_cadence: Thrice daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: In most cases, Code is a self-generated numeric value and is referred against a BarrId in underlying data.
+    In certain other cases, Code may have a more specific meaning. In these cases, Code is described in the field description
+    section.
+- name: ParentFactor
+  type: SMALLINT
+  nullable: false
+  description: The Parent factor code represents the combined factor code for long and short horizons. For example, GEM3L_SIZE
+    factor code is 3885 and GEM3S_SIZE factor code is 4085 but both will share parent factor GEM3_SIZE having code 20000.
+- name: DataDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DataDate is the year, month, and day of the data. LSEG Quantitative Analytics Database Schema for Barra 22
+- name: Exposure
+  type: FLOAT
+  nullable: true
+  description: Exposure is the exposure value of the data. For example, where this relates to global factors, this is the
+    global factor exposure.
+- name: RelDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: RelDate is the date the data was released. Use this field to locate final, corrected data.
+---
+table: qa_barra.BaNBimeModAstExp
+domain: risk_models
+description: Barra AUE4, CAE5, JPE4 models Asset | This table contains data on asset exposure for AUE4, CAE5, and JPE4 models.
+update_cadence: Thrice daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: In most cases, Code is a self-generated numeric value and is referred against a BarrId in underlying data.
+    In certain other cases, Code may have a more specific meaning. In these cases, Code is described in the field description
+    section.
+- name: ParentFactor
+  type: SMALLINT
+  nullable: false
+  description: The Parent factor code represents the combined factor code for long and short horizons. For example, GEM3L_SIZE
+    factor code is 3885 and GEM3S_SIZE factor code is 4085 but both will share parent factor GEM3_SIZE having code 20000.
+- name: DataDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DataDate is the year, month, and day of the data.
+- name: ParentModel
+  type: SMALLINT
+  nullable: false
+  description: The Parent model code represents the combined model code for long and short horizons. For example, AUE4L model
+    code is 83 and AUE4S model code is 84 but both will share parent model code=73.
+- name: Exposure
+  type: FLOAT
+  nullable: true
+  description: Exposure is the exposure value of the data. For example, where this relates to global factors, this is the
+    global factor exposure.
+- name: RelDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: RelDate is the date the data was released. Use this field to locate final, corrected data.
+---
+table: qa_barra.BaBimeModAstLsr
+domain: risk_models
+description: Barra BIMe Model Asset LSR | This table contains data on the linked specific risk (LSR) of assets.
+update_cadence: Thrice daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: In most cases, Code is a self-generated numeric value and is referred against a BarrId in underlying data.
+    In certain other cases, Code may have a more specific meaning. In these cases, Code is described in the field description
+    section.
+- name: Elasticity
+  type: FLOAT
+  nullable: true
+  description: Elasticity is the ratio of change.
+- name: RootSpecificRisk
+  type: FLOAT
+  nullable: true
+  description: RootSpecificRisk is the specific risk of the underlying asset.
+- name: DataDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DataDate is the year, month, and day of the data.
+- name: Model
+  type: SMALLINT
+  nullable: false
+  description: Model is the model code generated against each of the Barra model names. Model cross-references ModelShort
+    in BaBimeModels. LSEG Quantitative Analytics Database Schema for Barra 23
+- name: RelDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: RelDate is the date the data was released. Use this field to locate final, corrected data.
+---
+table: qa_barra.BaBimeModFacRet
+domain: risk_models
+description: Barra BIMe Model Factor Return | This table contains monthly factor return data.
+update_cadence: Thrice daily
+columns:
+- name: Factor
+  type: SMALLINT
+  nullable: false
+  description: Factor is the numeric code generated against each Factor. For example, where the data is currency, the factor
+    code is the currency factor code.
+- name: Return_
+  type: FLOAT
+  nullable: true
+  description: Return_ is the return of the code or factor for the period.
+- name: DataMonth
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DataMonth is the year, month, and day till when the data is valid.
+- name: Model
+  type: SMALLINT
+  nullable: false
+  description: Model is the model code generated against each of the Barra model names. Model cross-references ModelShort
+    in BaBimeModels.
+- name: RelDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: RelDate is the date the data was released. Use this field to locate final, corrected data.
+---
+table: qa_barra.BaBimeModFacRetExt
+domain: risk_models
+description: Barra BIMe Model Daily Factor Return | This table contains daily factor return data.
+update_cadence: Thrice daily
+columns:
+- name: Factor
+  type: SMALLINT
+  nullable: false
+  description: Factor is the numeric code generated against each Factor. For example, where the data is currency, the factor
+    code is the currency factor code.
+- name: Model
+  type: SMALLINT
+  nullable: false
+  description: Model is the model code generated against each of the Barra model names. Model cross-references ModelShort
+    in BaBimeModels.
+- name: DataDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DataDate is the year, month, and day of the data.
+- name: DlyReturn
+  type: FLOAT
+  nullable: true
+  description: DlyReturn is the daily return to the factor.
+---
+table: qa_barra.BaBimeModAstRet
+domain: risk_models
+description: Barra BIMe Model Asset Return | This table contains return information for each sub-model.
+update_cadence: Thrice daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: In most cases, Code is a self-generated numeric value and is referred against a BarrId in underlying data.
+    In certain other cases, Code may have a more specific meaning. In these cases, Code is described in the field description
+    section.
+- name: Return_
+  type: FLOAT
+  nullable: true
+  description: Return_ is the return of the code or factor for the period.
+- name: DataMonth
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DataMonth is the year, month, and day till when the data is valid.
+- name: Model
+  type: SMALLINT
+  nullable: false
+  description: Model is the model code generated against each of the Barra model names. Model cross-references ModelShort
+    in BaBimeModels.
+- name: RelDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: RelDate is the date the data was released. Use this field to locate final, corrected data.
+---
+table: qa_barra.BaNBimeMarketData
+domain: risk_models
+description: Barra BIMe Market Data | This table contains Barra GEM3 and USE4 Models market data.
+update_cadence: Thrice daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: In most cases, Code is a self-generated numeric value and is referred against a BarrId in underlying data.
+    In certain other cases, Code may have a more specific meaning. In these cases, Code is described in the field description
+    section.
+- name: ParentModel
+  type: SMALLINT
+  nullable: false
+  description: The Parent model code represents the combined model code for long and short horizons. For example, AUE4L model
+    code is 83 and AUE4S model code is 84 but both will share parent model code=73.
+- name: DataDate
+  type: date
+  nullable: false
+  description: DataDate is the year, month, and day of the data.
+- name: BidAskSpread
+  type: FLOAT
+  nullable: true
+  description: Daily bid/ask spread
+- name: ADBAS_30
+  type: FLOAT
+  nullable: true
+  description: Average daily bid/ask spread for the last 30 days
+- name: ADBAS_60
+  type: FLOAT
+  nullable: true
+  description: Average daily bid/ask spread for the last 60 days
+- name: ADBAS_90
+  type: FLOAT
+  nullable: true
+  description: Average daily bid/ask spread for the last 90 days
+- name: DlyVol
+  type: BIGINT
+  nullable: true
+  description: Daily trading volume
+- name: ADTV_30
+  type: FLOAT
+  nullable: true
+  description: Average daily trading volume (Rolling 30 calendar days)
+- name: ADTV_60
+  type: FLOAT
+  nullable: true
+  description: Average daily trading volume (Rolling 60 calendar days)
+- name: ADTV_90
+  type: FLOAT
+  nullable: true
+  description: Average daily trading volume (Rolling 90 calendar days)
+- name: ADPS
+  type: FLOAT
+  nullable: true
+  description: Average daily traded value (Rolling 30 calendar days)
+- name: CompVol
+  type: BIGINT
+  nullable: true
+  description: Daily composite volume. Only available for US and Japan
+- name: ADTCV_30
+  type: FLOAT
+  nullable: true
+  description: Average daily composite volume (Rolling 30 calendar days). Only available for US and Japan
+- name: ADTCV_60
+  type: FLOAT
+  nullable: true
+  description: Average daily composite volume (Rolling 60 calendar days). Only available for US and Japan
+- name: ADTCV_90
+  type: FLOAT
+  nullable: true
+  description: Average daily composite volume (Rolling 90 calendar days). Only available for US and Japan
+- name: ADTCA_30
+  type: FLOAT
+  nullable: true
+  description: Average daily composite value (Rolling 30 calendar days). Only available for US and Japan
+- name: IssuerMktCap
+  type: FLOAT
+  nullable: true
+  description: Daily issuer market capitalization
+- name: RelDate
+  type: date
+  nullable: true
+  description: The date the data was released. Use this field to locate final, corrected data. LSEG Quantitative Analytics
+    Database Schema for Barra 25
+---
+table: qa_barra.BaBimeModGlBeta
+domain: risk_models
+description: Barra BIMe Model Global Beta | This table contains global predicted beta data.
+update_cadence: Thrice daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: In most cases, Code is a self-generated numeric value and is referred against a BarrId in underlying data.
+    In certain other cases, Code may have a more specific meaning. In these cases, Code is described in the field description
+    section.
+- name: Model
+  type: SMALLINT
+  nullable: false
+  description: Model is the model code generated against each of the Barra model names. Model cross-references ModelShort
+    in BaBimeModels.
+- name: DataDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DataDate is the year, month, and day of the data.
+- name: GLBeta
+  type: FLOAT
+  nullable: true
+  description: GLBeta is the Global beta value.
+- name: RelDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: RelDate is the date the data was released. Use this field to locate final, corrected data.
+---
+table: qa_barra.BaUSNModAstExp
+domain: risk_models
+description: 'Barra US Model Asset Exposure | This table contains the asset exposure data for the models: USSLOW, USMED, and
+  USFAST data.'
+update_cadence: Thrice daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: In most cases, Code is a self-generated numeric value and is referred against a BarrId in underlying data.
+    In certain other cases, Code may have a more specific meaning. In these cases, Code is described in the field description
+    section.
+- name: ParentFactor
+  type: SMALLINT
+  nullable: false
+  description: The Parent factor code represents the combined factor code for long and short horizons. For example, GEM3L_SIZE
+    factor code is 3885 and GEM3S_SIZE factor code is 4085 but both will share parent factor GEM3_SIZE having code 20000.
+- name: DataDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DataDate is the year, month, and day of the data.
+- name: ParentModel
+  type: SMALLINT
+  nullable: false
+  description: The Parent model code represents the combined model code for long and short horizons. For example, AUE4L model
+    code is 83 and AUE4S model code is 84 but both will share parent model code=73.
+- name: Exposure
+  type: FLOAT
+  nullable: true
+  description: Exposure is the exposure value of the data. For example, where this relates to global factors, this is the
+    global factor exposure.
+- name: RelDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: RelDate is the date the data was released. Use this field to locate final, corrected data. LSEG Quantitative
+    Analytics Database Schema for Barra 26
+---
+table: qa_barra.BaGEMNModAstExp
+domain: risk_models
+description: Barra GEMN Model Asset Exposure | This table contains asset exposure data for the GEMLT model.
+update_cadence: Thrice daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: In most cases, Code is a self-generated numeric value and is referred against a BarrId in underlying data.
+    In certain other cases, Code may have a more specific meaning. In these cases, Code is described in the field description
+    section.
+- name: ParentFactor
+  type: SMALLINT
+  nullable: false
+  description: The Parent factor code represents the combined factor code for long and short horizons. For example, GEM3L_SIZE
+    factor code is 3885 and GEM3S_SIZE factor code is 4085 but both will share parent factor GEM3_SIZE having code 20000.
+- name: DataDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DataDate is the year, month, and day of the data.
+- name: ParentModel
+  type: SMALLINT
+  nullable: false
+  description: The Parent model code represents the combined model code for long and short horizons. For example, AUE4L model
+    code is 83 and AUE4S model code is 84 but both will share parent model code=73.
+- name: Exposure
+  type: FLOAT
+  nullable: true
+  description: Exposure is the exposure value of the data. For example, where this relates to global factors, this is the
+    global factor exposure.
+- name: RelDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: RelDate is the date the data was released. Use this field to locate final, corrected data.
+---
+table: qa_barra.BaEMM1ModAstExp
+domain: risk_models
+description: Barra EMM1 Model Asset Exposure | This table contains data on asset exposure for EMM1 model factor.
+update_cadence: Once daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: In most cases, Code is a self-generated numeric value and is referred against a BarrId in underlying data.
+    In certain other cases, Code may have a more specific meaning. In these cases, Code is described in the field description
+    section.
+- name: ParentFactor
+  type: SMALLINT
+  nullable: false
+  description: The Parent factor code represents the combined factor code for long and short horizons. For example, GEM3L_SIZE
+    factor code is 3885 and GEM3S_SIZE factor code is 4085 but both will share parent factor GEM3_SIZE having code 20000.
+- name: DataDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DataDate is the year, month, and day of the data.
+- name: Exposure
+  type: FLOAT
+  nullable: true
+  description: Exposure is the exposure value of the data. For example, where this relates to global factors, this is the
+    global factor exposure.
+- name: RelDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: RelDate is the date the data was released. Use this field to locate final, corrected data. LSEG Quantitative
+    Analytics Database Schema for Barra 27
+---
+table: qa_barra.BaUSDEEPModAstExp
+domain: risk_models
+description: Barra USDEEP Models Asset Exposure | This table contains data on asset exposure for USDEEP models.
+update_cadence: Once daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: In most cases, Code is a self-generated numeric value and is referred against a BarrId in underlying data.
+    In certain other cases, Code may have a more specific meaning. In these cases, Code is described in the field description
+    section.
+- name: ParentFactor
+  type: SMALLINT
+  nullable: false
+  description: The Parent factor code represents the combined factor code for long and short horizons. For example, GEM3L_SIZE
+    factor code is 3885 and GEM3S_SIZE factor code is 4085 but both will share parent factor GEM3_SIZE having code 20000.
+- name: DataDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DataDate is the year, month, and day of the data.
+- name: Exposure
+  type: FLOAT
+  nullable: true
+  description: Exposure is the exposure value of the data. For example, where this relates to global factors, this is the
+    global factor exposure.
+- name: RelDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: RelDate is the date the data was released. Use this field to locate final, corrected data.
+---
+table: qa_barra.BaUSSC4ModAstExp
+domain: risk_models
+description: Barra USSC4 Models Asset Exposure | This table contains data on asset exposure for USSC4 models.
+update_cadence: Once daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: In most cases, Code is a self-generated numeric value and is referred against a BarrId in underlying data.
+    In certain other cases, Code may have a more specific meaning. In these cases, Code is described in the field description
+    section.
+- name: ParentFactor
+  type: SMALLINT
+  nullable: false
+  description: The Parent factor code represents the combined factor code for long and short horizons. For example, GEM3L_SIZE
+    factor code is 3885 and GEM3S_SIZE factor code is 4085 but both will share parent factor GEM3_SIZE having code 20000.
+- name: DataDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DataDate is the year, month, and day of the data.
+- name: Exposure
+  type: FLOAT
+  nullable: true
+  description: Exposure is the exposure value of the data. For example, where this relates to global factors, this is the
+    global factor exposure.
+- name: RelDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: RelDate is the date the data was released. Use this field to locate final, corrected data.
+---
+table: qa_barra.BaEULTModAstExp
+domain: risk_models
+description: Barra EULT Models Asset Exposure | This table contains data on asset exposure for EULT models.
+update_cadence: Once daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: In most cases, Code is a self-generated numeric value and is referred against a BarrId in underlying data.
+    In certain other cases, Code may have a more specific meaning. In these cases, Code is described in the field description
+    section.
+- name: ParentFactor
+  type: SMALLINT
+  nullable: false
+  description: The Parent factor code represents the combined factor code for long and short horizons. For example, EULTL_SIZE
+    factor code is 6272 and EULTS_SIZE factor code is 6143 but both will share parent factor EULT_SIZE having code 21578.
+- name: DataDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DataDate is the year, month, and day of the data.
+- name: Exposure
+  type: FLOAT
+  nullable: true
+  description: Exposure is the exposure value of the data. For example, where this relates to global factors, this is the
+    global factor exposure.
+- name: RelDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: RelDate is the date the data was released. Use this field to locate final, corrected data. LSEG Quantitative
+    Analytics Database Schema for Barra 29 6 Barra BIMe Data – Covariance Subscription This chapter describes the Quantitative
+    Analytics database schema for Barra BIMe data that is available to Barra BIMe Covariance subscribers, and comes with any
+    model subscription.
+---
+table: qa_barra.BaBimeCovar
+domain: risk_models
+description: Barra BIMe Covariance | This table contains full factor covariance matrix data.
+update_cadence: Thrice daily
+columns:
+- name: Factor1
+  type: SMALLINT
+  nullable: false
+  description: Factor1 is the factor code of the first factor.
+- name: Factor2
+  type: SMALLINT
+  nullable: false
+  description: Factor2 is the factor code of the second factor.
+- name: Model1
+  type: SMALLINT
+  nullable: true
+  description: Model1 is the model code generated against each of the model names in Barra.
+- name: Model2
+  type: SMALLINT
+  nullable: true
+  description: Model2 is the model code generated against each of the model names in Barra. Use Model2 with Model1 to compare
+    factors from different models.
+- name: DataDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DataDate is the year, month, and day of the data.
+- name: VarCovar
+  type: FLOAT
+  nullable: true
+  description: VarCovar is the covariance between factor 1 and 2.
+- name: UnAdjCovar
+  type: FLOAT
+  nullable: true
+  description: Factor variance and covariance for all factors before Volatility Regime Adjustment or Optimization Bias Adjustment.
+- name: PreVRACovar
+  type: FLOAT
+  nullable: true
+  description: Factor variance and covariance for all factors before Volatility Regime Adjustment but after Optimization Bias
+    Adjustment.
+- name: RelDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: RelDate is the date the data was released. Use this field to locate final, corrected data.
+---
+table: qa_barra.BaBimePlCov
+domain: risk_models
+description: Barra BIMe Purely Local Covariance Matrix | This table contains scaled, purely local factor variances and covariances.
+  Local relationships are defined as
+update_cadence: Thrice daily
+columns:
+- name: Factor1
+  type: SMALLINT
+  nullable: false
+  description: Factor1 is the factor code of the first factor.
+- name: Factor2
+  type: SMALLINT
+  nullable: false
+  description: Factor2 is the factor code of the second factor.
+- name: Variance
+  type: FLOAT
+  nullable: true
+  description: Variance is the covariance between factors, or it is the variance if the factors match.
+- name: DataDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DataDate is the year, month, and day of the data.
+- name: RelDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: RelDate is the date the data was released. Use this field to locate final, corrected data. LSEG Quantitative
+    Analytics Database Schema for Barra Copyright © 2024 London Stock Exchange Group plc and its group of companies (LSEG)
+    and/or its affiliates. All rights reserved. The LSEG content received through this service is the intellectual property
+    of LSEG or its third party suppliers. Republication or redistribution of content provided by LSEG is expressly prohibited
+    without the prior written cons

@@ -1,0 +1,1488 @@
+table: qa_own_insider.OwnInvFndmntl
+domain: ownership
+description: Ownership Investor Fundamentals | This table contains fundamental consolidated portfolio information based on
+  owner holdings. | ModifiedDate datetime Y ModifiedDate is the date the table record was last updated with LSEG.
+update_cadence: Daily
+columns:
+- name: OwnerCode
+  type: INTEGER
+  nullable: false
+  description: OwnerCode is the unique identifier for an owner. It is defined by OwnInfo. This
+- name: PortfolioValue
+  type: FLOAT
+  nullable: true
+  description: PortfolioValue is the investor aggregate holdings value.
+- name: EPS3yrGrowth
+  type: FLOAT
+  nullable: true
+  description: EPS3yrGrowth is the three-year EPS growth.
+- name: Sales3yrGrowth
+  type: FLOAT
+  nullable: true
+  description: Sales3yrGrowth is the three-year sales growth.
+- name: EPS5yrProjected
+  type: FLOAT
+  nullable: true
+  description: EPS5yrProjected is the five-year projected EPS growth.
+- name: GrossMargin
+  type: FLOAT
+  nullable: true
+  description: GrossMargin is the gross margin of the owner’s portfolio.
+- name: LTDebtEquity
+  type: FLOAT
+  nullable: true
+  description: LTDebtEquity is the long-term debt or equity.
+- name: LTDebtCapital
+  type: FLOAT
+  nullable: true
+  description: LTDebtCapital is the long term debt or capital.
+- name: NetIncome
+  type: FLOAT
+  nullable: true
+  description: NetIncome is the net income of the portfolio.
+- name: NetMargin
+  type: FLOAT
+  nullable: true
+  description: NetMargin is the net margin of the portfolio.
+- name: OperatingMargin
+  type: FLOAT
+  nullable: true
+  description: OperatingMargin is the operating margin of the portfolio.
+- name: PEForward
+  type: FLOAT
+  nullable: true
+  description: PEForward is the P/E ratio, forward 12 months.
+- name: PETrailing
+  type: FLOAT
+  nullable: true
+  description: PETrailing is the P/E ratio, trailing 12 months.
+- name: PayoutRatio
+  type: FLOAT
+  nullable: true
+  description: PayoutRatio is the payout ratio.
+- name: PEGRatio
+  type: FLOAT
+  nullable: true
+  description: PEGRatio is the PEG (price/earnings to growth) ratio.
+- name: PriceToBook
+  type: FLOAT
+  nullable: true
+  description: PriceToBook is the price-to-book ratio.
+- name: PricetoSales
+  type: FLOAT
+  nullable: true
+  description: PricetoSales is the price-to-sales ratio.
+- name: Revenue
+  type: FLOAT
+  nullable: true
+  description: Revenue is the collective income.
+- name: ROA
+  type: FLOAT
+  nullable: true
+  description: ROA is the return on assets.
+- name: ROE
+  type: FLOAT
+  nullable: true
+  description: ROE is the return on equity.
+- name: Yield
+  type: FLOAT
+  nullable: true
+  description: Yield is the dividend yield.
+- name: ModifiedDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: 'ModifiedDate is the date the table record was last updated with LSEG. LSEG Quantitative Analytics Database
+    Schema for Ownership and Global Insider 8 3 Ownership Schema: Owner This diagram illustrates the relationship between
+    the Ownership Owner tables. LSEG Quantitative Analytics Database Schema for Ownership and Global Insider 9'
+---
+table: qa_own_insider.OwnAstAlloc
+domain: ownership
+description: Owner Asset Allocation
+update_cadence: Daily and Quarterly
+columns:
+- name: OwnerCode
+  type: INTEGER
+  nullable: false
+  description: OwnerCode is the unique identifier for an owner. It is defined by OwnInfo. This
+- name: AstTypeCode
+  type: INTEGER
+  nullable: false
+  description: AstTypeCode is the code that identifies the asset type. This field cross-references OwnCode where OwnCode.Type_
+    = 8 and OwnCode.Code = OwnAstAlloc.AstTypeCode.
+- name: AstRegionCode
+  type: INTEGER
+  nullable: false
+  description: AstRegionCode indicates the region for which asset allocation is reported. This OwnCode.Code = OwnAstAlloc.AstRegionCode.
+- name: AstCode
+  type: INTEGER
+  nullable: true
+  description: AstCode is the asset code identifier. This field cross-references OwnAstCode.
+---
+table: qa_own_insider.OwnAstCode
+domain: ownership
+description: Asset Range Information | The OwnAstCode table provides the lower and upper bounds associated with an asset.
+  Assets are indicated by
+update_cadence: Daily
+columns:
+- name: AstCode
+  type: INTEGER
+  nullable: false
+  description: AstCode is the asset code identifier. This field cross-references OwnAstAlloc.
+- name: Desc_
+  type: varchar(51)
+  nullable: true
+  description: Desc_ describes the asset range.
+- name: LB
+  type: INTEGER
+  nullable: true
+  description: LB is the lower boundary indicator. It describes the lower boundary of the asset allocation range. LB is stated
+    in millions.
+- name: UB
+  type: INTEGER
+  nullable: true
+  description: UB is the upper boundary indicator. It describes the upper boundary of the asset allocation range. UB is stated
+    in millions.
+---
+table: qa_own_insider.OwnCode
+domain: ownership
+description: Owner Codes (Integer) | This table contains translations for Codes of an integer datatype.
+update_cadence: Daily and Quarterly
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Type_ is a numeric code for a type of data.
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is a coded value for an element of Type_. When Type_ = 0, Code is the numeric code for each Type_ other
+    than 0 and Desc_ is a description of each Type_.
+- name: Desc_
+  type: varchar(51)
+  nullable: true
+  description: Desc_ is a plain-language description of the element defined by Type_ and Code. LSEG Quantitative Analytics
+    Database Schema for Ownership and Global Insider 10 See OwnDesc on page 11.
+---
+table: qa_own_insider.OwnCtrRegReln
+domain: ownership
+description: Country Global Regions | This table maps countries to global regions. Note that a single country may map to multiple
+  regions.
+update_cadence: Daily and Quarterly
+columns:
+- name: CtrCode
+  type: INTEGER
+  nullable: false
+  description: CtrCode is the country identifier. This field cross-references OwnCode where OwnCode.Type_ = 6 and OwnCode.Code
+    = OwnCtrRegReln.CtrCode.
+- name: RegionCode
+  type: INTEGER
+  nullable: false
+  description: RegionCode is the identifier for the global region. This field cross-references OwnCode where OwnCode.Type_
+    = 10 and OwnCode.Code = OwnCtrRegReln.RegionCode.
+---
+table: qa_own_insider.OwnData
+domain: ownership
+description: Historical Owner Statistics | Use this table to retrieve profile information about an owner’s portfolio, trading,
+  and turnover. | date because data in this table is collected from multiple sources.
+update_cadence: Daily and Quarterly
+columns:
+- name: OwnerCode
+  type: INTEGER
+  nullable: false
+  description: OwnerCode is the unique identifier for an owner. It is defined by OwnInfo. This field links to all Owner data
+    tables.
+- name: ReportDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: ReportDate is the most recent date of all reported holdings, formatted as YYYYMMDD. Note that report dates
+    at the holdings level may differ from this date because data in this table is collected from multiple sources.
+- name: AstFlgCode
+  type: char(1)
+  nullable: true
+  description: AstFlgCode is the Asset flag. AstFlgCode indicates whether the Total Equity Assets value is calculated (C)
+    or surveyed (S). AstFlgCode cross-references OwnDesc where OwnDesc.Type_ = 3 and OwnDesc.Code = OwnData.AstFlgCode.
+- name: TORateCode
+  type: INTEGER
+  nullable: true
+  description: TORateCode is the turnover rating code which is a qualitative indicator of turnover value. This field cross-references
+    OwnCode where OwnCode.Type_ = 4 and OwnCode.Code = OwnData.TORateCode.
+- name: SecHeld
+  type: BIGINT
+  nullable: true
+  description: SecHeld indicates the number of securities held by an owner as of the report date.
+- name: SecBought
+  type: BIGINT
+  nullable: true
+  description: SecBought indicates the number of securities purchased, when compared to the previous portfolio.
+- name: SecSold
+  type: BIGINT
+  nullable: true
+  description: SecSold indicates the number of securities sold, when compared to the previous portfolio.
+- name: PriorReportDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: PriorReportDate is the most recent prior holdings report date, formatted as YYYYMMDD. Note that report dates
+    at the holdings level may differ from this date because data in this table is collected from multiple sources.
+- name: ModifiedDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: ModifiedDate is the date the record was last updated with LSEG. LSEG Quantitative Analytics Database Schema
+    for Ownership and Global Insider 11
+---
+table: qa_own_insider.OwnDesc
+domain: ownership
+description: Owner Codes (varchar) | This table contains translations for Codes of varchar datatype.
+update_cadence: Daily and Quarterly
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Type_ is a numeric code for a type of data.
+- name: Code
+  type: varchar(11)
+  nullable: false
+  description: Code is a coded value for an element of Type_. When Type_ = 0, Code is the numeric code for each Type_ other
+    than 0 and Desc_ is a description of each Type_.
+- name: Desc_
+  type: varchar(51)
+  nullable: true
+  description: Desc_ is a plain-language description of the element defined by Type_ and Code. See OwnCode on page 9 and Examples
+    on page 32.
+---
+table: qa_own_insider.OwnEqData
+domain: ownership
+description: Owner Equity Data | This table contains the numeric profile information about an owner’s portfolio, trading,
+  equity assets, and turnover. | ModifiedDate datetime Y ModifiedDate is the date the table record was last updated with LSEG.
+update_cadence: Daily and Quarterly
+columns:
+- name: OwnerCode
+  type: INTEGER
+  nullable: false
+  description: OwnerCode is the unique identifier for an owner. It is defined by OwnInfo. This
+- name: TotEqAssets
+  type: FLOAT
+  nullable: true
+  description: TotEqAssets is the total equity value of the owner, if available. If the total equity value of the owner is
+    not available, then this field reports surveyed assets.
+- name: ToValue
+  type: FLOAT
+  nullable: true
+  description: ToValue is the turnover value. Turnover value is the measure of an owner's trading activity relative to its
+    assets.
+- name: ModifiedDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: ModifiedDate is the date the table record was last updated with LSEG.
+---
+table: qa_own_insider.OwnFundTic
+domain: ownership
+description: Ownership Mutual Fund Tickers | Use this table to identify mutual fund ticker symbols. A single mutual fund may
+  have multiple fund tickers
+update_cadence: Daily and Quarterly
+columns:
+- name: OwnerCode
+  type: INTEGER
+  nullable: false
+  description: OwnerCode is the unique identifier for an owner. It is defined by OwnInfo. This field links to all Owner data
+    tables.
+- name: TicSymbol
+  type: varchar(11)
+  nullable: false
+  description: TicSymbol is the ticker symbol for the mutual fund. LSEG Quantitative Analytics Database Schema for Ownership
+    and Global Insider 12
+---
+table: qa_own_insider.OwnInfo
+domain: ownership
+description: Owner Information | This table contains owner information such as address, phone, region, and status. This table
+  is also part of the
+update_cadence: Daily and Quarterly
+columns:
+- name: OwnerCode
+  type: INTEGER
+  nullable: false
+  description: OwnerCode is the unique identifier for an owner. This field links to all Owner data tables.
+- name: OwnerName
+  type: varchar(61)
+  nullable: true
+  description: OwnerName is the name of the owner.
+- name: Address1
+  type: varchar(51)
+  nullable: true
+  description: Address1 is the first line of the owner’s address.
+- name: Address2
+  type: varchar(51)
+  nullable: true
+  description: Address2 is the second line of the owner’s address.
+- name: Address3
+  type: varchar(51)
+  nullable: true
+  description: Address3 is the third line of the owner’s address.
+- name: City
+  type: varchar(51)
+  nullable: true
+  description: City is the city of the owner’s address.
+- name: CarsGeoCode
+  type: varchar(11)
+  nullable: true
+  description: CarsGeoCode is the Carson Code (Geo ID) of the owner. This code is a unique identifier that comes from the
+    legacy GEO (Global Equity Online) database. This code is not produced by Ownership.
+- name: Zip
+  type: varchar(17)
+  nullable: true
+  description: Zip is the postal code of the owner’s address.
+- name: Phone
+  type: varchar(51)
+  nullable: true
+  description: Phone is the main phone number of the owner.
+- name: Fax
+  type: varchar(51)
+  nullable: true
+  description: Fax is the main fax number of the owner.
+- name: URL
+  type: varchar(101)
+  nullable: true
+  description: URL is URL for the owner’s Web site.
+- name: BuySellSide
+  type: varchar(11)
+  nullable: true
+  description: (Reserved for future use.)
+- name: OwnerPermid
+  type: INTEGER
+  nullable: true
+  description: (Reserved for future use.)
+- name: OwnTypeCode
+  type: INTEGER
+  nullable: true
+  description: OwnTypeCode is the owner type identifier. This field cross-references OwnCode where OwnCode.Type_ = 16 and
+    OwnCode.Code = OwnInfo.OwnTypeCode.
+- name: MetroAreaCode
+  type: INTEGER
+  nullable: true
+  description: MetroAreaCode is the identifier for the metropolitan area of an owner. This field cross-references OwnCode
+    where OwnCode.Type_ = 14 and OwnCode.Code = OwnInfo.MetroAreaCode.
+- name: StateCode
+  type: varchar(3)
+  nullable: true
+  description: StateCode is the state identifier for the owner. This field cross-references OwnDesc where OwnDesc.Type_ =
+    2 and OwnDesc.Code = OwnInfo.StateCode.
+- name: ProvinceCode
+  type: INTEGER
+  nullable: true
+  description: ProvinceCode is the province identifier for the owner. This field cross- references OwnCode where OwnCode.Type_
+    = 12 and OwnCode.Code = OwnInfo.ProvinceCode.
+- name: USRegionCode
+  type: INTEGER
+  nullable: true
+  description: USRegionCode is the identifier of the U.S. geographic region for the owner. This field cross-references OwnCode
+    where OwnCode.Type_ = 9 and OwnCode.Code = OwnInfo.USRegionCode.
+- name: CtrCode
+  type: INTEGER
+  nullable: true
+  description: CtrCode is the country identifier of the owner. This field cross-references OwnCode where OwnCode.Type_ = 6
+    and OwnCode.Code = OwnInfo.CtrCode.
+- name: P_OwnerCode
+  type: INTEGER
+  nullable: true
+  description: P_OwnerCode is the OwnerCode of the parent owner or institution.
+- name: StatusCode
+  type: varchar(6)
+  nullable: true
+  description: StatusCode describes the current status of the owner. Y indicates that the owner is currently tracked and researched,
+    and N indicates that the owner is not currently tracked.
+- name: OrientCode
+  type: char(1)
+  nullable: true
+  description: OrientCode describes the investment orientation. The orientation may be Active (A) or Passive (P). OrientCode
+    cross-references OwnDesc where OwnDesc.Type_ = 1 and OwnDesc.Code = OwnInfo.OrientCode.
+- name: OwnStyleCode
+  type: INTEGER
+  nullable: true
+  description: OwnStyleCode is the unique investment style identifier of the owner. This OwnCode.Code = OwnInfo.OwnStyleCode.
+- name: CIKCode
+  type: varchar(11)
+  nullable: true
+  description: CIKCode is the Central Index Key. (This field is not currently populated.) LSEG Quantitative Analytics Database
+    Schema for Ownership and Global Insider 13 See Examples on page 32.
+---
+table: qa_own_insider.OwnProfCode
+domain: ownership
+description: Owner Profile Information | This table contains owner profile information about institutional owners, including
+  investment approach and
+update_cadence: Daily
+columns:
+- name: OwnerCode
+  type: INTEGER
+  nullable: false
+  description: OwnerCode is the unique identifier for an owner. It is defined by OwnInfo. This field links to all Owner data
+    tables.
+- name: ProfTypeCode
+  type: INTEGER
+  nullable: false
+  description: ProfTypeCode identifies the owner profile section type, such as Affiliations or Investment Approach. This field
+    cross-references OwnCode where OwnCode.Type_ = 5 and OwnCode.Code = OwnProfCode.ProfTypeCode.
+- name: ProfileText
+  type: varchar(max)
+  nullable: true
+  description: ProfileText is the text from the owner Profile section. Carriage returns are indicated by the caret ( ^ ) character.
+---
+table: qa_own_insider.OwnSecMap
+domain: ownership
+description: Owner and Security Mapping Information | This table contains owner and security mapping information. | The factor
+  table you should use is indicated by FeedType. For example, if OwnHoldDet.FeedType = D, this
+update_cadence: 'OwnSecCumAdjFactD: Daily'
+columns:
+- name: OwnerCode
+  type: INTEGER
+  nullable: false
+  description: OwnerCode is the unique identifier for an owner. It is defined by OwnInfo. This field links to all Owner data
+    tables.
+- name: SecurityCode
+  type: INTEGER
+  nullable: false
+  description: SecurityCode is the unique identifier for a security. This field links to all Security data tables.
+- name: CUSIP
+  type: varchar(9)
+  nullable: true
+  description: CUSIP is the security CUSIP.
+- name: Sedol
+  type: varchar(7)
+  nullable: true
+  description: Sedol is the security SEDOL.
+- name: ISIN
+  type: varchar(12)
+  nullable: true
+  description: 'ISIN is the security ISIN. LSEG Quantitative Analytics Database Schema for Ownership and Global Insider 14
+    4 Ownership Schema: Security This diagram illustrates the relationship between the Ownership Security tables. PK SecurityCode
+    int CUSIP varchar(10) Sedol varchar(8) ISIN varchar(13) CINS varchar(13) SecPermId int TicSym varchar(13) SecName varchar(76)
+    SecDesc_ varchar(51) SecClsCode(DT) varchar(4) SecStyCode int FK1 IndustryCode int IssCtrCode int IssuedDate datetime
+    MarketCapCatCode int P_'
+---
+table: qa_own_insider.OwnSecCumAdjFactQ
+domain: ownership
+description: Quarterly
+---
+table: qa_own_insider.OwnSecCumAdjFactW
+domain: ownership
+description: Weekly | The ratio table you should refer to is indicated by FeedType. For example, if OwnSecData.FeedType =
+  D, this | table (OwnSecCumAdjRationD) for the latest cumulative ratio value.
+update_cadence: 'OwnSecCumAdjRatioD: Daily'
+columns:
+- name: SecurityCode
+  type: INTEGER
+  nullable: false
+  description: SecurityCode is the unique identifier for a security. It is defined by OwnSecInfo. This
+- name: CumFact
+  type: FLOAT
+  nullable: true
+  description: 'CumFact is the cumulative factor to apply to the security based on all historical splits and corporate actions.
+    Because the factor value takes into account the differences in the frequency of the feeds, this figure may be different
+    depending on whether you are viewing the daily, weekly, or quarterly data. See OwnSecData on page 16 and OwnHoldDet on
+    page 21. OwnSecCumAdjRatio*: Corporate Actions Cumulative History These tables capture the cumulative history of the corporate
+    actions for one or mor'
+---
+table: qa_own_insider.OwnSecCumAdjRatioQ
+domain: ownership
+description: Quarterly
+---
+table: qa_own_insider.OwnSecCumAdjRatioW
+domain: ownership
+description: Weekly
+columns:
+- name: SecurityCode
+  type: INTEGER
+  nullable: false
+  description: SecurityCode is the unique identifier for a security. It is defined by OwnSecInfo. This field links to all
+    Security data tables.
+- name: EventDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: EventDate is the date of the split or the corporate action. LSEG Quantitative Analytics Database Schema for
+    Ownership and Global Insider 16
+- name: Ratio
+  type: FLOAT
+  nullable: true
+  description: Ratio is the split factor.
+- name: CumRatio
+  type: FLOAT
+  nullable: true
+  description: CumRatio is the cumulative value of all splits for a given security. It is calculated in chronological order
+    by event date. See OwnSecData on page 16 and OwnHoldDet on page 21.
+---
+table: qa_own_insider.OwnSecData
+domain: ownership
+description: Security Numeric Data | This table contains security-related numeric and time series data. The data in this table
+  is adjusted for corporate | OwnSecFData table where DataItemCode = 1 (share price). | ModifiedDate datetime Y ModifiedDate
+  is the date the table record was last updated with LSEG.
+update_cadence: Daily and Quarterly
+columns:
+- name: SecurityCode
+  type: INTEGER
+  nullable: false
+  description: SecurityCode is the unique identifier for a security. It is defined by OwnSecInfo. This field links to all
+    Security data tables.
+- name: PriceDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: PriceDate is the date of the reported share price for a given security, formatted as YYYYMMDD.
+- name: SharePrice
+  type: FLOAT
+  nullable: true
+  description: 'SharePrice is the price per share. Prices are split adjusted. Note: This field is no longer populated. Instead
+    of this field, use the OwnSecFData table where DataItemCode = 1 (share price).'
+- name: ShareOut
+  type: FLOAT
+  nullable: true
+  description: ShareOut is the number of shares outstanding for the security, as of the share pricing date or corporate actions
+    date.
+- name: TradCtrCode
+  type: INTEGER
+  nullable: true
+  description: TradCtrCode is the primary trading country identifier for the security. This OwnCode.Code = OwnSecData.TradCtrCode.
+- name: ExchCode
+  type: varchar(4)
+  nullable: true
+  description: ExchCode indicates the primary exchange for a security, on the share price date. This field cross-references
+    OwnDesc where OwnDesc.Type_ = 6 and OwnDesc.Code = OwnSecData.ExchCode.
+- name: LatHoldDat
+  type: TIMESTAMP(6)
+  nullable: true
+  description: LatHoldDat is the latest date for which this security has a portfolio holding.
+- name: ADROrdRatio
+  type: FLOAT
+  nullable: true
+  description: ADROrdRatio is the number of shares represented by one ADR (American Depository Receipt) of its underlying
+    security. For example, a value of 10 means that one ADR share represents 10 shares of the underlying security.
+- name: FreeFloat
+  type: FLOAT
+  nullable: true
+  description: (Reserved for future use.)
+- name: FFAsPctShrOut
+  type: FLOAT
+  nullable: true
+  description: FFAsPctShrOut is the FreeFloat as a percent of shares outstanding. (This
+- name: MarketCap
+  type: FLOAT
+  nullable: true
+  description: MarketCap is the market capitalization of the security, stated in USD as of the share pricing or corporate
+    action date. Market capitalization is price multiplied by shares outstanding.
+- name: FeedType
+  type: char(1)
+  nullable: true
+  description: FeedType identifies the last feed that updated this record. Feeds may be Daily (D), Weekly (W), or Quarterly
+    (Q).
+- name: ModifiedDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: ModifiedDate is the date the table record was last updated with LSEG. LSEG Quantitative Analytics Database
+    Schema for Ownership and Global Insider 17
+---
+table: qa_own_insider.OwnSecFData
+domain: ownership
+description: Historical Pricing and Shares Outstanding | This table contains end-of-month price history and end-of-quarter
+  shares outstanding history for securities.
+update_cadence: Weekly and Quarterly
+columns:
+- name: SecurityCode
+  type: INTEGER
+  nullable: false
+  description: SecurityCode is the unique identifier for a security. This field links to all Security data tables.
+- name: DataItemCode
+  type: INTEGER
+  nullable: false
+  description: 'DataItemCode is the data item code: – 1 = share price (monthly price per share) – 2 = shares outstanding (quarterly
+    shares outstanding for the security) This field cross-references OwnCode.Code where OwnCode.Type_ = 25.'
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date is the date for which the value is applicable.
+- name: Value
+  type: FLOAT
+  nullable: true
+  description: Value is the value of the item on the date specified in the Date_ field.
+- name: FeedType
+  type: char(1)
+  nullable: true
+  description: 'FeedType determines which adjustment factor is used to retrieve adjusted data: – Q = quarterly – W = weekly'
+---
+table: qa_own_insider.OwnSecIdent
+domain: ownership
+description: Industry-Standard Security Identifiers | This table contains industry-standard security identifiers, including
+  CINS/CUSIP, SEDOL, and ISIN.
+update_cadence: Daily and Quarterly
+columns:
+- name: SecurityCode
+  type: INTEGER
+  nullable: false
+  description: SecurityCode is the unique identifier for a security. This field links to all Security data tables.
+- name: IdentType
+  type: INTEGER
+  nullable: false
+  description: IdentType indicates the type of identifier contained in the IdentValue field. – 1 = CINS/CUSIP – 2 = SEDOL
+    – 3 = ISIN This field cross-references with OwnCode.Code where OwnCode.Type_ = 26.
+- name: SeqNum
+  type: INTEGER
+  nullable: false
+  description: SeqNum is used to incorporate multiple values for a given identifier and a given security. For example, if
+    TRDW receives multiple SEDOLs for a single security, TRDW stores the SEDOLs with a sequence number (SeqNum 1, 2, 3, and
+    so on).
+- name: IdentValue
+  type: varchar(30)
+  nullable: true
+  description: IdentValue is the industry security ID. The type of identifier (CUSIP, SEDOL, or ISIN) is indicated by the
+    IdentType field. This is the alternative ID for security search. LSEG Quantitative Analytics Database Schema for Ownership
+    and Global Insider 18
+join_hints:
+- to: OwnCode
+  evidence: IdentType int N IdentType indicates the type of identifier contained in the IdentValue field. – 1 = CINS/CUSIP
+    – 2 = SEDOL – 3 = ISIN This field cross-references with OwnCode.Code where OwnCode.Type_ = 26.
+  type: cross_reference
+---
+table: qa_own_insider.OwnSecInfo
+domain: ownership
+description: Security Information | This table contains descriptive data associated with a given security. This table is also
+  part of the Insider schema.
+update_cadence: Daily and Quarterly
+columns:
+- name: SecurityCode
+  type: INTEGER
+  nullable: false
+  description: SecurityCode is the unique identifier for a security. This field links to all Security data tables.
+- name: CUSIP
+  type: varchar(10)
+  nullable: true
+  description: CUSIP is the security CUSIP.
+- name: Sedol
+  type: varchar(8)
+  nullable: true
+  description: Sedol is the security SEDOL.
+- name: ISIN
+  type: varchar(13)
+  nullable: true
+  description: ISIN is the security ISIN.
+- name: CINS
+  type: varchar(13)
+  nullable: true
+  description: CINS is the unique identifier for foreign securities.
+- name: SecPermId
+  type: INTEGER
+  nullable: true
+  description: SecPermId is the GEM PermID. This field is not currently populated.
+- name: TicSym
+  type: varchar(13)
+  nullable: true
+  description: TicSym is the security ticker symbol.
+- name: SecName
+  type: varchar(76)
+  nullable: true
+  description: SecName is the name of the security including the name of the issuing company.
+- name: SecDesc_
+  type: varchar(51)
+  nullable: true
+  description: SecDesc_ indicates whether the security is described as common (Com), or whether the security has a different
+    description.
+- name: SecClsCode
+  type: varchar(4)
+  nullable: true
+  description: SecClsCode is the broad class of the security. This field cross- references OwnDesc.Code where OwnDesc.Type_
+    = 5.
+- name: SecStyCode
+  type: INTEGER
+  nullable: true
+  description: (Reserved for future use.)
+- name: IndustryCode
+  type: INTEGER
+  nullable: true
+  description: IndustryCode is the primary industry identifier for the security. This field cross-references OwnSecSectorCode.
+- name: IssCtrCode
+  type: INTEGER
+  nullable: true
+  description: IssCtrCode is the issuer country code. It indicates the country from which the security was issued. This field
+    cross-references OwnCode.Code where OwnCode.Type_ = 6.
+- name: IssuedDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: IssuedDate is the date the security was issued, in the format YYYYMMDD.
+- name: MarketCapCatCode
+  type: INTEGER
+  nullable: true
+  description: MarketCapCatCode is the market capitalization of the security, stated in USD as of the share pricing or corporate
+    action date. Market capitalization is price multiplied by shares outstanding.
+- name: P_SecCode
+  type: INTEGER
+  nullable: true
+  description: P_SecCode is the Parent of the SecurityCode. This field is not currently populated.
+- name: ADROrdSecID
+  type: INTEGER
+  nullable: true
+  description: ADROrdSecID is the identifier of the ADR’s underlying security.
+- name: TSE33IndustryCode
+  type: INTEGER
+  nullable: true
+  description: (Reserved for future use.)
+- name: ExchCode
+  type: varchar(4)
+  nullable: true
+  description: ExchCode indicates the recent primary exchange for a security. This
+- name: CUSIPChkDgt
+  type: char(1)
+  nullable: true
+  description: CUSIPChkDgt is the ninth character of the CUSIP field. This character serves as a check digit for the first
+    eight characters.
+- name: SEDOLChkDgt
+  type: char(1)
+  nullable: true
+  description: SEDOLChkDgt is the seventh character of a SEDOL field. This character serves as a check digit for the first
+    six characters.
+- name: StopDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: StopDate is the date on which the security stopped trading, in the format YYYYMMDD.
+- name: IssuerCode
+  type: INTEGER
+  nullable: true
+  description: IssuerCode is the identifier for the issuing company. IssuerCode cross- references OwnSecIssuer.
+- name: Active
+  type: char(1)
+  nullable: true
+  description: Active is a flag identifying whether the security is active (Y) or inactive (N). See Examples on page 32. LSEG
+    Quantitative Analytics Database Schema for Ownership and Global Insider 19
+---
+table: qa_own_insider.OwnSecIssuer
+domain: ownership
+description: Security Issuer Information | Use this table to retrieve information about the issuer of a security.
+update_cadence: Daily
+columns:
+- name: IssuerCode
+  type: INTEGER
+  nullable: false
+  description: IssuerCode is the identifier for the issuing company.
+- name: IssuerName
+  type: varchar(76)
+  nullable: true
+  description: IssuerName is the name of the issuer of the security. This field translates IssuerCode.
+- name: CtrCode
+  type: INTEGER
+  nullable: true
+  description: CtrCode is the country identifier. This field cross-references OwnCode.Code where OwnCode.Type_ = 6.
+- name: IndustryCode
+  type: INTEGER
+  nullable: true
+  description: IndustryCode is the primary industry identifier for the security. This
+- name: IssuerPermId
+  type: INTEGER
+  nullable: true
+  description: (Reserved for future use.)
+- name: PrimaryExchangeCode
+  type: INTEGER
+  nullable: true
+  description: (Reserved for future use.)
+- name: PrimaryTickerSymbol
+  type: varchar(13)
+  nullable: true
+  description: (Reserved for future use.) See Examples on page 32.
+---
+table: qa_own_insider.OwnSecSectorCode
+domain: ownership
+description: Security Sector Information | Use this table to retrieve security industry, sector, and macro sector information.
+update_cadence: Daily and Quarterly
+columns:
+- name: IndustryCode
+  type: INTEGER
+  nullable: false
+  description: IndustryCode is the primary industry identifier for the security.
+- name: IndDesc_
+  type: varchar(51)
+  nullable: true
+  description: IndDesc_ is the description of the industry. This field translates IndustryCode.
+- name: SecCode
+  type: INTEGER
+  nullable: true
+  description: SecCode is the sector code. This field is translated by SecDesc_.
+- name: SecDesc_
+  type: varchar(51)
+  nullable: true
+  description: SecDesc_ is the description of the business sector. This field translates SecCode.
+- name: MacSecCode
+  type: INTEGER
+  nullable: true
+  description: MacSecCode is the unique identifier for the macro sector. This field is translated by MacSecDesc_.
+- name: MacSecDesc_
+  type: varchar(51)
+  nullable: true
+  description: 'MacSecDesc_ translates MacSecCode. It is the description of the macro sector. LSEG Quantitative Analytics
+    Database Schema for Ownership and Global Insider 20 5 Ownership Schema: Holdings This diagram illustrates how the Ownership
+    Holdings table, OwnHoldDet, relates to OwnInfo and OwnSecInfo. PK,FK1 OwnerCode int PK,FK2 SecurityCode int PK ReportDate
+    datetime PK QtrDate datetime PK HldgType(CT) int FlgSrcCode int TranCode(DT) varchar(3) SharesHeld bigint ValueHeld float
+    SharesChg bigint ValueChg '
+---
+table: qa_own_insider.OwnHoldCF
+domain: ownership
+description: Carry Forward and Next Report Dates | This table contains quarter-end carry forward and next report dates.
+update_cadence: Daily/Weekly/Quarterly
+columns:
+- name: OwnerCode
+  type: INTEGER
+  nullable: false
+  description: OwnerCode is the unique identifier for an owner. It is defined by OwnInfo. This field links to all Owner data
+    tables.
+- name: SecurityCode
+  type: INTEGER
+  nullable: false
+  description: SecurityCode is the unique identifier for a security. It is defined by OwnSecInfo. This field links to all
+    Security data tables.
+- name: ReportDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: ReportDate is the date on which holdings were reported.
+- name: QtrDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: QtrDate is the end date of the reporting quarter. LSEG Quantitative Analytics Database Schema for Ownership
+    and Global Insider 21
+- name: HldgType
+  type: INTEGER
+  nullable: false
+  description: 'HldgType is the category of the holding: – 1 = CONS (consolidated) – 2 = Inst (institutional) – 3 = MF (mutual
+    fund) This field cross-references OwnCode.Code where OwnCode.Type_ = 20.'
+- name: FlgSrcCode
+  type: INTEGER
+  nullable: true
+  description: FlgSrcCode indicates the reporting source. This field cross-references OwnCode.Code where OwnCode.Type_ = 11.
+- name: CFQtrDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: CFQtrDate is the quarter-end date to which the position can carry forward.
+- name: NxtReportDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: NxtReportDate is the quarter-end of the next reported filing date. For the latest available record, NxtReportDate
+    will be 2079-01-01.
+---
+table: qa_own_insider.OwnHoldDet
+domain: ownership
+description: Owner Holdings Detail | This table contains an owner's security-level holdings data. The data in this table is
+  compiled from a variety of | FeedType char(1) Y FeedType indicates which table (D = OwnSecCumAdjFactD, W = | ModifiedDate
+  datetime Y ModifiedDate is the date the table record was last updated with LSEG.
+update_cadence: Daily, Weekly and Quarterly
+columns:
+- name: OwnerCode
+  type: INTEGER
+  nullable: false
+  description: OwnerCode is the unique identifier for an owner. It is defined by OwnInfo. This field links to all Owner data
+    tables.
+- name: SecurityCode
+  type: INTEGER
+  nullable: false
+  description: SecurityCode is the unique identifier for a security. It is defined by OwnSecInfo. This field links to all
+    Security Data tables.
+- name: ReportDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: ReportDate is the date on which holdings were reported.
+- name: QtrDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: QtrDate is the end date of the reporting quarter.
+- name: HldgType
+  type: INTEGER
+  nullable: false
+  description: 'HldgType is the category of the holding: – 1 = CONS (consolidated) – 2 = Inst (institutional) – 3 = MF (mutual
+    fund) This field cross-references OwnCode.Code where OwnCode.Type_ = 20.'
+- name: FlgSrcCode
+  type: INTEGER
+  nullable: true
+  description: FlgSrcCode indicates the reporting source. FlgSrcCode cross- references OwnCode where OwnCode.Type_ = 11 and
+    OwnCode.Code = OwnHoldDet.FlgSrcCode.
+- name: TranCode
+  type: varchar(3)
+  nullable: true
+  description: TranCode is the holdings transaction code. TranCode cross-references OwnDesc where OwnDesc.Type_ = 4 and OwnDesc.Code
+    = OwnHoldDet.TranCode.
+- name: SharesHeld
+  type: BIGINT
+  nullable: true
+  description: SharesHeld is the number of shares held as of the report date.
+- name: ValueHeld
+  type: FLOAT
+  nullable: true
+  description: ValueHeld is the dollar value of the shares held.
+- name: SharesChg
+  type: BIGINT
+  nullable: true
+  description: SharesChg is number of shares changed between the report date and the prior report date. LSEG Quantitative
+    Analytics Database Schema for Ownership and Global Insider 22
+- name: ValueChg
+  type: FLOAT
+  nullable: true
+  description: ValueChg is the dollar value of the shares changed.
+- name: NewPosition
+  type: char(1)
+  nullable: true
+  description: NewPosition indicates whether the position is new to the owner’s portfolio since the prior report date. New
+    positions are flagged with a Y.
+- name: PctShareOutstanding
+  type: FLOAT
+  nullable: true
+  description: PctShareOutstanding is the number of shares held, represented as a percentage of the issue’s total shares outstanding.
+    When this data is unavailable, the value of this field may be blank or null, even if the shares held in the record are
+    non-zero.
+- name: PriorReportDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: PriorReportDate is the date of the prior report in which the holdings were reported, in the format YYYYMMDD.
+- name: FeedType
+  type: char(1)
+  nullable: true
+  description: FeedType indicates which table (D = OwnSecCumAdjFactD, W = OwnSecCumAdjFactW, and Q = OwnSecCumAdjFactQ) should
+    be used for adjustment. Additionally, FeedType indicates which type of update last modified this record.
+- name: ModifiedDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: 'ModifiedDate is the date the table record was last updated with LSEG. See Examples on page 32. LSEG Quantitative
+    Analytics Database Schema for Ownership and Global Insider 23 6. Ownership Schema: Contacts Data This diagram illustrates
+    how the Ownership Contacts tables relate to each other. PK,FK1 ContactCode int PK,FK2 SpecCode int PK,FK1 ContactCode
+    int Bio nvarchar PK ContactCode int FirstName varchar(30) LastName varchar(36) MiddleInitial varchar(8) Honorific varchar(16)
+    Suffix varchar(4) Gen'
+---
+table: qa_own_insider.OwnConSpCode
+domain: ownership
+columns:
+- name: SpecCode
+  type: INTEGER
+  nullable: false
+  description: SpecCode is the unique code that identifies the contact’s specialty.
+- name: Desc_
+  type: varchar(51)
+  nullable: true
+  description: Desc_ describes SpecCode.
+- name: SpecCatCode
+  type: INTEGER
+  nullable: false
+  description: SpecCatCode identifies the category of the specialty. SpecCatCode cross- references OwnCode where OwnCode.Type_
+    = 1 and OwnCode.Code = OwnConSpCode.SpecCatCode.
+- name: P_SpecCode
+  type: INTEGER
+  nullable: true
+  description: (Reserved for future use.) LSEG Quantitative Analytics Database Schema for Ownership and Global Insider 26
+---
+table: qa_own_insider.OwnCon
+domain: ownership
+description: Contact Employment Information | Use this table to retrieve contact employment information. Contact employment
+  information is useful in defining
+update_cadence: Daily
+columns:
+- name: OwnerCode
+  type: INTEGER
+  nullable: false
+  description: OwnerCode is the unique identifier for an owner. It is defined by OwnInfo. This field links to all Owner data
+    tables.
+- name: ContactCode
+  type: INTEGER
+  nullable: false
+  description: ContactCode is the unique identifier for a contact. It is defined by OwnConInfo. This field links to all Contacts
+    Data tables. LSEG Quantitative Analytics Database Schema for Ownership and Global Insider 24
+- name: ContactJobCode
+  type: INTEGER
+  nullable: false
+  description: ContactJobCode identifies the job or role of a contact. ContactJobCode cross-references OwnCode where OwnCode.Type_
+    = 2 and OwnCode.Code = OwnCon.ContactJobCode.
+- name: JobTitleDesc
+  type: varchar(51)
+  nullable: true
+  description: JobTitleDesc is the contact’s professional job title.
+---
+table: qa_own_insider.OwnConAddress
+domain: ownership
+description: Contact Addresses | Use this table to retrieve a contact’s address information. Note that a contact may have
+  more than one address. | ModifiedDate datetime N ModifiedDate is the date the table record was last updated with LSEG.
+update_cadence: Daily
+columns:
+- name: ContactCode
+  type: INTEGER
+  nullable: false
+  description: ContactCode is the unique identifier for a contact. It is defined by OwnConInfo. This field links to all Contacts
+    Data tables.
+- name: AddTypeCode
+  type: INTEGER
+  nullable: false
+  description: AddTypeCode indicates the type of address. AddTypeCode cross- references OwnCode where OwnCode.Type_ = 3 and
+    OwnCode.Code = OwnConAddress.AddTypeCode.
+- name: ModifiedDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: ModifiedDate is the date the table record was last updated with LSEG.
+- name: Address1
+  type: varchar(51)
+  nullable: true
+  description: Address1 is the first line of the address.
+- name: Address2
+  type: varchar(51)
+  nullable: true
+  description: Address2 is the second line of the address.
+- name: Address3
+  type: varchar(51)
+  nullable: true
+  description: Address3 is the third line of the address.
+- name: City
+  type: varchar(51)
+  nullable: true
+  description: City is the city of the contact address.
+- name: StateCode
+  type: varchar(3)
+  nullable: true
+  description: StateCode is the state of the contact address.
+- name: ProvinceCode
+  type: INTEGER
+  nullable: true
+  description: ProvinceCode is the province code of the address. This field cross- references OwnCode where OwnCode.Type_
+    = 12 and OwnCode.Code = OwnConAddress.ProvinceCode.
+- name: CountryCode
+  type: INTEGER
+  nullable: true
+  description: CountryCode is the country identifier. This field cross-references OwnCode where OwnCode.Type_ = 6 and OwnCode.Code
+    = OwnConAddress.CountryCode.
+- name: Zip
+  type: varchar(17)
+  nullable: true
+  description: Zip is the postal code for the contact address.
+- name: MetroAreaCode
+  type: INTEGER
+  nullable: true
+  description: MetroAreaCode is the identifier for the metropolitan area of a contact. This OwnCode.Code = OwnConAddress.MetroAreaCode.
+---
+table: qa_own_insider.OwnConBio
+domain: ownership
+description: Contact Employment History | Use this table to retrieve the biographical employment history of a contact.
+update_cadence: Daily
+columns:
+- name: ContactCode
+  type: INTEGER
+  nullable: false
+  description: ContactCode is the unique identifier for a contact. It is defined by OwnConInfo. This field links to all Contacts
+    Data tables.
+- name: Bio
+  type: varchar(max)
+  nullable: true
+  description: Bio is a description of the contact’s employment history. LSEG Quantitative Analytics Database Schema for Ownership
+    and Global Insider 25
+---
+table: qa_own_insider.OwnConInfo
+domain: ownership
+description: Contact Information | This table contains contact identity information.
+update_cadence: Daily
+columns:
+- name: ContactCode
+  type: INTEGER
+  nullable: false
+  description: ContactCode is the unique identifier for a contact. This field links to all Contacts Data tables.
+- name: FirstName
+  type: varchar(31)
+  nullable: true
+  description: FirstName is the first name of the contact.
+- name: LastName
+  type: varchar(37)
+  nullable: true
+  description: LastName is the last name of the contact.
+- name: MiddleInitial
+  type: varchar(9)
+  nullable: true
+  description: MiddleInitial is the middle initial of the contact.
+- name: Honorific
+  type: varchar(17)
+  nullable: true
+  description: Honorific is the title of the contact that precedes the contact name; for example, Mrs., Professor, Dr., etc..
+- name: Suffix
+  type: varchar(5)
+  nullable: true
+  description: Suffix is the designation that follows the contact name; for example, Jr., III, CFA, etc..
+- name: GenderCode
+  type: char(1)
+  nullable: true
+  description: GenderCode indicates the gender of the contact. M is male and F is female. A null value in this field indicates
+    the gender of the contact is not available.
+- name: Email
+  type: varchar(101)
+  nullable: true
+  description: Email is the contact’s e-mail address, if available.
+- name: TelCtrCode
+  type: INTEGER
+  nullable: true
+  description: TelCtrCode is the country code for the contact’s phone number.
+- name: TelAreaCode
+  type: varchar(7)
+  nullable: true
+  description: TelAreaCode is the area code for the contact’s phone number.
+- name: TelNumber
+  type: varchar(17)
+  nullable: true
+  description: TelNumber is contact’s telephone number. TelCtrCode + TelAreaCode + TelNumber is the full telephone number
+    for the contact, including country code and area code.
+- name: TelExtn
+  type: varchar(9)
+  nullable: true
+  description: TelExtn is the direct phone extension for the contact.
+- name: FaxCtrCode
+  type: varchar(6)
+  nullable: true
+  description: FaxCtrCode is the country code for the contact’s fax number.
+- name: FaxAreaCode
+  type: varchar(7)
+  nullable: true
+  description: FaxAreaCode is the area code for the contact’s fax number.
+- name: FaxNumber
+  type: varchar(17)
+  nullable: true
+  description: FaxNumber is the contact’s fax number. FaxCtrCode + FaxAreaCode + FaxNumber is the contact’s full fax number
+    including the country code and the area code.
+---
+table: qa_own_insider.OwnConSpCode
+domain: ownership
+description: Contact Specialty Codes | Use the data in this table to translate contact specialty code information.
+update_cadence: Daily
+columns:
+- name: SpecCode
+  type: INTEGER
+  nullable: false
+  description: SpecCode is the unique code that identifies the contact’s specialty.
+- name: Desc_
+  type: varchar(51)
+  nullable: true
+  description: Desc_ describes SpecCode.
+- name: SpecCatCode
+  type: INTEGER
+  nullable: false
+  description: SpecCatCode identifies the category of the specialty. SpecCatCode cross- references OwnCode where OwnCode.Type_
+    = 1 and OwnCode.Code = OwnConSpCode.SpecCatCode.
+- name: P_SpecCode
+  type: INTEGER
+  nullable: true
+  description: (Reserved for future use.) LSEG Quantitative Analytics Database Schema for Ownership and Global Insider 26
+---
+table: qa_own_insider.OwnConSpecialty
+domain: ownership
+description: Contact Specialties | The data in this table identifies areas in which contacts specialize, such as market capitalization,
+  investment
+update_cadence: Daily
+columns:
+- name: ContactCode
+  type: INTEGER
+  nullable: false
+  description: ContactCode is the unique identifier for a contact. It is defined by OwnConInfo. This
+- name: SpecCode
+  type: INTEGER
+  nullable: false
+  description: 'SpecCode is the unique code that identifies the contact’s specialty. This field cross- references OwnConSpCode
+    where SpecCatCode = 3 and OwnConSpCode.SpecCode = OwnConSpecialty.SpecCode. LSEG Quantitative Analytics Database Schema
+    for Ownership and Global Insider 27 7. Ownership Schema: Global Insider Data Tables The global Insider schema is comprised
+    of the tables described in this chapter, as well as the OwnInfo and UserInfo tables. LSEG Quantitative Analytics Database
+    Schema for Ownership and'
+---
+table: qa_own_insider.OwnInsAsiaData
+domain: ownership
+description: Asia Insider Transaction Data | The table contains equity ownership Asia Insider transaction data.
+update_cadence: Daily
+columns:
+- name: FilerID
+  type: INTEGER
+  nullable: false
+  description: FilerID is the unique identifier for each as-filed Asian insider filer name.
+- name: SecurityCode
+  type: INTEGER
+  nullable: false
+  description: SecurityCode is the unique identifier for each issue.
+- name: TranID
+  type: INTEGER
+  nullable: false
+  description: TranID is the unique sequence number assigned to each transaction occurring between the same filer for the
+    same issue on the same TranDate.
+- name: TranDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: TranDate is the date of the transaction, in the format YYYYMMDD.
+- name: InsID
+  type: INTEGER
+  nullable: true
+  description: InsID is a unique insider identifier generated by LSEG. This field cross- references OwnInsInfo.
+- name: FilingDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: FilingDate is the date of filing, in the format YYYYMMDD.
+- name: TranType
+  type: char(1)
+  nullable: true
+  description: TranType indicates whether the transaction type is Direct (D) or Indirect (I). This field cross-references
+    OwnInsDesc where OwnInsDesc.Type_ = 1 and OwnInsDesc.Code = OwnInsAsiaData.TranType.
+- name: TranCode
+  type: INTEGER
+  nullable: true
+  description: Trancode indicates the type of transaction. Trancode cross-references OwnInsCode where OwnInsCode.Type_ = 6
+    and OwnInsCode.Code = OwnInsAsiaData.Trancode.
+- name: BuySellFlag
+  type: char(1)
+  nullable: true
+  description: BuySellFlag indicates whether the issue was Acquired (A) or Disposed of (D). A null value indicates another
+    type of transaction, such as an opening balance. This field cross-references OwnInsDesc where OwnInsDesc.Type_ = 2 and
+    OwnInsDesc.Code = OwnInsAsiaData.BuySellFlag.
+- name: PosnChg
+  type: BIGINT
+  nullable: true
+  description: PosnChg indicates the position change, reported as the number of shares in the transaction. In the case of
+    a disposition, this value is negative. A null value may indicate an opening balance.
+- name: SharHeld
+  type: BIGINT
+  nullable: true
+  description: SharHeld is the number of shares held after completion of the given transaction.
+- name: ExerPriceUSD
+  type: FLOAT
+  nullable: true
+  description: ExerPriceUSD is the exercise or transaction price in USD (United States dollars), rounded to a tenth of a cent.
+    If data is unavailable, the field is null.
+- name: UpdDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: UpdDate is the date an update occurred in the LSEG database, in the format YYYYMMDD.
+- name: OwnerCode
+  type: INTEGER
+  nullable: true
+  description: OwnerCode is the unique identifier for an owner. It is defined by OwnInfo. This field links to all Owner data
+    tables.
+- name: ProdID
+  type: INTEGER
+  nullable: true
+  description: ProdID is the unique LSEG owner identifier.
+---
+table: qa_own_insider.OwnInsAsiaTitle
+domain: ownership
+description: Asia Insider Title and Rank Information | This table captures the title and rank information for Asia Insiders.
+  | Rank is populated after matching the Title from the OwnInsAsiaTitle table | with Title in the OwnInsCode table (Type_
+  = 4).
+update_cadence: Daily
+columns:
+- name: FilerID
+  type: INTEGER
+  nullable: false
+  description: FilerID is the unique identifier for each owner.
+- name: SecurityCode
+  type: INTEGER
+  nullable: false
+  description: SecurityCode is the unique identifier for each issue.
+- name: TranID
+  type: INTEGER
+  nullable: false
+  description: TranId is the unique sequence number assigned to each transaction occurring between the same filer for the
+    same issue on the same TranDate. LSEG Quantitative Analytics Database Schema for Ownership and Global Insider 29
+- name: TranDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: TranDate is the date of the transaction, in the format YYYYMMDD.
+- name: Title
+  type: varchar(150)
+  nullable: true
+  description: Title is the insider company title/role relationship description.
+- name: Rank
+  type: INTEGER
+  nullable: true
+  description: Rank is used for Asian Insiders with multiple title or role descriptions, as only one title/role is displayed
+    in products and data feeds. Rank is populated after matching the Title from the OwnInsAsiaTitle table with Title in the
+    OwnInsCode table (Type_ = 4).
+---
+table: qa_own_insider.OwnInsCode
+domain: ownership
+description: Insider Codes (Integer) | This table contains translations for codes of an integer datatype.
+update_cadence: Daily
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Type_ is a numeric code for a type of data.
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is a coded value for an element of Type_. When Type_ = 0, Code is the numeric code for each Type_ other
+    than 0 and Desc_ is a description of each Type_.
+- name: Desc_
+  type: varchar(250)
+  nullable: true
+  description: Desc_ is a plain-language description of the element defined by Type_ and Code. See OwnInsDesc on page 30.
+---
+table: qa_own_insider.OwnInsData
+domain: ownership
+description: Insider Data | This table contains UK Trades and Canadian SEDI insider transaction data. Note that these are
+  not consolidated | holdings, but are a record of the transactions. The data in this table is not adjusted for corporate
+  actions.
+update_cadence: Daily
+columns:
+- name: FilerID
+  type: INTEGER
+  nullable: false
+  description: FilerID is a unique identifier for each SEDI (System for Electronic Disclosure by Insiders) filer.
+- name: TranID
+  type: INTEGER
+  nullable: false
+  description: TranID is a unique sequence number assigned to each transaction.
+- name: FeedCode
+  type: INTEGER
+  nullable: false
+  description: FeedCode indicates the feed source of the data. FeedCode cross-references OwnInsCode where OwnInsCode.Type_
+    = 1 and OwnInsCode.Code = OwnInsData.FeedCode.
+- name: TranDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: TranDate is the date of the transaction, in the format YYYYMMDD.
+- name: InsID
+  type: INTEGER
+  nullable: true
+  description: InsID is a unique insider identifier generated by LSEG. This field cross- references OwnInsInfo.
+- name: SecurityCode
+  type: INTEGER
+  nullable: true
+  description: SecurityCode is the unique identifier for a security. It is defined by OwnSecInfo. This field links to all
+    Security Data tables.
+- name: FilingDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: FilingDate is the date of filing, in the format YYYYMMDD.
+- name: TranType
+  type: char(1)
+  nullable: true
+  description: TranType indicates whether the transaction type is Direct (D) or Indirect (I). This field cross-references
+    OwnInsDesc where OwnInsDesc.Type_ = 1 and OwnInsDesc.Code = OwnInsData.TranType.
+- name: Trancode
+  type: INTEGER
+  nullable: true
+  description: Trancode indicates the type of transaction. Trancode cross-references OwnInsCode where OwnInsCode.Type_ = 3
+    and OwnInsCode.Code = OwnInsData.Trancode. LSEG Quantitative Analytics Database Schema for Ownership and Global Insider
+    30
+- name: BuySellFlag
+  type: char(1)
+  nullable: true
+  description: BuySellFlag indicates whether the issue was Acquired (A) or Disposed of (D). A null value indicates another
+    type of transaction, such as an opening balance. This field cross-references OwnInsDesc where OwnInsDesc.Type_ = 2 and
+    OwnInsDesc.Code = OwnInsData.BuySellFlag.
+- name: Posnchg
+  type: BIGINT
+  nullable: true
+  description: Posnchg indicates the position change, reported as the number of shares in the transaction. In the case of
+    a disposition, this value is negative. A null value may indicate an opening balance.
+- name: SharHeld
+  type: BIGINT
+  nullable: true
+  description: SharHeld is the number of shares held after completion of the given transaction.
+- name: AmndFlag
+  type: char(1)
+  nullable: true
+  description: AmndFlag is the Amended flag. This flag indicates whether the transaction has been amended (A), or if there
+    has been no amendment (N). This field cross- references OwnInsDesc where OwnInsDesc.Type_ = 3 and OwnInsDesc.Code = OwnInsData.AmndFlag.
+- name: ExerPriceUSD
+  type: FLOAT
+  nullable: true
+  description: ExerPriceUSD is the exercise or transaction price in USD (United States dollars), rounded to a tenth of a cent.
+    If data is unavailable, the field is null.
+- name: ExerpriceLocal
+  type: FLOAT
+  nullable: true
+  description: ExerpriceLocal is the exercise price. If this value is from the UK feed, it is as reported in GBP (Great Britain
+    pounds). If from the SEDI feed, the value is in CAD (Canada dollars), or is as reported and converted to CAD.
+- name: ExerpriceEU
+  type: FLOAT
+  nullable: true
+  description: ExerpriceEU is the exercise price in EUR (Europe Euros), rounded to a tenth of a cent. If data is unavailable,
+    this field is null.
+- name: GLTPctUK
+  type: char(1)
+  nullable: true
+  description: GLTPctUK describes whether the holder’s share holding is less than or more than the percentage specified in
+    the PctUK field. If the PctUK field contains the actual reported value, then this field is null. This applies only to
+    UK data. This OwnInsDesc.Code = OwnInsData.GLTPctUK.
+- name: PctUK
+  type: FLOAT
+  nullable: true
+  description: PctUK is the percentage of holdings the transaction represents, as reported by trade announcements.
+- name: HoldFlagUK
+  type: char(1)
+  nullable: true
+  description: HoldFlagUK indicates whether the trade is the latest, previous, or historical trade announcement for this combination
+    of issue and filer. This field cross- references OwnInsDesc where OwnInsDesc.Type_ = 5 and OwnInsDesc.Code = OwnInsData.HoldFlagUK.
+- name: UpdDateUK
+  type: TIMESTAMP(6)
+  nullable: true
+  description: UpdDateUK is the date an update occurred in the LSEG database.
+- name: DirFlag
+  type: char(1)
+  nullable: true
+  description: DirFlag indicates whether the filer is (Y) or is not (N) a Director. This field cross- references OwnInsDesc
+    where OwnInsDesc.Type_ = 6 and OwnInsDesc.Code = OwnInsData.DirFlag.
+- name: OwnerCode
+  type: INTEGER
+  nullable: true
+  description: OwnerCode is the unique identifier for an owner. It is defined by OwnInfo. This
+- name: ProdID
+  type: INTEGER
+  nullable: true
+  description: ProdID is a unique LSEG identifier. This field is blank or null if the SEDI filer does not have filings on
+    record with the LSEG data source.
+---
+table: qa_own_insider.OwnInsDesc
+domain: ownership
+description: Insider Codes (varchar) | This table contains translations for codes of varchar datatype.
+update_cadence: Daily
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Type_ is a numeric code for a type of data.
+- name: Code
+  type: varchar(11)
+  nullable: false
+  description: Code is a coded value for an element of Type_. When Type_ = 0, Code is the numeric code for each Type_ other
+    than 0 and Desc_ is a description of each Type_.
+- name: Desc_
+  type: varchar(101)
+  nullable: true
+  description: Desc_ is a plain-language description of the element defined by Type_ and Code. See OwnInsCode on page 29.
+    LSEG Quantitative Analytics Database Schema for Ownership and Global Insider 31
+---
+table: qa_own_insider.OwnInsInfo
+domain: ownership
+description: Insider Investors Information | This table provides information about insider investors.
+update_cadence: Daily
+columns:
+- name: InsID
+  type: INTEGER
+  nullable: false
+  description: InsID is a unique insider identifier generated by LSEG. This field cross- references OwnInsData.
+- name: OwnerCode
+  type: INTEGER
+  nullable: true
+  description: OwnerCode is the unique identifier for an owner. It is defined by OwnInfo. This
+- name: ProdId
+  type: INTEGER
+  nullable: true
+  description: ProdId is a unique LSEG identifier. This field is blank or null if the SEDI (System for Electronic Disclosure
+    by Insiders) filer does not have filings on record with the LSEG data source.
+- name: FilerId
+  type: INTEGER
+  nullable: true
+  description: FilerId is a unique identifier for each filer.
+- name: FilerName
+  type: varchar(80)
+  nullable: true
+  description: FilerName is the filer name, as filed.
+- name: ProdName
+  type: varchar(80)
+  nullable: true
+  description: ProdName is the standardized LSEG filer name. This field will be null if the filer does not have filings on
+    record with LSEG.
+- name: FeedCode
+  type: INTEGER
+  nullable: false
+  description: FeedCode indicates the feed source of the data. FeedCode cross-references OwnInsCode where OwnInsCode.Type_
+    = 1 and OwnInsCode.Code = OwnInsInfo.FeedCode.
+- name: LicFlag
+  type: INTEGER
+  nullable: false
+  description: 'LicFlag describes licensing requirements: – LicFlag = 1 for UK and Canada – LicFlag = 2 for Asia LSEG Quantitative
+    Analytics Database Schema for Ownership and Global Insider 32 8. Ownership Schema: This section includes sample queries
+    demonstrating how to return all securities by the same issuer, and how to use an owner ID to return the holdings of the
+    owner on a given date. These examples reference the TRQA core master tables. For more information about the master tables,
+    see the Database Schem'

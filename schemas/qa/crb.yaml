@@ -1,0 +1,288 @@
+table: qa_crb.CMContr
+domain: commodities
+description: Futures Contracts | This table is not available in Quantitative Analytics hosted. | This table contains the identifier
+  and description for futures contracts.
+update_cadence: Daily
+columns:
+- name: Ticker
+  type: varchar(30)
+  nullable: false
+  description: Ticker is the internal identifier for the commodity/currency/financial.
+- name: Name
+  type: varchar(60)
+  nullable: true
+  description: Name is the text description of the commodity/currency/financial. The date indicates the month and year of
+    the expiration of the contract.
+---
+table: qa_crb.CMDaily
+domain: commodities
+description: Futures Daily Prices | This table contains the daily prices for futures contracts.
+update_cadence: Daily
+columns:
+- name: InfoCode
+  type: INTEGER
+  nullable: false
+  description: InfoCode is a primary link across CM* tables.
+- name: Contract
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Contract is the month and year of the contract, with the default day as the first day of the month.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the trading date.
+- name: Open_
+  type: FLOAT
+  nullable: true
+  description: Open_ is the open price on the given date.
+- name: High
+  type: FLOAT
+  nullable: true
+  description: High is the high price on the given date.
+- name: Low
+  type: FLOAT
+  nullable: true
+  description: Low is the low price on the given date.
+- name: Close_
+  type: FLOAT
+  nullable: true
+  description: Close_ is the close price on the given date.
+- name: Volume
+  type: FLOAT
+  nullable: true
+  description: Volume is the trading volume on the given date.
+- name: Interest
+  type: FLOAT
+  nullable: true
+  description: Interest is the open interest on the given date. LSEG Quantitative Analytics Database Schema for Commodity
+    Research Bureau (CRB) 7
+---
+table: qa_crb.CMExpCal
+domain: commodities
+description: Futures Expiration | Use this table to retrieve futures contract expiration information.
+update_cadence: Daily
+columns:
+- name: Name
+  type: varchar(20)
+  nullable: false
+  description: Name is the internal identifier for the commodity/currency/financial. It joins to CMInfo.Ticker.
+- name: Description
+  type: varchar(160)
+  nullable: true
+  description: Description is the text description of the commodity/currency/financial.
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code joins to CMInfo.StartMonth.
+---
+table: qa_crb.CMExpMth
+domain: commodities
+description: Expiration Month Futures Contracts | This table contains expiration data for month futures contracts.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code joins to CMInfo.StartMonth.
+- name: Contract
+  type: smalldatetime
+  nullable: false
+  description: Contract is the month and year of the contract, with the default day as the first day of the month.
+- name: ExpDate
+  type: smalldatetime
+  nullable: false
+  description: ExpDate is the contract expiration date.
+---
+table: qa_crb.CMFutVol
+domain: commodities
+description: Futures Volatility | This table contains volatility data for futures contracts.
+update_cadence: Daily
+columns:
+- name: InfoCode
+  type: INTEGER
+  nullable: false
+  description: InfoCode is a primary link across CM* tables.
+- name: ExpMonth
+  type: smalldatetime
+  nullable: false
+  description: ExpMonth is the month the contract expires.
+- name: date_
+  type: smalldatetime
+  nullable: false
+  description: date_ is the pricing date for the given values.
+- name: HistVol
+  type: FLOAT
+  nullable: true
+  description: HistVol is the historical volatility.
+- name: AtmImpVol
+  type: FLOAT
+  nullable: true
+  description: AtmImpVol is the at-the-money implied volatility.
+- name: Flags
+  type: INTEGER
+  nullable: true
+  description: Flags is an internal flag for use by Quantitative Analytics. LSEG Quantitative Analytics Database Schema for
+    Commodity Research Bureau (CRB) 8
+---
+table: qa_crb.CMInfo
+domain: commodities
+description: Futures Information | This is the master information table for futures contracts.
+update_cadence: Daily
+columns:
+- name: Ticker
+  type: varchar(30)
+  nullable: true
+  description: Ticker is the internal identifier for the commodity/currency/financial.
+- name: Name
+  type: varchar(60)
+  nullable: true
+  description: Name is the text description of the commodity/currency/financial.
+- name: InfoCode
+  type: INTEGER
+  nullable: false
+  description: InfoCode is a primary link across CM* tables.
+- name: StartMonth
+  type: INTEGER
+  nullable: true
+  description: A zero in StartMonth and Frequency represent the current contract period.
+- name: Frequency
+  type: INTEGER
+  nullable: true
+  description: See the StartMonth description above.
+---
+table: qa_crb.CMRoll
+domain: commodities
+description: Futures Series Rollover | This table is not available in Quantitative Analytics hosted. | This table contains
+  futures series rollover data.
+update_cadence: Daily
+columns:
+- name: SeriesCode
+  type: INTEGER
+  nullable: false
+  description: SeriesCode identifies the series. It joins to CMSeries.SeriesCode.
+- name: Deferral
+  type: INTEGER
+  nullable: false
+  description: Deferral is zero unless a user manually enters a new contract series in the database specifying a different
+    contract expiration period. Zero is always the current contract period from the current date.
+- name: RollDate
+  type: smalldatetime
+  nullable: false
+  description: RollDate is the first date a new contract is used as the front contract.
+- name: Contract
+  type: smalldatetime
+  nullable: true
+  description: Contract is the contract expiration date.
+- name: CashFlow
+  type: FLOAT
+  nullable: true
+  description: CashFlow is the result of the roll to a new contract in a futures time series.
+- name: PriceUnits
+  type: FLOAT
+  nullable: true
+  description: PriceUnits is the number of units used to compute a futures time series.
+---
+table: qa_crb.CMSeries
+domain: commodities
+description: Futures Series | This table is not available in Quantitative Analytics hosted. | This table contains futures
+  series information.
+update_cadence: 'Daily Adjusted: No'
+columns:
+- name: Ticker
+  type: varchar(30)
+  nullable: true
+  description: Ticker is the internal identifier of the commodity/currency/financial.
+- name: Name
+  type: varchar(60)
+  nullable: true
+  description: Name is the text description of the commodity/currency/financial.
+- name: SeriesCode
+  type: INTEGER
+  nullable: false
+  description: SeriesCode identifies the series. It joins to CMRoll.SeriesCode.
+- name: InfoCode
+  type: INTEGER
+  nullable: false
+  description: InfoCode is a primary link across CM* tables.
+- name: RollType
+  type: INTEGER
+  nullable: true
+  description: 'RollType can be: – 1 - Roll on next price date after expiration – 2 - Roll on last day of month prior to expiration,
+    or next price date – 3 - Roll specified number of days prior to next price date – 4 - Roll on volume crossover – 5 - Roll
+    on open interest crossover'
+- name: RollDays
+  type: INTEGER
+  nullable: true
+  description: RollDays is the number under X roll days before expiration.
+- name: AdjType
+  type: INTEGER
+  nullable: true
+  description: 'AdjType can be: – 1 – UNADJUST – 2 – REINVEST – 3 – BACKFACTOR – 4 – BACKDIFF'
+- name: ContractMonths
+  type: varchar(12)
+  nullable: true
+  description: 'ContractMonths indicates the contract months included, listing January through December as either True (T)
+    or False (F). For example, if all months are included except March, then all values will be True except the value for
+    the third month, March, which will be False. This is displayed as: TTFTTTTTTTTT. LSEG Quantitative Analytics Database
+    Schema for Commodity Research Bureau (CRB) 10 3 CRB Spot Data Tables The tables in this chapter contain data for all types
+    of spot trades – commodities, curr'
+---
+table: qa_crb.SpotDly
+domain: commodities
+description: Spot Daily Prices | This table contains daily data on spot prices.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all Spot* tables.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the trading date.
+- name: Open_
+  type: FLOAT
+  nullable: true
+  description: Open_ is the open price on the given date.
+- name: High
+  type: FLOAT
+  nullable: true
+  description: High is the high price on the given date.
+- name: Low
+  type: FLOAT
+  nullable: true
+  description: Low is the low price on the given date.
+- name: Close_
+  type: FLOAT
+  nullable: true
+  description: Close_ is the close price on the given date.
+- name: Volume
+  type: FLOAT
+  nullable: true
+  description: Volume is the trading volume on the given date.
+- name: Interest
+  type: FLOAT
+  nullable: true
+  description: Interest is the open interest on the given date.
+---
+table: qa_crb.SpotInfo
+domain: commodities
+description: Spot Information | Use this table to retrieve spot information.
+update_cadence: Daily
+columns:
+- name: Ticker
+  type: varchar(30)
+  nullable: true
+  description: Ticker is an abbreviated mnemonic for the commodity/currency/financial.
+- name: Name
+  type: varchar(60)
+  nullable: true
+  description: Name is the text description of the commodity/currency/financial.
+- name: Code
+  type: INTEGER
+  nullable: true
+  description: Code is the primary link across all Spot* tables. LSEG Quantitative Analytics Database Schema for Commodity
+    Research Bureau (CRB) Copyright © 2024 London Stock Exchange Group plc and its group of companies (LSEG) and/or its affiliates.
+    All rights reserved. The LSEG content received through this service is the intellectual property of LSEG or its third
+    party suppliers. Republication or redistribution of content provided by LSEG is expressly prohibited without the prior
+    written consent of LSEG, ex

@@ -1,0 +1,4406 @@
+table: qa_fi_ejv.FISecCspChgX
+domain: fixed_income
+description: Fixed Income Security Master CUSIP Changes | Use this table to retrieve the CUSIP history of a fixed income security
+  (global and domestic).
+update_cadence: Daily
+columns:
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode links across the FISec* concordance tables. It also cross- references with Prc.PrcIss.Code for a given
+    type. Type_ = 21 is used for FI EJV securities in PrcIss maps. (Prc.PrcIss is documented in the Database Schema for LSEG
+    Quantitative Analytics Core Tables document.)
+- name: Type_
+  type: SMALLINT
+  nullable: false
+  description: (Reserved for future development.)
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the first date issuer information is valid.
+- name: Cusip
+  type: varchar(8)
+  nullable: true
+  description: The CUSIP for the period specified in StartDate and EndDate.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the last date issuer information is valid.
+---
+table: qa_fi_ejv.FISecIsinChgX
+domain: fixed_income
+description: Fixed Income Security Master ISIN Changes | Use this table to retrieve the ISIN history of a fixed income security
+  (global and domestic).
+update_cadence: Daily
+columns:
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode links across the FISec* concordance tables. It also cross- references with Prc.PrcIss.Code for a given
+    type. Type_ = 21 is used for FI EJV securities in PrcIss maps. (Prc.PrcIss is documented in the Database Schema for LSEG
+    Quantitative Analytics Core Tables document.)
+- name: Type_
+  type: SMALLINT
+  nullable: false
+  description: (Reserved for future development.)
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the first date issuer information is valid.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the last date issuer information is valid.
+- name: Isin
+  type: varchar(12)
+  nullable: true
+  description: The ISIN for the period specified in StartDate and EndDate.
+---
+table: qa_fi_ejv.FISecMapX
+domain: fixed_income
+description: Fixed Income Security Map | This table provides mapping to vendor codes including ranking and time series.
+update_cadence: Daily
+columns:
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode links across the FISec* concordance tables. It also cross- references with Prc.PrcIss.Code for a given
+    type. Type_ = 21 is used for FI EJV securities in PrcIss maps. (Prc.PrcIss is documented in the Database Schema for LSEG
+    Quantitative Analytics Core Tables document.)
+- name: Type_
+  type: SMALLINT
+  nullable: false
+  description: (Reserved for future development.)
+- name: VenType
+  type: SMALLINT
+  nullable: false
+  description: VenType is a unique type code for each vendor. VenType is defined in SecVenType. FI EJV Ventype = 45.
+- name: VenCode
+  type: INTEGER
+  nullable: true
+  description: VenCode is the corresponding vendor’s unique code. For FI EJV, VenCode cross references with FIEJVSecInfo.InstrCode.
+- name: Rank
+  type: SMALLINT
+  nullable: false
+  description: 'Rank is the issue rank for issuers with multiple issues. Note: Ranking is determined upon initial load, and
+    will not necessarily change in response to new issues or volume/status changes.'
+- name: Exchange
+  type: SMALLINT
+  nullable: true
+  description: Exchange identifies whether the VenCode applies to EJV (EJV = 20).
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: StartDate is the first date issuer information is valid.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the last date issuer information is valid.
+---
+table: qa_fi_ejv.FISecMstrX
+domain: fixed_income
+description: Fixed Income Security Master | This table returns the master fixed income security record (global and domestic)
+  from the ID, CUSIP, SEDOL, or
+update_cadence: Daily
+columns:
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode links across the FISec* concordance tables. It also cross- references with Prc.PrcIss.Code for a given
+    type. Type_ = 21 is used for FI EJV securities in PrcIss maps. (Prc.PrcIss is documented in the Database Schema for LSEG
+    Quantitative Analytics Core Tables document.)
+- name: Id
+  type: varchar(30)
+  nullable: true
+  description: 'Id is the unique LSEG Quantitative Analytics Fixed Income identifier. FI QAID begins with the ''#'' symbol
+    and is derived as follows: #+5-digit(alphanumeric company name)+6-digit Hex sequence number. LSEG Quantitative Analytics
+    Database Schema for Fixed Income EJV 10'
+- name: Type_
+  type: SMALLINT
+  nullable: false
+  description: (Reserved for future development.)
+- name: IdBase
+  type: varchar(5)
+  nullable: true
+  description: IdBase is the 5-digit (alphanumeric company name) Base from the ID column.
+- name: IdSeq
+  type: INTEGER
+  nullable: true
+  description: IdSeq is the sequence number from the ID column.
+- name: Cusip
+  type: varchar(8)
+  nullable: true
+  description: Cusip is the security CUSIP number.
+- name: PrevCusip
+  type: varchar(8)
+  nullable: true
+  description: PrevCusip is the CUSIP before the most recent CUSIP change. This field is reserved for future use.
+- name: Sedol
+  type: varchar(6)
+  nullable: true
+  description: Sedol is the primary security SEDOL. It corresponds to the security where Rank = 1 in SecMapX.
+- name: PrevSedol
+  type: varchar(6)
+  nullable: true
+  description: PrevSedol is the SEDOL before the most recent SEDOL change. This
+- name: Sedol2
+  type: varchar(6)
+  nullable: true
+  description: Sedol2 is the secondary security’s SEDOL (for dually listed securities). It corresponds to the security where
+    Rank = 2 in SecMapX. This field is reserved for future use. (SecMapX is documented in the Database Schema for LSEG Quantitative
+    Analytics Core Tables document.)
+- name: PrevSedol2
+  type: varchar(6)
+  nullable: true
+  description: PrevSedol2 is the secondary security’s SEDOL before the most recent SEDOL change. It corresponds to the security
+    where Rank = 2 in SecMapX. This field is reserved for future use. (SecMapX is documented in the Database Schema for LSEG
+    Quantitative Analytics Core Tables document.)
+- name: Isin
+  type: varchar(12)
+  nullable: true
+  description: Isin is the security ISIN number.
+- name: Name
+  type: varchar(60)
+  nullable: true
+  description: Name is the name of the security.
+- name: Country
+  type: varchar(3)
+  nullable: true
+  description: Country is the ISO3 code for the country of incorporation.
+- name: Vendors1
+  type: BIGINT
+  nullable: true
+  description: Vendors1 indicates the vendor the security is mapped to.
+- name: Vendors2
+  type: BIGINT
+  nullable: true
+  description: (Reserved for future development.)
+- name: Vendors3
+  type: BIGINT
+  nullable: true
+  description: (Reserved for future development.)
+- name: Vendors4
+  type: BIGINT
+  nullable: true
+  description: (Reserved for future development.)
+---
+table: qa_fi_ejv.FISecSdlChgX
+domain: fixed_income
+description: Fixed Income Security Master Primary SEDOL | This table provides SEDOL change history for fixed income master
+  securities (global and domestic).
+update_cadence: 'Daily Adjusted: Yes'
+columns:
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode links across the FISec* concordance tables. It also cross- references with Prc.PrcIss.Code for a given
+    type. Type_ = 21 is used for FI EJV securities in PrcIss maps. (Prc.PrcIss is documented in the Database Schema for LSEG
+    Quantitative Analytics Core Tables document.)
+- name: Type_
+  type: SMALLINT
+  nullable: false
+  description: (Reserved for future development.)
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the first date issuer information is valid.
+- name: Sedol
+  type: varchar(6)
+  nullable: true
+  description: The SEDOL for the period specified in StartDate and EndDate
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the last date issuer information is valid. LSEG Quantitative Analytics Database Schema for Fixed
+    Income EJV 11 4. Fixed Income EJV Terms & Conditions Database Schema This chapter provides schema information for the
+    Fixed Income EJV Terms & Conditions (T&C) tables. FIEJV Common Tables The diagram on the following page shows the relationships
+    between the FIEJV Common tables. LSEG Quantitative Analytics Database Schema for Fixed Income EJV 12 PK,FK1 InstrCode
+    int PK AmtDate int PK,FK2 It
+---
+table: qa_fi_ejv.FIEJVCap
+domain: fixed_income
+description: Capitalization Schedule Information | This table contains capitalization schedule information.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: CapDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: CapDate is the date on which the capitalization rate becomes effective.
+- name: CapPct
+  type: FLOAT
+  nullable: true
+  description: CapPct is the percentage rate to be capitalized.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs.
+---
+table: qa_fi_ejv.FIEJVCode
+domain: fixed_income
+description: Numeric Codes | This table contains descriptions of Fixed Income EJV numeric codes.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Type_ is a numeric code for a type of data.
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is a coded value for an element of Type_. When Type_ = 0, Code is the numeric code for each Type_ other
+    than 0 and Desc_ is a description of each Type_.
+- name: Desc_
+  type: varchar(120)
+  nullable: true
+  description: Desc_ is a plain-language description of the element defined by Type_ and Code.
+---
+table: qa_fi_ejv.FIEJVCpn
+domain: fixed_income
+description: Asset Interest Cash Flow Information | This table contains the data elements necessary for determining the interest
+  cash flows for an asset. | Item int N Item is a code representing the respective item. See the FIEJVItem table
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in QUANTITATIVE
+    DATA WAREHOUSE (QDW) and is not received from the vendor.
+- name: CpnLegNum
+  type: TINYINT
+  nullable: false
+  description: A particular instrument can have multiple coupons. CpnLegNum helps capture this detail, which is derived from
+    the XML feed structure.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is a code representing the respective item. See the FIEJVItem table (Item) for a complete list of codes.
+- name: Value_
+  type: varchar(30)
+  nullable: true
+  description: Value_ is the value for the respective item.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs. LSEG Quantitative
+    Analytics Database Schema for Fixed Income EJV 14
+---
+table: qa_fi_ejv.FIEJVCpnFltRate
+domain: fixed_income
+description: Asset Coupon Rates | This table maintains the current and historical coupon rates for those assets that have
+  coupons. There will be | may have more than one entry in this table for past rate changes.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in QUANTITATIVE
+    DATA WAREHOUSE (QDW) and is not received from the vendor.
+- name: EffDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: EffDate is the date on which interest begins accruing at a specified rate.
+- name: CpnRate
+  type: FLOAT
+  nullable: true
+  description: CpnRate is the coupon rate associated with each corresponding date.
+- name: NonAnnCpnRate
+  type: FLOAT
+  nullable: true
+  description: NonAnnCpnRate is the non-annual coupon rate. This is used primarily for Italian bonds.
+- name: RstDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: RstDate is the date for which the value was calculated.
+- name: CpnRateSrcCode
+  type: varchar(3)
+  nullable: true
+  description: CpnRateSrcCode is a code specifying the source of the rate. Floating rate notes are programmatically calculated
+    and are indicated by 'PGM'. FIEJVCpnFltRate.CpnRateSrcCode joins with FIEJVDesc.Code where Type_ = 71.
+- name: UnadjRstDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: UnadjRstDate is the reset date for the new rate, unadjusted by any holiday schedules or business rules.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs.
+---
+table: qa_fi_ejv.FIEJVCpnHdr
+domain: fixed_income
+description: Instrument Coupon Terms | This table contains the coupon terms for an instrument.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: CpnSubTypeCode
+  type: varchar(4)
+  nullable: true
+  description: CpnSubTypeCode is a code representing the type of coupon payment applicable to the security. FIEJVCpnHdr.CpnSubTypeCode
+    joins with FIEJVDesc.Code where Type_ = 22.
+- name: FrstCpnDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: FrstCpnDate is the date on which the first coupon payment is made.
+- name: LastCpnDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: LastCpnDate is the last possible reset date for floating rate bonds.
+- name: RecDateDays
+  type: INTEGER
+  nullable: true
+  description: RecDateDays is an integer used in conjunction with the record date code. For example, if the record_dt_cd is
+    a "...calendar day of month" value and the record date is on the 30th calendar day of the month, 30 would show in this
+    field. If the record_dt_cd is a "...calendar day(s) prior" value, then it is an offset from the pay date. For example,
+    15 means ”15 calendar days prior to the pay date."
+- name: StripCpnFl
+  type: TINYINT
+  nullable: true
+  description: StripCpnFl is a 1/0 flag indicating whether the coupon payments may be "stripped" from the offered security.
+    Stripping is the process of LSEG Quantitative Analytics Database Schema for Fixed Income EJV 15
+- name: CurrCpnRate
+  type: FLOAT
+  nullable: true
+  description: CurrCpnRate is the effective interest rate for the security, expressed as an annual percentage of face value.
+    For preferred stocks, the rate is expressed as a percent of the liquidation preference.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs.
+---
+table: qa_fi_ejv.FIEJVCurve
+domain: fixed_income
+description: Curve Information | This table contains curve information that shows the relationship between the interest rate
+  and the time to
+update_cadence: Daily, Monday – Friday
+columns:
+- name: CurveId
+  type: INTEGER
+  nullable: false
+  description: CurveId is a unique EJV system-generated identifier indicating the curve for the benchmark.
+- name: AnltyYldCurveFl
+  type: TINYINT
+  nullable: true
+  description: AnltyYldCurveFl is a 1/0 flag indicating whether the analytic yield curve was created by LSEG Evaluated Pricing
+    Service.
+- name: ISOCtryCode
+  type: char(2)
+  nullable: true
+  description: ISOCtryCode is a code representing the domicile of the issuer for the bonds that make up the curve. FIEJVCurve.ISOCtryCode
+    joins with FIEJVDesc.Code where Type_ = 12.
+- name: PriCtryFl
+  type: TINYINT
+  nullable: true
+  description: PriCtryFl is a 1/0 flag indicating whether the curve is the primary curve for the country specified by ISOCtryCode.
+- name: CompFreqCode
+  type: INTEGER
+  nullable: true
+  description: CompFreqCode is a code representing the frequency used for analytic calculations across the curve. FIEJVCurve.CompFreqCode
+    joins with FIEJVCode.Code where Type_ = 4.
+- name: CpnTypeCode
+  type: varchar(4)
+  nullable: true
+  description: CpnTypeCode is a code representing the interest payment type applicable to the majority of the bonds for the
+    curve. FIEJVCurve.CpnTypeCode joins with FIEJVDesc.Code where Type_ = 21.
+- name: ISOCurCode
+  type: char(3)
+  nullable: true
+  description: ISOCurCode is a code representing the currency for the bonds that make up the curve. FIEJVCurve.ISOCurCode
+    joins with FIEJVDesc.Code where Type_ = 23.
+- name: PriCurFl
+  type: TINYINT
+  nullable: true
+  description: PriCurFl is a 1/0 flag indicating whether the curve is the primary curve for the currency specified by ISOCurCode.
+- name: YldCurveCode
+  type: char(2)
+  nullable: true
+  description: YldCurveCode is a code representing the curve classification. FIEJVCurve.YldCurveCode joins with FIEJVDesc.Code
+    where Type_ = 24.
+- name: YldCurveSubCode
+  type: varchar(4)
+  nullable: true
+  description: YldCurveSubCode is a code used in conjunction with curve_cd to further classify, in terms of market sector,
+    the type of underlying instruments that produce the curve. FIEJVCurve.YldCurveSubCode joins with FIEJVDesc.Code where
+    Type_ = 25.
+- name: YldCurveIndCode
+  type: varchar(8)
+  nullable: true
+  description: YldCurveIndCode is a code identifying the industry of the issuer. FIEJVCurve.YldCurveIndCode joins with FIEJVDesc.Code
+    where Type_ = 38.
+- name: LongName
+  type: varchar(255)
+  nullable: true
+  description: LongName is the long name for the curve.
+- name: ShortName
+  type: varchar(20)
+  nullable: true
+  description: ShortName is the short name for the curve. LSEG Quantitative Analytics Database Schema for Fixed Income EJV
+    16
+- name: TermCalCode
+  type: char(1)
+  nullable: true
+  description: TermCalCode is a code indicating whether analytic calculations use actual terms (A) or nominal terms (N) across
+    the curve. FIEJVCurve.TermCalCode joins with FIEJVDesc.Code where Type_ = 70.
+- name: VenCurveId
+  type: BIGINT
+  nullable: true
+  description: VenCurveId is the Curve ID received in the feed.
+- name: IsDeleted
+  type: TINYINT
+  nullable: false
+  description: IsDeleted is a (1/0) flag indicating whether the curve has been deleted.
+- name: DelDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: DelDate is the date the curve was deleted (feed date).
+- name: DelTime
+  type: TIMESTAMP(6)
+  nullable: true
+  description: DelTime is the time the curve was deleted (feed time).
+---
+table: qa_fi_ejv.FIEJVCurveBenchmark
+domain: fixed_income
+description: Benchmark Curve Information | This table contains curve/point information, allowing for multiple yield curves
+  per country.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: CurveId
+  type: INTEGER
+  nullable: false
+  description: CurveId is a unique EJV system-generated identifier indicating the curve for the benchmark.
+- name: PointID
+  type: INTEGER
+  nullable: false
+  description: PointID is a unique EJV system-generated identifier indicating the point for the benchmark.
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the date on which the asset became a benchmark security.
+- name: CurrentFl
+  type: TINYINT
+  nullable: true
+  description: CurrentFl is a 1/0 flag indicating whether the security is currently a benchmark.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the date on which the asset is no longer considered a benchmark security. If superseded by another
+    security, the “end date” is set to the calendar day before the “begin date” of the successor record.
+- name: ClrngRefCode
+  type: char(3)
+  nullable: true
+  description: ClrngRefCode is a code representing the clearing reference. FIEJVCurveBenchmark.ClrngRefCode joins with FIEJVDesc.Code
+    where Type_ = 77.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs.
+---
+table: qa_fi_ejv.FIEJVCurvePoint
+domain: fixed_income
+description: Curve Point Information | This table contains information about the different points on the curve and the calculation
+  method used for
+update_cadence: Daily, Monday – Friday
+columns:
+- name: CurveId
+  type: INTEGER
+  nullable: false
+  description: CurveId is a unique EJV system-generated identifier indicating the curve for the benchmark. LSEG Quantitative
+    Analytics Database Schema for Fixed Income EJV 17
+- name: PointID
+  type: INTEGER
+  nullable: false
+  description: PointID is a unique integer code that identifies a point on a particular curve. This integer code is defined
+    in Quantitative Data Warehouse (QDW) and is not received from the vendor. ShortName is used as a logical key to generate
+    a unique PointID within each curve.
+- name: LongName
+  type: varchar(255)
+  nullable: true
+  description: LongName is the long name for the point.
+- name: NomTermToMat
+  type: FLOAT
+  nullable: true
+  description: NomTermToMat is the nominal term to maturity used for analytics display (and calculations if the curve’s term_calc_cd
+    = nominal) for the record.
+- name: QuoteTypeCode
+  type: char(1)
+  nullable: true
+  description: QuoteTypeCode is a code for the quote type. FIEJVCurvePoint.QuoteTypeCode joins with FIEJVDesc.Code where Type_
+    = 50.
+- name: ShortName
+  type: varchar(20)
+  nullable: true
+  description: ShortName is the short name for the point.
+---
+table: qa_fi_ejv.FIEJVDebtFactor
+domain: fixed_income
+description: TIPS Support | This table provides support for Treasury Inflation Protected Securities (TIPS).
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: DebtFactorDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DebtFactorDate is the date on which the factor in the schedule becomes effective.
+- name: DebtFactor
+  type: FLOAT
+  nullable: true
+  description: DebtFactor is the portion of principal currently outstanding expressed as a decimal; calculated by using the
+    current amount outstanding divided by original issue amount. This field is used in conjunction with index linked securities.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs.
+---
+table: qa_fi_ejv.FIEJVDenHdr
+domain: fixed_income
+description: Security Denominations | This table contains a listing of the tradeable amounts for a security (denominations).
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: ISOCurCode
+  type: INTEGER
+  nullable: false
+  description: ISOCurCode is the currency in which the various amounts are mentioned. FIEJVDenHdr.ISOCurCode joins with FIEJVCode.Code
+    where Type_ = 21.
+- name: SeqNum
+  type: TINYINT
+  nullable: false
+  description: A particular instrument is denominated in various currencies in various denominations. SeqNum helps capture
+    the different denominations.
+- name: DenAmt
+  type: FLOAT
+  nullable: true
+  description: DenAmt is the schedule of amounts in which the security may be purchased, expressed in face value (for example,
+    1,000, 10,000, 100,000). LSEG Quantitative Analytics Database Schema for Fixed Income EJV 18
+- name: MinDenAtIssFl
+  type: TINYINT
+  nullable: true
+  description: MinDenAtIssFl is a 1/0 flag indicating whether a particular currency/amount is the minimum denomination at
+    issuance.
+- name: MinDenFl
+  type: TINYINT
+  nullable: true
+  description: MinDenFl is a 1/0 flag indicating the minimum denomination in which the asset can be sold.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs.
+---
+table: qa_fi_ejv.FIEJVDesc
+domain: fixed_income
+description: Character Code Descriptions | This table contains descriptions of FIEJV character codes.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Type_ is a numeric code for a type of data.
+- name: Code
+  type: varchar(50)
+  nullable: false
+  description: Code is a coded value for an element of Type_. When Type_ = 0, Code is the numeric code for each Type_ other
+    than 0 and Desc_ is a description of each Type_.
+- name: Desc_
+  type: varchar(120)
+  nullable: true
+  description: Desc_ is a plain-language description of the element defined by Type_ and Code.
+---
+table: qa_fi_ejv.FIEJVExDivSched
+domain: fixed_income
+description: Ex-Dividend Schedule | This table contains a schedule of ex-dividend dates for assets with the ex-dividend calendar
+  code of “as
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: ExDivDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: ExDivDate is the date that determines whether the next coupon payment is made to the previous or new owner
+    of the bond (based on who owns the bond at the start of the ex-dividend period).
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs.
+---
+table: qa_fi_ejv.FIEJVFngHdr
+domain: fixed_income
+description: Fungible Security Information | This table contains the instrument codes that identify fungible issues and exchange
+  offers. | the same terms. See the FIEJVItem table (Item) for a complete list of codes.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is an item code that identifies if the security is fungible or has already been funged. Fungible securities
+    can be combined or exchanged into another security with the same terms. See the FIEJVItem table (Item) for a complete
+    list of codes.
+- name: GemInstrID
+  type: BIGINT
+  nullable: false
+  description: GemInstrID is the GEM Instrument ID for the respective item.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs.
+---
+table: qa_fi_ejv.FIEJVFormula
+domain: fixed_income
+description: Formula String | This table contains the formula string associated with a formula ID.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: FmlID
+  type: INTEGER
+  nullable: false
+  description: FmlID is a unique formula ID generated by Quantitative Data Warehouse (QDW).
+- name: Formula
+  type: varchar(max)
+  nullable: true
+  description: Formula specifies the entire formula. It is calculated by combining the various components of a formula.
+---
+table: qa_fi_ejv.FIEJVFormulaHdr
+domain: fixed_income
+description: FRN Formula Components | This table contains the formula components for FRNs in postfix order.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: FmlID
+  type: INTEGER
+  nullable: false
+  description: FmlID is a unique formula ID generated by Quantitative Data Warehouse (QDW).
+- name: PayFmlSeqNum
+  type: INTEGER
+  nullable: false
+  description: PayFmlSeqNum is the sequence number of the component.
+- name: PayFmlFuncArg
+  type: INTEGER
+  nullable: true
+  description: PayFmlFuncArg is the number of arguments for the function.
+- name: PayFmlFuncCode
+  type: varchar(10)
+  nullable: true
+  description: PayFmlFuncCode is a code representing the functions that are legal in formulas. FIEJVFormulaHdr.PayFmlFuncCode
+    joins with FIEJVDesc.Code where Type_ = 32.
+- name: IdxLkbckNum
+  type: INTEGER
+  nullable: true
+  description: IdxLkbckNum is a code representing the lookbacks used in formulas.
+- name: IdxLkbckTypeCode
+  type: char(1)
+  nullable: true
+  description: IdxLkbckTypeCode is a description of index_lb_num. FIEJVFormulaHdr.IdxLkbckTypeCode joins with FIEJVDesc.Code
+    where Type_ = 40.
+- name: PayFmlIdxName
+  type: varchar(20)
+  nullable: true
+  description: PayFmlIdxName is the short name of the index.
+- name: PayFmlNumVal
+  type: FLOAT
+  nullable: true
+  description: PayFmlNumVal is the numeric constant.
+- name: PayFmlOperator
+  type: varchar(2)
+  nullable: true
+  description: 'PayFmlOperator is the operator values. For example: +-*/^<> =! <= >='
+- name: PayFmlStrg
+  type: varchar(512)
+  nullable: true
+  description: PayFmlStrg is the string constant.
+- name: PayFmlTypeCode
+  type: varchar(3)
+  nullable: true
+  description: PayFmlTypeCode is a code representing the types of formula components. LSEG Quantitative Analytics Database
+    Schema for Fixed Income EJV 20
+---
+table: qa_fi_ejv.FIEJVGEMPermIDMap
+domain: fixed_income
+description: GEM Perm ID Mapping | This table maps the GEM Perm ID with the NAIC code, Clearing code, SIC Code, ISO Country
+  code, Market | table (GEM Perm ID Source Code) for a complete list of codes.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: GEMPermID
+  type: BIGINT
+  nullable: false
+  description: GEMPermID links the various securities and their issuer organizations.
+- name: SeqNum
+  type: TINYINT
+  nullable: false
+  description: For a particular security, there might be more than one description for the same identifier type. SeqNum helps
+    capture the various values.
+- name: SrcType
+  type: INTEGER
+  nullable: false
+  description: SrcType is a code representing the identifier type code. See the FIEJVCode table (GEM Perm ID Source Code)
+    for a complete list of codes.
+- name: SrcID
+  type: varchar(10)
+  nullable: false
+  description: SrcID is the source ID for the respective identifier code.
+- name: SrcDesc
+  type: varchar(255)
+  nullable: true
+  description: SrcDesc is the source ID description for the respective source ID.
+---
+table: qa_fi_ejv.FIEJVGovAuc
+domain: fixed_income
+description: Government Treasury Securities Information | This table contains information on securities issued by a government
+  treasury.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: IssDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: IssDate is the date on which the security was issued via an auction process. It is used for Treasury securities.
+- name: AnnDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: AnnDate is the date on which information was announced pertaining to an upcoming auction of Treasury securities.
+- name: DutchAuctionFl
+  type: TINYINT
+  nullable: true
+  description: DutchAuctionFl is a 1/0 flag indicating whether this bond was "Dutch" auctioned.
+- name: SettDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: SettDate is the date on which the issuer receives payment for the new issue or tap.
+- name: WhenIssdTypeCode
+  type: char(3)
+  nullable: true
+  description: WhenIssdTypeCode is a code that specifies the type of when-issued security. FIEJVGovAuc.WhenIssdTypeCode joins
+    with FIEJVDesc.Code where Type_ = 79.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs. LSEG Quantitative
+    Analytics Database Schema for Fixed Income EJV 21
+---
+table: qa_fi_ejv.FIEJVGovAucFData
+domain: fixed_income
+description: Government Security Float Data | This table contains information on securities issued by a government treasury
+  (float data items). | Item int N Item is a code representing the respective item. See the FIEJVItem table (Item)
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is a code representing the respective item. See the FIEJVItem table (Item) for a complete list of codes.
+- name: IssDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: IssDate is the date on which the security was issued via an auction process. Used for Treasury securities.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the value for the respective item.
+- name: ISOCurCode
+  type: char(3)
+  nullable: true
+  description: ISOCurCode is the currency in which the various amounts are mentioned. FIEJVGovAucFData.ISOCurCode joins with
+    FIEJVDesc.Code where Type_ = 23.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs.
+---
+table: qa_fi_ejv.FIEJVItem
+domain: fixed_income
+description: Data Item Information | This table contains descriptive information about data items, coded to an integer that
+  is further referenced in the | TableName varchar(20) Y TableName is the name of the data table in which the item is contained.
+  | The following table provides additional descriptions for some items in the FIEJVItem table.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is a unique integer code that identifies an item.
+- name: Mnemonic
+  type: varchar(50)
+  nullable: false
+  description: Mnemonic is a single-word, alphanumeric coded name for the item. This code name is as received in the feed
+    file.
+- name: Desc_
+  type: varchar(255)
+  nullable: true
+  description: Desc_ is a short description for the mnemonic. For some items, an additional description is provided in Supplemental
+    Item Descriptions below.
+- name: DataType
+  type: varchar(20)
+  nullable: true
+  description: DataType is the data type for the item such as percentage, money, text, Boolean, numeric, date/time (not the
+    SQL data type).
+- name: TableName
+  type: varchar(20)
+  nullable: true
+  description: TableName is the name of the data table in which the item is contained. Supplemental Item Descriptions The
+    following table provides additional descriptions for some items in the FIEJVItem table. Item Mnemonic Description 3 EJVPartyId
+    Internal identifier used to identify organizations. 4 OrganizationFixedIncomeSymbol Internal symbol used to uniquely identify
+    each organization. A subsidiary of a parent entity has its own symbol. 5 RdcOrgId Internal identifier used to identify
+    organizations. 6 EJVP
+---
+table: qa_fi_ejv.FIEJVMiscCInfo
+domain: fixed_income
+description: Miscellaneous Security Char/Varchar Data | This table contains miscellaneous information on securities (char
+  and varchar data items). | Item int N Item is a code representing the respective item. See the FIEJVItem table (Item)
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is a code representing the respective item. See the FIEJVItem table (Item) for a complete list of codes.
+- name: Value_
+  type: varchar(10)
+  nullable: true
+  description: Value_ is the value for the respective item.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs.
+---
+table: qa_fi_ejv.FIEJVMiscDInfo
+domain: fixed_income
+description: Miscellaneous Security Date Data | This table contains miscellaneous information on securities (Date data items).
+  | Item int N Item is a code representing the respective item. See the FIEJVItem table (Item) for a
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is a code representing the respective item. See the FIEJVItem table (Item) for a complete list of codes.
+- name: Value_
+  type: INTEGER
+  nullable: true
+  description: Value_ is the value for the respective item.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs.
+---
+table: qa_fi_ejv.FIEJVMiscFInfo
+domain: fixed_income
+description: Miscellaneous Security Float Data | This table contains miscellaneous information on securities (float data items).
+  | Item int N Item is a code representing the respective item. See the FIEJVItem table (Item) for
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is a code representing the respective item. See the FIEJVItem table (Item) for a complete list of codes.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the value for the respective item.
+- name: ISOCurCode
+  type: char(3)
+  nullable: true
+  description: ISOCurCode is the currency in which the various amounts are given. FIEJVMiscFInfo.ISOCurCode joins with FIEJVDesc.Code
+    where Type_ = 23. LSEG Quantitative Analytics Database Schema for Fixed Income EJV 23
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs.
+---
+table: qa_fi_ejv.FIEJVOrgDesc
+domain: fixed_income
+description: Asset Issuer Business Description | This table contains the business description for the issuer of the asset.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: OrgCode
+  type: INTEGER
+  nullable: false
+  description: OrgCode is a unique integer code that identifies an organization. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: OrgDesc
+  type: varchar(max)
+  nullable: true
+  description: OrgDesc is a brief description of the organization’s business and operations.
+---
+table: qa_fi_ejv.FIEJVOrgIdent
+domain: fixed_income
+description: Organization Third Party Identifiers | This table contains a listing of third-party identifiers particular to
+  an organization such as CUSIP and ISIN. | Item int N Item is a code representing the identifier type code. See the FIEJVItem
+  table
+update_cadence: Daily, Monday – Friday
+columns:
+- name: OrgCode
+  type: INTEGER
+  nullable: false
+  description: OrgCode is a unique integer code that identifies an organization. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is a code representing the identifier type code. See the FIEJVItem table (Item) for a complete list of
+    codes.
+- name: SeqNum
+  type: TINYINT
+  nullable: false
+  description: For a particular organization, there might be more than one value for the same identifier type. SeqNum helps
+    capture the various values.
+- name: Value_
+  type: varchar(30)
+  nullable: true
+  description: Value_ is the value for that respective identifier.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: StartDate is the date the respective identifier value has changed for a particular organization.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is populated when the identifier value for an organization changes.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs.
+---
+table: qa_fi_ejv.FIEJVOrgIndHdr
+domain: fixed_income
+description: Organization Industry Sector Details | This table contains industry sector details for a particular organization
+  such as NAIC code and SIC code.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: OrgCode
+  type: INTEGER
+  nullable: false
+  description: OrgCode is a unique integer code that identifies an organization. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is an item identifying the NAIC code or the SIC code column. The Item number is populated from the FIEJVItem
+    table.
+- name: Value_
+  type: INTEGER
+  nullable: false
+  description: Value_ is the corresponding value for the respective item (NAIC/SIC). FIEJVOrgIndHdr.Value_ joins with FIEJVDesc.Code
+    where Type_ = 87 for NAIC codes.
+- name: IsPrimary
+  type: TINYINT
+  nullable: true
+  description: IsPrimary is a 1/0 flag indicating the primary NAIC/SIC code of the organization (IsPrimaryNAICSectorOf / IsPrimarySICSectorOf).
+---
+table: qa_fi_ejv.FIEJVOrgInfo
+domain: fixed_income
+description: Asset Issuer Information | This table contains the basic information for the issuer of the asset.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: OrgCode
+  type: INTEGER
+  nullable: false
+  description: OrgCode is a unique integer code that identifies an organization. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: AddTypeCode
+  type: char(3)
+  nullable: true
+  description: AddTypeCode is set to 'HEA'.
+- name: AddLine1
+  type: varchar(255)
+  nullable: true
+  description: AddLine1 is the current address of the organization's principal executive offices.
+- name: City
+  type: varchar(60)
+  nullable: true
+  description: City is the current city of the organization's principal executive offices.
+- name: Region
+  type: varchar(80)
+  nullable: true
+  description: Region is the current state, province, or region of the organization's principal executive offices.
+- name: PostCode
+  type: varchar(10)
+  nullable: true
+  description: PostCode is the current post code of the organization's principal executive offices.
+- name: ISOCtryCode
+  type: char(2)
+  nullable: true
+  description: ISOCtryCode is a code representing the current country of the organization's principal executive offices. FIEJVOrgInfo.ISOCtryCode
+    joins with FIEJVDesc.Code where Type_ = 12.
+- name: PhoneNum
+  type: varchar(20)
+  nullable: true
+  description: PhoneNum is the current telephone number, including area code, of the organization's principal executive offices.
+- name: URL
+  type: varchar(100)
+  nullable: true
+  description: URL is the Internet address for the party.
+- name: OrgIncorpYr
+  type: INTEGER
+  nullable: true
+  description: OrgIncorpYr is the year in which the company received its state charter allowing it to operate as a corporation.
+    If the year of incorporation is not disclosed, or if the company is not a corporation, then this is the year in which
+    the company was formed.
+- name: PubPriFl
+  type: TINYINT
+  nullable: true
+  description: PubPriFl is a 1/0 flag indicating whether the registrant is privately owned.
+- name: OrgActiveFl
+  type: TINYINT
+  nullable: true
+  description: OrgActiveFl indicates whether a GovCorp party still exists as a company. 1 = Active, 2 = Inactive.
+- name: FiscalYrEnd
+  type: varchar(6)
+  nullable: true
+  description: FiscalYrEnd is the date that marks the end of a company’s annual accounting period, when the books are closed
+    and profit or loss is determined.
+- name: OrgTypeCode
+  type: varchar(5)
+  nullable: true
+  description: 'In Quantitative Data Warehouse (QDW), this value is populated directly from SDI. In SDI the logic is as follows:
+    If party.indu_sector_cd = ''SPRA'', the OrgTypeCode is ''SUPN''. Else, if party.sovr_class_cd = ''GOVT'', ''MUNI'', ''PROV'',
+    or ''TREA'', the OrgTypeCode is ''GVT''. Else, if party.sovr_class_cd = ''AGNC'', the OrgTypeCode is ''GVTOC''. LSEG Quantitative
+    Analytics Database Schema for Fixed Income EJV 25'
+- name: OrgSubTypeCode
+  type: varchar(5)
+  nullable: true
+  description: If party.sovr_class_cd = 'CTLB', the OrgSubTypeCode is 'CBNK'. Else, if party.sovr_class_cd = 'MUNI', the OrgSubTypeCode
+    is 'LGVT'. Else, if party.sovr_class_cd = 'PROV', the OrgSubTypeCode is 'SPGVT'. Otherwise, OrgSubTypeCode is NULL. FIEJVOrgInfo.OrgSubTypeCode
+    joins with FIEJVDesc.Code where Type_ = 67.
+- name: AcctOrgID
+  type: BIGINT
+  nullable: true
+  description: AcctOrgID is the identifier for the current accountant representing the organization.
+- name: IncISOCtryCode
+  type: char(2)
+  nullable: true
+  description: IncISOCtryCode is the country in which the organization received its charter allowing it to operate as a corporation.
+    If the country of incorporation is not disclosed, or if the company is not a corporation, then this is the country in
+    which the company was formed. FIEJVOrgInfo.IncISOCtryCode joins with FIEJVDesc.Code where Type_ = 12.
+- name: CurImmParOrgID
+  type: BIGINT
+  nullable: true
+  description: An immediate parent is a company that owns or controls the issuer through the ownership of greater than 50%
+    of the voting stock.
+- name: CurUltParOrgID
+  type: BIGINT
+  nullable: true
+  description: An ultimate parent is a company that owns or controls the immediate parent through the ownership of greater
+    than 50% of the voting stock.
+- name: GemOrgID
+  type: BIGINT
+  nullable: true
+  description: GemOrgID is a unique GEM Perm ID attributed to an organization.
+- name: IsDeleted
+  type: TINYINT
+  nullable: false
+  description: IsDeleted is a 1/0 flag indicating if the organization has been deleted.
+- name: DelDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: DelDate is the date the organization was deleted (feed date).
+- name: DelTime
+  type: TIMESTAMP(6)
+  nullable: true
+  description: DelTime is the time the organization was deleted (feed time).
+---
+table: qa_fi_ejv.FIEJVOrgName
+domain: fixed_income
+description: Asset Issuer Name | This table contains the different names for the issuer of the asset. | organization name
+  type code. See the FIEJVCode table
+update_cadence: Daily, Monday – Friday
+columns:
+- name: OrgCode
+  type: INTEGER
+  nullable: false
+  description: OrgCode is a unique integer code that identifies an organization. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: OrgNameTypeCode
+  type: INTEGER
+  nullable: false
+  description: OrgNameTypeCode is a code representing the organization name type code (legal, alias, etc.). FIEJVOrgName.OrgNameTypeCode
+    joins with FIEJVCode.Code where Type_ = 13.
+- name: NameStartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: NameStartDate is the date when the current name became effective.
+- name: OrgName
+  type: varchar(255)
+  nullable: true
+  description: OrgName is the current organization name related to the organization name type code. See the FIEJVCode table
+    (Organization Name Type Code) for a complete list of codes.
+- name: NameEndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: NameEndDate is populated when the OrgName (for a particular OrgNameTypeCode) for an organization changes. The
+    NameEndDate is the NameEffDate for the change for that security minus one day. LSEG Quantitative Analytics Database Schema
+    for Fixed Income EJV 26
+---
+table: qa_fi_ejv.FIEJVPayInKind
+domain: fixed_income
+description: Pay-in-Kind Security Information | This table contains information specific to pay-in-kind (PIK) securities.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: EffDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: EffDate is the date on which interest begins to accrue at the cash or PIK rate.
+- name: CashRate
+  type: FLOAT
+  nullable: true
+  description: CashRate is the rate of interest that accrues when interest is payable in cash. Usually, the cash rate is the
+    same as the coupon rate on the security.
+- name: TypeCode
+  type: INTEGER
+  nullable: true
+  description: TypeCode is a code representing the type of security to be distributed to holders in lieu of cash interest
+    payments. FIEJVPayInKind.TypeCode joins with FIEJVCode.Code where Type_ = 20.
+- name: PIKRate
+  type: FLOAT
+  nullable: true
+  description: PIKRate is the rate of interest accruing when interest is payable in additional securities. Usually, the PIK
+    rate is the same as the coupon rate on the security. PIKIssCode number (38,0) Y An identifier assigned to the security
+    that is used for the payment of interest/dividends in kind, in lieu of cash. A value may only be updated when PIKRate
+    is greater than 0.
+- name: IntPayDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: IntPayDate is the first date on which payment of interest may be made in securities instead of, or in addition
+    to, cash.
+- name: FrstCashPayDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: FrstCashPayDate is the first date on which payment of interest may be made in cash instead of, or in addition
+    to, additional securities.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs.
+---
+table: qa_fi_ejv.FIEJVPayInPart
+domain: fixed_income
+description: Pay-in-Part Security Information | This table contains information on securities that can be issued in parts.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: EffDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: EffDate is the date on which partial payment is due. This date pertains to securities where the original issue
+    amount can be purchased in parts.
+- name: PIPPct
+  type: FLOAT
+  nullable: true
+  description: PIPPct is the percentage of the total issue amount due on the pay date. This percentage pertains to securities
+    for which the original issue amount can be purchased in parts.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs. LSEG Quantitative
+    Analytics Database Schema for Fixed Income EJV 27
+---
+table: qa_fi_ejv.FIEJVPrefrdStk
+domain: fixed_income
+description: Preferred Stock Information | This table contains information pertaining specifically to preferred stock issues.
+  | FIEJVCode table (PreferredStkDFlag) for a complete list of codes.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: AnnlDiv
+  type: FLOAT
+  nullable: true
+  description: AnnlDiv is the last regular annual dividend paid to the stockholder by the company (expressed in currency of
+    issue).
+- name: AuthorizedShares
+  type: INTEGER
+  nullable: true
+  description: AuthorizedShares is the maximum number of shares of a class or type of security which may be issued by the
+    registrant, as authorized by the articles of incorporation of the registrant.
+- name: InsIssueDiv
+  type: FLOAT
+  nullable: true
+  description: InsIssueDiv is the initial rate at which earnings are distributed to holders of the offered security.
+- name: LiqValue
+  type: FLOAT
+  nullable: true
+  description: LiqValue is the total amount that a stockholder is entitled to receive from the distribution of assets in the
+    event of liquidation.
+- name: ShrParValue
+  type: FLOAT
+  nullable: true
+  description: ShrParValue is the face value of a security.
+- name: ISOCurCode
+  type: char(3)
+  nullable: true
+  description: ISOCurCode is the currency in which the amounts are given. FIEJVPrefrdStk.ISOCurCode joins with FIEJVDesc.Code
+    where Type_ = 23.
+- name: PrefrdStkDFlag
+  type: INTEGER
+  nullable: false
+  description: PrefrdStkDFlag is a codified value for the attributes for a security. See the FIEJVCode table (PreferredStkDFlag)
+    for a complete list of codes.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs.
+---
+table: qa_fi_ejv.FIEJVPrincipalHdr
+domain: fixed_income
+description: Asset Principal Cash Flow Data | This table contains the data elements necessary for determining the principal
+  cash flows of an asset. | Item int N Item is a code representing the respective item. See the FIEJVItem table (Item)
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is a code representing the respective item. See the FIEJVItem table (Item) for a complete list of codes.
+- name: EffDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: EffDate is the date for which the principal terms for this leg number are in effect.
+- name: Value_
+  type: varchar(30)
+  nullable: true
+  description: Value_ is the value for the respective item.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs. LSEG Quantitative
+    Analytics Database Schema for Fixed Income EJV 28
+---
+table: qa_fi_ejv.FIEJVRdmpRpt
+domain: fixed_income
+description: Market Report Data | This table contains market report data.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: SeqNum
+  type: TINYINT
+  nullable: false
+  description: For a particular security, there might be more than one report. SeqNum helps capture the various values. The
+    logical keys for the generation of SeqNum are TypeCode, redemptionDate, OfferComplDate, and OffrExpDate.
+- name: TypeCode
+  type: varchar(3)
+  nullable: true
+  description: TypeCode is a code representing the type of market report. FIEJVRdmpRpt.TypeCode joins with FIEJVDesc.Code
+    where Type_ = 42.
+- name: RedemDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: RedemDate is the date listed in the source document and/or news wires notifying the end of a specific redemption.
+    This date is usually fixed.
+- name: OfferComplDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: OfferComplDate is the date on which the corporate action (exchange, tender, etc.) takes place.
+- name: OffrExpDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: OffrExpDate is the date listed in the source document and/or news wires notifying the end of a specific corporate
+    action. However, this date may be extended due to lack of participation.
+- name: OffrEffDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: OffrEffDate is the beginning date of a corporate action. Normally the date of the document or news wire that
+    announces the action.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs.
+---
+table: qa_fi_ejv.FIEJVRdmpRptFData
+domain: fixed_income
+description: Market Report Float Data | This table contains float data type market report data items. | Item int N Item is
+  a code representing the respective item. See the FIEJVItem table (Item) for
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: SeqNum
+  type: TINYINT
+  nullable: false
+  description: For a particular security, there might be more than one report. SeqNum helps capture the various values. The
+    logical keys for generation of SeqNum are TypeCode, redemptionDate, OfferComplDate, and OffrExpDate.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is a code representing the respective item. See the FIEJVItem table (Item) for a complete list of codes.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the value for the respective item.
+- name: ISOCurCode
+  type: char(3)
+  nullable: true
+  description: ISOCurCode is the currency in which the amounts are given. FIEJVRdmpRptFData.ISOCurCode joins with FIEJVDesc.Code
+    where Type_ = 23.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs. LSEG Quantitative
+    Analytics Database Schema for Fixed Income EJV 29
+---
+table: qa_fi_ejv.FIEJVSecAdminHdr
+domain: fixed_income
+description: Security Issue Organizations | This table identifies the various organizations (for example, commission agent
+  and deal manager) that have been | FIEJVItem table (Item) for a complete list of codes.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is a code relating to the various agents associated with a bond issue. See the FIEJVItem table (Item)
+    for a complete list of codes.
+- name: GemOrgID
+  type: BIGINT
+  nullable: false
+  description: GemOrgID is the Organization ID for the respective agent code.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs.
+---
+table: qa_fi_ejv.FIEJVSecAmt
+domain: fixed_income
+description: Outstanding Values | This table contains historical and current amount outstanding values. | FIEJVItem table
+  (Item) for a complete list of codes.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is a code representing the respective amount outstanding item. See the FIEJVItem table (Item) for a complete
+    list of codes.
+- name: AmtDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: AmtDate is a schedule of the history of all obtainable dates of changed amounts outstanding.
+- name: value_
+  type: varchar(30)
+  nullable: true
+  description: value_ is the value for the respective item.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs.
+---
+table: qa_fi_ejv.FIEJVSecCalendar
+domain: fixed_income
+description: Instrument Cut-Off Date Calendar | This table contains the information related to the calendar applicable for
+  cut-off date for an instrument.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: DomSettCalCode
+  type: char(3)
+  nullable: true
+  description: DomSettCalCode is a code indicating the calendar used to determine settle date. LSEG Quantitative Analytics
+    Database Schema for Fixed Income EJV 30
+- name: DomSettDays
+  type: INTEGER
+  nullable: true
+  description: DomSettDays is the number of business days after the completion of a trade during which the security is settled
+    by the holder’s domestic clearing house.
+- name: ExDivDays
+  type: INTEGER
+  nullable: true
+  description: ExDivDays is an integer used in conjunction with the ex-dividend calendar code. For example, if the exdiv_cal_cd
+    is a "...calendar day of month" value and the ex-dividend date is on the 30th calendar day of the month, 30 would show
+    in this field. If the exdiv_cal_cd is a "...calendar day(s) prior" value, then it is an offset from the pay date. For
+    example, 15 means "15 calendar days prior to the pay date."
+- name: SettHldConvCode
+  type: varchar(4)
+  nullable: true
+  description: SettHldConvCode is a code representing the holiday calendar convention used to calculate the domestic settlement
+    date when the dom_settle_cal_cd = 'BDY' (Business Days). FIEJVSecCalendar.SettHldConvCode joins with FIEJVDesc.Code where
+    Type_ = 35.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs.
+---
+table: qa_fi_ejv.FIEJVSecGuaUnd
+domain: fixed_income
+description: Security Guarantor and Underwriter Organizations | This table identifies the various guarantor and underwriter
+  organizations which have been involved with the issue | FIEJVItem table (Item) for a complete list of codes.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: GemOrgID
+  type: BIGINT
+  nullable: false
+  description: GemOrgID is the Organization ID for the respective agent code.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is a code relating to the various agents associated with a bond issue. See the FIEJVItem table (Item)
+    for a complete list of codes.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the date from which the respective organization has the undersigned relationship (as defined by
+    item) with the security.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the date on which the undersigned relationship (as defined by item) between the organization and
+    the security ends.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs.
+---
+table: qa_fi_ejv.FIEJVSecIdent
+domain: fixed_income
+description: Issue Third Party Identifiers | This table contains a listing of third-party identifiers particular to an issue
+  such as CUSIP and ISIN. | Item int N Item is a code representing the identifier type code. See the FIEJVItem table
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor. LSEG Quantitative Analytics Database Schema for Fixed Income
+    EJV 31
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is a code representing the identifier type code. See the FIEJVItem table (Item) for a complete list of
+    codes.
+- name: SeqNum
+  type: TINYINT
+  nullable: false
+  description: For a particular security, there might be more than one value for the same identifier type. SeqNum helps capture
+    the various values.
+- name: Value_
+  type: varchar(30)
+  nullable: true
+  description: Value_ is the value for that respective identifier.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: StartDate is the date the respective identifier value has changed for a particular security.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is populated when the indentifier value for a security changes.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs.
+---
+table: qa_fi_ejv.FIEJVSecInfo
+domain: fixed_income
+description: Security Static Values | This table contains the static values for a particular security. | a security. See the
+  FIEJVCode table (ProspectusDFlag) for a | the FIEJVCode table (SecInfoDFlag) for a complete list of codes.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor. GEMInstrId is the logical key used to generate InstrCode.
+- name: OffgMktCode
+  type: varchar(4)
+  nullable: true
+  description: OffgMktCode is a code representing the subclassification of the asset within the security type code. FIEJVSecInfo.OffgMktCode
+    joins with FIEJVDesc.Code where Type_ = 6.
+- name: DebtISOCurCode
+  type: char(3)
+  nullable: true
+  description: DebtISOCurCode is a code representing the primary currency of the issue. FIEJVSecInfo.DebtISOCurCode joins
+    with FIEJVDesc.Code where Type_ = 23.
+- name: IssTypeCode
+  type: varchar(10)
+  nullable: true
+  description: IssTypeCode is a code classifying the security. FIEJVSecInfo.IssTypeCode joins with FIEJVDesc.Code where Type_
+    = 29.
+- name: MoodysSnrtyCode
+  type: varchar(3)
+  nullable: true
+  description: MoodysSnrtyCode is a code representing the Moody's debt class. FIEJVSecInfo.MoodysSnrtyCode joins with FIEJVDesc.Code
+    where Type_ = 41.
+- name: TraceEligCode
+  type: char(1)
+  nullable: true
+  description: TraceEligCode is a code indicating the TRACE eligibility of a security. FIEJVSecInfo.TraceEligCode joins with
+    FIEJVDesc.Code where Type_ = 72.
+- name: DebtFlngStaCode
+  type: INTEGER
+  nullable: true
+  description: DebtFlngStaCode is a code representing the status of the document. FIEJVSecInfo.DebtFlngStaCode joins with
+    FIEJVCode.Code where Type_ = 11.
+- name: DebtIssTypeCode
+  type: varchar(8)
+  nullable: true
+  description: DebtIssTypeCode is a code for the description of the security itself. For example, bond, note, bill, debenture,
+    preferred stock, warrant, or commercial paper. FIEJVSecInfo.DebtIssTypeCode joins with FIEJVDesc.Code where Type_ = 39.
+- name: ProTypeCode
+  type: varchar(8)
+  nullable: true
+  description: ProTypeCode is a code for the description of the program for issuance of the security. For example, Brady,
+    Medium Term Note, OPF Jumbo, or Schiffspfandbriefe. FIEJVSecInfo.ProTypeCode joins with FIEJVDesc.Code where Type_ = 51.
+- name: PhyFormCode
+  type: char(3)
+  nullable: true
+  description: PhyFormCode is a code representing the form in which the security can be traded in the secondary market. LSEG
+    Quantitative Analytics Database Schema for Fixed Income EJV 32
+- name: DebtSrcCode
+  type: varchar(3)
+  nullable: true
+  description: DebtSrcCode is a code indicating the source from which the terms of the security originated. FIEJVSecInfo.DebtSrcCode
+    joins with FIEJVDesc.Code where Type_ = 71.
+- name: WithhldgTaxRate
+  type: FLOAT
+  nullable: true
+  description: WithhldgTaxRate is the tax deducted at source on interest or dividends to be paid by the investor. It is most
+    often given for international government issues.
+- name: NtvYldTypeCode
+  type: char(2)
+  nullable: true
+  description: NtvYldTypeCode is a code indicating which formula, including day count and compounding conventions, to be used
+    for price/yield calculations. FIEJVSecInfo.NtvYldTypeCode joins with FIEJVDesc.Code where Type_ = 80.
+- name: StdYldTypeCode
+  type: char(2)
+  nullable: true
+  description: StdYldTypeCode is a code indicating the equivalent yield type to be used for comparison of yields across security
+    types. FIEJVSecInfo.StdYldTypeCode joins with FIEJVDesc.Code where Type_ = 80.
+- name: IssrGEMOrgId
+  type: BIGINT
+  nullable: true
+  description: IssrGEMOrgId is the issuer level identifier that can be referenced to GEMOrgId in FIEJVOrgInfo table.
+- name: IssName
+  type: varchar(40)
+  nullable: true
+  description: IssName is the abbreviated form of the full security name.
+- name: IssNameTypeCode
+  type: char(3)
+  nullable: true
+  description: IssNameTypeCode is set to 'LNG'. This value is populated directly from the feed file.
+- name: IssNameLangCode
+  type: char(2)
+  nullable: true
+  description: IssNameLangCode is set to 'en'. This value is populated directly from the feed file.
+- name: IssClassTypeCode
+  type: char(2)
+  nullable: true
+  description: IssClassTypeCode is set to 'FI'. This value is populated directly from the feed file.
+- name: IssSovTypeCode
+  type: varchar(4)
+  nullable: true
+  description: 'This value is populated directly from the feed file. SDI logic for this column is as follows: If asset.sovr_class_cd
+    is ''AGNC'', IssSovTypeCode is ''AGCY''. If asset.sovr_class_cd is ''MUNI'', IssSovTypeCode is ''MUN''. If asset.sovr_class_cd
+    is ''CTLB'', ''GOVT'', ''PROV'', or ''TREA'', IssSovTypeCode is ''GVSV''. If either asset.convertible_fl = ''y'' or orig_iss_info.instrument_type_cd
+    is ''PFDSTK'' or ''TRPFDSEC'', IssSovTypeCode is ''PFDC''. Otherwise, default to ''CORP''.'
+- name: IssSubTypeCode
+  type: char(3)
+  nullable: true
+  description: IssSubTypeCode is set to 'UNK'. This value is populated directly from the feed file.
+- name: IssSeries
+  type: varchar(20)
+  nullable: true
+  description: IssSeries is the series number (for example, 1998-F). This field may also be used for hybrid securities such
+    as MIPPS.
+- name: MatDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: MatDate is the date on which the principal amount of the security becomes due and payable, as stated in the
+    terms of the security.
+- name: IssStatusCode
+  type: varchar(5)
+  nullable: true
+  description: IssStatusCode is a code representing the status of the security. FIEJVSecInfo.IssStatusCode joins with FIEJVDesc.Code
+    where Type_ = 5.
+- name: IssStatusEffDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: IssStatusEffDate is the date for which the status code is effective.
+- name: GEMInstrID
+  type: BIGINT
+  nullable: true
+  description: GEMInstrID is a unique GEM Perm ID attributed to a security.
+- name: EJVAssetID
+  type: varchar(20)
+  nullable: true
+  description: EJVAssetID is a unique EJV Asset identifier for an instrument.
+- name: InitAccDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: InitAccDate is the date from which interest on the bond begins accruing.
+- name: CurrCpnRate
+  type: FLOAT
+  nullable: true
+  description: CurrCpnRate is the effective interest rate for the security, expressed as an annual percentage of face value.
+    For preferred stocks, the rate is expressed as a percent of the liquidation preference.
+- name: ProsDflag
+  type: INTEGER
+  nullable: false
+  description: ProsDflag is the codified value for the prospectus related attributes for a security. See the FIEJVCode table
+    (ProspectusDFlag) for a complete list of codes. LSEG Quantitative Analytics Database Schema for Fixed Income EJV 33
+- name: SecInfoDFlag
+  type: INTEGER
+  nullable: false
+  description: SecInfoDFlag is the codified value for the attributes for a security. See the FIEJVCode table (SecInfoDFlag)
+    for a complete list of codes.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs.
+- name: IsDeleted
+  type: TINYINT
+  nullable: false
+  description: IsDeleted is a 1/0 flag indicating if the instrument has been deleted.
+- name: DelDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: DelDate is the date the instrument was deleted (feed date).
+- name: DelTime
+  type: TIMESTAMP(6)
+  nullable: true
+  description: DelTime is the time the instrument was deleted (feed time).
+---
+table: qa_fi_ejv.FIEJVSecIssInfo
+domain: fixed_income
+description: Security Original Issue Information | This table contains information associated with the original issue of the
+  security. | FIEJVCode table (OrigIssDFlag) for a complete list of codes.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: EuroCenBnkCode
+  type: char(1)
+  nullable: true
+  description: 'EuroCenBnkCode is a code representing eligibility for Eurosystem monetary policy operations. Eligible assets
+    belong to one of two categories: tier one consists of marketable debt instruments fulfilling uniform euro area-wide eligibility
+    criteria specified by the European Central Bank (ECB); tier two consists of additional assets, marketable and non-marketable,
+    which are of particular importance to national financial markets and banking systems and for which eligibility criteria
+    is established by'
+- name: IssYTM
+  type: FLOAT
+  nullable: true
+  description: IssYTM is the calculation that determines rate of the return an investor will receive if a long-term, interest-bearing
+    investment is held to its maturity date. The calculation formula includes purchase price, redemption value, time to maturity,
+    coupon yield, and the time between interest payments. For floating rate securities, the initial coupon rate is used in
+    the calculation.
+- name: OverallotDays
+  type: INTEGER
+  nullable: true
+  description: If there is an over-allotment option granted to the underwriters to purchase additional securities, OverallotDays
+    is the number of days in which the option is effective.
+- name: PrcQuoteConvtCode
+  type: varchar(3)
+  nullable: true
+  description: PrcQuoteConvtCode is a code representing the numeric format in which prices are quoted. FIEJVSecIssInfo.PrcQuoteConvtCode
+    joins with FIEJVDesc.Code where Type_ = 53.
+- name: PrcQuoteRndCode
+  type: varchar(2)
+  nullable: true
+  description: PrcQuoteRndCode is a code representing the rounding factor or number of decimals retained when calculating
+    a price given a yield. FIEJVSecIssInfo.PrcQuoteRndCode joins with FIEJVDesc.Code where Type_ = 62.
+- name: SeasngDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: SeasngDate is the first day that a non-U.S. domestic bond is considered seasoned for trading by U.S. investors.
+- name: DebtInsOffrCode
+  type: INTEGER
+  nullable: true
+  description: DebtInsOffrCode is a code representing the nature of the registration. FIEJVSecIssInfo.DebtInsOffrCode joins
+    with FIEJVCode.Code where Type_ = 9.
+- name: SnrtyCode
+  type: varchar(8)
+  nullable: true
+  description: SnrtyCode is a code representing the debt seniority type. FIEJVSecIssInfo.SnrtyCode joins with FIEJVDesc.Code
+    where Type_ = 64. LSEG Quantitative Analytics Database Schema for Fixed Income EJV 34
+- name: PurAmtToPub
+  type: FLOAT
+  nullable: true
+  description: PurAmtToPub is the price at which the public may purchase the offered security from the underwriters.
+- name: ValuationDateCode
+  type: char(2)
+  nullable: true
+  description: ValuationDateCode is a code representing the values that describe market rules for the setting of a valuation
+    date, usually with respect to a trade or settlement date. FIEJVSecIssInfo.ValuationDateCode joins with FIEJVDesc.Code
+    where Type_ = 76.
+- name: IniPhyFormCode
+  type: char(3)
+  nullable: true
+  description: IniPhyFormCode is a code representing the form in which the security is originally issued. FIEJVSecIssInfo.IniPhyFormCode
+    joins with FIEJVDesc.Code where Type_ = 27. BnhmrkAtIssGemId number (38,0) Y Contains the asset_id of the benchmark against
+    which the bond was priced at issuance.
+- name: AvgLifeAtOffr
+  type: FLOAT
+  nullable: true
+  description: AvgLifeAtOffr is the average number of years the principal of the offered security will be outstanding.
+- name: ISOCurCode
+  type: char(3)
+  nullable: true
+  description: ISOCurCode is the currency in which the principal is paid. FIEJVSecIssInfo.ISOCurCode joins with FIEJVDesc.Code
+    where Type_ = 23.
+- name: DelyDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: DelyDate is the date on which the securities are delivered by the registrant for payment from the underwriter(s).
+    It is also known as the settlement date.
+- name: IssPrc
+  type: FLOAT
+  nullable: true
+  description: IssPrc is the price at which the public may purchase the offered security from the underwriters. This price
+    is expressed as a percentage of par.
+- name: AmtIssd
+  type: FLOAT
+  nullable: true
+  description: AmtIssd is the total amount, exclusive of interest or premium, due to the holder at maturity. This value is
+    inscribed on the certificate or instrument.
+- name: IssPriISOCtryCode
+  type: char(2)
+  nullable: true
+  description: IssPrilSOCtryCode is the primary country where the security was issued (IsIssuedInPrimary). FIEJVSecIssInfo.IssPriISOCtryCode
+    joins with FIEJVDesc.Code where Type_ = 12.
+- name: IssDFlag
+  type: INTEGER
+  nullable: false
+  description: IssDFlag is the codified value for the attributes for a security. See the FIEJVCode table (OrigIssDFlag) for
+    a complete list of codes.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs.
+---
+table: qa_fi_ejv.FIEJVSecListingHdr
+domain: fixed_income
+description: Instrument Countries and Exchanges | This table contains details of the countries and the exchanges on which
+  an instrument is listed and traded.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is an item identifying IssISOCtrycode, ExchCode, or the MIC code column. The Item number is populated
+    from the FIEJVItem table.
+- name: SeqNum
+  type: TINYINT
+  nullable: false
+  description: For a particular instrument, there might be more than one value for the same item. SeqNum helps capture the
+    various values.
+- name: Value_
+  type: varchar(4)
+  nullable: true
+  description: Value_ is the corresponding value for the respective item. Relationship types are “IsISsuedIn” and “IsTradedOn”.
+    LSEG Quantitative Analytics Database Schema for Fixed Income EJV 35
+- name: IsPrimary
+  type: TINYINT
+  nullable: true
+  description: IsPrimary is a 1/0 flag indicating the primary IssISOCtryCode or the Official place of Listing for the associates
+    MIC code of the instrument (IsIssuedInPrimary / IsOfficialPlaceOfListingOf).
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs.
+---
+table: qa_fi_ejv.FIEJVSecNotes
+domain: fixed_income
+description: Conditional Terms | This table contains information on any conditional terms extracted from the prospectus.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: NoteTypeCode
+  type: INTEGER
+  nullable: false
+  description: NoteTypeCode is a code representing the subject of the note record. FIEJVSecNotes.NoteTypeCode joins with FIEJVCode.Code
+    where Type_ = 19. To get descriptions for the field values, cross-reference with FIEJVDesc.Code where Type_ = 43.
+- name: EffDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: EffDate is the effective date of the note.
+- name: EffTime
+  type: INTEGER
+  nullable: false
+  description: EffTime is the effective datetime of the note.
+- name: Note
+  type: varchar(512)
+  nullable: true
+  description: The Note and LargeNote fields provide descriptive information for inquiry or display regarding terms and conditions
+    not captured in collection items.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs.
+- name: LargeNote
+  type: varchar(max)
+  nullable: true
+  description: The Note and LargeNote fields provide descriptive information for inquiry or display regarding terms and conditions
+    not captured in collection items.
+---
+table: qa_fi_ejv.FIEJVSrcDoc
+domain: fixed_income
+description: Security Documentation Sources | This table contains all the related sources of documentation used to model the
+  security.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: EffDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: EffDate is the date of the source document used to collect information on the offered security.
+- name: DocSrcTypeCode
+  type: varchar(3)
+  nullable: true
+  description: DocSrcTypeCode is a code representing the source used to collect information on the security. FIEJVSrcDoc.DocSrcTypeCode
+    joins with FIEJVDesc.Code where Type_ = 69. LSEG Quantitative Analytics Database Schema for Fixed Income EJV 36
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs.
+---
+table: qa_fi_ejv.FIEJVUnderwriters
+domain: fixed_income
+description: Underwriters | This table contains a listing of all underwriters. Historical issues may not be complete, but
+  for new issues
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: UndwrtOrgCode
+  type: INTEGER
+  nullable: false
+  description: UndwrtOrgCode is a unique LSEG system-generated identifier for an underwriter.
+- name: RankingCode
+  type: TINYINT
+  nullable: false
+  description: RankingCode is a code representing the ranking of the underwriter. FIEJVUnderwriters.RankingCode joins with
+    FIEJVCode.Code where Type_ = 6.
+- name: EffDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: EffDate is the date assigned when new underwriters are added to the list.
+- name: Allotment
+  type: FLOAT
+  nullable: true
+  description: Allotment is the total amount that each corresponding underwriter has agreed to purchase pursuant to the offering.
+- name: ShrAllot
+  type: INTEGER
+  nullable: true
+  description: ShrAllot displays the total shares that each corresponding underwriter has agreed to purchase pursuant to the
+    offering.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs. FIEJV Call Tables
+    The following diagram shows the relationship between the FIEJV Call tables. PK,FK1 InstrCode int PK CallSettTypeCode int
+    MkWhlSpd float MaxNtc int MinNtc int FreqCode int MetCode varchar(3) OptCode varchar(3) NtcUtsCode char(3) FinalCallPrc
+    float MkWhlIdx varchar(30) LicFlag int PK,FK2 InstrCode int PK,FK2 CallSettTypeCode int PK StartDate int EndDate int CallPrc
+    float LicFlag int LSEG
+---
+table: qa_fi_ejv.FIEJVCall
+domain: fixed_income
+description: Call Term Redemption Schedule | This table contains the redemption schedule for the corresponding call terms.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: CallSettTypeCode
+  type: INTEGER
+  nullable: false
+  description: 'CallSettTypeCode is a code that represents the type of call schedule: • 1 = CSH (Cash) • 2 = ECB (Equity Clawback
+    Call) • 3 = MKW (Make Whole Call) • 4 = SPC (Special Call) • 5 = REC (Regulatory Call) FIEJVCall.CallSettTypeCode joins
+    with FIEJVCode.Code where Type_ = 25. To get descriptions for the field values, cross-reference with FIEJVDesc.Code where
+    Type_ = 10.'
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the first date on which the offered security may be redeemed for a given period at an indicated
+    price.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the last date on which the offered security may be redeemed for a given period at an indicated price.
+- name: CallPrc
+  type: FLOAT
+  nullable: true
+  description: CallPrc is the price at which the offered security may be redeemed for a given period. CallPrc is expressed
+    as a percentage of the principal amount.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs.
+---
+table: qa_fi_ejv.FIEJVCallHdr
+domain: fixed_income
+description: Redemption Schedule Provisions | This table contains all the redemption provisions associated with the redemption
+  schedule.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: CallSettTypeCode
+  type: INTEGER
+  nullable: false
+  description: 'CallSettTypeCode is a code that represents the type of call schedule: – 1 = CSH (Cash) – 2 = ECB (Equity Clawback
+    Call) – 3 = MKW (Make Whole Call) – 4 = SPC (Special Call) – 5 = REC (Regulatory Call) FIEJVCallHdr.CallSettTypeCode joins
+    with FIEJVCode.Code where Type_ = 25. To get descriptions for the field values, cross-reference with FIEJVDesc.Code where
+    Type_ = 10. LSEG Quantitative Analytics Database Schema for Fixed Income EJV 38'
+- name: MkWhlSpd
+  type: FLOAT
+  nullable: true
+  description: MkWhlSpd is the basis point spread over Treasury pertaining to make whole calls.
+- name: MaxNtc
+  type: INTEGER
+  nullable: true
+  description: MaxNtc is the maximum number of days marking the issuer’s notification that the bonds will be called.
+- name: MinNtc
+  type: INTEGER
+  nullable: true
+  description: MinNtc is the minimum number of days marking the issuer’s notification that the bonds will be called.
+- name: FreqCode
+  type: INTEGER
+  nullable: true
+  description: FreqCode is the code that represents the frequency of the periods in which redemption is scheduled to occur
+    per year. FIEJVCallHdr.FreqCode joins with FIEJVCode.Code where Type_ = 4.
+- name: MetCode
+  type: varchar(3)
+  nullable: true
+  description: MetCode is the code that indicates whether the company must redeem all or none of the securities in order for
+    redemption to occur. FIEJVCallHdr.MetCode joins with FIEJVDesc.Code where Type_ = 3.
+- name: OptCode
+  type: varchar(3)
+  nullable: true
+  description: OptCode is the code that indicates whether the bond is subject to redemption only on certain dates. FIEJVCallHdr.OptCode
+    joins with FIEJVDesc.Code where Type_ = 9.
+- name: NtcUtsCode
+  type: char(3)
+  nullable: true
+  description: NtcUtsCode is the code that specifies the units in which beginning call notification period and ending call
+    notification period are expressed (business days or calendar days). FIEJVCallHdr.NtcUtsCode joins with FIEJVDesc.Code
+    where Type_ = 26.
+- name: FinalCallPrc
+  type: FLOAT
+  nullable: true
+  description: FinalCallPrc is the price at which the bond is called. It is expressed as a percentage of the principal amount.
+- name: MkWhlIdx
+  type: varchar(30)
+  nullable: true
+  description: MkWhlIdx is the short name of the current treasury that the make whole premium uses in its calculation.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: 'LicFlag is a license flag that identifies to which entitlement package each data row belongs. LSEG Quantitative
+    Analytics Database Schema for Fixed Income EJV 39 FIEJV Convertibles Tables The following diagram shows the relationships
+    between the FIEJV Convertibles tables. PK,FK1 InstrCode int PK,FK1 LegNum tinyint PK StartDate int MetCode char(1) ISOCurCode
+    char(3) HrdlNtcDaysCode char(3) HrdlNtcDays int DurDaysCode char(3) DurDays int EndDate int NtcDaysCode char(3) NtcDays
+    int PrcCode char(1) '
+---
+table: qa_fi_ejv.FIEJVCv
+domain: fixed_income
+description: Convertible Bond Terms | This table contains the terms of the convertible bond at issue. The data in this view
+  typically does not change over | created if necessary. This table contains data only for CvTypeCode = ‘EI’.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: LegNum
+  type: TINYINT
+  nullable: false
+  description: LegNum identifies the segment for which a specific set of convertible terms are contained. A new leg number
+    is added each time the key convertible terms of the security change. This is generated within Quantitative Data Warehouse
+    (QDW) based on the feed file structure.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the date that corresponds with the effective conversion rate.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the date the conversion rights expire. LSEG Quantitative Analytics Database Schema for Fixed Income
+    EJV 40
+- name: CvTypeCode
+  type: char(2)
+  nullable: true
+  description: CvTypeCode is a code representing the convertible type. FIEJVCv.CvTypeCode joins with FIEJVDesc.Code where
+    Type_ = 19.
+- name: DilProCode
+  type: char(1)
+  nullable: true
+  description: DilProCode is a code representing the type of dilution protection. FIEJVCv.DilProCode joins with FIEJVDesc.Code
+    where Type_ = 28.
+- name: Optcode
+  type: char(3)
+  nullable: true
+  description: Optcode is a code indicating the exercise style of the conversion option. FIEJVCv.OptCode joins with FIEJVDesc.Code
+    where Type_ = 9.
+- name: FracCode
+  type: char(1)
+  nullable: true
+  description: FracCode is a code representing the treatment of fractions. FIEJVCv.FracCode joins with FIEJVCode.Code where
+    Type_ = 3.
+- name: AccIntCode
+  type: char(3)
+  nullable: true
+  description: AccIntCode is a code indicating how remaining accrued interest is handled if conversion takes place between
+    interest payment dates. FIEJVCv.AccIntCode joins with FIEJVDesc.Code where Type_ = 15.
+- name: NtcDayTypeCode
+  type: varchar(3)
+  nullable: true
+  description: NtcDayTypeCode is a code indicating whether business or calendar days are used to represent the notice period.
+    FIEJVCv.NtcDayTypeCode joins with FIEJVDesc.Code where Type_ = 26.
+- name: NtcDays
+  type: INTEGER
+  nullable: true
+  description: NtcDays is the number of days notice given prior to the conversion.
+- name: FreqCode
+  type: INTEGER
+  nullable: true
+  description: FreqCode is a code indicating the time period during which the conversion may occur. FIEJVCv.FreqCode joins
+    with FIEJVCode.Code where Type_ = 4.
+- name: CvOptCode
+  type: char(3)
+  nullable: true
+  description: CvOptCode is a code indicating who has the option to convert. FIEJVCv.CvOptCode joins with FIEJVDesc.Code where
+    Type_ = 16.
+- name: CvPremPct
+  type: FLOAT
+  nullable: true
+  description: CvPremPct is the percent premium to the convertible debt at issue.
+- name: SettCode
+  type: char(1)
+  nullable: true
+  description: SettCode is a code indicating how the underlying record is settled at conversion. FIEJVCv.SettCode joins with
+    FIEJVDesc.Code where Type_ = 65.
+- name: SettDayTypeCode
+  type: varchar(3)
+  nullable: true
+  description: SettDayTypeCode is a code indicating whether business or calendar days are used to represent the settlement
+    period. FIEJVCv.SettDayTypeCode joins with FIEJVDesc.Code where Type_ = 26.
+- name: SettDays
+  type: INTEGER
+  nullable: true
+  description: SettDays is the number of days representing settlement from delivery of the debt instrument to the receipt
+    of the underlying asset.
+- name: StkBuybackCode
+  type: char(1)
+  nullable: true
+  description: StkBuybackCode is a code indicating the type of protection available to either the issuer or investor if the
+    stock is bought back. FIEJVCv.StkBuybackCode joins with FIEJVDesc.Code where Type_ = 17.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs.
+---
+table: qa_fi_ejv.FIEJVCvHrdl
+domain: fixed_income
+description: Redemption/Conversion Conditions | This table contains the conditions under which the issuer can force redemption
+  and/or the holder can convert the | FIEJVDesc table (Day Type Code) for a complete list of codes.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: LegNum
+  type: TINYINT
+  nullable: false
+  description: LegNum identifies the segment for which a specific set of convertible terms are contained. A new leg number
+    is added each time the key convertible terms of the security change. This is generated within Quantitative Data Warehouse
+    (QDW) based on the feed file structure.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the start date from which the redemption price applies as part of the call hurdle.
+- name: MetCode
+  type: char(1)
+  nullable: true
+  description: MetCode is a code representing the method used to select a called bond, in the event of a partial redemption.
+    FIEJVCvHrdl.MetCode joins with FIEJVDesc.Code where Type_ = 3.
+- name: ISOCurCode
+  type: char(3)
+  nullable: true
+  description: ISOCurCode is a code representing the currency in which the bond is redeemed. FIEJVCvHrdl.ISOCurCode joins
+    with FIEJVDesc.Code where Type_ = 23.
+- name: HrdlNtcDaysCode
+  type: char(3)
+  nullable: true
+  description: HrdlNtcDaysCode is a code representing (along with hurdle day value) the maximum amount of time after crossing
+    a hurdle before the issuer must declare redemption. FIEJVCvHrdl.HrdlNtcDaysCode joins with FIEJVDesc.Code where Type_
+    = 26.
+- name: HrdlNtcDays
+  type: INTEGER
+  nullable: true
+  description: HrdlNtcDays is the maximum period after the last day that the hurdle duration condition has been met, before
+    the issuer has to give notice of redemption.
+- name: DurDaysCode
+  type: char(3)
+  nullable: true
+  description: DurDaysCode is a code representing the period during which conditions for the hurdle apply. FIEJVCvHrdl.DurDaysCode
+    joins with FIEJVDesc.Code where Type_ = 26.
+- name: DurDays
+  type: INTEGER
+  nullable: true
+  description: DurDays is the time elapsed, measured in business or calendar days, in which the asset must exceed the hurdle
+    value in order to trigger the hurdle.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the end date from which the redemption price applies as part of the call hurdle.
+- name: NtcDaysCode
+  type: char(3)
+  nullable: true
+  description: NtcDaysCode is a code representing the period of notice between the issuer’s declaration of redemption and
+    the actual redemption. See the FIEJVDesc table (Day Type Code) for a complete list of codes.
+- name: NtcDays
+  type: INTEGER
+  nullable: true
+  description: NtcDays is the number of days notice the issuer is required to give in the event that the hurdle is exceeded,
+    and the issuer elects to call the bond.
+- name: PrcCode
+  type: char(1)
+  nullable: true
+  description: PrcCode is a code indicating what price should be used for the call hurdle. FIEJVCvHrdl.PrcCode joins with
+    FIEJVDesc.Code where Type_ = 49.
+- name: RedemCode
+  type: char(1)
+  nullable: true
+  description: RedemCode is a code indicating how the bond is called. FIEJVExtcHrdl.RedemCode joins with FIEJVDesc.Code where
+    Type_ = 58.
+- name: RedemPrc
+  type: FLOAT
+  nullable: true
+  description: RedemPrc is the price at which the bond will be redeemed.
+- name: HrdlPrcTypeCode
+  type: char(1)
+  nullable: true
+  description: HrdlPrcTypeCode is a code representing how the hurdle value is expressed. FIEJVCvHrdl.HrdlPrcTypeCode joins
+    with FIEJVDesc.Code where Type_ = 37.
+- name: HrdlPrc
+  type: FLOAT
+  nullable: true
+  description: HrdlPrc is the underlying asset price value at or above which the issuer has a call option right.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs. LSEG Quantitative
+    Analytics Database Schema for Fixed Income EJV 42
+---
+table: qa_fi_ejv.FIEJVCvRfx
+domain: fixed_income
+description: Convertible Bond Refix Data | This table contains data values related to a possible refix of the conversion price
+  and ratio of a convertible bond.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: LegNum
+  type: TINYINT
+  nullable: false
+  description: LegNum identifies the segment for which a specific set of convertible terms are contained. A new leg number
+    is added each time the key convertible terms of the security change. This is generated within Quantitative Data Warehouse
+    (QDW) based on the feed file structure.
+- name: EffDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: EffDate is the date for which the refixed conversion price becomes effective.
+- name: CapPrcPct
+  type: FLOAT
+  nullable: true
+  description: CapPrcPct is the maximum to which the conversion price can be refixed. This value is expressed as a percentage
+    of the prevailing conversion price.
+- name: DaysCode
+  type: char(3)
+  nullable: true
+  description: DaysCode is a code indicating whether refix conditions run on business or calendar days. FIEJVCvRfx.DaysCode
+    joins with FIEJVDesc.Code where Type_ = 26.
+- name: DaysValue
+  type: INTEGER
+  nullable: true
+  description: DaysValue is the number of days for which the refix conditions must be met prior to the setting date.
+- name: FlrPrcPct
+  type: FLOAT
+  nullable: true
+  description: FlrPrcPct is the minimum to which the conversion price can be refixed. This value is expressed as a percentage
+    of the prevailing conversion price.
+- name: RfxHrdlPrcLow
+  type: FLOAT
+  nullable: true
+  description: RfxHrdlPrcLow is the lower reset limit, and minimum amount by which the new price must be less than the existing
+    or refix_ref_px (refix reference price) in order to trigger the refix. This value is expressed as a price (for example,
+    EUR 1).
+- name: RfxHrdlPrcHigh
+  type: FLOAT
+  nullable: true
+  description: RfxHrdlPrcHigh is the upper reset limit, and maximum amount by which the new price must be more than the existing
+    or refix_ref_px (refix reference price) in order to trigger the refix. This value is expressed as a price (for example,
+    EUR 1).
+- name: Premium
+  type: FLOAT
+  nullable: true
+  description: Premium defines whether the refixed conversion price will be at any premium to the average stock price over
+    which the refixed conversion price is fixed. The refix premium is usually zero, but sometimes it is the same as the original
+    premium at issue.
+- name: RfxRefPrc
+  type: FLOAT
+  nullable: true
+  description: RfxRefPrc is the price that is used to determine whether the underlying asset price has shifted enough to warrant
+    a change in the conversion price. A large enough change in the underlying asset price from the reference price triggers
+    a change in the conversion price.
+- name: SetDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: SetDate is the date on which the conversion refix terms are set.
+- name: RfxTypeCode
+  type: char(1)
+  nullable: true
+  description: RfxTypeCode is a code representing the refix type. FIEJVCvRfx.RfxTypeCode joins with FIEJVDesc.Code where Type_
+    = 60.
+- name: ISOCurCode
+  type: char(3)
+  nullable: true
+  description: ISOCurCode is the currency in which the various amounts are mentioned. FIEJVCvRfx.ISOCurCode joins with FIEJVDesc.Code
+    where Type_ = 23.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs. LSEG Quantitative
+    Analytics Database Schema for Fixed Income EJV 43
+---
+table: qa_fi_ejv.FIEJVCvTerms
+domain: fixed_income
+description: Convertible Bond Variables | This table contains data for variables such as prices, dates, rates, and price ratio
+  that typically can change due to
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: LegNum
+  type: TINYINT
+  nullable: false
+  description: LegNum identifies the segment for which a specific set of convertible terms are contained. A new leg number
+    is added each time the key convertible terms of the security change. This is generated within Quantitative Data Warehouse
+    (QDW) based on the feed file structure.
+- name: EffDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: EffDate is the date on which the event occurred.
+- name: ParValue
+  type: FLOAT
+  nullable: true
+  description: ParValue is a unit of reference for the conversion ratio. It is normally the minimum denomination of the bond.
+- name: CvPrc
+  type: FLOAT
+  nullable: true
+  description: CvPrc is the price paid per share to acquire the underlying common stock.
+- name: CvRatio
+  type: FLOAT
+  nullable: true
+  description: 'CvRatio is the amount of the underlying asset that the bondholder will receive per par amount at conversion.
+    The formula is: Conversion Ratio = Par Amount/Conversion Price.'
+- name: EventCode
+  type: char(3)
+  nullable: true
+  description: EventCode is a code representing categories of events that may affect the terms and conditions of a convertible
+    security. FIEJVCvTerms.EventCode joins with FIEJVDesc.Code where Type_ = 14.
+- name: FXRate
+  type: FLOAT
+  nullable: true
+  description: FXRate is the rate of exchange between the underlying asset and the bond in the manner indicated by the codes
+    in the Forex Rate Code field.
+- name: FXRateTypeCode
+  type: char(1)
+  nullable: true
+  description: FXRateTypeCode is the description of for_exch_rate. FIEJVCvTerms.FXRateTypeCode joins with FIEJVDesc.Code where
+    Type_ = 31.
+- name: ISOCurCode
+  type: char(3)
+  nullable: true
+  description: ISOCurCode is the currency in which the various amounts are mentioned. FIEJVCvTerms.ISOCurCode joins with FIEJVDesc.Code
+    where Type_ = 23.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs.
+---
+table: qa_fi_ejv.FIEJVCvTermsExt
+domain: fixed_income
+description: Additional Convertible Bond Variables | This table contains data for variables such as prices, dates, rates,
+  and price ratio that typically can change due to | convertible terms. (This table is separate from FIEJVCvTerms because
+  the fields below have a high percentage
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor. LSEG Quantitative Analytics Database Schema for Fixed Income
+    EJV 44
+- name: LegNum
+  type: TINYINT
+  nullable: false
+  description: LegNum identifies the segment for which a specific set of convertible terms are contained. A new leg number
+    is added each time the key convertible terms of the security change. This is generated within Quantitative Data Warehouse
+    (QDW) based on the feed file structure.
+- name: EffDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: EffDate is the date on which the event occurred.
+- name: CashPayAmt
+  type: FLOAT
+  nullable: true
+  description: CashPayAmt is the amount the bondholder would receive from the issuer upon conversion. This field is populated
+    if the bond is convertible into cash only.
+- name: ISOCurCode
+  type: char(3)
+  nullable: true
+  description: ISOCurCode is the currency in which the various amounts are mentioned. FIEJVCvTermsExt.ISOCurCode joins with
+    FIEJVDesc.Code where Type_ = 23.
+- name: PrcFml
+  type: varchar(255)
+  nullable: true
+  description: PrcFml is the formula used to calculate the conversion price.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs.
+---
+table: qa_fi_ejv.FIEJVCvUndly
+domain: fixed_income
+description: Underlying Asset Implementation Details | This table contains information about how a particular underlying asset
+  is implemented for a convertible security.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: LegNum
+  type: TINYINT
+  nullable: false
+  description: LegNum identifies the segment for which a specific set of convertible terms are contained. A new leg number
+    is added each time the key convertible terms of the security change. This is generated within Quantitative Data Warehouse
+    (QDW) based on the feed file structure.
+- name: UndlyLegNum
+  type: TINYINT
+  nullable: false
+  description: UndlyLegNum is a unique Quantitative Data Warehouse (QDW) generated identifier for an underlying asset. This
+    number is generated based on the feed file structure.
+- name: EffDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: EffDate is the effective date for the terms of the underlying asset associated with the convertible bond.
+- name: UndlyInsUnitCode
+  type: char(3)
+  nullable: true
+  description: UndlyInsUnitCode is a code representing the unit code of the underlying asset. FIEJVCvUndly.UndlyInsUnitCode
+    joins with FIEJVDesc.Code where Type_ = 20.
+- name: BasketWgtVal
+  type: FLOAT
+  nullable: true
+  description: BasketWgtVal is an initial basket value represented by each asset in the basket.
+- name: IsrChsnDlvryFl
+  type: TINYINT
+  nullable: true
+  description: IsrChsnDlvryFl is a 1/0 flag indicating whether the issuer or holder chooses the underlying asset when there
+    are multiple underlying assets (1=issuer, 0=holder).
+- name: ISOCurCode
+  type: char(3)
+  nullable: true
+  description: ISOCurCode is a code indicating the currency in which the holder of the underlying bond is paid at settlement.
+    FIEJVCvUndly.ISOCurCode joins with FIEJVDesc.Code where Type_ = 23.
+- name: UndlyRICCode
+  type: varchar(22)
+  nullable: true
+  description: The RIC (Identification Code) of the underlying asset.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs. LSEG Quantitative
+    Analytics Database Schema for Fixed Income EJV 45
+---
+table: qa_fi_ejv.FIEJVCvUndlyExt
+domain: fixed_income
+description: Additional Underlying Asset Details | This table contains information about how a particular underlying asset
+  is implemented for a convertible security. | table is separate from FIEJVCvUndly because the fields below have a high percentage
+  of Nulls.)
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: LegNum
+  type: TINYINT
+  nullable: false
+  description: LegNum identifies the segment for which a specific set of convertible terms are contained. A new leg number
+    is added each time the key convertible terms of the security change. This is generated within Quantitative Data Warehouse
+    (QDW) based on the feed file structure.
+- name: UndlyLegNum
+  type: TINYINT
+  nullable: false
+  description: UndlyLegNum is a unique Quantitative Data Warehouse (QDW) generated identifier for an underlying asset. This
+    number is generated based on the feed file structure.
+- name: EffDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: EffDate is the effective date for the terms of the underlying asset associated with the convertible bond.
+- name: BasketWgtCode
+  type: char(3)
+  nullable: true
+  description: BasketWgtCode is a code indicating the type of data in basket_weight_val. FIEJVCvUndlyExt.BasketWgtCode joins
+    with FIEJVDesc.Code where Type_ = 20.
+- name: KnkInStartDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: KnkInStartDate is the first date on which the knock-in level becomes effective.
+- name: KnkInEndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: KnkInEndDate is the last date on which the knock-in level is effective.
+- name: KnkInPrc
+  type: FLOAT
+  nullable: true
+  description: KnkInPrc is populated if the knock-in level is given in an amount (as opposed to a percentage).
+- name: PrcISOCurCode
+  type: char(3)
+  nullable: true
+  description: PrcISOCurCode is the currency in which the knock-in price is given. FIEJVCvUndlyExt.PrcISOCurCode joins with
+    FIEJVDesc.Code where Type_ = 23.
+- name: KnkInRefPrc
+  type: FLOAT
+  nullable: true
+  description: KnkInRefPrc is the current share price shown in the Terms and Conditions section of a prospectus for a knock-in
+    convertible/exchangeable security, when issued.
+- name: RefPrcISOCurCode
+  type: char(3)
+  nullable: true
+  description: RefPrcISOCurCode is the currency in which the knock-in reference price is given. FIEJVCvUndlyExt.RefPrcISOCurCode
+    joins with FIEJVDesc.Code where Type_ = 23.
+- name: KnkInTypeCode
+  type: char(1)
+  nullable: true
+  description: KnkInTypeCode is a code representing the knock-in type code. FIEJVCvUndlyExt.KnkInTypeCode joins with FIEJVDesc.Code
+    where Type_ = 18.
+- name: CvPrcMin
+  type: FLOAT
+  nullable: true
+  description: The price and ratio range fields are populated when the conversion price and ratio are variable. CvPrcMin describes
+    the minimum threshold of the range (price) when the conversion terms are variable. The lower threshold of the price range
+    determines the conversion ratio (ratio_range_upper).
+- name: CvPrcMax
+  type: FLOAT
+  nullable: true
+  description: The price and ratio range fields are populated when the conversion price and ratio are variable. CvPrcMax describes
+    the maximum threshold of the range (price) when the conversion terms are variable. The upper threshold of the price range
+    determines the conversion ratio (ratio_range_lower).
+- name: CvRatioMin
+  type: FLOAT
+  nullable: true
+  description: The price and ratio range fields are populated when the conversion price and ratio are variable. CvRatioMin
+    describes the minimum LSEG Quantitative Analytics Database Schema for Fixed Income EJV 46
+- name: CvRatioMax
+  type: FLOAT
+  nullable: true
+  description: The price and ratio range fields are populated when the conversion price and ratio are variable. CvRatioMax
+    describes the maximum threshold of the range (ratio) when the conversion terms are variable. The maximum amount of shares
+    is determined by px_range_lower.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs. FIEJV EMU Tables
+    The following diagram shows the FIEJV EMU tables. PK InstrCode int RedenomMetCode char(1) GovISOCtryCode char(2) MinNtcDays
+    int OddLotCode char(2) ReconCode char(2) EffDate int StatusCode char(1) EJVRedenomDate int RenomCode char(1) RndgCode
+    char(1) PriorGEMInstrId bigint LicFlag int PK InstrCode int DCBChgDate int HolCalChgDate int QuoteChgDate int SettChgDate
+    int LicFlag int
+---
+table: qa_fi_ejv.FIEJVEmuHarm
+domain: fixed_income
+description: Bond EMU Harmonization Status | This table contains the EMU harmonization status of a bond (for example, when
+  the EMU member conventions
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: DCBChgDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: DCBChgDate is the date the day count of a bond changed to harmonize with EMU conventions.
+- name: HolCalChgDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: HolCalChgDate is the date the settlement holidays of a bond changed to harmonize with EMU conventions.
+- name: QuoteChgDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: QuoteChgDate is the date the quotation rules of a bond changed to harmonize with EMU conventions.
+- name: SettChgDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: SettChgDate is the date the settlement rule of a bond changed to harmonize with EMU conventions.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs. LSEG Quantitative
+    Analytics Database Schema for Fixed Income EJV 47
+---
+table: qa_fi_ejv.FIEJVEmuRedenom
+domain: fixed_income
+description: EMU Bond Redenomination Information | This table contains information regarding the redenomination of EMU bonds,
+  such as when and by what means
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: RedenomMetcode
+  type: char(1)
+  nullable: true
+  description: RedenomMetcode is a code representing the conversion method for the issue. FIEJVEmuRedenom.RedenomMetcode joins
+    with FIEJVCode.Code where Type_ = 7.
+- name: GovISOCtryCode
+  type: char(2)
+  nullable: true
+  description: The Governing Law of a bond determines the basis for redenomination. A bond is redenominated depending on the
+    Governing Law of the bond, not the currency in which the bond is denominated. If the Governing Law of a bond is from an
+    'out' country and the currency is from an 'in' country, the redenomination conventions default to the currency in which
+    the bond is denominated. FIEJVEmuRedenom.GovISOCtryCode joins with FIEJVDesc.Code where Type_ = 12.
+- name: MinNtcDays
+  type: INTEGER
+  nullable: true
+  description: MinNtcDays is the minimum number of days notice prior to redenomination from NCU into the EURO on or after
+    January 01, 1999.
+- name: OddLotCode
+  type: char(2)
+  nullable: true
+  description: OddLotCode identifies the method used for the calculation of extraordinary principal repayments ('odd lots')
+    associated with EMU Redenomination. FIEJVEmuRedenom.OddLotCode joins with FIEJVDesc.Code where Type_ = 44.
+- name: ReconCode
+  type: char(2)
+  nullable: true
+  description: ReconCode is a code representing the method used to reconcile the total issue to the sum of individual issues.
+    FIEJVEmuRedenom.ReconCode joins with FIEJVDesc.Code where Type_ = 57.
+- name: EffDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EffDate is the date on which the redenomination was performed and became effective. Prior to redenomination,
+    this field is NULL. The planned future redenomination date can be found in the redenom_target_dt field.
+- name: StatusCode
+  type: char(1)
+  nullable: true
+  description: StatusCode is a code representing the status of the EMU redenomination. FIEJVEmuRedenom.StatusCode joins with
+    FIEJVDesc.Code where Type_ = 59.
+- name: EJVRedenomDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EJVRedenomDate is the date the bond is scheduled to be redenominated. Generally, the target date is the same
+    as the effective date. However, this is not the case if the bond was redenominated before LSEG had knowledge of the redenomination.
+- name: RenomCode
+  type: char(1)
+  nullable: true
+  description: RenomCode is a code representing the method used to renominalize the converted bond par value. FIEJVEmuRedenom.RenomCode
+    joins with FIEJVDesc.Code where Type_ = 61.
+- name: RndgCode
+  type: char(1)
+  nullable: true
+  description: RndgCode is a code representing the method used to round the calculated Euro amount after conversion. FIEJVEmuRedenom.RndgCode
+    joins with FIEJVCode.Code where Type_ = 8.
+- name: PriorGemInstrID
+  type: BIGINT
+  nullable: true
+  description: PriorGemInstrID is the previous instrument code that the instrument was exchanged for (WasExchangedFor).
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: 'LicFlag is a license flag that identifies to which entitlement package each data row belongs. LSEG Quantitative
+    Analytics Database Schema for Fixed Income EJV 48 FIEJV Exotics Tables The following diagram shows the relationships between
+    the FIEJV Exotics tables. PK,FK1 InstrCode int PK,FK1 LegNum tinyint PK StartDate int MetCode char(1) ISOCurCode char(3)
+    HrdlNtcDaysCode char(3) HrdlNtcDays int DurDaysCode char(3) DurDays int EndDate int NtcDaysCode char(3) NtcDays int PrcCode
+    char(1) RedemCode '
+---
+table: qa_fi_ejv.FIEJVExtc
+domain: fixed_income
+description: Exotic Bond Terms | This table contains the terms of the exotic bond at issue. The data in this view typically
+  does not change over the
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor. LSEG Quantitative Analytics Database Schema for Fixed Income
+    EJV 49
+- name: LegNum
+  type: TINYINT
+  nullable: false
+  description: LegNum identifies the segment for which a specific set of convertible terms are contained. A new leg number
+    is added each time the key convertible terms of the security change. This is generated within Quantitative Data Warehouse
+    (QDW) based on the feed file structure.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the date that corresponds with the effective conversion rate.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the date the conversion rights expire.
+- name: ExtcTypeCode
+  type: char(2)
+  nullable: true
+  description: ExtcTypeCode is a code representing the convertible type. FIEJVExtc.ExtcTypeCode joins with FIEJVDesc.Code
+    where Type_ = 19.
+- name: DilProCode
+  type: char(1)
+  nullable: true
+  description: DilProCode is a code representing the type of dilution protection. FIEJVExtc.DilProCode joins with FIEJVDesc.Code
+    where Type_ = 28.
+- name: Optcode
+  type: char(3)
+  nullable: true
+  description: Optcode is a code indicating the exercise style of the conversion option. FIEJVExtc.Optcode joins with FIEJVDesc.Code
+    where Type_ = 9.
+- name: FracCode
+  type: char(1)
+  nullable: true
+  description: FracCode is a code representing the treatment of fractions. FIEJVExtc.FracCode joins with FIEJVCode.Code where
+    Type_ = 3.
+- name: AccIntCode
+  type: char(3)
+  nullable: true
+  description: AccIntCode is a code indicating how remaining accrued interest is handled if conversion takes place between
+    interest payment dates. FIEJVExtc.AccIntCode joins with FIEJVDesc.Code where Type_ = 15.
+- name: NtcDayTypeCode
+  type: varchar(3)
+  nullable: true
+  description: NtcDayTypeCode is a code indicating whether business or calendar days are used to represent the notice period.
+    FIEJVExtc.NtcDayTypeCode joins with FIEJVDesc.Code where Type_ = 26.
+- name: NtcDays
+  type: INTEGER
+  nullable: true
+  description: NtcDays is the number of days notice given prior to the conversion.
+- name: FreqCode
+  type: INTEGER
+  nullable: true
+  description: FreqCode is a code indicating the time period during which the conversion may occur. FIEJVExtc.FreqCode joins
+    with FIEJVCode.Code where Type_ = 4.
+- name: ExtcOptCode
+  type: char(3)
+  nullable: true
+  description: ExtcOptCode is a code indicating who has the option to convert. FIEJVExtc.ExtcOptCode joins with FIEJVDesc.Code
+    where Type_ = 16.
+- name: ExtcPremPct
+  type: FLOAT
+  nullable: true
+  description: ExtcPremPct is the percent premium to the convertible debt at issue.
+- name: SettCode
+  type: char(1)
+  nullable: true
+  description: SettCode is a code indicating how the underlying record is settled at conversion. FIEJVExtc.SettCode joins
+    with FIEJVDesc.Code where Type_ = 65.
+- name: SettDayTypeCode
+  type: varchar(3)
+  nullable: true
+  description: SettDayTypeCode is a code indicating whether business or calendar days are used to represent the settlement
+    period. FIEJVExtc.SettDayTypeCode joins with FIEJVDesc.Code where Type_ = 26.
+- name: SettDays
+  type: INTEGER
+  nullable: true
+  description: SettDays is the number of days representing settlement from delivery of the debt instrument to the receipt
+    of the underlying asset.
+- name: StkBuybackCode
+  type: char(1)
+  nullable: true
+  description: StkBuybackCode is a code indicating the type of protection available to either the issuer or investor if the
+    stock is bought back. FIEJVExtc.StkBuybackCode joins with FIEJVDesc.Code where Type_ = 17.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs. LSEG Quantitative
+    Analytics Database Schema for Fixed Income EJV 50
+---
+table: qa_fi_ejv.FIEJVExtcHrdl
+domain: fixed_income
+description: Exotic Redemption/Conversion Conditions | This table contains the conditions under which the issuer can force
+  redemption and/or the holder can convert the
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: LegNum
+  type: TINYINT
+  nullable: false
+  description: LegNum identifies the segment for which a specific set of convertible terms are contained. A new leg number
+    is added each time the key convertible terms of the security change. This is generated within Quantitative Data Warehouse
+    (QDW) based on the feed file structure.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: The start date from which the redemption price applies as part of the call hurdle.
+- name: MetCode
+  type: char(1)
+  nullable: true
+  description: MetCode is a code representing the method used to select a called bond in the event of a partial redemption.
+    FIEJVExtcHrdl.MetCode joins with FIEJVDesc.Code where Type_ = 3.
+- name: ISOCurCode
+  type: char(3)
+  nullable: true
+  description: ISOCurCode is a code representing the currency in which the bond is redeemed. FIEJVExtcHrdl.ISOCurCode joins
+    with FIEJVDesc.Code where Type_ = 23.
+- name: HrdlNtcDaysCode
+  type: varchar(3)
+  nullable: true
+  description: HrdlNtcDaysCode is a code representing (along with hurdle day value) the maximum amount of time after crossing
+    a hurdle before the issuer must declare redemption. FIEJVExtcHrdl.HrdlNtcDaysCode joins with FIEJVDesc.Code where Type_
+    = 26.
+- name: HrdlNtcDays
+  type: INTEGER
+  nullable: true
+  description: HrdlNtcDays is the maximum period after the last day that the hurdle duration condition has been met before
+    the issuer has to give notice of redemption.
+- name: DurDaysCode
+  type: char(3)
+  nullable: true
+  description: DurDaysCode is a code representing the period during which conditions for the hurdle apply. FIEJVExtcHrdl.DurDaysCode
+    joins with FIEJVDesc.Code where Type_ = 26.
+- name: DurDays
+  type: INTEGER
+  nullable: true
+  description: DurDays is the time elapsed, measured in business or calendar days, in which the asset must exceed the hurdle
+    value in order to trigger the hurdle.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the end date from which the redemption price applies as part of the call hurdle.
+- name: NtcDaysCode
+  type: char(3)
+  nullable: true
+  description: NtcDaysCode is a code representing the period of notice between the issuer’s declaration of redemption and
+    the actual redemption. FIEJVExtcHrdl.NtcDaysCode joins with FIEJVDesc.Code where Type_ = 26.
+- name: NtcDays
+  type: INTEGER
+  nullable: true
+  description: NtcDays is the number of days notice the issuer is required to give in the event that the hurdle is exceeded,
+    and the issuer elects to call the bond.
+- name: PrcCode
+  type: char(1)
+  nullable: true
+  description: PrcCode is a code indicating what price should be used for the call hurdle. FIEJVExtcHrdl.PrcCode joins with
+    FIEJVDesc.Code where Type_ = 49.
+- name: RedemCode
+  type: char(1)
+  nullable: true
+  description: RedemCode is a code indicating how the bond is called. FIEJVExtcHrdl.RedemCode joins with FIEJVDesc.Code where
+    Type_ = 58.
+- name: RedemPrc
+  type: FLOAT
+  nullable: true
+  description: RedemPrc is the price at which the bond will be redeemed.
+- name: HrdlPrcTypeCode
+  type: char(1)
+  nullable: true
+  description: HrdlPrcTypeCode is a code representing how the hurdle value is expressed. FIEJVExtcHrdl.HrdlPrcTypeCode joins
+    with FIEJVDesc.Code where Type_ = 37. LSEG Quantitative Analytics Database Schema for Fixed Income EJV 51
+- name: HrdlPrc
+  type: FLOAT
+  nullable: true
+  description: HrdlPrc is the underlying asset price value at or above which the issuer has a call option right.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs.
+---
+table: qa_fi_ejv.FIEJVExtcRfx
+domain: fixed_income
+description: Exotic Bond Refix Data | This table contains data values related to a possible refix of the conversion price
+  and ratio of an exotic bond.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: LegNum
+  type: TINYINT
+  nullable: false
+  description: LegNum identifies the segment for which a specific set of convertible terms are contained. A new leg number
+    is added each time the key convertible terms of the security change. This is generated within Quantitative Data Warehouse
+    (QDW) based on the feed file structure.
+- name: EffDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: EffDate is the date for which the refixed conversion price becomes effective.
+- name: CapPrcPct
+  type: FLOAT
+  nullable: true
+  description: CapPrcPct is the maximum to which the conversion price can be refixed. Expressed as a percentage of the prevailing
+    conversion price.
+- name: DaysCode
+  type: char(3)
+  nullable: true
+  description: DaysCode is a code indicating whether refix condition runs on business or calendar days. FIEJVExtcRfx.DaysCode
+    joins with FIEJVDesc.Code where Type_ = 26.
+- name: DaysValue
+  type: INTEGER
+  nullable: true
+  description: DaysValue is the number of days for which the refix conditions must be met prior to the setting date.
+- name: FlrPrcPct
+  type: FLOAT
+  nullable: true
+  description: FlrPrcPct is the minimum to which the conversion price can be refixed. This value is expressed as a percentage
+    of the prevailing conversion price.
+- name: RfxHrdlPrcLow
+  type: FLOAT
+  nullable: true
+  description: RfxHrdlPrcLow is the lower reset limit and minimum amount by which the new price must be less than the existing
+    or refix_ref_px (refix reference price) in order to trigger the refix. This value is expressed as a price (for example,
+    EUR 1).
+- name: RfxHrdlPrcHigh
+  type: FLOAT
+  nullable: true
+  description: RfxHrdlPrcHigh is the upper reset limit and maximum amount by which the new price must be more than the existing
+    or refix_ref_px (refix reference price) in order to trigger the refix. This value is expressed as a price (for example,
+    EUR 1).
+- name: Premium
+  type: FLOAT
+  nullable: true
+  description: Premium defines whether the refixed conversion price will be at any premium to the average stock price over
+    which the refixed conversion price is fixed. The refix premium is usually zero, but sometimes it is the same as the original
+    premium at issue.
+- name: RfxRefPrc
+  type: FLOAT
+  nullable: true
+  description: RfxRefPrc is the price that is used to determine whether the underlying asset price has shifted enough to warrant
+    a change in the conversion price. A large enough change in the underlying asset price from the reference price triggers
+    a change in the conversion price.
+- name: SetDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: SetDate is the date on which the conversion refix terms are set.
+- name: RfxTypeCode
+  type: char(1)
+  nullable: true
+  description: RfxTypeCode is a code representing the refix type. FIEJVExtcRfx.RfxTypeCode joins with FIEJVDesc.Code where
+    Type_ = 60.
+- name: ISOCurCode
+  type: char(3)
+  nullable: true
+  description: ISOCurCode is the currency in which the various amounts are mentioned. LSEG Quantitative Analytics Database
+    Schema for Fixed Income EJV 52
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs.
+---
+table: qa_fi_ejv.FIEJVExtcTerms
+domain: fixed_income
+description: Exotic Bond Variables | This table contains data for variables such as prices, dates, rates, and price ratio
+  that typically can change due to
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: LegNum
+  type: TINYINT
+  nullable: false
+  description: LegNum identifies the segment for which a specific set of convertible terms are contained. A new leg number
+    is added each time the key convertible terms of the security change. This is generated within Quantitative Data Warehouse
+    (QDW) based on the feed file structure.
+- name: EffDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: EffDate is the date on which the event occurred.
+- name: ParValue
+  type: FLOAT
+  nullable: true
+  description: ParValue is the unit of reference for the conversion ratio. It is normally the minimum denomination of the
+    bond.
+- name: ExtcPrc
+  type: FLOAT
+  nullable: true
+  description: ExtcPrc is the price paid per share to acquire the underlying common stock.
+- name: ExtcRatio
+  type: FLOAT
+  nullable: true
+  description: 'ExtcRatio is the amount of the underlying asset that the bondholder will receive per par amount at conversion.
+    The formula is: Conversion Ratio = Par Amount/Conversion Price.'
+- name: EventCode
+  type: char(3)
+  nullable: true
+  description: EventCode is a code representing categories of events that may effect the terms and conditions of a convertible
+    security. FIEJVExtcTerms.EventCode joins with FIEJVDesc.Code where Type_ = 14.
+- name: FXRATE
+  type: FLOAT
+  nullable: true
+  description: FXRATE is the rate of exchange between the underlying asset and the bond in the manner indicated by the codes
+    in the Forex Rate Code field.
+- name: FXRateTypeCode
+  type: char(1)
+  nullable: true
+  description: FXRateTypeCode is the description of for_exch_rate. FIEJVExtcTerms.FXRateTypeCode joins with FIEJVDesc.Code
+    where Type_ = 31.
+- name: ISOCurCode
+  type: char(3)
+  nullable: true
+  description: ISOCurCode is the currency in which the various amounts are mentioned. FIEJVExtcTerms.ISOCurCode joins with
+    FIEJVDesc.Code where Type_ = 23. LSEG Quantitative Analytics Database Schema for Fixed Income EJV 53
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs.
+---
+table: qa_fi_ejv.FIEJVExtcTermsExt
+domain: fixed_income
+description: Additional Exotic Bond Variables | This table contains data for variables such as prices, dates, rates, and price
+  ratio that typically can change due to | terms. (This table is separate from FIEJVExtcTerms because the fields below have
+  a high percentage of Nulls.)
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: LegNum
+  type: TINYINT
+  nullable: false
+  description: LegNum identifies the segment for which a specific set of convertible terms are contained. A new leg number
+    is added each time the key convertible terms of the security change. This is generated within Quantitative Data Warehouse
+    (QDW) based on the feed file structure.
+- name: EffDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: EffDate is the date on which the event occurred.
+- name: CashPayAmt
+  type: FLOAT
+  nullable: true
+  description: CashPayAmt is the amount the bondholder would receive from the issuer upon conversion. This field is populated
+    if the bond is convertible into cash only.
+- name: ISOCurCode
+  type: char(3)
+  nullable: true
+  description: ISOCurCode is the currency in which the various amounts are mentioned. FIEJVExtcTermsExt.ISOCurCode joins with
+    FIEJVDesc.Code where Type_ = 23.
+- name: PrcFml
+  type: varchar(255)
+  nullable: true
+  description: PrcFml is the formula used to calculate the conversion price.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs.
+---
+table: qa_fi_ejv.FIEJVExtcUndly
+domain: fixed_income
+description: Exotic Security Underlying Asset Details | This table contains information about how a particular underlying
+  asset is implemented for an exotic security. A
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: LegNum
+  type: TINYINT
+  nullable: false
+  description: LegNum identifies the segment for which a specific set of convertible terms are contained. A new leg number
+    is added each time the key convertible terms of the security change. This is generated within Quantitative Data Warehouse
+    (QDW) based on the feed file structure.
+- name: UndlyLegNum
+  type: TINYINT
+  nullable: false
+  description: UndlyLegNum is a unique Quantitative Data Warehouse (QDW) generated identifier for an underlying asset. This
+    number is generated based on the feed file structure. LSEG Quantitative Analytics Database Schema for Fixed Income EJV
+    54
+- name: EffDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: EffDate is the effective date for the terms of the underlying asset associated with the convertible bond.
+- name: UndlyInsUnitCode
+  type: char(3)
+  nullable: true
+  description: UndlyInsUnitCode is a code representing the unit code of the underlying asset. FIEJVExtcUndly.UndlyInsUnitCode
+    joins with FIEJVDesc.Code where Type_ = 20.
+- name: BasketWgtVal
+  type: FLOAT
+  nullable: true
+  description: BasketWgtVal is the initial basket value represented by each asset in the basket.
+- name: IsrChsnDlvryFl
+  type: TINYINT
+  nullable: true
+  description: IsrChsnDlvryFl is a 1/0 flag indicating whether the issuer or holder chooses the underlying asset when there
+    are multiple underlying assets (1=issuer, 0=holder).
+- name: ISOCurCode
+  type: char(3)
+  nullable: true
+  description: ISOCurCode is a code indicating the currency in which the holder of the underlying bond is paid at settlement.
+    FIEJVExtcUndly.ISOCurCode joins with FIEJVDesc.Code where Type_ = 23.
+- name: UndlyRICCode
+  type: varchar(22)
+  nullable: true
+  description: The RIC (Identification Code) of the underlying asset.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs.
+---
+table: qa_fi_ejv.FIEJVExtcUndlyExt
+domain: fixed_income
+description: Additional Exotic Security Underlying Asset Details | This table contains information about how a particular
+  underlying asset is implemented for an exotic security. A | table is separate from FIEJVExtcUndly because the fields below
+  have a high percentage of Nulls).
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: LegNum
+  type: TINYINT
+  nullable: false
+  description: LegNum identifies the segment for which a specific set of convertible terms are contained. A new leg number
+    is added each time the key convertible terms of the security change. This is generated within Quantitative Data Warehouse
+    (QDW) based on the feed file structure.
+- name: UndlyLegNum
+  type: TINYINT
+  nullable: false
+  description: UndlyLegNum is a unique Quantitative Data Warehouse (QDW) generated identifier for an underlying asset. This
+    number is generated based on the feed file structure.
+- name: EffDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: EffDate is the effective date for the terms of the underlying asset associated with the convertible bond.
+- name: BasketWgtCode
+  type: char(3)
+  nullable: true
+  description: BasketWgtCode is a code indicating the type of data in basket_weight_val. FIEJVExtcUndlyExt.BasketWgtCode joins
+    with FIEJVDesc.Code where Type_ = 20.
+- name: KnkInStartDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: KnkInStartDate is the first date on which the knock-in level becomes effective.
+- name: KnkInEndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: KnkInEndDate is the last date on which the knock-in level is effective.
+- name: KnkInPrc
+  type: FLOAT
+  nullable: true
+  description: KnkInPrc is populated if the knock-in level is given in an amount (as opposed to a percentage).
+- name: PrcISOCurCode
+  type: char(3)
+  nullable: true
+  description: PrcISOCurCode is the currency in which the Knock-in price is given. FIEJVExtcUndlyExt.PrcISOCurCode joins with
+    FIEJVDesc.Code where Type_ = 23. LSEG Quantitative Analytics Database Schema for Fixed Income EJV 55
+- name: KnkInRefPrc
+  type: FLOAT
+  nullable: true
+  description: KnkInRefPrc is the current share price shown in the Terms and Conditions section of a prospectus for a knock-in
+    convertible/exchangeable security, when issued.
+- name: RefPrcISOCurCode
+  type: char(3)
+  nullable: true
+  description: RefPrcISOCurCode is the currency in which the Knock-in reference price is given. FIEJVExtcUndlyExt.RefPrcISOCurCode
+    joins with FIEJVDesc.Code where Type_ = 23.
+- name: KnkInTypeCode
+  type: char(1)
+  nullable: true
+  description: KnkInTypeCode is a code representing the knock-in type code. FIEJVExtcUndlyExt.KnkInTypeCode joins with FIEJVDesc.Code
+    where Type_ = 18.
+- name: ExtcPrcMin
+  type: FLOAT
+  nullable: true
+  description: The price and ratio range fields are populated when the conversion price and ratio are variable. ExtcPrcMin
+    describes the minimum threshold of the range (price) when the conversion terms are variable. The lower threshold of the
+    price range determines the conversion ratio (ratio_range_upper).
+- name: ExtcPrcMax
+  type: FLOAT
+  nullable: true
+  description: The price and ratio range fields are populated when the conversion price and ratio are variable. ExtcPrcMax
+    describes the maximum threshold of the range (price) when the conversion terms are variable. The upper threshold of the
+    price range determines the conversion ratio (ratio_range_lower).
+- name: ExtcRatioMin
+  type: FLOAT
+  nullable: true
+  description: The price and ratio range fields are populated when the conversion price and ratio are variable. ExtcRatioMin
+    describes the minimum threshold of the range (ratio) when the conversion terms are variable. The minimum amount of shares
+    is determined by px_range_upper.
+- name: ExtcRatioMax
+  type: FLOAT
+  nullable: true
+  description: The price and ratio range fields are populated when the conversion price and ratio are variable. ExtcRatioMax
+    describes the maximum threshold of the range (ratio) when the conversion terms are variable. The maximum amount of shares
+    is determined by px_range_lower.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs. FIEJV Extendible
+    Tables The following diagram shows the relationship between the FIEJV Extendible tables. PK InstrCode int MaxNtc int MinNtc
+    int EffDate int FreqCode int HldrOptFl tinyint NtcUtsCode char(3) ExtnEndDate int LicFlag int
+---
+table: qa_fi_ejv.FIEJVExtPrc
+domain: fixed_income
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: EffDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: EffDate is the schedule of maturity date(s) for all extendible securities.
+- name: MatPrc
+  type: FLOAT
+  nullable: true
+  description: MatPrc is the price at which the maturity date may be extended. Unless otherwise indicated, MatPrc defaults
+    to 100.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs. LSEG Quantitative
+    Analytics Database Schema for Fixed Income EJV 57 FIEJV Issue Ratings Tables The following diagram shows the FIEJV Issue
+    Ratings tables. PK InstrCode int PK RtngAgcyCode int PK StartDate int PK StartTime int RtngDateAnnCode int RatingCode
+    varchar(30) EndDate int EndTime int LicFlag int PK InstrCode int PK RtngAgcyCode int PK StartDate int OutlookCode varchar(15)
+    EndDate int LicFlag int
+---
+table: qa_fi_ejv.FIEJVExtHdr
+domain: fixed_income
+description: Bond Maturity Extension Terms | This table contains the terms and conditions by which the maturity of a bond
+  may be extended by the issuer.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: MaxNtc
+  type: INTEGER
+  nullable: true
+  description: MaxNtc is the beginning of the issuer's notification period, expressed as a number of period units prior to
+    the call date.
+- name: MinNtc
+  type: INTEGER
+  nullable: true
+  description: MinNtc is the end of the user's notification period, expressed as a number of period units prior to the call
+    date.
+- name: EffDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EffDate is the date on which the extend provision becomes effective.
+- name: FreqCode
+  type: INTEGER
+  nullable: true
+  description: FreqCode is a code representing the frequency of maturity date extensions. FIEJVExtHdr.FreqCode joins with
+    FIEJVCode.Code where Type_ = 4.
+- name: HldrOptFl
+  type: TINYINT
+  nullable: true
+  description: HldrOptFl is a 1/0 flag indicating whether the holder of the security has the option to extend the term of
+    the security.
+- name: NtcUtsCode
+  type: char(3)
+  nullable: true
+  description: NtcUtsCode is a code specifying the units in which beginning notification period and ending notification period
+    are expressed. FIEJVExtHdr.NtcUtsCode joins with FIEJVDesc.Code where Type_ = 26.
+- name: ExtnEndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: ExtnEndDate is the date on and after which the security cannot be extended.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs.
+---
+table: qa_fi_ejv.FIEJVExtPrc
+domain: fixed_income
+description: Bond Extension Schedule | This table contains the extend schedule corresponding to the extend terms.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: EffDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: EffDate is the schedule of maturity date(s) for all extendible securities.
+- name: MatPrc
+  type: FLOAT
+  nullable: true
+  description: MatPrc is the price at which the maturity date may be extended. Unless otherwise indicated, MatPrc defaults
+    to 100.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs. LSEG Quantitative
+    Analytics Database Schema for Fixed Income EJV 57 FIEJV Issue Ratings Tables The following diagram shows the FIEJV Issue
+    Ratings tables. PK InstrCode int PK RtngAgcyCode int PK StartDate int PK StartTime int RtngDateAnnCode int RatingCode
+    varchar(30) EndDate int EndTime int LicFlag int PK InstrCode int PK RtngAgcyCode int PK StartDate int OutlookCode varchar(15)
+    EndDate int LicFlag int
+---
+table: qa_fi_ejv.FIEJVIssRtng
+domain: fixed_income
+description: Ratings | This table contains current and historical ratings from various rating agencies.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: RtngAgcyCode
+  type: INTEGER
+  nullable: false
+  description: RtngAgcyCode is a code specifying the source of the rating. FIEJVIssRtng.RtngAgcyCode joins with FIEJVCode.Code
+    where Type_ = 22.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the date corresponding to a given rating assigned to the security by a rating agency.
+- name: StartTime
+  type: INTEGER
+  nullable: false
+  description: StartTime is the time corresponding to a given rating assigned to the security by a rating agency.
+- name: RtngDateAnnCode
+  type: INTEGER
+  nullable: true
+  description: RtngDateAnnCode is a code indicating if the date for a given rating was the date of the actual rating assignment,
+    or the date of the source disclosing the rating. FIEJVIssRtng.RtngDateAnnCode joins with FIEJVCode.Code where Type_ =
+    10.
+- name: RatingCode
+  type: varchar(30)
+  nullable: true
+  description: RatingCode is a code assigned by a rating agency indicating the investment quality of an offered security.
+    FIEJVIssRtng.RatingCode joins with FIEJVDesc.Code where Type_ = 55.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is populated when indentifier value for a security changes. The EndDate is the StartDate for the change
+    for that organization minus one second.
+- name: EndTime
+  type: INTEGER
+  nullable: true
+  description: EndTime is populated when the indentifier value for a security changes. The EndTime is the StartTime for the
+    change for that organization minus one second.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs. LSEG Quantitative
+    Analytics Database Schema for Fixed Income EJV 58
+---
+table: qa_fi_ejv.FIEJVIssRtngOutlook
+domain: fixed_income
+description: Rating Outlook Information | This table contains current and historical rating outlook information from various
+  rating agencies.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: RtngAgcyCode
+  type: INTEGER
+  nullable: false
+  description: RtngAgcyCode is a code representing the rating agency and code set used for outlook_cd. FIEJVIssRtngOutlook.RtngAgcyCode
+    joins with FIEJVCode.Code where Type_ = 22.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the start date of the outlook time period for a security.
+- name: OutlookCode
+  type: varchar(15)
+  nullable: true
+  description: OutlookCode is a code representing the outlook trend for a security. FIEJVIssRtngOutlook.OutlookCode joins
+    with FIEJVDesc.Code where Type_ = 46.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the end date of the outlook time period for a security.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs.
+---
+table: qa_fi_ejv.FIEJVIssRtngWatch
+domain: fixed_income
+description: Rating Watch Information | This table contains current and historical rating watch information.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: RtngAgcyCode
+  type: INTEGER
+  nullable: false
+  description: RtngAgcyCode is a code representing the rating services that are responsible for the evaluation of an issuer's
+    short- or long-term debt rating. FIEJVIssRtngWatch.RtngAgcyCode joins with FIEJVCode.Code where Type_ = 22.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the first date on which an issuer is placed under a special credit evaluation by a given rating
+    agency.
+- name: WatchCode
+  type: varchar(3)
+  nullable: true
+  description: WatchCode is a code representing the potential credit implications of a particular rating as the result of
+    a credit watch. FIEJVIssRtngWatch.WatchCode joins with FIEJVDesc.Code where Type_ = 78.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the last date on which an issuer is under a special credit evaluation by a given rating agency.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs. LSEG Quantitative
+    Analytics Database Schema for Fixed Income EJV 59 FIEJV Issuer Ratings Tables The following diagram shows the FIEJV Issuer
+    Ratings tables. PK OrgCode int PK RtngAgcyCode int PK IsrRtngTypeCode int PK StartDate int PK StartTime int RatingCode
+    varchar(30) EndDate int EndTime int LicFlag int PK OrgCode int PK RtngAgcyCode int PK StartDate int OutlookCode varchar(15)
+    EndDate int LicFlag in
+---
+table: qa_fi_ejv.FIEJVIsrRtng
+domain: fixed_income
+description: Bond Issuer/Party Ratings | This table contains current and historical issuer/party ratings for a bond from various
+  rating agencies.
+update_cadence: Daily, Monday – Friday
+---
+table: qa_fi_ejv.StartTime
+domain: fixed_income
+columns:
+- name: OrgCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an organization. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: RtngAgcyCode
+  type: INTEGER
+  nullable: false
+  description: RtngAgcyCode is a code indicating the external source for the rating. FIEJVIsrRtng.RtngAgcyCode joins with
+    FIEJVCode.Code where Type_ = 22.
+- name: IsrRtngTypeCode
+  type: INTEGER
+  nullable: false
+  description: IsrRtngTypeCode is a code indicating if the rating is for instruments issued in domestic or foreign currency.
+    In the event that two or more external agencies categorize domestic and/or foreign debt differently, a pooled (combined
+    minimum) rating is also stored. FIEJVIsrRtng.IsrRtngTypeCode joins with FIEJVCode.Code where Type_ = 23.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the start date for which the credit rating is in effect.
+- name: StartTime
+  type: INTEGER
+  nullable: false
+  description: StartTime is the start time for which the credit rating is in effect.
+- name: RatingCode
+  type: varchar(30)
+  nullable: true
+  description: RatingCode is a credit rating assignment from an external source. FIEJVIsrRtng.RatingCode joins with FIEJVDesc.Code
+    where Type_ = 55.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is populated when the indentifier value for a security changes. The EndDate is the StartDate for the
+    change for that organization minus one second.
+- name: EndTime
+  type: INTEGER
+  nullable: true
+  description: EndTime is populated when the indentifier value for a security changes. The EndTime is the StartTime for the
+    change for that organization minus one second.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs. LSEG Quantitative
+    Analytics Database Schema for Fixed Income EJV 60
+---
+table: qa_fi_ejv.FIEJVIsrRtngOutlook
+domain: fixed_income
+description: Issuer/Party Rating Outlook Information | This table contains current and historical issuer/party rating outlook
+  information from various rating agencies.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: OrgCode
+  type: INTEGER
+  nullable: false
+  description: OrgCode is a unique integer code that identifies an organization. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: RtngAgcyCode
+  type: INTEGER
+  nullable: false
+  description: RtngAgcyCode is a code representing the rating agency and code set used for outlook_cd. FIEJVIsrRtngOutlook.RtngAgcyCode
+    joins with FIEJVCode.Code where Type_ = 22.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the start date of the outlook time period for a party.
+- name: OutlookCode
+  type: varchar(15)
+  nullable: true
+  description: OutlookCode is a code representing the outlook trend for a party. FIEJVIsrRtngOutlook.OutlookCode joins with
+    FIEJVDesc.Code where Type_ = 46.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the end date of the outlook time period for a party.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs.
+---
+table: qa_fi_ejv.FIEJVIsrRtngWatch
+domain: fixed_income
+description: Issuer/Party Rating Watch Information | This table contains current and historical issuer/party rating watch
+  information.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: OrgCode
+  type: INTEGER
+  nullable: false
+  description: OrgCode is a unique integer code that identifies an organization. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: RtngAgcyCode
+  type: INTEGER
+  nullable: false
+  description: RtngAgcyCode is a code representing the rating services that are responsible for the evaluation of an issuer's
+    short- or long-term debt rating. FIEJVIssRtngWatch.RtngAgcyCode joins with FIEJVCode.Code where Type_ = 22.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the first date on which an issuer is placed under a special credit evaluation by a given rating
+    agency.
+- name: WatchCode
+  type: char(3)
+  nullable: true
+  description: WatchCode is a code representing the potential credit implications of a particular rating as a result of the
+    credit watch. FIEJVIsrRtngWatch.WatchCode joins with FIEJVDesc.Code where Type_ = 78.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the last date on which an issuer is placed under a special credit evaluation by a given rating agency.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs. LSEG Quantitative
+    Analytics Database Schema for Fixed Income EJV 61 FIEJV Medium-Term Notes Tables The following diagram shows the FIEJV
+    MTN tables. PK InstrCode LONG PK SeqNum SHORT PrcSuppNum TEXT(20) PrcSuppDate LONG AccrDate LONG IssDate LONG Proceeds
+    DOUBLE IssPrc DOUBLE YTM DOUBLE LicFlag LONG PK InstrCode int MatDateRngCode int MaxFees float MaxFeesPerSec float MaxProceedsPerSec
+    float MaxTotProce
+---
+table: qa_fi_ejv.FIEJVMTN
+domain: fixed_income
+description: Medium-Term Note Issue Information | This table contains additional information from the pricing supplement particular
+  to medium-term note issues.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: SeqNum
+  type: TINYINT
+  nullable: false
+  description: For a particular security, there might be more than one value for the same identifier type. SeqNum helps capture
+    the various values. Logical keys for the generation of SeqNum are InstrCode and PrcSuppNum.
+- name: PrcSuppNum
+  type: varchar(20)
+  nullable: false
+  description: PrcSuppNum is the number or alpha of the pricing supplement.
+- name: PrcSuppDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: PrcSuppDate is the date of the pricing supplement.
+- name: AccrDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: AccrDate is the date from which interest begins accruing on the bond.
+- name: IssDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: IssDate is the delivery date of each pricing supplement.
+- name: Proceeds
+  type: FLOAT
+  nullable: true
+  description: Proceeds is the proceeds the registrant will receive from the offering after commissions are deducted.
+- name: IssPrc
+  type: FLOAT
+  nullable: true
+  description: IssPrc is the price at which the public may purchase the offered security from the underwriters (expressed
+    as a percentage of par).
+- name: YTM
+  type: FLOAT
+  nullable: true
+  description: The calculation that determines the rate of the return an investor will receive if a long-term, interest-bearing
+    investment is held to its maturity date.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs.
+---
+table: qa_fi_ejv.FIEJVMTNHdr
+domain: fixed_income
+description: Medium-Term Note Shelf Information | This table contains information pertaining to the Shelf information for
+  medium-term note issues.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: MatDateRngCode
+  type: INTEGER
+  nullable: true
+  description: MatDateRngCode is a code representing the time over which the principal amounts of securities are estimated
+    to become due and payable, as disclosed on the front cover of the prospectus. FIEJVMTNHdr.MatDateRngCode joins with FIEJVCode.Code
+    where Type_ = 5.
+- name: MaxFees
+  type: FLOAT
+  nullable: true
+  description: MaxFees is the maximum amount permitted to be paid to any underwriters in the offering. This amount consists
+    of selling concessions, management fees, and underwriting fees.
+- name: MaxFeesPerSec
+  type: FLOAT
+  nullable: true
+  description: MaxFeesPerSec is the maximum amount permitted to be paid to any underwriters in the offering. This amount consists
+    of selling concessions, management fees, and underwriting fees. Expressed as a percentage of par.
+- name: MaxProceedsPerSec
+  type: FLOAT
+  nullable: true
+  description: MaxProceedsPerSec is the maximum amount that the registrant is permitted to receive from the offering after
+    commissions are deducted. This amount is expressed as a percent of the principal amount.
+- name: MaxTotProceeds
+  type: FLOAT
+  nullable: true
+  description: MaxTotProceeds is the maximum amount that the registrant is permitted to receive from the offering after commissions
+    are deducted.
+- name: MaxTotPrcToPub
+  type: FLOAT
+  nullable: true
+  description: MaxTotPrcToPub is the maximum total price at which the public may purchase the offered security from the underwriters.
+- name: MinFees
+  type: FLOAT
+  nullable: true
+  description: MinFees is the minimum amount permitted to be paid to any underwriters in the offering. This amount consists
+    of selling concessions, management fees, and underwriting fees.
+- name: MinFeesPerSec
+  type: FLOAT
+  nullable: true
+  description: MinFeesPerSec is the minimum amount permitted to be paid to any underwriters in the offering. This amount consists
+    of selling concessions, management fees, and underwriting fees. It is also expressed as a percentage of par.
+- name: MinProceedsPerSec
+  type: FLOAT
+  nullable: true
+  description: MinProceedsPerSec is the minimum amount that the registrant is permitted to receive from the offering after
+    commissions are deducted. This amount is expressed as a percent of the principal amount.
+- name: MinTotProceeds
+  type: FLOAT
+  nullable: true
+  description: MinTotProceeds is the minimum amount that the registrant is permitted to receive from the offering after commissions
+    are deducted.
+- name: MinTotPrcToPub
+  type: FLOAT
+  nullable: true
+  description: MinTotPrcToPub is the minimum total price at which the public may purchase the offered security from the underwriters.
+- name: PrcToPubPct
+  type: FLOAT
+  nullable: true
+  description: PrcToPubPct is the price at which the public may purchase the offered security from the underwriters. This
+    amount is expressed as a percentage of par.
+- name: TotProgAmt
+  type: FLOAT
+  nullable: true
+  description: TotProgAmt is the total principal amount of securities permitted to be issued under the shelf, as given on
+    the front cover of the prospectus.
+- name: TotProgAmtSupp
+  type: FLOAT
+  nullable: true
+  description: TotProgAmtSupp is the total principal amount of securities permitted to be issued under the shelf supplement,
+    as given on the front cover of the prospectus.
+- name: ISOCurCode
+  type: char
+  nullable: true
+  description: ISOCurCode is the currency in which the various amounts are given. FIEJVMTNHdr.ISOCurCode joins with FIEJVDesc.Code
+    where Type_ = 23.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs. LSEG Quantitative
+    Analytics Database Schema for Fixed Income EJV 63 FIEJV Put Tables The following diagram shows the relationship between
+    the FIEJV Put tables. PK,FK1 InstrCode int PK PutSettTypeCode int ClnUpCallFl tinyint MaxNtc int MinNtc int FreqCode int
+    MetCode varchar(3) OptCode varchar(3) NtcUtsCode char(3) LicFlag int PK,FK1 InstrCode int PK,FK1 PutSettTypeCode int PK
+    StartDate int EndDate int P
+---
+table: qa_fi_ejv.FIEJVPut
+domain: fixed_income
+description: Put Schedule | This table contains the put schedule for the corresponding put terms.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and not received from the vendor.
+- name: PutSettTypeCode
+  type: INTEGER
+  nullable: false
+  description: 'PutSettTypeCode is a code representing the type of put option modeled: – 1 = CTS (Credit Sensitive) – 2 =
+    MP (Mandatory Put) – 3 = REG (Regular) FIEJVPut.PutSettTypeCode joins with FIEJVCode.Code where Type_ = 26. To get descriptions
+    for the field values, cross-reference with FIEJVDesc.Code where Type_ = 52.'
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the first date on which the offered security may be redeemed for a given period at an indicated
+    price.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the last date on which the offered security may be redeemed for a given period at an indicated price.
+- name: PutPrc
+  type: FLOAT
+  nullable: true
+  description: PutPrc is the price at which the offered security may be redeemed for a given period. This value is expressed
+    as a percentage of principal amount.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs.
+---
+table: qa_fi_ejv.FIEJVPutHdr
+domain: fixed_income
+description: Put Exercise Terms | This table contains the terms and conditions at which a put provision may be exercised at
+  the option of the holder.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor. LSEG Quantitative Analytics Database Schema for Fixed Income
+    EJV 64
+- name: PutSettTypeCode
+  type: INTEGER
+  nullable: false
+  description: 'PutSettTypeCode is a code representing the type of put option modeled: – 1 = CTS (Credit Sensitive) – 2 =
+    MP (Mandatory Put) – 3 = REG (Regular) FIEJVPutHdr.PutSettTypeCode joins with FIEJVCode.Code where Type_ = 26. To get
+    descriptions for the field values, cross-reference with FIEJVDesc.Code where Type_ = 52.'
+- name: ClnUpCallFl
+  type: TINYINT
+  nullable: true
+  description: ClnUpCallFl is a 1/0 flag indicating whether the existence of provisions that allow the issuer to call the
+    security, if the amount outstanding of the security declines below a specified amount.
+- name: MaxNtc
+  type: INTEGER
+  nullable: true
+  description: MaxNtc is the beginning of the issuer's notification period, expressed as a number of period units prior to
+    the put date.
+- name: MinNtc
+  type: INTEGER
+  nullable: true
+  description: MinNtc is the end of the user's notification period, expressed as a number of period units prior to the put
+    date.
+- name: FreqCode
+  type: INTEGER
+  nullable: true
+  description: FreqCode is a code representing the frequency of the periods per year in which puts are scheduled to occur.
+    FIEJVPutHdr.FreqCode joins with FIEJVCode.Code where Type_ = 4.
+- name: MetCode
+  type: varchar(3)
+  nullable: true
+  description: MetCode is a code representing the put method. FIEJVPutHdr.MetCode joins with FIEJVDesc.Code where Type_ =
+    3.
+- name: OptCode
+  type: varchar(3)
+  nullable: true
+  description: OptCode is a code indicating whether the bond is subject to puts only on certain dates. FIEJVPutHdr.OptCode
+    joins with FIEJVDesc.Code where Type_ = 9.
+- name: NtcUtsCode
+  type: char(3)
+  nullable: true
+  description: NtcUtsCode is a code specifying the units in which the beginning put notification period and ending put notification
+    period are expressed. FIEJVPutHdr.NtcUtsCode joins with FIEJVDesc.Code where Type_ = 26.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs. FIEJV Range Tables
+    The following diagram shows the relationship between the FIEJV Range tables. PK,FK1 InstrCode int PK,FK1 CpnLegNum tinyint
+    PK,FK1 RngLegNum tinyint PK,FK1 EffDate int PK RstDate int PK RngTypeCode int ObsDate int RngRate float UnadjRstDate int
+    LicFlag int PK InstrCode int PK CpnLegNum tinyint PK RngLegNum tinyint PK EffDate int CmplxRngFl tinyint CpnHolCalCode
+    varchar(4) CpnInRng floa
+---
+table: qa_fi_ejv.FIEJVRng
+domain: fixed_income
+description: Floating Rate Bond Criteria | This table contains detailed criteria for floating rate bonds, where the coupon
+  is determined based on the rate | falling within a certain range. This table is only used for interest legs with coupon
+  class range.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: CpnLegNum
+  type: TINYINT
+  nullable: false
+  description: A particular instrument can have multiple coupons. CpnLegNum helps capture this detail. This is derived based
+    on the XML feed structure.
+- name: RngLegNum
+  type: TINYINT
+  nullable: false
+  description: RngLegNum is a number to differentiate between ranges on the same effective date.
+- name: EffDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: EffDate is the effective date for the range information.
+- name: CmplxRngFl
+  type: TINYINT
+  nullable: true
+  description: CmplxRngFl is a 1/0 flag marking the formula_(in out)_rng_id complex.
+- name: CpnHolCalCode
+  type: varchar(4)
+  nullable: true
+  description: CpnHolCalCode is a code representing the underlying holiday calendar convention used in determining the condition
+    coupon. This is used if the conditional coupon is based on an Index. FIEJVRng.CpnHolCalCode joins with FIEJVDesc.Code
+    where Type_ = 35.
+- name: CpnInRng
+  type: FLOAT
+  nullable: true
+  description: CpnInRng is a numerical value that describes the paid coupon, if the index is “in” range.
+- name: CpnOutOfRng
+  type: FLOAT
+  nullable: true
+  description: CpnOutOfRng is a numerical value that describes the paid coupon, if the index is “out” of range.
+- name: RstCalCode
+  type: char(3)
+  nullable: true
+  description: RstCalCode is a code representing the generic calendar position of the condition coupon reset. This is used
+    if the conditional coupon is based on an Index. FIEJVRng.RstCalCode joins with FIEJVDesc.Code where Type_ = 8.
+- name: RstCalValue
+  type: INTEGER
+  nullable: true
+  description: RstCalValue is a numerical value associated with conditional coupon reset calendar code. This is used if the
+    conditional coupon is based on an index.
+- name: RstFreqCode
+  type: INTEGER
+  nullable: true
+  description: RstFreqCode is a code representing the frequency of conditional coupon resets. This is used if the conditional
+    coupon is based on an index. FIEJVRng.RstFreqCode joins with FIEJVCode.Code where Type_ = 4.
+- name: RstDRCCode
+  type: varchar(4)
+  nullable: true
+  description: RstDRCCode is a code specifying the rule if reset of the condition coupon falls on a non-business day. This
+    is used if the conditional coupon is based on an index. FIEJVRng.RstDRCCode joins with FIEJVDesc.Code where Type_ = 36.
+- name: LwrRngLmt
+  type: FLOAT
+  nullable: true
+  description: LwrRngLmt is a numerical value describing the lower limit of the range.
+- name: LwrRngLmtCode
+  type: char(2)
+  nullable: true
+  description: LwrRngLmtCode is a code qualifying the lower range criteria. This is used if the conditional coupon is based
+    on an Index. FIEJVRng.LwrRngLmtCode joins with FIEJVDesc.Code where Type_ = 45.
+- name: UprRngLmt
+  type: FLOAT
+  nullable: true
+  description: UprRngLmt is a numerical value indicating the upper limit of the range.
+- name: UprRngLmtCode
+  type: char(2)
+  nullable: true
+  description: UprRngLmtCode is a code qualifying the upper range criteria. This is used if the conditional coupon is based
+    on an Index. FIEJVRng.UprRngLmtCode joins with FIEJVDesc.Code where Type_ = 45.
+- name: RngInFmlID
+  type: INTEGER
+  nullable: true
+  description: RngInFmlID is the RngInFormula ID and is populated from the FormulaInfo table, having the respective InstrCode
+    and FormulaTypeCode as "Range In Formula". LSEG Quantitative Analytics Database Schema for Fixed Income EJV 66
+- name: RngOutFmlID
+  type: INTEGER
+  nullable: true
+  description: RngOutFmlID is the RngOutFormula ID and is populated from the FormulaInfo table, having the respective InstrCode
+    and FormulaTypeCode as "Range Out Formula".
+- name: RngIdxFmlID
+  type: INTEGER
+  nullable: true
+  description: RngIdxFmlID is populated from the FormulaInfo table, having the respective InstrCode and FormulaTypeCode as
+    "Range Index Formula".
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs.
+---
+table: qa_fi_ejv.FIEJVRngRate
+domain: fixed_income
+description: Ranged Bond Rate Formula Values | This table contains in- and out-range formula values for use in calculating
+  ranged bond rates.
+update_cadence: Daily, Monday – Friday
+---
+table: qa_fi_ejv.RstDate
+domain: fixed_income
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: CpnLegNum
+  type: TINYINT
+  nullable: false
+  description: A particular instrument can have multiple coupons. CpnLegNum helps capture this detail. This is derived based
+    on the XML feed structure.
+- name: RngLegNum
+  type: TINYINT
+  nullable: false
+  description: RngLegNum is a number that differentiates between ranges on the same effective date.
+- name: RngTypeCode
+  type: INTEGER
+  nullable: false
+  description: RngTypeCode is a code indicating whether this value is in or out of range. FIEJVRngRate.RngTypeCode joins with
+    FIEJVCode.Code where Type_ = 2.
+- name: EffDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: EffDate is the effective date for the range information.
+- name: RstDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: RstDate is the date to which the value pertains.
+- name: ObsDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: ObsDate is the date for which the value was calculated.
+- name: RngRate
+  type: FLOAT
+  nullable: true
+  description: RngRate is the calculated value of the range.
+- name: UnadjRstDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: UnadjRstDate is the reset date for the new rate, unadjusted by any holiday schedules or business rules.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs. FIEJV Sink Fund
+    Tables The following diagram shows the relationship between the FIEJV Sink Fund tables. PK,FK1 InstrCode int PK SinkTypeCode
+    int PK Item int Value_ varchar(20) LicFlag int PK,FK1 InstrCode int PK,FK1 SinkTypeCode int PK EffDate int SinkAmt float
+    SinkPrc float SinkAmtUnitCode varchar(3) ISOCurCode char(3) LicFlag int LSEG Quantitative Analytics Database Schema for
+    Fixed Income EJV 67
+---
+table: qa_fi_ejv.FIEJVSink
+domain: fixed_income
+description: Fund Schedule | This table contains the fund schedule for the corresponding fund terms. | amount in the fund
+  schedule table is stated.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: SinkTypeCode
+  type: INTEGER
+  nullable: false
+  description: SinkTypeCode is a code representing the type of fund in effect. FIEJVSink.SinkTypeCode joins with FIEJVCode.Code
+    where Type_ = 24. To get descriptions for the field values, cross-reference with FIEJVDesc.Code where Type_ = 33.
+- name: EffDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: If a sinking fund exists for the offered security, EffDate is the schedule of dates on which the sinking fund
+    payments are made.
+- name: SinkAmt
+  type: FLOAT
+  nullable: true
+  description: If a sinking fund exists for the offered security, SinkAmt is the schedule of sinking fund payments for each
+    corresponding sinking fund date. The value is expressed in thousands when the fund_amt_unit_cd = F.
+- name: SinkPrc
+  type: FLOAT
+  nullable: true
+  description: If a sinking fund exists for the offered security, SinkPrc is the schedule of prices corresponding to each
+    sinking fund date and amount.
+- name: SinkAmtUnitCode
+  type: varchar(3)
+  nullable: true
+  description: SinkAmtUnitCode is a code representing the units in which the fund amount in the fund schedule table is stated.
+    FIEJVSink.SinkAmtUnitCode joins with FIEJVDesc.Code where Type_ = 4.
+- name: ISOCurCode
+  type: char(3)
+  nullable: true
+  description: ISOCurCode is the currency in which the various amounts are mentioned. FIEJVSink.ISOCurCode joins with FIEJVDesc.Code
+    where Type_ = 23.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs.
+---
+table: qa_fi_ejv.FIEJVSinkHdr
+domain: fixed_income
+description: Redemption Funds Terms and Conditions | This table contains all the pertinent terms and conditions for all funds
+  that lead to redemption. More than one fund | table (Item) for a complete list of codes.
+update_cadence: Daily, Monday – Friday
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is a unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: SinkTypeCode
+  type: INTEGER
+  nullable: false
+  description: SinkTypeCode is a code representing the type of fund in effect. FIEJVSinkHdr.SinkTypeCode joins with FIEJVCode.Code
+    where Type_ = 24. To get descriptions for the field values, cross-reference with FIEJVDesc.Code where Type_ = 33.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is a code representing the respective sink item. See the FIEJVItem table (Item) for a complete list of
+    codes.
+- name: Value_
+  type: varchar(30)
+  nullable: true
+  description: Value_ is the value for the respective item.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a license flag that identifies to which entitlement package each data row belongs. LSEG Quantitative
+    Analytics Database Schema for Fixed Income EJV 68 5. Fixed Income EJV Pricing Database Schema The following diagram shows
+    the FIEJV Pricing tables. PK InstrCode INTEGER PK TradeDate LONG PrcSrcCode TEXT(3) Prc DOUBLE DebtIsoCurCode CHAR(3)
+    PrcgMetCode TEXT(2) MatCorpYld DOUBLE WrstCorpYld DOUBLE MatStdYld DOUBLE WrstStdYld DOUBLE LicFlag SHORT PK OrgCode LONG
+    PK FileDate LONG BnkrptcyT
+---
+table: qa_fi_ejv.FIEJVPrcDesc
+domain: fixed_income
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Type_ is a numeric code for a type of data.
+- name: Code
+  type: varchar(20)
+  nullable: false
+  description: Code is a coded value for an element of Type_. When Type_ = 0, Code is the numeric code for each Type_ other
+    than 0 and Desc_ is a description of each Type_.
+- name: Desc_
+  type: varchar(120)
+  nullable: true
+  description: Desc_ is a plain-language description of the element defined by Type_ and Code.
+---
+table: qa_fi_ejv.FIEJVPrcBnkrptcy
+domain: fixed_income
+description: Bankruptcy Information | This table contains bankruptcy information for various organizations.
+update_cadence: Daily
+columns:
+- name: OrgCode
+  type: INTEGER
+  nullable: false
+  description: OrgCode is a unique integer code that identifies an organization. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor.
+- name: FileDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: FileDate is the date on which the registrant filed bankruptcy.
+- name: BnkrptcyTypCode
+  type: varchar(3)
+  nullable: true
+  description: BnkrptcyTypCode is the code indicating the type of bankruptcy the registrant has filed. FIEJVPrcBnkrptcy.BnkrptcyTypCode
+    joins with FIEJVPRCDesc.Code where Type_ = 2.
+- name: EmrgDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EmrgDate is the date on which the registrant emerges from bankruptcy.
+---
+table: qa_fi_ejv.FIEJVPrcCode
+domain: fixed_income
+description: Numeric Codes | This table contains descriptions of FIEJV Pricing numeric codes.
+update_cadence: Daily
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Type_ is a numeric code for a type of data.
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is a coded value for an element of Type_. When Type_ = 0, Code is the numeric code for each Type_ other
+    than 0 and Desc_ is a description of each Type_.
+- name: Desc_
+  type: varchar(120)
+  nullable: true
+  description: Desc_ is a plain-language description of the element defined by Type_ and Code.
+---
+table: qa_fi_ejv.FIEJVPrcDesc
+domain: fixed_income
+description: Character Code Descriptions | This table contains descriptions of FIEJV Pricing character codes.
+update_cadence: Daily
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Type_ is a numeric code for a type of data.
+- name: Code
+  type: varchar(20)
+  nullable: false
+  description: Code is a coded value for an element of Type_. When Type_ = 0, Code is the numeric code for each Type_ other
+    than 0 and Desc_ is a description of each Type_.
+- name: Desc_
+  type: varchar(120)
+  nullable: true
+  description: Desc_ is a plain-language description of the element defined by Type_ and Code.
+---
+table: qa_fi_ejv.FIEJVPrcDly
+domain: fixed_income
+description: Composite Pricing Information | This table contains composite pricing information for a particular security.
+  | Price Source. See the FIEJVPRCCode table (License Flag) for complete list
+update_cadence: Daily
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is unique integer code that identifies an instrument. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor. GEMInstrId is the logical key used to generate InstrCode.
+- name: TradeDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: TradeDate is the date on which the contributor or exchange quoted the price of the security.
+- name: PrcSrcCode
+  type: varchar(3)
+  nullable: true
+  description: PrcSrcCode is the code indicating the contributor or exchange that quotes the pricing value of the security.
+    FIEJVPrcDly.PrcSrcCode joins with FIEJVDesc.Code where Type_ = 77. PrcSrcCode cross-references with FIEJVPrcDesc on FIEJVPrcDesc.Code
+    = FIEJVPrcDly.PrcSrcCode where Type_ = 1.
+- name: Prc
+  type: FLOAT
+  nullable: true
+  description: Prc is the price quoted for the security.
+- name: DebtIsoCurCode
+  type: char(3)
+  nullable: true
+  description: DebtIsoCurCode is the code representing the primary currency of the issue. FIEJVPrcDly.DebtIsoCurCode joins
+    with FIEJVDesc.Code where Type_ = 23.
+- name: PrcgMetCode
+  type: varchar(2)
+  nullable: true
+  description: PrcgMetCode is the code indicating the ask and/or bid value for the security. FIEJVPrcDly.PrcgMetCode joins
+    with FIEJVPrcDesc.Code where Type_ = 4.
+- name: MatCorpYld
+  type: FLOAT
+  nullable: true
+  description: 'If price source equals the LSEG Composite, MatCorpYld represents the annual yield as defined by ISMA. Otherwise,
+    MatCorpYld is the corporate bond equivalent cash-flow yield using the cash flow assumptions described as follows: the
+    average life of the security, calculated with the cash-flow assumption that corporate and government securities trade
+    to maturity. LSEG Quantitative Analytics Database Schema for Fixed Income EJV 70'
+- name: WrstCorpYld
+  type: FLOAT
+  nullable: true
+  description: 'If price source equals the LSEG Composite, WrstCorpYld represents the annual yield to worst defined by ISMA.
+    Otherwise, WrstCorpYld is the corporate bond equivalent cash-flow yield using the cash-flow assumptions described as follows:
+    the average life, computed using cash-flow assumptions that represent expected outcome. LSEG determines the worst sinking
+    fund and call, and the best put.'
+- name: MatStdYld
+  type: FLOAT
+  nullable: true
+  description: MatStdYld is calculated using the native yield to maturity convention.
+- name: WrstStdYld
+  type: FLOAT
+  nullable: true
+  description: WrstStdYld is calculated based on the native yield to worst formula, after taking all of the bond redemption
+    features into account.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a unique code representing the license flag values for various Price Source. See the FIEJVPRCCode
+    table (License Flag) for complete list of codes.
+join_hints:
+- to: FIEJVPrcDesc
+  evidence: PrcSrcCode cross-references with FIEJVPrcDesc on FIEJVPrcDesc.Code = FIEJVPrcDly.PrcSrcCode where Type_ = 1.
+  type: cross_reference
+---
+table: qa_fi_ejv.FIEJVEvalPrc
+domain: fixed_income
+description: Evaluated Pricing Information | This table contains evaluated pricing information for a particular security.
+update_cadence: Daily
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: A unique integer code to identify an instrument. GEMInstrId is the logical key used to generate InstrCode.
+- name: TradeDt
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Trade date used to price the security.
+- name: SettleDt
+  type: TIMESTAMP(6)
+  nullable: true
+  description: Date on which cash payments for purchases are due and for which accrued interest and price/yield relationships
+    are computed.
+- name: Description
+  type: varchar(30)
+  nullable: true
+  description: 'A descriptive field including: ticker, coupon, maturity date, or other pertinent information that identifies
+    the security.'
+- name: BidPrc
+  type: FLOAT
+  nullable: true
+  description: The bid price assigned to the security by the LSEG Evaluations Desk.
+- name: BidYld
+  type: FLOAT
+  nullable: true
+  description: The bid yield assigned to the security by the LSEG Evaluations Desk.
+- name: BidAskSprd
+  type: FLOAT
+  nullable: true
+  description: The difference between the bid and ask prices for the security.
+- name: OfferPrc
+  type: FLOAT
+  nullable: true
+  description: The offer price assigned to the security by the LSEG Evaluations Desk.
+- name: OfferYld
+  type: FLOAT
+  nullable: true
+  description: The offer yield assigned to the security by the LSEG Evaluations Desk.
+- name: MeanPrc
+  type: FLOAT
+  nullable: true
+  description: The mean price assigned to the security by the LSEG Evaluations Desk.
+- name: MeanYld
+  type: FLOAT
+  nullable: true
+  description: The mean yield assigned to the security by the LSEG Evaluations Desk.
+- name: AccrInt
+  type: FLOAT
+  nullable: true
+  description: The amount of interest that the buyer owes the seller of the security on the settlement date.
+- name: BidCleanPrc
+  type: FLOAT
+  nullable: true
+  description: The bid price without accrued interest assigned to the security by LSEG Evaluations Desk.
+- name: BidDirtyPrc
+  type: FLOAT
+  nullable: true
+  description: The bid price with accrued interest assigned to the security by LSEG Evaluations Desk.
+- name: OfferCleanPrc
+  type: FLOAT
+  nullable: true
+  description: The offer price without accrued interest assigned to the security by LSEG Evaluations Desk.
+- name: OfferDirtyPrc
+  type: FLOAT
+  nullable: true
+  description: The offer price with accrued interest assigned to the security by LSEG Evaluations Desk.
+- name: MeanCleanPrc
+  type: FLOAT
+  nullable: true
+  description: The mean price without accrued interest assigned to the security by LSEG Evaluations Desk.
+- name: MeanDirty_Prc
+  type: FLOAT
+  nullable: true
+  description: The mean price with accrued interest assigned to the security by the LSEG Evaluations Desk.
+- name: BrkrQuotes
+  type: varchar(20)
+  nullable: true
+  description: 'Broker quotes observed by evaluator, one of three: None, Single or Multiple.'
+- name: Comparable
+  type: char(1)
+  nullable: true
+  description: A y/n flag indicating if a comparable issue was observed.
+- name: ContribPrcAvl
+  type: INTEGER
+  nullable: true
+  description: Number of contributed prices available. LSEG Quantitative Analytics Database Schema for Fixed Income EJV 71
+- name: IssuerMove
+  type: char(1)
+  nullable: true
+  description: A y/n flag indicator where two or more bonds with the same issuer were changed at the same time.
+- name: TraceInd
+  type: char(1)
+  nullable: true
+  description: A y/n flag indicator of Direct Trace Trades for same issuer effective the current day.
+- name: TraceTrds
+  type: INTEGER
+  nullable: true
+  description: Assigned the number of active (non-cancelled), round-lot trades effective the current day (may contain numeric
+    zero). Null if bond is not TRACE-eligible or TRACE RIC does not exist.
+- name: LicFlag
+  type: TINYINT
+  nullable: true
+  description: Depending on the subscription level, this license flag will either indicate ISIN or CUSIP.
+---
+table: qa_fi_ejv.FIEJVEvalPrcDet
+domain: fixed_income
+description: Evaluated Pricing Details | This table contains evaluated pricing details for a particular security.
+update_cadence: 'Daily Adjusted: N/A'
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: '"A unique integer code to identify an instrument. GEMInstrId is the logical key used to generate InstrCode.'
+- name: StartDt
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Trade date used to price the security.
+- name: EndDt
+  type: TIMESTAMP(6)
+  nullable: true
+  description: StartDt - 1 (captures timeseries changes for any of the non-PK fields
+- name: LocCode
+  type: char(1)
+  nullable: true
+  description: Code indicating location.
+- name: SegCode
+  type: char(1)
+  nullable: true
+  description: Code indicating security type.
+- name: InflationFlg
+  type: char(1)
+  nullable: true
+  description: A y/n flag indicating if the price includes an index adjustment.
+- name: CurrCode
+  type: char(3)
+  nullable: true
+  description: Code representing the primary currency of the issue.
+- name: EvalComm
+  type: varchar(500)
+  nullable: true
+  description: Notes and comments related to the recipe.
+- name: EvalName
+  type: varchar(100)
+  nullable: true
+  description: Identifier of source recipe owner.
+- name: EvalGrpPhone
+  type: varchar(15)
+  nullable: true
+  description: The evaluator’s group phone number.
+- name: LicFlag
+  type: TINYINT
+  nullable: true
+  description: 'Depending on the subscription level, this license flag will either indicate ISIN or CUSIP. LSEG Quantitative
+    Analytics Database Schema for Fixed Income EJV Copyright © 2024 London Stock Exchange Group plc and its group of companies
+    (LSEG) and/or its affiliates. All rights reserved. The LSEG content received through this service is the intellectual
+    property of LSEG or its third party suppliers. Republicati on or redistribution of content provided by LSEG is expressly
+    prohibited without the prior '

@@ -1,0 +1,1257 @@
+table: qa_core.SecCspChgX
+domain: reference
+description: Security CUSIP Change History | This table provides CUSIP change history for each domestic master security.
+update_cadence: Daily
+columns:
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode links across the master tables.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the first date issuer information is valid.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the last date issuer information is valid.
+- name: Cusip
+  type: varchar(9)
+  nullable: true
+  description: The CUSIP for the period specified in StartDate and EndDate.
+---
+table: qa_core.SecMapX
+domain: reference
+description: North American Security Map | This table provides mapping to vendor codes including ranking and time series.
+update_cadence: 'Daily Adjusted: N/A'
+columns:
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode links across the master tables.
+- name: VenType
+  type: SMALLINT
+  nullable: false
+  description: VenType is a unique type code for each vendor. VenType is defined in SecVenType. VenType mapping is described
+    in the SecMapX and GSecMapX Security VenTypes Mapping table.
+- name: VenCode
+  type: INTEGER
+  nullable: true
+  description: VenCode is the corresponding vendor’s unique code.
+- name: Rank
+  type: SMALLINT
+  nullable: false
+  description: 'Rank is the issue rank for issuers with multiple issues. Note: Ranking is determined upon initial load, and
+    will not necessarily change in response to new issues or volume/status changes.'
+- name: Exchange
+  type: SMALLINT
+  nullable: true
+  description: Exchange identifies whether the security is a United States security (1) or a Canadian security (2). A value
+    of 0 indicates that this field is not applicable.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: StartDate is the first date issuer information is valid.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the last date issuer information is valid. LSEG Quantitative Analytics Database Schema for Core
+    Tables 10 Security VenTypes Mapping for the SecMapX and GSecMapX Tables SecMapX/GSecMapXVenType Vendor Vendor Table(s)
+    Vencode = [field] 1 IDC Pricing Prc.PrcInfo, CPrcInfo, 2 I/B/E/S, I/B/E/S Global IBESInfo3, IBGSInfo3 Code 3 I/B/E/S Canadian
+    IBGSInfo3 Code 4 Compustat Xpressfeed CSVSecurity (domestic); CSGSec (global) SecIntCode (domestic); SecID (global) 5
+    Compustat PIT CSPITCmp GvKey 6
+---
+table: qa_core.AxSedolChg
+domain: reference
+---
+table: qa_core.SecId
+domain: reference
+---
+table: qa_core.SecMstrX
+domain: reference
+description: North American Security Master | This table returns the North American master security record from the ID, CUSIP,
+  SEDOL, or ISIN. It also | (prc.prcinfo/cprcinfo) or Datastream table (DS2CtryQtInfo) depending on
+update_cadence: Daily
+columns:
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode links across the master tables.
+- name: Id
+  type: varchar(31)
+  nullable: true
+  description: Id is the unique LSEG Quantitative Analytics identifier for a security.
+- name: Type_
+  type: SMALLINT
+  nullable: false
+  description: 'Type_ is the security type and can be: – 1 (North American Equities) – 2 (Futures) – 4 (Spot Commodities)
+    – 6 (Index)'
+- name: IdBase
+  type: varchar(6)
+  nullable: true
+  description: IdBase is derived from the first 5 letters of the Name.
+- name: IdSeq
+  type: INTEGER
+  nullable: true
+  description: IdSeq is a sequencing of the common root IdBase to formulate a unique Id.
+- name: Cusip
+  type: varchar(9)
+  nullable: true
+  description: Cusip is the security CUSIP number.
+- name: PrevCusip
+  type: varchar(9)
+  nullable: true
+  description: PrevCusip is the CUSIP before the most recent CUSIP change.
+- name: Sedol
+  type: varchar(7)
+  nullable: true
+  description: Sedol is the primary security SEDOL. It corresponds to the security where Rank = 1 for IDC in SecMapX.
+- name: PrevSedol
+  type: varchar(7)
+  nullable: true
+  description: PrevSedol is the SEDOL before the most recent SEDOL change.
+- name: Sedol2
+  type: varchar(7)
+  nullable: true
+  description: Sedol2 is the SEDOL for a dually listed issue (trading both CAN and US) that is not marked as the primary security
+    in either the IDC tables (prc.prcinfo/cprcinfo) or Datastream table (DS2CtryQtInfo) depending on coverage. Primary status
+    is set first by IDC and then by Datastream.
+- name: PrevSedol2
+  type: varchar(7)
+  nullable: true
+  description: PrevSedol2 is the secondary security’s SEDOL before the most recent SEDOL change. It corresponds to the security
+    where Rank = 2 in SecMapX.
+- name: Isin
+  type: varchar(13)
+  nullable: true
+  description: Isin is the security ISIN number.
+- name: Name
+  type: varchar(61)
+  nullable: true
+  description: Name is the name of the security.
+- name: Country
+  type: varchar(4)
+  nullable: true
+  description: Country is the ISO3 code for the country of incorporation.
+- name: Vendors1
+  type: BIGINT
+  nullable: true
+  description: (Reserved for future development.) LSEG Quantitative Analytics Database Schema for Core Tables 12
+---
+table: qa_core.SecSdlChgX
+domain: reference
+description: Security Master Primary SEDOL Change History | This table provides SEDOL change history for each North American
+  master security.
+update_cadence: Daily
+columns:
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode links across the master tables.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the first date issuer information is valid.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the last date issuer information is valid.
+- name: Sedol
+  type: varchar(7)
+  nullable: true
+  description: The SEDOL for the period specified in StartDate and EndDate.
+---
+table: qa_core.SecSdl2ChgX
+domain: reference
+description: Security Master Secondary SEDOL Change History | This table provides the SEDOL2 change history for each North
+  American master security.
+update_cadence: Daily
+columns:
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode links across the master tables.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the first date issuer information is valid.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the last date issuer information is valid.
+- name: Sedol
+  type: varchar(7)
+  nullable: true
+  description: The SEDOL for the period specified in StartDate and EndDate.
+---
+table: qa_core.SecVenType
+domain: reference
+description: Security Master Vendor Type Codes | This table provides the vendor name for each vendor type present in the mapping
+  tables.
+update_cadence: Daily
+columns:
+- name: VenType
+  type: INTEGER
+  nullable: false
+  description: VenType contains a unique type code for each vendor. VenType is cross- referenced by SecMapX and GSecMapX.
+    VenType mapping is described in Security VenTypes mapping on page 10.
+- name: VenId
+  type: varchar(6)
+  nullable: true
+  description: VenId is the text identifier of the vendor.
+- name: VenName
+  type: varchar(81)
+  nullable: true
+  description: VenName is the vendor name and the description of VenId.
+- name: MaskNum
+  type: SMALLINT
+  nullable: true
+  description: (Reserved for future development.)
+- name: MaskValue
+  type: BIGINT
+  nullable: true
+  description: (Reserved for future development.)
+- name: Vendors2
+  type: BIGINT
+  nullable: true
+  description: (Reserved for future development.)
+- name: Vendors3
+  type: BIGINT
+  nullable: true
+  description: (Reserved for future development.)
+- name: Vendors4
+  type: BIGINT
+  nullable: true
+  description: (Reserved for future development.) LSEG Quantitative Analytics Database Schema for Core Tables 13 Expanded
+    Global Security Mapping
+---
+table: qa_core.GSecMapX
+domain: reference
+description: Global Security Map | This table provides mapping to all available vendor codes including ranking and time series.
+  | mapping table on page 10.
+update_cadence: Daily
+columns:
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode links across the master tables.
+- name: VenType
+  type: SMALLINT
+  nullable: false
+  description: VenType is a unique type code for each vendor. VenType is defined in SecVenType. VenType mapping is described
+    in the Security VenTypes mapping table on page 10.
+- name: VenCode
+  type: INTEGER
+  nullable: true
+  description: VenCode is the corresponding vendor’s unique code.
+- name: Rank
+  type: SMALLINT
+  nullable: false
+  description: 'Rank is the issue rank for issuers with multiple issues. Note: Ranking is determined upon initial load, and
+    will not necessarily change in response to new issues or volume/status changes.'
+- name: Exchange
+  type: SMALLINT
+  nullable: true
+  description: (Reserved for future development.)
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: StartDate is the first date issuer information is valid.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the last date issuer information is valid.
+---
+table: qa_core.GSecMstrX
+domain: reference
+description: Global Security Master6 | This table returns the global Master Security record from the ID, CUSIP, SEDOL, or
+  ISIN. It also provides the
+update_cadence: Daily
+columns:
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode links across the master tables.
+- name: Id
+  type: varchar(31)
+  nullable: true
+  description: Id is the unique LSEG Quantitative Analytics identifier for a security.
+- name: Type_
+  type: SMALLINT
+  nullable: false
+  description: Type_ is the security type. A value of 10 indicates the type is Global.
+- name: IdBase
+  type: varchar(6)
+  nullable: true
+  description: IdBase is derived from the first 5 letters of the Name.
+- name: IdSeq
+  type: INTEGER
+  nullable: true
+  description: IdSeq is a sequencing of the common root IdBase to formulate a unique Id.
+- name: Cusip
+  type: varchar(9)
+  nullable: true
+  description: Cusip is the security CUSIP number.
+- name: PrevCusip
+  type: varchar(9)
+  nullable: true
+  description: PrevCusip is the CUSIP before the most recent CUSIP change.
+- name: Sedol
+  type: varchar(7)
+  nullable: true
+  description: Sedol is the primary security SEDOL. It corresponds to the security where Rank = 1 for IDC in GSecMapX.
+- name: PrevSedol
+  type: varchar(7)
+  nullable: true
+  description: PrevSedol is the SEDOL before the most recent SEDOL change.
+- name: Sedol2
+  type: varchar(7)
+  nullable: true
+  description: Sedol2 is the secondary security’s SEDOL (for dually listed securities). It corresponds to the security where
+    Rank = 2 in GSecMapX.
+- name: PrevSedol2
+  type: varchar(7)
+  nullable: true
+  description: PrevSedol2 is the secondary security’s SEDOL before the most recent SEDOL change. It corresponds to the security
+    where Rank = 2 in GSecMapX.
+- name: Isin
+  type: varchar(13)
+  nullable: true
+  description: Isin is the security ISIN number.
+- name: Name
+  type: varchar(61)
+  nullable: true
+  description: Name is the name of the security.
+- name: Country
+  type: varchar(4)
+  nullable: true
+  description: Country is the ISO3 code for the country of incorporation. LSEG Quantitative Analytics Database Schema for
+    Core Tables 14
+- name: Vendors1
+  type: BIGINT
+  nullable: true
+  description: (Reserved for future development.)
+- name: Vendors2
+  type: BIGINT
+  nullable: true
+  description: (Reserved for future development.)
+- name: Vendors3
+  type: BIGINT
+  nullable: true
+  description: (Reserved for future development.)
+- name: Vendors4
+  type: BIGINT
+  nullable: true
+  description: (Reserved for future development.)
+---
+table: qa_core.GSecSdlChg
+domain: reference
+description: Global Security SEDOL Change History | This table provides SEDOL change history for each Global Master Security.
+  | Table Ownership | This table returns the issuer information for pricing data. | This table returns issue information for
+  pricing data.
+update_cadence: Daily
+columns:
+- name: IsrCode
+  type: INTEGER
+  nullable: false
+  description: IsrCode is the issuer code. Cross-reference with prc.PRCISS where prc.PRCISR.isrcode = prc.PRCISS.isrcode.
+- name: ParIsrCode
+  type: INTEGER
+  nullable: true
+  description: ParIsrCode is the parent issuer code.
+- name: IsrName
+  type: varchar(40)
+  nullable: true
+  description: IsrName is the issuer name.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: StartDate is the first date issuer information is valid.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: EndDate is the last date issuer information is valid.
+- name: IsoCtry
+  type: varchar(3)
+  nullable: true
+  description: IsoCtry may be the issuer’s Extel country code or ISO2 country code.
+- name: FyeMonth
+  type: SMALLINT
+  nullable: true
+  description: FyeMonth is the month of the Issuer’s fiscal year end.
+- name: SIC
+  type: SMALLINT
+  nullable: true
+  description: SIC is the issuer’s SIC code.
+- name: NAICS
+  type: INTEGER
+  nullable: true
+  description: NAICS is the issuer’s NAICS code.
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode links across the master tables.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the first date issuer information is valid.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the last date issuer information is valid.
+- name: Sedol
+  type: varchar(7)
+  nullable: true
+  description: 'The SEDOL for the period specified in StartDate and EndDate. LSEG Quantitative Analytics Database Schema for
+    Core Tables 15 prc.PrcIss: Pricing Issue Information This table returns issue information for pricing data.'
+- name: IsrCode
+  type: INTEGER
+  nullable: false
+  description: IsrCode is the issue’s issuer code. Cross-reference with Prc.PrcIsr where Prc.PrcIss.isrcode = Prc.PrcIsr.isrcode.
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: 'Type_ is the issue type and can be: – 1 (the issue is a domestic security residing in Sec* tables.) – 6 (the
+    issue is a global security residing in GSec* tables.) – 21 (the issue is a fixed income EJV security residing in FISec*
+    tables.)'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the security code for the issue in its pricing tables. Code cross-references the pricing universe tables
+    where prc.PrcIss.Code = SecMstrX.SecCode and prc.PrcIss.Type_ = 1; or, where prc.PrcIss.Code = GSecMstrX.SecCode and prc.PrcIss.Type_
+    = 6. For fixed income EJV, Type_ = 21.
+- name: Rank
+  type: INTEGER
+  nullable: true
+  description: 'Rank is the issue rank for issuers with multiple issues. Ranking is determined by the ID with the most vendor
+    mappings. Note: Ranking is determined upon initial load, and will not necessarily change in response to new issues or
+    volume/status changes.'
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: (Reserved for future development.)
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: (Reserved for future development.) LSEG Quantitative Analytics Database Schema for Core Tables 16 3 Exchange
+    Code Descriptions Security Mapping – North American
+---
+table: qa_core.TQAExch
+domain: reference
+description: Map Exchange Code Descriptions | This table returns the exchange description from the SecMapX table. | ExchCode
+  smallint N ExchCode provides the link to the SecMapX table where
+update_cadence: Daily
+columns:
+- name: ExchCode
+  type: SMALLINT
+  nullable: false
+  description: ExchCode provides the link to the SecMapX table where TQAEXCH.ExchCode = SecMapX.Exchange.
+- name: CompExchCode
+  type: SMALLINT
+  nullable: true
+  description: The CompExchCode is the ExchCode of the composite exchange of which TQAExch is a member. If the TQAExch is
+    a composite exchange, the field is 0 (null).
+- name: TQAExch
+  type: varchar(7)
+  nullable: true
+  description: TQAExch is the LSEG Quantitative Analytics character exchange code.
+- name: Desc_
+  type: varchar(60)
+  nullable: true
+  description: Desc_ is the description of the exchange. LSEG Quantitative Analytics Database Schema for Core Tables 17 4
+    Economic Indicators Tables
+---
+table: qa_core.EconInfo
+domain: reference
+description: Economic Indicators Information | This is the information table for economic indicators data.
+update_cadence: As Needed
+columns:
+- name: Ticker
+  type: varchar(30)
+  nullable: true
+  description: Ticker is an abbreviated mnemonic for the economic indicator.
+- name: Name
+  type: varchar(60)
+  nullable: true
+  description: Name is the text description of Ticker.
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all ECON* tables.
+---
+table: qa_core.EconRpt
+domain: reference
+description: Economic Indicators Data | This is the information table for economic indicators data, and contains as-reported
+  data.
+update_cadence: As Needed
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link to all ECON* tables.
+- name: ReportDate
+  type: smalldatetime
+  nullable: false
+  description: ReportDate is the actual reporting date associated with PeriodDate.
+- name: PeriodDate
+  type: smalldatetime
+  nullable: true
+  description: PeriodDate is the period associated with the report.
+- name: Estimate
+  type: FLOAT
+  nullable: true
+  description: Estimate is the consensus estimate of the value prior to the report.
+- name: Actual
+  type: FLOAT
+  nullable: true
+  description: Actual is the actual value of the indicator as reported on the report date. LSEG Quantitative Analytics Database
+    Schema for Core Tables 18 5 Regions Data Tables Countries in this schema are classified using the ISO-3166-1-alpha-2 code.
+    These tables are updated whenever there are changes imposed by the standards used.
+---
+table: qa_core.TMCCode
+domain: reference
+description: Regions Code Information | This table contains code translations and descriptions for all PermIds and ISO codes
+  in the TMCRegnCntryMap
+update_cadence: As Needed
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Type_ identifies the type. Types are defined where Type_ = 0, and Code identifies the Type.
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is described by Desc_. This field is cross-referenced by TMCRegnCntryMap.
+- name: Desc_
+  type: varchar(51)
+  nullable: true
+  description: Desc_ is the full name of Code.
+---
+table: qa_core.TMCRegnCntryMap
+domain: reference
+description: Regions Classifications | This table contains regional classifications. The codes in this table are translated
+  by TMCCode, described above.
+update_cadence: As Needed
+columns:
+- name: Lvl5PermId
+  type: INTEGER
+  nullable: false
+  description: Lvl5PermId is the lowest level of classification. This item represents the country.
+- name: Lvl5ISOCntry
+  type: varchar(6)
+  nullable: true
+  description: Lvl5ISOCntry is the ISO Country Code for the country represented by Lvl5PermId.
+- name: Lvl4PermID
+  type: INTEGER
+  nullable: true
+  description: Lvl4PermID is the identifier for the next level of classification. In some cases, this represents the country
+    itself.
+- name: Lvl3PermID
+  type: INTEGER
+  nullable: true
+  description: Lvl3PermID is the identifier for the next level of classification.
+- name: Lvl2PermID
+  type: INTEGER
+  nullable: true
+  description: Lvl2PermID is the identifier for the next level of classification.
+- name: Lvl1PermID
+  type: INTEGER
+  nullable: true
+  description: 'Lvl1PermID is the identifier for the highest level of classification, usually World. When building a data
+    tree, start with this level. LSEG Quantitative Analytics Database Schema for Core Tables 19 6 Special Dates Tables This
+    chapter describes the special dates tables. Use the data in these tables to identify dates that may affect exchange trading
+    schedules. This chapter also contains Examples on page 20. Legacy Tables: SDDates and SDInfo The tables SDDates and SDInfo
+    are legacy tables. These ta'
+---
+table: qa_core.SDDates_v
+domain: reference
+description: Special Dates Information | Use this table to retrieve the information associated with a special date.
+update_cadence: Monthly
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the special date code. This field cross-references SDInfo_v.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the date that corresponds to the Code.
+- name: ExchCode
+  type: INTEGER
+  nullable: false
+  description: ExchCode is the numeric code of the associated exchange. If this value is 0, then this data is self-sourced
+    by LSEG Quantitative Analytics. Where ExchCode is not 0, this associated exchange.
+---
+table: qa_core.SDExchInfo_v
+domain: reference
+description: Exchange Information | Use this table to retrieve vendor exchange information. For your convenience all delivered
+  vendor exchange
+update_cadence: Monthly
+columns:
+- name: ExchCode
+  type: INTEGER
+  nullable: false
+  description: ExchCode is the numeric code of the associated exchange. This field cross- references with SDDates_v where
+    SDDates_v.ExchCode = SDExchInfo_v.ExchCode and SDExchInfo_v.HolType = ‘SE Trading’.
+- name: ExchAbbr
+  type: varchar(4)
+  nullable: true
+  description: ExchAbbr is the three-letter abbreviation of the exchange.
+- name: ExchName
+  type: varchar(101)
+  nullable: true
+  description: ExchName describes the exchange special dates. LSEG Quantitative Analytics Database Schema for Core Tables
+    20
+- name: CntryName
+  type: varchar(31)
+  nullable: true
+  description: CntryName is the name of the exchange country.
+- name: IsoCcy
+  type: varchar(4)
+  nullable: true
+  description: IsoCcy is the ISO currency code.
+- name: IsoCtry
+  type: varchar(3)
+  nullable: true
+  description: IsoCtry is the ISO country code.
+- name: HolType
+  type: varchar(21)
+  nullable: true
+  description: HolType may be a description of the type of holiday, or may be vendor exchange information.
+- name: Define1
+  type: varchar(250)
+  nullable: true
+  description: Define1 is the first line of the text description of the holiday.
+- name: Define2
+  type: varchar(250)
+  nullable: true
+  description: Define2 is the second line of the text description of the holiday.
+---
+table: qa_core.SDInfo_v
+domain: reference
+description: Special Dates Codes | This table defines Code. | The ExchIntCode from the Datastream table Ds2Exchange can be
+  mapped to ExchCode using the Ds2XRef
+update_cadence: Monthly
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the special date code. This field cross-references with SDDates_v.
+- name: Name
+  type: varchar(81)
+  nullable: true
+  description: 'Name is the text translation of Code. For LSEG Quantitative Analytics self-sourced data (where [table name].ExchCode
+    = 0), this field defines the entity or event observing the special date. For other data, Name describes the holiday observed
+    on the given date. For an illustration of how to interpret the data in this field, see Create Joins to Return Descriptions
+    of Special Dates on page 20. Examples: Special Dates Tables Create Joins to Return ExchCode for Datastream''s ExchIntCode
+    The ExchIntCod'
+---
+table: qa_core.ACount
+domain: reference
+---
+table: qa_core.UCount
+domain: reference
+---
+table: qa_core.DCount
+domain: reference
+---
+table: qa_core.ErrorMessage
+domain: reference
+---
+table: qa_core.bcpString
+domain: reference
+---
+table: qa_core.Update_Log
+domain: reference
+description: Cumulative Account of Every Table Update | This table is not available in LSEG Quantitative Analytics in the
+  cloud. | This table contains cumulative update information for all tables in your subscription. In Snowflake, this table
+  is | available at schema level i.e., DBO and PRC. Note the table structure in Snowflake is different to the one listed |
+  below. The table serves the purpose to list adds, updates, and deletes to all tables in your subscription. Please | TableName
+  varchar(101) N TableNam
+update_cadence: Daily, for every update
+columns:
+- name: TableName
+  type: varchar(101)
+  nullable: false
+  description: TableName may name any user table in your database.
+- name: FileDate
+  type: smalldatetime
+  nullable: false
+  description: FileDate is the date in the name of the update file that was processed. For example, an entry of 2003-10-30
+    means the update filename had 20031030 as part of the name.
+- name: FileNum
+  type: INTEGER
+  nullable: false
+  description: FileNum is the index of the FileDate that was processed. For example, expanding on the previous example, an
+    entry of 1 would mean the update file name is 20031030-1.UPD.
+- name: StartTime
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartTime is the time the update for TableName was started.
+- name: EndTime
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndTime is the time the update for TableName was completed.
+- name: Status
+  type: INTEGER
+  nullable: false
+  description: status is the bcp return status of the table update. A return status of 0 represents a clean update of that
+    table.
+- name: insertCount
+  type: INTEGER
+  nullable: true
+  description: insertCount is the number of records inserted into a table.
+- name: updateCount
+  type: INTEGER
+  nullable: true
+  description: updateCount is the number of existing records modified in a table. LSEG Quantitative Analytics Database Schema
+    for Core Tables 24
+- name: deleteCount
+  type: INTEGER
+  nullable: true
+  description: deleteCount is the number of records deleted in a table.
+- name: ACount
+  type: INTEGER
+  nullable: true
+  description: ACount is the number of adds in the update file.
+- name: UCount
+  type: INTEGER
+  nullable: true
+  description: UCount is the number of updates in the update file.
+- name: DCount
+  type: INTEGER
+  nullable: true
+  description: DCount is the number of deletes in the update file.
+- name: ErrorMessage
+  type: varchar(500)
+  nullable: true
+  description: ErrorMessage is the bcp error message in the event the return status is not equal to zero.
+- name: bcpString
+  type: varchar(500)
+  nullable: true
+  description: 'bcpString is the command used to execute the table update. When the value of insertCount matches ACount, updateCount
+    matches UCount, and deleteCount matches DCount, this indicates that your database is in sync with our master database.
+    On rare occasions, these values may not match. Even so, if the sum of insertCount plus updateCount matches the sum of
+    ACount plus UCount, then it is likely that the database is still in sync. These numbers may differ merely as a result
+    of processing the file more '
+---
+table: qa_core.Update_Status
+domain: reference
+description: Statistical Recap of Most Recent Update for Every Table | This table is available only in LSEG Quantitative Analytics
+  deployed. | This table contains statistical information about the most recent update for all tables in your subscription.
+  | example, the PrimaryUpdateNum for the table prc.PrcDly is 1. This | means the major update for this table occurs where
+  FileNum = 1.
+update_cadence: Calculated from Update_Log.
+columns:
+- name: TableName
+  type: varchar(101)
+  nullable: false
+  description: TableName cross-references with Update_Log.
+- name: PrimaryUpdateNum
+  type: INTEGER
+  nullable: true
+  description: PrimaryUpdateNum is a predetermined value indicating that a data update is likely to occur in a certain numeric
+    update file. For example, the PrimaryUpdateNum for the table prc.PrcDly is 1. This means the major update for this table
+    occurs where FileNum = 1.
+- name: UpdateFrequency
+  type: varchar(20)
+  nullable: true
+  description: 'UpdateFrequency is the Update Cycle for individual tables. UpdateFrequency may be: – DAILY (table updates
+    at least once a day) – WEEKLY (table updates at least once a week) – MONTHLY (table updates at least once a month) – INFREQUENT
+    (table is generally static and rarely updates)'
+- name: FileDate
+  type: smalldatetime
+  nullable: true
+  description: FileDate is the most recent update file containing updates.
+- name: PrimaryDone
+  type: char(1)
+  nullable: true
+  description: PrimaryDone is Y (yes) if the most recent Update_Log.FileNum is the same as PrimaryUpdateNum.
+- name: PrimaryUpdateTime
+  type: smalldatetime
+  nullable: true
+  description: PrimaryUpdateTime is the most recent date and time of the primary update.
+- name: FilesDone
+  type: INTEGER
+  nullable: true
+  description: FilesDone is the number of updates processed for Update_Log.FileDate.
+- name: LastFileNum
+  type: INTEGER
+  nullable: true
+  description: LastFileNum is the last Update_Log.FileNum processed.
+- name: LastUpdateTime
+  type: smalldatetime
+  nullable: true
+  description: LastUpdateTime is the last date and time of an update.
+- name: LastStatus
+  type: INTEGER
+  nullable: true
+  description: LastStatus is the last bcp return status from Update_Log.status. LSEG Quantitative Analytics Database Schema
+    for Core Tables 25
+---
+table: qa_core.Update_BadRecs
+domain: reference
+description: Bad Records Update | This table is available only in LSEG Quantitative Analytics deployed. | This table contains
+  the most recent update information about any bad records in your tables. | TableName varchar(101) N TableName may name any
+  user table in your database.
+update_cadence: As Needed
+columns:
+- name: TableName
+  type: varchar(101)
+  nullable: false
+  description: TableName may name any user table in your database.
+- name: FileDate
+  type: smalldatetime
+  nullable: false
+  description: FileDate is the date in the name of the update file that was processed. For example, an entry of 2003-10-30
+    means the update filename had 20031030 as part of the name.
+- name: FileNum
+  type: INTEGER
+  nullable: false
+  description: FileNum is the index of the FileDate that was processed. For example, expanding on the previous example, an
+    entry of 1 would mean the update file name is 20031030-1.UPD.
+- name: BadCount
+  type: INTEGER
+  nullable: true
+  description: BadCount is the number of bad records.
+---
+table: qa_core.UpdIdCode
+domain: reference
+description: Update ID Description | Use this table to retrieve the description of an update ID. | This table is available
+  only in LSEG Quantitative Analytics deployed.
+update_cadence: Infrequent, as needed
+columns:
+- name: UpdateId
+  type: SMALLINT
+  nullable: false
+  description: UpdateId cross-references PriUpdStatus.
+- name: UpdateName
+  type: varchar(80)
+  nullable: true
+  description: UpdateName is the description of the corresponding UpdateId.
+- name: updstartTime
+  type: TIMESTAMP(6)
+  nullable: true
+  description: updstartTime indicates the time the update began.
+- name: updendTime
+  type: TIMESTAMP(6)
+  nullable: true
+  description: updendTime indicates the time the update concluded. LSEG Quantitative Analytics Database Schema for Core Tables
+    26
+---
+table: qa_core.MQASys
+domain: reference
+description: Recent System Update Information | This table is available only in LSEG Quantitative Analytics deployed. | This
+  table contains information on the last two updates applied to your server.
+update_cadence: Daily, with every update
+columns:
+- name: Type
+  type: INTEGER
+  nullable: false
+  description: Type indicates the update applied where 3 is the most recent update applied and 4 is the second most recent
+    update applied.
+- name: Number
+  type: INTEGER
+  nullable: true
+  description: (Reserved for future development.)
+- name: Value1
+  type: smalldatetime
+  nullable: true
+  description: Value1 is the date associated with the update.
+- name: Value2
+  type: INTEGER
+  nullable: true
+  description: Value2 is the update number.
+---
+table: qa_core.PriUpdStatus
+domain: reference
+description: Primary Update Status | This table contains the primary update information from LSEG Quantitative Analytics.
+  | This table is available only in LSEG Quantitative Analytics deployed.
+update_cadence: Daily
+columns:
+- name: UpdateId
+  type: SMALLINT
+  nullable: false
+  description: UpdateId is the LSEG unique identifier.
+- name: FileDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: FileDate is the date is the name of the processed update file. For example, for an entry of 2005-10-31 the
+    update file would have 20051031 as part of the file name.
+- name: FileNum
+  type: SMALLINT
+  nullable: true
+  description: FileNum represents the index of the FileDate that was processed. For example, expanding on the previous example,
+    an entry of 1 would mean the update file name is 20051031-1.upd.
+---
+table: qa_core.TQA_Version
+domain: reference
+description: LSEG Quantitative Analytics Database Version Information | This table is available only in LSEG Quantitative
+  Analytics deployed. | This table contains information on the version number of your LSEG Quantitative Analytics database.
+update_cadence: As needed
+columns:
+- name: Name_
+  type: varchar(256)
+  nullable: false
+  description: Name_ is the database name. This is usually QADirect.
+- name: Type_
+  type: varchar(64)
+  nullable: false
+  description: Type indicates the update applied.
+- name: MajorVersion
+  type: INTEGER
+  nullable: true
+  description: MajorVersion is the major version number. For example, if your version number is 5.69, then 5 is the major
+    version number.
+- name: MinorVersion
+  type: INTEGER
+  nullable: true
+  description: MinorVersion is the minor version number. For example, if your version is number 5.69, then 69 is the minor
+    version number.
+- name: BuildVersion
+  type: INTEGER
+  nullable: true
+  description: BuildVersion indicates the version of the build.
+- name: LastUpdateTime
+  type: TIMESTAMP(6)
+  nullable: false
+  description: LastUpdateTime indicates when this version was applied to the server.
+---
+table: qa_core.Example
+domain: reference
+---
+table: qa_core.UPDPrimCode
+domain: reference
+description: Primary Update Code | This table is available only in LSEG Quantitative Analytics deployed. | Use this table
+  to retrieve the description of an update ID.
+update_cadence: Infrequent, as needed
+columns:
+- name: UpdateID
+  type: SMALLINT
+  nullable: false
+  description: UpdateID cross-references with UPDPrimStatus.
+- name: UpdateName
+  type: varchar(30)
+  nullable: true
+  description: UpdateName is a description for the corresponding UpdateID.
+- name: Region
+  type: varchar(3)
+  nullable: true
+  description: Region is a vendor-specific region code.
+- name: Exchange
+  type: varchar(3)
+  nullable: true
+  description: For Datastream2, Exchange cross-references with Ds2Exchange.DsExchCode. This field is currently only used for
+    DS2.
+- name: Frequency
+  type: varchar(3)
+  nullable: true
+  description: Frequency specifies how often updates are processed. Possible values are daily, weekly, or monthly.
+join_hints:
+- to: Ds2Exchange
+  evidence: Exchange varchar(3) Y For Datastream2, Exchange cross-references with Ds2Exchange.DsExchCode.
+  type: cross_reference
+---
+table: qa_core.UPDPrimStatus
+domain: reference
+description: Primary Update Status | This table is available only in LSEG Quantitative Analytics deployed. | This table contains
+  primary update information. | table information, see the SmartLoader Log Tables Quick Reference Card.
+update_cadence: Infrequent, as needed
+columns:
+- name: UpdateID
+  type: SMALLINT
+  nullable: false
+  description: Update ID.
+- name: MarketDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: MarketDate is the actual date for the majority of data in the update.
+- name: IsComplete
+  type: TINYINT
+  nullable: true
+  description: 'IsComplete is a flag that indicates whether the primary update for a given MarketDate has been applied to
+    a client''s database: – 0 = False – 1 =True SmartLoader Log Tables The following tables contain log information for SmartLoader.
+    For a reference document with SmartLoader log table information, see the SmartLoader Log Tables Quick Reference Card.
+    PK FileDate PK FileNum PK DataSource PK TableName PK RowId'
+---
+table: qa_core.ErrorInfo
+domain: reference
+columns:
+- name: ErrorCode
+  type: INTEGER
+  nullable: false
+  description: ErrorCode is the SmartLoader error code. ErrorInfo.ErrorCode cross- references with Update_Errors.ErrorCode.
+- name: ErrorName
+  type: varchar(50)
+  nullable: false
+  description: ErrorName is the name of the SmartLoader error.
+- name: Severity
+  type: INTEGER
+  nullable: false
+  description: Severity indicates the severity level of the SmartLoader error. – 1 = Fatal update failure (most severe) –
+    2 = Wrong table schema – 3 = Data defects in the source – 4 = Unprocessed data in the UPD file – 5 = Warning-level message
+    (least severe; error does not cause data divergence against the source)
+- name: Description
+  type: varchar(512)
+  nullable: false
+  description: Description is a description of the SmartLoader error.
+---
+table: qa_core.ErrorName
+domain: reference
+---
+table: qa_core.Severity
+domain: reference
+---
+table: qa_core.Update_Errors
+domain: reference
+description: SmartLoader Update Errors | This table is available only in LSEG Quantitative Analytics deployed. | This table
+  contains SmartLoader update errors. Use the ErrorInfo table to interpret Update_Errors.ErrorCode. | TableName varchar(100)
+  N TableName is the table where the error occurred. | – 2 = Wrong table schema
+columns:
+- name: FileDate
+  type: smalldatetime
+  nullable: false
+  description: FileDate is the file date of the UPD that caused the SmartLoader error.
+- name: FileNum
+  type: INTEGER
+  nullable: false
+  description: FileNum is the file number of the UPD that caused the error.
+- name: DataSource
+  type: varchar(50)
+  nullable: false
+  description: DataSource is reserved for future development.
+- name: TableName
+  type: varchar(100)
+  nullable: false
+  description: TableName is the table where the error occurred.
+- name: RowId
+  type: INTEGER
+  nullable: false
+  description: RowId is the error index per table.
+- name: Action
+  type: varchar(30)
+  nullable: false
+  description: Action is the action that caused the error.
+- name: ErrorCode
+  type: INTEGER
+  nullable: false
+  description: ErrorCode is the SmartLoader error code. UpdateErrors.ErrorCode cross-references with ErrorInfo.ErrorCode.
+- name: ErrorMessage
+  type: varchar(512)
+  nullable: true
+  description: ErrorMessage is the SmartLoader error message.
+- name: Severity
+  type: INTEGER
+  nullable: false
+  description: Severity indicates the severity level of the SmartLoader error. – 1 = Fatal update failure (most severe) –
+    2 = Wrong table schema – 3 = Data defects in the source – 4 = Unprocessed data in the UPD file – 5 = Warning-level message
+    (least severe; error does not cause data divergence against the source) LSEG Quantitative Analytics Database Schema for
+    Core Tables 29
+- name: Record
+  type: varchar(1000)
+  nullable: true
+  description: Record is the UPD record where the error occurred.
+- name: UpdFile
+  type: varchar(512)
+  nullable: false
+  description: UpdFile is the full path of the UPD file that caused the error.
+- name: LogFile
+  type: varchar(512)
+  nullable: false
+  description: LogFile is the full path of the text file where the error was logged.
+- name: LogTime
+  type: TIMESTAMP(6)
+  nullable: false
+  description: LogTime is the time when the error was logged.
+---
+table: qa_core.ErrorInfo
+domain: reference
+description: Descriptions and Severity Level of Error Codes | This table is available only in LSEG Quantitative Analytics
+  deployed. | This table contains information about each SmartLoader error based on ErrorCode. Use this table to understand
+  | – 2 = Wrong table schema
+columns:
+- name: ErrorCode
+  type: INTEGER
+  nullable: false
+  description: ErrorCode is the SmartLoader error code. ErrorInfo.ErrorCode cross- references with Update_Errors.ErrorCode.
+- name: ErrorName
+  type: varchar(50)
+  nullable: false
+  description: ErrorName is the name of the SmartLoader error.
+- name: Severity
+  type: INTEGER
+  nullable: false
+  description: Severity indicates the severity level of the SmartLoader error. – 1 = Fatal update failure (most severe) –
+    2 = Wrong table schema – 3 = Data defects in the source – 4 = Unprocessed data in the UPD file – 5 = Warning-level message
+    (least severe; error does not cause data divergence against the source)
+- name: Description
+  type: varchar(512)
+  nullable: false
+  description: Description is a description of the SmartLoader error.
+---
+table: qa_core.Content_Completion_Status
+domain: reference
+description: Snowflake Content Completion Status | Use this table to see if various content sets are considered complete for
+  a given feed date.
+update_cadence: 'Daily Adjusted: N/A'
+columns:
+- name: Technical_Content
+  type: varchar(16777216)
+  nullable: false
+  description: The content set abbreviation.
+- name: ContentName
+  type: varchar(16777216)
+  nullable: true
+  description: The full name of the content set.
+- name: FeedDate
+  type: varchar(16777216)
+  nullable: true
+  description: The feed date of reference.
+- name: Total_Builds
+  type: number
+  nullable: true
+  description: The total number of updates or builds expected for the FeedDate.
+- name: Num_Of_Builds_Processed
+  type: number
+  nullable: true
+  description: The total number of updates or builds completed for the FeedDate.
+- name: Is_Completed
+  type: varchar(16777216)
+  nullable: true
+  description: Flag that will be "Y" if the content is considered complete for the FeedDate.
+- name: Time_Of_Completion
+  type: timestamp_ntz
+  nullable: true
+  description: The time the content was completed. This will be null for incomplete content sets. LSEG Quantitative Analytics
+    Database Schema for Core Tables 30 8 Vendor Interim Adjustment Factors Tables
+---
+table: qa_core.AdjFctr
+domain: reference
+description: 'Vendor Supplemental Adjustments | This table supplements specific vendor tables that do not have a daily update
+  cycle. Companies that split | The AdjFctr table is also documented in the Database Schema for I/B/E/S document. | VendorCode
+  int N VendorCode cross-references with the entire specific vendor primary *INFO* table | IdxDjCtr, and IdxDjMkt. Additionally,
+  you can use the prc.IdxSec table to map security codes from the SecMstrX | table to security codes in the DJX tables. For
+  details about '
+update_cadence: Daily
+columns:
+- name: Database_
+  type: SMALLINT
+  nullable: false
+  description: 'Database_ may be: – 1 = I/B/E/S U.S. History – 2 = I/B/E/S U.S. QFS – 3 = Compustat – 4 = Compustat AFR –
+    5 = First Call – 6 = Compustat Back Data – 7 = I/B/E/S Global History – 8 = I/B/E/S Global QFS – 9 = Compustat Preliminary
+    – 10 = Compustat Daily'
+- name: VendorCode
+  type: INTEGER
+  nullable: false
+  description: VendorCode cross-references with the entire specific vendor primary *INFO* table where VendorCode = *INFO*.Code.
+- name: Factor
+  type: FLOAT
+  nullable: true
+  description: Factor represents the additional factor that should apply. LSEG Quantitative Analytics Database Schema for
+    Core Tables 31 9 Content Set-Specific Core License Tables The tables described in this chapter are also included in the
+    core license. Because these tables relate to tables that are part of content set-specific licenses, their details are
+    documented in the corresponding content set- specific schema documents as noted below. Dow Jones Industrial Average (DJX)
+    Index Composition Tables The core
+---
+table: qa_core.vw_securityMasterX
+domain: reference
+---
+table: qa_core.secCode
+domain: reference
+description: (prc.prcinfo/cprcinfo) or Datastream table (DS2CtryQtInfo) depending on
+columns:
+- name: seccode
+  type: INTEGER
+  nullable: false
+  description: SecCode links across the master tables.
+- name: id
+  type: Varchar(31)
+  nullable: true
+  description: Id is the unique LSEG Quantitative Analytics identifier for a security.
+- name: typ
+  type: INTEGER
+  nullable: false
+  description: 'Typ is the security type and can be: – 1 (North American Equities) – 6 (Global Equities)'
+- name: sedol
+  type: Varchar(7)
+  nullable: true
+  description: Sedol is the primary security SEDOL. It corresponds to the security where Rank = 1 for IDC in SecMapX.
+- name: prevSedol
+  type: Varchar(7)
+  nullable: true
+  description: PrevSedol is the SEDOL before the most recent SEDOL change.
+- name: gsedol2
+  type: Varchar(7)
+  nullable: true
+  description: Sedol2 is the SEDOL for a dually listed issue (trading both CAN and US) that is not marked as the primary security
+    in either the IDC tables (prc.prcinfo/cprcinfo) or Datastream table (DS2CtryQtInfo) depending on coverage. Primary status
+    is set first by IDC and then by Datastream.
+- name: prevSedol2
+  type: Varchar(7)
+  nullable: true
+  description: PrevSedol2 is the secondary security’s SEDOL before the most recent SEDOL change. It corresponds to the security
+    where Rank = 2 in SecMapX.
+- name: cusip
+  type: Varchar(9)
+  nullable: true
+  description: Cusip is the security CUSIP number
+- name: prevCusip
+  type: Varchar(9)
+  nullable: true
+  description: PrevCusip is the CUSIP before the most recent CUSIP change.
+- name: isin
+  type: Varchar(13)
+  nullable: true
+  description: Isin is the security ISIN number.
+- name: name
+  type: Varchar(61)
+  nullable: true
+  description: Name is the name of the security.
+- name: country
+  type: Varchar(4)
+  nullable: true
+  description: Country is the ISO3 code for the country of incorporation. LSEG Quantitative Analytics Database Schema for
+    Core Tables 33
+---
+table: qa_core.vw_securityMappingX
+domain: reference
+columns:
+- name: seccode
+  type: INTEGER
+  nullable: false
+  description: SecCode links across the master tables.
+- name: ventype
+  type: SMALLINT
+  nullable: false
+  description: VenType is a unique type code for each vendor. VenType is defined in SecVenType. VenType mapping is described
+    in the SecMapX and GSecMapX Security VenTypes Mapping table.
+- name: typ
+  type: INTEGER
+  nullable: false
+  description: 'Typ is the security type and can be: – 1 (North American Equities) – 6 (Global Equities)'
+- name: vencode
+  type: INTEGER
+  nullable: true
+  description: VenCode is the corresponding vendor’s unique code.
+- name: rank
+  type: SMALLINT
+  nullable: false
+  description: 'Rank is the issue rank for issuers with multiple issues. Note: Ranking is determined upon initial load, and
+    will not necessarily change in response to new issues or volume/status changes.'
+- name: exchange
+  type: SMALLINT
+  nullable: true
+  description: Exchange identifies whether the security is a United States security (1) or a Canadian security (2). A value
+    of 0 indicates that this field is not applicable.
+- name: startDate
+  type: smalldatetime
+  nullable: true
+  description: StartDate is the first date issuer information is valid.
+- name: endDate
+  type: smalldatetime
+  nullable: true
+  description: EndDate is the last date issuer information is valid. Example Use Case m.id,m.sedol,m.name,p.* from vw_securityMasterX
+    m join vw_securityMappingX p on p.seccode = m.seccode and p.ventype = 33 -- Datastream and p.typ = m.typ where m.id =
+    '@HONDA9' LSEG Quantitative Analytics Database Schema for Commodity Research Bureau (CRB) Copyright © 2024 London Stock
+    Exchange Group plc and its group of companies (LSEG) and/or its affiliates. All rights reserved. The LSEG content received
+    through this service

@@ -1,0 +1,776 @@
+table: qa_starmine_an.SMAIdent
+domain: analytics
+description: This table contains identifier information for securities included in the CAM model.
+update_cadence: Daily
+columns:
+- name: QuotePermID
+  type: BIGINT
+  nullable: false
+  description: Quote Perm ID
+- name: InstrumentPermID
+  type: BIGINT
+  nullable: true
+  description: Instrument Perm ID
+- name: OrgPermID
+  type: BIGINT
+  nullable: true
+  description: Organization Perm ID
+- name: RIC
+  type: varchar(15)
+  nullable: true
+  description: Refinitiv Identification Codes
+- name: EstimatePermID
+  type: BIGINT
+  nullable: true
+  description: Estimate Perm ID
+- name: CmpCtry
+  type: char(2)
+  nullable: true
+  description: Country of incorporation for the company. CmpCtry cross- references SMACode where SMACode.Type_ = 3 Refinitiv
+    Quantitative Analytics - Database Schema for StarMine Analytics Version 1.2.1 Page 9 of 26
+---
+table: qa_starmine_an.SMAMap
+domain: analytics
+description: This table contains mapping data for StarMine SecID to PermID.
+update_cadence: Daily
+columns:
+- name: QuotePermID
+  type: BIGINT
+  nullable: false
+  description: Quote PermID
+- name: SecID
+  type: INTEGER
+  nullable: true
+  description: StarMine Security ID
+- name: PriQuotePermID
+  type: BIGINT
+  nullable: true
+  description: Primary Quote Perm ID
+---
+table: qa_starmine_an.SMACode
+domain: analytics
+description: This table contains metadata for the CAM model.
+update_cadence: Daily
+columns:
+- name: CodeType
+  type: SMALLINT
+  nullable: false
+  description: Code type lookup
+- name: Code
+  type: varchar(20)
+  nullable: false
+  description: Coded value
+- name: Description
+  type: varchar(200)
+  nullable: true
+  description: Description
+---
+table: qa_starmine_an.SMAItem
+domain: analytics
+description: This table contains items relating to the StarMine Credit Risk models. | TableCode tinyint Y Table name where
+  the data can be located. Cross
+update_cadence: N/A
+columns:
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item number
+- name: Mnemonic
+  type: varchar(80)
+  nullable: true
+  description: Item Mnemonic
+- name: ItemDesc
+  type: varchar(100)
+  nullable: true
+  description: Item Description
+- name: Model
+  type: TINYINT
+  nullable: true
+  description: StarMine Model containing the item. Cross reference SMACode where Model = SMACode.code and SMACode.Type_ =
+    6
+- name: TableCode
+  type: TINYINT
+  nullable: true
+  description: Table name where the data can be located. Cross reference SMACode where TableCode = SMACode.code and SMACode.Type_
+    = 5
+- name: DataType
+  type: TINYINT
+  nullable: true
+  description: Type of data the item holds. Cross reference SMACode where DataType = SMACode.code and SMACode.Type_ = 4 Refinitiv
+    Quantitative Analytics - Database Schema for StarMine Analytics Version 1.2.1 Page 11 of 26 3 Combined Alpha Model Tables
+    SMACAMAm (16951) PK QuotePermID bigint PK CalcDate datetime2(3) SecCtryPermID int RegionPermID int CamRegRank tinyint
+    CamCtryRank tinyint CamSectRank tinyint CamIndRank tinyint SMACAMEa (16952) PK QuotePermID bigint PK CalcDate datetime2(3)
+    SecCtryPermID int Regi
+---
+table: qa_starmine_an.SMACAMAm
+domain: analytics
+description: This table contains StarMine daily CAM Americas data.
+update_cadence: Daily
+columns:
+- name: QuotePermID
+  type: BIGINT
+  nullable: false
+  description: Quote Perm ID
+- name: CalcDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date the data was calculated
+- name: SecCtryPermID
+  type: INTEGER
+  nullable: true
+  description: Perm ID for the security's country of listing. Cross reference SMACode where CodeType = 2
+- name: RegionPermID
+  type: INTEGER
+  nullable: true
+  description: Perm ID for the security's region used in the region rank calculations. Cross reference SMACode where CodeType
+    = 1
+- name: CAMRegRank
+  type: TINYINT
+  nullable: true
+  description: A 1-100 rank, relative to other firms in the same region, representing the StarMine Combined Alpha Model score
+    for a security listing. Higher ranks are more bullish
+- name: CAMCtryRank
+  type: TINYINT
+  nullable: true
+  description: 1-100 rank, relative to other firms in the same country, representing the StarMine Combined Alpha Model score
+    for a security listing. Higher ranks are more bullish
+- name: CAMSectRank
+  type: TINYINT
+  nullable: true
+  description: A 1-100 rank, relative to other firms in the same region and TRBC economic sector. There are ten TRBC economic
+    sectors. Higher ranks are more bullish within a given sector Refinitiv Quantitative Analytics - Database Schema for StarMine
+    Analytics Version 1.2.1 Page 12 of 26
+- name: CAMIndRank
+  type: TINYINT
+  nullable: true
+  description: A 1-100 rank, relative to other firms in the same region and TRBC industry group. There are approximately 53
+    TRBC industry groups. Higher ranks are more bullish within a given industry group
+---
+table: qa_starmine_an.SMACAMAp
+domain: analytics
+description: This table contains StarMine daily CAM Asia Pacific data.
+update_cadence: Daily
+columns:
+- name: QuotePermID
+  type: BIGINT
+  nullable: false
+  description: Quote Perm ID
+- name: CalcDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date the data was calculated
+- name: SecCtryPermID
+  type: INTEGER
+  nullable: true
+  description: Perm ID for the security's country of listing. Cross reference SMACode where CodeType = 2
+- name: RegionPermID
+  type: INTEGER
+  nullable: true
+  description: Perm ID for the security's region used in the region rank calculations. Cross reference SMACode where CodeType
+    = 1
+- name: CAMRegRank
+  type: TINYINT
+  nullable: true
+  description: A 1-100 rank, relative to other firms in the same region, representing the StarMine Combined Alpha Model score
+    for a security listing. Higher ranks are more bullish
+- name: CAMCtryRank
+  type: TINYINT
+  nullable: true
+  description: 1-100 rank, relative to other firms in the same country, representing the StarMine Combined Alpha Model score
+    for a security listing. Higher ranks are more bullish
+- name: CAMSectRank
+  type: TINYINT
+  nullable: true
+  description: A 1-100 rank, relative to other firms in the same region and TRBC economic sector. There are ten TRBC economic
+    sectors. Higher ranks are more bullish within a given sector
+- name: CAMIndRank
+  type: TINYINT
+  nullable: true
+  description: A 1-100 rank, relative to other firms in the same region and TRBC industry group. There are approximately 53
+    TRBC industry groups. Higher ranks are more bullish within a given industry group Refinitiv Quantitative Analytics - Database
+    Schema for StarMine Analytics Version 1.2.1 Page 13 of 26
+---
+table: qa_starmine_an.SMACAMEa
+domain: analytics
+description: This table contains StarMine daily CAM Europe, Middle East, and Africa data.
+update_cadence: Daily
+columns:
+- name: QuotePermID
+  type: BIGINT
+  nullable: false
+  description: Quote Perm ID
+- name: CalcDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date the data was calculated
+- name: SecCtryPermID
+  type: INTEGER
+  nullable: true
+  description: Perm ID for the security's country of listing. Cross reference SMACode where CodeType = 2
+- name: RegionPermID
+  type: INTEGER
+  nullable: true
+  description: Perm ID for the security's region used in the region rank calculations. Cross reference SMACode where CodeType
+    = 1
+- name: CAMRegRank
+  type: TINYINT
+  nullable: true
+  description: A 1-100 rank, relative to other firms in the same region, representing the StarMine Combined Alpha Model score
+    for a security listing. Higher ranks are more bullish
+- name: CAMCtryRank
+  type: TINYINT
+  nullable: true
+  description: 1-100 rank, relative to other firms in the same country, representing the StarMine Combined Alpha Model score
+    for a security listing. Higher ranks are more bullish
+- name: CAMSectRank
+  type: TINYINT
+  nullable: true
+  description: A 1-100 rank, relative to other firms in the same region and TRBC economic sector. There are ten TRBC economic
+    sectors. Higher ranks are more bullish within a given sector
+- name: CAMIndRank
+  type: TINYINT
+  nullable: true
+  description: A 1-100 rank, relative to other firms in the same region and TRBC industry group. There are approximately 53
+    TRBC industry groups. Higher ranks are more bullish within a given industry group Refinitiv Quantitative Analytics - Database
+    Schema for StarMine Analytics Version 1.2.1 Page 14 of 26 4 Combined Credit Risk Model Tables PK QuotePermID bigint PK
+    CalcDate datetime2(3) PK Item smallint Region varchar(50) SecCtry char(2) Sector char(2) Industry char(6) IndustryClass
+    varchar(10) Value_ float P
+---
+table: qa_starmine_an.SMACCRAm
+domain: analytics
+description: This table contains StarMine daily Combined Credit Risk Americas data.
+update_cadence: Daily
+columns:
+- name: QuotePermID
+  type: BIGINT
+  nullable: false
+  description: Quote Perm ID
+- name: CalcDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date the data was calculated
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: StarMine Item - Cross reference SMAItem where item = SMAItem.Item
+- name: Region
+  type: varchar(50)
+  nullable: true
+  description: Region code used in the region rank calculations
+- name: SecCtry
+  type: char(2)
+  nullable: true
+  description: Two-letter code of the country of the security listing. Cross reference SMACode where SecCtry = SMACode.code
+    and SMACode.Type_ = 10
+- name: Sector
+  type: char(2)
+  nullable: true
+  description: TRBC Economic Sector, analogous to the GICS Sector.
+- name: Industry
+  type: char(6)
+  nullable: true
+  description: TRBC Industry Group, analogous to the GICS Industry.
+- name: IndustryClass
+  type: varchar(10)
+  nullable: true
+  description: Source name for Industry and Sector classifications
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value for the item Refinitiv Quantitative Analytics - Database Schema for StarMine Analytics Version 1.2.1
+    Page 15 of 26
+---
+table: qa_starmine_an.SMACCRAp
+domain: analytics
+description: This table contains StarMine daily Combined Credit Risk Asia Pacific data.
+update_cadence: Daily
+columns:
+- name: QuotePermID
+  type: BIGINT
+  nullable: false
+  description: Quote Perm ID
+- name: CalcDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date the data was calculated
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: StarMine Item - Cross reference SMAItem where item = SMAItem.Item
+- name: Region
+  type: varchar(50)
+  nullable: true
+  description: Region code used in the region rank calculations
+- name: SecCtry
+  type: char(2)
+  nullable: true
+  description: Two-letter code of the country of the security listing. Cross reference SMACode where SecCtry = SMACode.code
+    and SMACode.Type_ = 10
+- name: Sector
+  type: char(2)
+  nullable: true
+  description: TRBC Economic Sector, analogous to the GICS Sector.
+- name: Industry
+  type: char(6)
+  nullable: true
+  description: TRBC Industry Group, analogous to the GICS Industry.
+- name: IndustryClass
+  type: varchar(10)
+  nullable: true
+  description: Source name for Industry and Sector classifications
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value for the item
+---
+table: qa_starmine_an.SMACCREa
+domain: analytics
+description: This table contains StarMine daily Combined Credit Risk Europe, Middle East, and Africa data.
+update_cadence: Daily
+columns:
+- name: QuotePermID
+  type: BIGINT
+  nullable: false
+  description: Quote Perm ID
+- name: CalcDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date the data was calculated
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: StarMine Item - Cross reference SMAItem where item = SMAItem.Item
+- name: Region
+  type: varchar(50)
+  nullable: true
+  description: Region code used in the region rank calculations Refinitiv Quantitative Analytics - Database Schema for StarMine
+    Analytics Version 1.2.1 Page 16 of 26
+- name: SecCtry
+  type: char(2)
+  nullable: true
+  description: Two-letter code of the country of the security listing. Cross reference SMACode where SecCtry = SMACode.code
+    and SMACode.Type_ = 10
+- name: Sector
+  type: char(2)
+  nullable: true
+  description: TRBC Economic Sector, analogous to the GICS Sector.
+- name: Industry
+  type: char(6)
+  nullable: true
+  description: TRBC Industry Group, analogous to the GICS Industry.
+- name: IndustryClass
+  type: varchar(10)
+  nullable: true
+  description: Source name for Industry and Sector classifications
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: 'Value for the item Refinitiv Quantitative Analytics - Database Schema for StarMine Analytics Version 1.2.1
+    Page 17 of 26 5 Text Mining Credit Risk Model Tables PK QuotePermID bigint PK CalcDate datetime2(3) PK Item smallint Region
+    varchar(50) SecCtry char(2) Sector char(2) Industry char(6) IndustryClass varchar(10) Value_ float PK QuotePermID bigint
+    PK CalcDate datetime2(3) PK Item smallint Region varchar(50) SecCtry char(2) Sector char(2) Industry char(6) IndustryClass
+    varchar(10) Value_ float '
+---
+table: qa_starmine_an.SMATMCRAm
+domain: analytics
+description: This table contains StarMine daily Text Mining Credit Risk Americas data.
+update_cadence: Daily
+columns:
+- name: QuotePermID
+  type: BIGINT
+  nullable: false
+  description: Quote Perm ID
+- name: CalcDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date the data was calculated
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: StarMine Item - Cross reference SMAItem where item = SMAItem.Item
+- name: Region
+  type: varchar(50)
+  nullable: true
+  description: Region code used in the region rank calculations
+- name: SecCtry
+  type: char(2)
+  nullable: true
+  description: Two-letter code of the country of the security listing. Cross reference SMACode where SecCtry = SMACode.code
+    and SMACode.Type_ = 10
+- name: Sector
+  type: char(2)
+  nullable: true
+  description: TRBC Economic Sector, analogous to the GICS Sector.
+- name: Industry
+  type: char(6)
+  nullable: true
+  description: TRBC Industry Group, analogous to the GICS Industry.
+- name: IndustryClass
+  type: varchar(10)
+  nullable: true
+  description: Source name for Industry and Sector classifications
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value for the item Refinitiv Quantitative Analytics - Database Schema for StarMine Analytics Version 1.2.1
+    Page 18 of 26
+---
+table: qa_starmine_an.SMATMCRAp
+domain: analytics
+description: This table contains StarMine daily Text Mining Credit Risk Asia Pacific data.
+update_cadence: Daily
+columns:
+- name: QuotePermID
+  type: BIGINT
+  nullable: false
+  description: Quote Perm ID
+- name: CalcDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date the data was calculated
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: StarMine Item - Cross reference SMAItem where item = SMAItem.Item
+- name: Region
+  type: varchar(50)
+  nullable: true
+  description: Region code used in the region rank calculations
+- name: SecCtry
+  type: char(2)
+  nullable: true
+  description: Two-letter code of the country of the security listing. Cross reference SMACode where SecCtry = SMACode.code
+    and SMACode.Type_ = 10
+- name: Sector
+  type: char(2)
+  nullable: true
+  description: TRBC Economic Sector, analogous to the GICS Sector.
+- name: Industry
+  type: char(6)
+  nullable: true
+  description: TRBC Industry Group, analogous to the GICS Industry.
+- name: IndustryClass
+  type: varchar(10)
+  nullable: true
+  description: Source name for Industry and Sector classifications
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value for the item
+---
+table: qa_starmine_an.SMATMCREa
+domain: analytics
+description: This table contains StarMine daily Text Mining Credit Risk Europe, Middle East, and Africa data.
+update_cadence: Daily
+columns:
+- name: QuotePermID
+  type: BIGINT
+  nullable: false
+  description: Quote Perm ID
+- name: CalcDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date the data was calculated
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: StarMine Item - Cross reference SMAItem where item = SMAItem.Item
+- name: Region
+  type: varchar(50)
+  nullable: true
+  description: Region code used in the region rank calculations Refinitiv Quantitative Analytics - Database Schema for StarMine
+    Analytics Version 1.2.1 Page 19 of 26
+- name: SecCtry
+  type: char(2)
+  nullable: true
+  description: Two-letter code of the country of the security listing. Cross reference SMACode where SecCtry = SMACode.code
+    and SMACode.Type_ = 10
+- name: Sector
+  type: char(2)
+  nullable: true
+  description: TRBC Economic Sector, analogous to the GICS Sector.
+- name: Industry
+  type: char(6)
+  nullable: true
+  description: TRBC Industry Group, analogous to the GICS Industry.
+- name: IndustryClass
+  type: varchar(10)
+  nullable: true
+  description: Source name for Industry and Sector classifications
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value for the item Refinitiv Quantitative Analytics - Database Schema for StarMine Analytics Version 1.2.1
+    Page 20 of 26 6 Structural Credit Risk Model Tables PK QuotePermID bigint PK CalcDate datetime2(3) PK Item smallint Region
+    varchar(50) SecCtry char(2) Sector char(2) Industry char(6) IndustryClass varchar(10) Value_ float PK QuotePermID bigint
+    PK CalcDate datetime2(3) PK Item smallint Region varchar(50) SecCtry char(2) Sector char(2) Industry char(6) IndustryClass
+    varchar(10) Value_ float P
+---
+table: qa_starmine_an.SMASCRAm
+domain: analytics
+description: This table contains StarMine daily Structural Credit Risk Americas data.
+update_cadence: Daily
+columns:
+- name: QuotePermID
+  type: BIGINT
+  nullable: false
+  description: Quote Perm ID
+- name: CalcDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date the data was calculated
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: StarMine Item - Cross reference SMAItem where item = SMAItem.Item
+- name: Region
+  type: varchar(50)
+  nullable: true
+  description: Region code used in the region rank calculations
+- name: SecCtry
+  type: char(2)
+  nullable: true
+  description: Two-letter code of the country of the security listing. Cross reference SMACode where SecCtry = SMACode.code
+    and SMACode.Type_ = 10
+- name: Sector
+  type: char(2)
+  nullable: true
+  description: TRBC Economic Sector, analogous to the GICS Sector.
+- name: Industry
+  type: char(6)
+  nullable: true
+  description: TRBC Industry Group, analogous to the GICS Industry.
+- name: IndustryClass
+  type: varchar(10)
+  nullable: true
+  description: Source name for Industry and Sector classifications
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value for the item Refinitiv Quantitative Analytics - Database Schema for StarMine Analytics Version 1.2.1
+    Page 21 of 26
+---
+table: qa_starmine_an.SMASCRAp
+domain: analytics
+description: This table contains StarMine daily Structural Credit Risk Asia Pacific data .
+update_cadence: Daily
+columns:
+- name: QuotePermID
+  type: BIGINT
+  nullable: false
+  description: Quote Perm ID
+- name: CalcDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date the data was calculated
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: StarMine Item - Cross reference SMAItem where item = SMAItem.Item
+- name: Region
+  type: varchar(50)
+  nullable: true
+  description: Region code used in the region rank calculations
+- name: SecCtry
+  type: char(2)
+  nullable: true
+  description: Two-letter code of the country of the security listing. Cross reference SMACode where SecCtry = SMACode.code
+    and SMACode.Type_ = 10
+- name: Sector
+  type: char(2)
+  nullable: true
+  description: TRBC Economic Sector, analogous to the GICS Sector.
+- name: Industry
+  type: char(6)
+  nullable: true
+  description: TRBC Industry Group, analogous to the GICS Industry.
+- name: IndustryClass
+  type: varchar(10)
+  nullable: true
+  description: Source name for Industry and Sector classifications
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value for the item
+---
+table: qa_starmine_an.SMASCREa
+domain: analytics
+description: This table contains StarMine daily Structural Credit Risk Europe, Middle East, and Africa data.
+update_cadence: Daily
+columns:
+- name: QuotePermID
+  type: BIGINT
+  nullable: false
+  description: Quote Perm ID
+- name: CalcDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date the data was calculated
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: StarMine Item - Cross reference SMAItem where item = SMAItem.Item
+- name: Region
+  type: varchar(50)
+  nullable: true
+  description: Region code used in the region rank calculations Refinitiv Quantitative Analytics - Database Schema for StarMine
+    Analytics Version 1.2.1 Page 22 of 26
+- name: SecCtry
+  type: char(2)
+  nullable: true
+  description: Two-letter code of the country of the security listing. Cross reference SMACode where SecCtry = SMACode.code
+    and SMACode.Type_ = 10
+- name: Sector
+  type: char(2)
+  nullable: true
+  description: TRBC Economic Sector, analogous to the GICS Sector.
+- name: Industry
+  type: char(6)
+  nullable: true
+  description: TRBC Industry Group, analogous to the GICS Industry.
+- name: IndustryClass
+  type: varchar(10)
+  nullable: true
+  description: Source name for Industry and Sector classifications
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: 'Value for the item Refinitiv Quantitative Analytics - Database Schema for StarMine Analytics Version 1.2.1
+    Page 23 of 26 7 SmartRatios Credit Risk Model Tables PK QuotePermID bigint PK CalcDate datetime2(3) PK Item smallint Region
+    varchar(50) SecCtry char(2) Sector char(2) Industry char(6) IndustryClass varchar(10) Value_ float PK QuotePermID bigint
+    PK CalcDate datetime2(3) PK Item smallint Region varchar(50) SecCtry char(2) Sector char(2) Industry char(6) IndustryClass
+    varchar(10) Value_ float '
+---
+table: qa_starmine_an.SMASRCRAm
+domain: analytics
+description: This table contains StarMine daily SmartRatios Credit Risk Americas data.
+update_cadence: Daily
+columns:
+- name: QuotePermID
+  type: BIGINT
+  nullable: false
+  description: Quote Perm ID
+- name: CalcDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date the data was calculated
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: StarMine Item - Cross reference SMAItem where item = SMAItem.Item
+- name: Region
+  type: varchar(50)
+  nullable: true
+  description: Region code used in the region rank calculations
+- name: SecCtry
+  type: char(2)
+  nullable: true
+  description: Two-letter code of the country of the security listing. Cross reference SMACode where SecCtry = SMACode.code
+    and SMACode.Type_ = 10
+- name: Sector
+  type: char(2)
+  nullable: true
+  description: TRBC Economic Sector, analogous to the GICS Sector.
+- name: Industry
+  type: char(6)
+  nullable: true
+  description: TRBC Industry Group, analogous to the GICS Industry.
+- name: IndustryClass
+  type: varchar(10)
+  nullable: true
+  description: Source name for Industry and Sector classifications
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value for the item Refinitiv Quantitative Analytics - Database Schema for StarMine Analytics Version 1.2.1
+    Page 24 of 26
+---
+table: qa_starmine_an.SMASRCRAp
+domain: analytics
+description: This table contains StarMine daily SmartRatios Credit Risk Asia Pacific data.
+update_cadence: Daily
+columns:
+- name: QuotePermID
+  type: BIGINT
+  nullable: false
+  description: Quote Perm ID
+- name: CalcDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date the data was calculated
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: StarMine Item - Cross reference SMAItem where item = SMAItem.Item
+- name: Region
+  type: varchar(50)
+  nullable: true
+  description: Region code used in the region rank calculations
+- name: SecCtry
+  type: char(2)
+  nullable: true
+  description: Two-letter code of the country of the security listing. Cross reference SMACode where SecCtry = SMACode.code
+    and SMACode.Type_ = 10
+- name: Sector
+  type: char(2)
+  nullable: true
+  description: TRBC Economic Sector, analogous to the GICS Sector.
+- name: Industry
+  type: char(6)
+  nullable: true
+  description: TRBC Industry Group, analogous to the GICS Industry.
+- name: IndustryClass
+  type: varchar(10)
+  nullable: true
+  description: Source name for Industry and Sector classifications
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value for the item
+---
+table: qa_starmine_an.SMASRCREa
+domain: analytics
+description: This table contains StarMine daily SmartRatios Credit Risk Europe, Middle East, and Africa data.
+update_cadence: Daily
+columns:
+- name: QuotePermID
+  type: BIGINT
+  nullable: false
+  description: Quote Perm ID
+- name: CalcDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date the data was calculated
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: StarMine Item - Cross reference SMAItem where item = SMAItem.Item
+- name: Region
+  type: varchar(50)
+  nullable: true
+  description: Region code used in the region rank calculations Refinitiv Quantitative Analytics - Database Schema for StarMine
+    Analytics Version 1.2.1 Page 25 of 26
+- name: SecCtry
+  type: char(2)
+  nullable: true
+  description: Two-letter code of the country of the security listing. Cross reference SMACode where SecCtry = SMACode.code
+    and SMACode.Type_ = 10
+- name: Sector
+  type: char(2)
+  nullable: true
+  description: TRBC Economic Sector, analogous to the GICS Sector.
+- name: Industry
+  type: char(6)
+  nullable: true
+  description: TRBC Industry Group, analogous to the GICS Industry.
+- name: IndustryClass
+  type: varchar(10)
+  nullable: true
+  description: Source name for Industry and Sector classifications
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value for the item Refinitiv Quantitative Analytics - Database Schema for StarMine Analytics Version 1.2.1
+    Page 26 of 26 © Refinitiv 2022. All Rights Reserved. Republication or redistribution of Refinitiv content, including by
+    framing or similar means, is prohibited without the prior written consent of Refinitiv. Refinitiv and the Refinitiv logo
+    are trademarks of Refinitiv and its affiliated companies. For more information visit us at www.refinitiv.com

@@ -1,0 +1,811 @@
+table: qa_trbc.RDCCode
+domain: reference
+description: Numeric Codes | This table contains descriptions of Reference Data Convergence (RDC) numeric codes.
+update_cadence: Full refresh is available weekly. Incremental updates from RDC are available every 15 minutes.
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Type_ is a numeric code for a type of data.
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is a coded value for an element of Type_. When Type_ = 0, Code is the numeric code for each Type_ other
+    than 0 and Desc_ is a description of each Type_.
+- name: Desc_
+  type: varchar(255)
+  nullable: true
+  description: Desc_ is a plain-language description of the element defined by Type_ and Code.
+---
+table: qa_trbc.RDCDesc
+domain: reference
+description: Character Code Descriptions | This table contains descriptions of Reference Data Convergence (RDC) character
+  codes.
+update_cadence: Full refresh is available weekly. Incremental updates from RDC are available every 15 minutes.
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Type_ is a numeric code for a type of data.
+- name: Code
+  type: varchar(50)
+  nullable: false
+  description: Code is a coded value for an element of Type_. When Type_ = 0, Code is the numeric code for each Type_ other
+    than 0 and Desc_ is a description of each Type_.
+- name: Desc_
+  type: varchar(255)
+  nullable: true
+  description: 'Desc_ is a plain-language description of the element defined by Type_ and Code. 2. The Reference Business
+    Classification (TRBC) Tables RDCOrgAddr: Address and Contact Information 7'
+---
+table: qa_trbc.RDCOrgAddr
+domain: reference
+description: Address and Contact Information | This table contains the address and contact information of an organization.
+update_cadence: Full refresh is available weekly. Incremental updates from RDC are available every 15 minutes.
+columns:
+- name: OrgId
+  type: INTEGER
+  nullable: false
+  description: OrgId is the permanent identifier of the organization.
+- name: AddrTypeCode
+  type: char(2)
+  nullable: true
+  description: 'AddrTypeCode is the address type of the organization. AddrTypeCode can be: – TR = Trading – MK = Marketing
+    – RG = Registered – HQ = Headquarters RDCOrgAddr.AddrTypeCode cross-references with RDCDesc.Code where Type_ = 80948.'
+- name: EmailId
+  type: varchar(255)
+  nullable: true
+  description: EmailId is the e-mail address of the organization.
+- name: FaxNo
+  type: varchar(75)
+  nullable: true
+  description: FaxNo is the fax number.
+- name: IndiEmailId
+  type: varchar(255)
+  nullable: true
+  description: IndiEmailId is the e-mail address of the individual.
+- name: IndiFaxNo
+  type: varchar(75)
+  nullable: true
+  description: IndiFaxNo is the fax number of the individual.
+- name: IndiName
+  type: varchar(110)
+  nullable: true
+  description: IndiName is the contact name of the individual.
+- name: IndiTelNo
+  type: varchar(75)
+  nullable: true
+  description: IndiTelNo is the telephone number of the individual.
+- name: PostalCode
+  type: varchar(10)
+  nullable: true
+  description: PostalCode is the first line of an address, excluding county, zip code, and country.
+- name: StateCntry
+  type: varchar(90)
+  nullable: true
+  description: StateCntry is the state or country in the address.
+- name: StrAddr
+  type: varchar(255)
+  nullable: true
+  description: StrAddr is the first line of an address, excluding county, zip code, and country.
+- name: CityTown
+  type: varchar(90)
+  nullable: true
+  description: CityTown is the city or town of an address.
+- name: TelNo
+  type: varchar(75)
+  nullable: true
+  description: TelNo is the telephone number.
+- name: TollFreeNo
+  type: varchar(75)
+  nullable: true
+  description: TollFreeNo is the toll free number of the organization.
+- name: WebAddr
+  type: varchar(255)
+  nullable: true
+  description: WebAddr is the organization’s Web site.
+join_hints:
+- to: RDCDesc
+  evidence: 'AddrTypeCode can be: – TR = Trading – MK = Marketing – RG = Registered – HQ = Headquarters RDCOrgAddr.AddrTypeCode
+    cross-references with RDCDesc.Code where Type_ = 80948.'
+  type: cross_reference
+---
+table: qa_trbc.RDCOrgInfo
+domain: reference
+description: Organization Information | This table contains information for organizations of interest in the capital markets.
+update_cadence: Full refresh is available weekly. Incremental updates from RDC are available every 15 minutes.
+columns:
+- name: OrgId
+  type: INTEGER
+  nullable: false
+  description: OrgId is the permanent identifier of the organization.
+- name: ComName
+  type: varchar(110)
+  nullable: true
+  description: ComName is the name of the organization in mixed case, manually limited to 80 characters to meet OptionX requirements.
+    The organization’s legal name is used to populate this field when the legal name does not exceed 80 characters.
+- name: LegalName
+  type: varchar(255)
+  nullable: true
+  description: LegalName is the fully registered legal name of the company, or the official name of the institution.
+- name: ShortName
+  type: varchar(40)
+  nullable: true
+  description: ShortName is the short name of the organization in mixed case (unless it is a recognized acronym entered in
+    uppercase, such as IBM for International Business Machines Corp), manually limited to a maximum of 16 characters.
+- name: OrgStatus
+  type: char(2)
+  nullable: true
+  description: 'OrgStatus is the role-to-issue status of the organization. It can have the following values: – AC = Active
+    – DC = Inactive Values are to be populated automatically, according to the type of organization. Values are never populated
+    or maintained manually.'
+- name: ContriCode
+  type: varchar(20)
+  nullable: true
+  description: ContriCode is the code used to identify organizations contributing data (usually quotes) to the real-time Integrated
+    Data Network. (IDN). RDCOrgInfo.ContriCode cross-references with RDCDesc.Code where Type_ = 27035.
+- name: ContriTypeCode
+  type: char(3)
+  nullable: true
+  description: ContriTypeCode is the classifier of the contributing organization. ContriTypeCode can be bank or broker. RDCOrgInfo.ContriTypeCode
+    cross-references with RDCDesc.Code where Type_ = 110661.
+- name: ClSiteLocCode
+  type: varchar(20)
+  nullable: true
+  description: ClSiteLocCode uniquely identifies the contributor. The code is comprised of the country code, followed by a
+    generated sequence number of the contributor in that country. RDCOrgInfo.ClSiteLocCode cross-references with RDCDesc.Code
+    where Type_ = 114785.
+- name: CntryHQISOCode
+  type: char(3)
+  nullable: true
+  description: CntryHQISOCode is the geographical headquarters of the organization. RDCOrgInfo.CntryHQISOCode cross-references
+    with RDCDesc.Code where Type_ = 27165.
+- name: CntryOfIncCode
+  type: char(3)
+  nullable: true
+  description: CntryOfIncCode is the country in which the party received its charter, allowing it to operate as a corporation.
+    If the country of incorporation is not disclosed, or if the company is not a corporation, then this would be populated
+    the same as the current country or where the company was formed. RDCOrgInfo.CntryOfIncCode cross-references with RDCDesc.Code
+    where Type_ = 30986.
+- name: ISOCurrCode
+  type: char(3)
+  nullable: true
+  description: ISOCurrCode is the currency of record of the fund entity. RDCOrgInfo.ISOCurrCode cross-references with RDCDesc.Code
+    where Type_ = 80867.
+- name: OrgTypeCode
+  type: varchar(5)
+  nullable: true
+  description: OrgTypeCode is described in the OrgTypeCode section on page 8.
+- name: DFlag
+  type: INTEGER
+  nullable: true
+  description: 'DFlag stores a bitmasked combination for the IsContributor, IsExch, and IsFundSupCmp data items. OrgTypeCode
+    is the organization type. It can be: Code Description CO Corporation FD Fund GA Government Agency GP State & Provincial
+    GT Government SP Supranational CF Closed End Fund (not used) OF Open End Fund (not used) NC Not Categorized PC Private
+    Corporation 2. The Reference Business Classification (TRBC) Tables RDCTRBCAudit: TRBC Audit Trail 9 Code Description CTLB
+    Central Bank MUNI Municipal TR'
+---
+table: qa_trbc.RDCTRBCAudit
+domain: reference
+description: TRBC Audit Trail | This data table contains audit trail for any change in TRBC assignments.
+update_cadence: Full refresh is available weekly. Incremental updates from RDC are available every 15 minutes.
+columns:
+- name: OrgId
+  type: INTEGER
+  nullable: false
+  description: OrgId is the permanent identifier of the organization entity.
+- name: AuditCode
+  type: INTEGER
+  nullable: false
+  description: 'AuditCode represents the change type for TRBC assignments: – GRO: Internal growth (business) – MAA: M&A (business)
+    – DIV: Divestiture (business) – DIS: Discontinuation (business) – SCH: Change in schema – ERR: Error Correction – REV:
+    Review RDCTRBCAudit.AuditCode cross-references with RDCCode.Code where Type_ = 115371.'
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the date on which the validity of the attribute value begins.
+- name: StartTime
+  type: INTEGER
+  nullable: false
+  description: StartTime is the time when the validity of the attribute value begins.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the date on which the validity of the attribute value ends.
+- name: EndTime
+  type: INTEGER
+  nullable: true
+  description: EndTime is the time when the validity of the attribute value ends.
+join_hints:
+- to: RDCCode
+  evidence: 'AuditCode int N AuditCode represents the change type for TRBC assignments: – GRO: Internal growth (business)
+    – MAA: M&A (business) – DIV: Divestiture (business) – DIS: Discontinuation (business) – SCH: Change in schema – ERR: Error
+    Correction – REV: Review RDCTRBCAudit.AuditCode cross-references wit'
+  type: cross_reference
+---
+table: qa_trbc.RDCTRBCData
+domain: reference
+description: TRBC Primary Codes | This table contains the current and historic TRBC primary codes for an organization.
+update_cadence: Full refresh is available weekly. Incremental updates from RDC are available every 15 minutes.
+columns:
+- name: OrgId
+  type: INTEGER
+  nullable: false
+  description: OrgId is the permanent identifier of the organization entity.
+- name: TRBCId
+  type: SMALLINT
+  nullable: false
+  description: TRBCId identifies each business entity property.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the date on which the validity of the attribute value begins.
+- name: StartTime
+  type: INTEGER
+  nullable: false
+  description: StartTime is the time when the validity of the attribute value begins.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the date on which the validity of the attribute value ends.
+- name: EndTime
+  type: INTEGER
+  nullable: true
+  description: EndTime is the time when the validity of the attribute value ends.
+- name: IsPrimary
+  type: TINYINT
+  nullable: true
+  description: IsPrimary indicates if TRBCId is the primary classification.
+---
+table: qa_trbc.RDCTRBCInfo
+domain: reference
+description: TRBC Item Information | This table contains TRBC item information.
+update_cadence: Full refresh is available weekly. Incremental updates from RDC are available every 15 minutes.
+columns:
+- name: TRBCId
+  type: SMALLINT
+  nullable: false
+  description: TRBCId identifies each business entity property. This field cross-references with RDCTRBCData.TRBCId.
+- name: TRBCGrpId
+  type: TINYINT
+  nullable: true
+  description: TRBCGrpId is the business entity to which each item belongs.
+- name: HierarchicalId
+  type: BIGINT
+  nullable: true
+  description: HierarchicalId is the numeric code assigned by Reference Data Convergence (RDC).
+- name: Mnemonic
+  type: varchar(5)
+  nullable: true
+  description: Mnemonic is the char code assigned by RDC.
+- name: ShortTitle
+  type: varchar(255)
+  nullable: true
+  description: ShortTitle is the short property name for each item.
+- name: Title
+  type: varchar(255)
+  nullable: true
+  description: Title is the property name for each item.
+- name: ShortDesc
+  type: varchar(350)
+  nullable: true
+  description: ShortDesc is the short description for each item.
+- name: LongDesc
+  type: varchar(960)
+  nullable: true
+  description: LongDesc is the long description for each item.
+---
+table: qa_trbc.RDCTRBCInfoChg
+domain: reference
+description: TRBC Item Information Changes | This table contains information on changes to the TRBC Ids.
+update_cadence: Full refresh is available weekly. Incremental updates from RDC are available every 15 minutes.
+columns:
+- name: TRBCId
+  type: SMALLINT
+  nullable: false
+  description: TRBCId identifies each business entity property. This field cross-references with RDCTRBCData.TRBCId. StartDate
+    datetime N EndDate datetime N
+- name: TRBCGrpId
+  type: TINYINT
+  nullable: true
+  description: TRBCGrpId is the business entity to which each item belongs.
+- name: HierarchicalId
+  type: BIGINT
+  nullable: true
+  description: HierarchicalId is the numeric code assigned by Reference Data Convergence (RDC).
+- name: Mnemonic
+  type: varchar(5)
+  nullable: true
+  description: Mnemonic is the char code assigned by RDC.
+- name: ShortTitle
+  type: varchar(255)
+  nullable: true
+  description: ShortTitle is the short property name for each item.
+- name: Title
+  type: varchar(255)
+  nullable: true
+  description: Title is the property name for each item.
+- name: ShortDesc
+  type: varchar(350)
+  nullable: true
+  description: ShortDesc is the short description for each item.
+- name: LongDesc
+  type: varchar(960)
+  nullable: true
+  description: LongDesc is the long description for each item.
+---
+table: qa_trbc.RDCTRBCMap
+domain: reference
+description: TRBC Mapping Information | industries, and 837 Activity codes. This table captures the association between all
+  levels.
+update_cadence: Full refresh is available weekly. Incremental updates from RDC are available every 15 minutes.
+columns:
+- name: ActTRBCId
+  type: SMALLINT
+  nullable: false
+  description: ActTRBCId is the relevant activity code derived from RDCTRBC* tables.
+- name: IndTRBCId
+  type: SMALLINT
+  nullable: true
+  description: IndTRBCId is the relevant industry sector derived from RDCTRBC* tables.
+- name: IndGrpTRBCId
+  type: SMALLINT
+  nullable: true
+  description: IndGrpTRBCId is the relevant industry group derived from RDCTRBC* tables.
+- name: BusTRBCId
+  type: SMALLINT
+  nullable: true
+  description: BusTRBCId is the relevant business sector derived from RDCTRBC* tables.
+- name: EcoTRBCId
+  type: SMALLINT
+  nullable: true
+  description: EcoTRBCId is the relevant economic sector derived from RDCTRBC* tables.
+---
+table: qa_trbc.RDCInstrInfo
+domain: reference
+description: Instrument Level Information | This data table contains financial instruments and indicators with reference and
+  descriptive information provided at
+update_cadence: Daily
+columns:
+- name: InstrID
+  type: INTEGER
+  nullable: false
+  description: InstrID is the Permanent Identifier of the instrument.
+- name: InstrStatusCode
+  type: char(2)
+  nullable: true
+  description: For non-debt issues, if an issue asset/instrument has at least one quote that is active (AssetState = 'AC'),
+    then AssetState is Active 'AC'. If all quote assets are deactivated (AssetState = 'DC'), then AssetState is Deactivated
+    'DC'. AssetState is derived for all asset types except debt issues that are maintained by the DBS forward feed. AssetState
+    is 'NA' (Not Applicable) when no quote asset is found against the issue/instrument. In particular, new issues get 'NA'
+    status as soon as they are cr
+- name: ComName
+  type: varchar(110)
+  nullable: true
+  description: In most instances, ComName is not populated, except for equity indices and warrants sourced from DBS.
+- name: InstrCatCode
+  type: char(4)
+  nullable: true
+  description: InstrCatCode is the two-level hierarchical asset classification scheme. Wherever possible, an asset is given
+    a category from the lower level in the hierarchy. This field is always mapped to AssetType.
+- name: InstrType
+  type: varchar(40)
+  nullable: true
+  description: InstrType is the single-level, broad asset classification scheme, used principally as an internal scheme for
+    time series classification. This
+- name: IssueISOCurrCode
+  type: char(3)
+  nullable: true
+  description: 'IssueISOCurrCode is derived according to logic from the following fields: – Valuation Quote''s Base Currency
+    for Equity Issues – Principal Currency for Fixed Income (Debt) Issues – Quote Asset''s Quotation Currency for Warrant
+    Issues The issue currency data is system-driven. It is a derived attribute that is not able to be updated by applications.
+    It will be updated by changes to the source fields (the currency held in either Valuation Quote Currency or Principal
+    Currency fields). All changes made'
+- name: IsCDSConv
+  type: TINYINT
+  nullable: true
+  description: IsCDSConv is the most liquid contract for doc clause and currency.
+- name: MifidStatusCode
+  type: varchar(8)
+  nullable: true
+  description: 'MifidStatusCode indicates whether the security is subject to MIFID regulation: – MIFID-U: Mifid unconfirmed
+    security – MIFID-E: Mifid eligible security – MIFID-L: Mifid top liquidity security'
+- name: MostReleMrkt
+  type: char(3)
+  nullable: true
+  description: MostReleMrkt references the country where the instrument was first admitted to trading on a regulated market.
+- name: RCSAssetCla
+  type: varchar(10)
+  nullable: true
+  description: RCSAssetCla is the Reference Classification Scheme classification.
+- name: ShortName
+  type: varchar(20)
+  nullable: true
+  description: ShortName is not mandatory for Issue Assets. This field may hold a value for some debt and commodities instruments
+    (sourced from DBS and CMI respectively). No formal standard has been set.
+- name: OrgID
+  type: INTEGER
+  nullable: true
+  description: OrgID is the permanent identifier of the organization.
+- name: PrimTrdQuotePI
+  type: INTEGER
+  nullable: true
+  description: PrimTrdQuotePI is similar to the VQ, but the tradable RIC is used. This is very US-specific where market cap
+    for the issue must be calculated on a consolidated quote that is not a RIC you can trade. Therefore, PrimTrdQuotePI exists
+    to denote the main "primary" quote of a multi-listed share line in the US that can be traded.
+- name: TMTPermId
+  type: varchar(10)
+  nullable: true
+  description: TMTPermId is the permanent Identifier of the Instrument in the TMT/TKO Database.
+- name: GemPermId
+  type: BIGINT
+  nullable: true
+  description: GemPermId is the unique entity ID for the Instrument Entity. This
+---
+table: qa_trbc.RDCSecMapX
+domain: reference
+description: RDC Security Map | This table provides mapping to vendor codes including ranking and time series.
+update_cadence: Daily
+columns:
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode links across the master tables.
+- name: VenType
+  type: SMALLINT
+  nullable: false
+  description: VenType is a unique type code for each vendor. VenType is defined in SecVenType. For RDC, VenType = 49.
+- name: VenCode
+  type: INTEGER
+  nullable: true
+  description: VenCode is the corresponding vendor’s unique code.
+- name: Rank
+  type: SMALLINT
+  nullable: false
+  description: 'Rank is the issue rank for issuers with multiple issues. Note: Ranking is determined upon initial load, and
+    will not necessarily change in response to new issues or volume/status changes.'
+- name: Exchange
+  type: SMALLINT
+  nullable: true
+  description: Exchange identifies whether the security is a United States security (1) or a Canadian security (2). A value
+    of 0 indicates that this field is not applicable.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: StartDate is the first date issuer information is valid.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the last date issuer information is valid.
+---
+table: qa_trbc.RDCGSecMapX
+domain: reference
+description: Global RDC Security Map | This table provides mapping to all available vendor codes including ranking and time
+  series.
+update_cadence: Daily
+columns:
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode links across the master tables.
+- name: VenType
+  type: SMALLINT
+  nullable: false
+  description: VenType is a unique type code for each vendor. VenType is defined in SecVenType.
+- name: VenCode
+  type: INTEGER
+  nullable: true
+  description: VenCode is the corresponding vendor’s unique code. For RDC, VenType = 49.
+- name: Rank
+  type: SMALLINT
+  nullable: false
+  description: 'Rank is the issue rank for issuers with multiple issues. Note: Ranking is determined upon initial load, and
+    will not necessarily change in response to new issues or volume/status changes.'
+- name: Exchange
+  type: SMALLINT
+  nullable: true
+  description: (Reserved for future development.)
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: StartDate is the first date issuer information is valid.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the last date issuer information is valid.
+---
+table: qa_trbc.vw_TRBCMapping
+domain: reference
+columns:
+- name: IsrCode
+  type: INTEGER
+  nullable: true
+  description: IsrCode is the issue’s issuer code. Cross-reference with Prc.PrcIsr where Prc.PrcIss.isrcode = Prc.PrcIsr.isrcode.
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode links across the master tables.
+- name: Typ
+  type: INTEGER
+  nullable: false
+  description: 6 for Global and 1 for North America.
+- name: orgID
+  type: INTEGER
+  nullable: true
+  description: OrgId is the permanent identifier of the organization.
+- name: IssueVenCode
+  type: INTEGER
+  nullable: true
+  description: 'VenCode is the corresponding vendor’s unique code (Issue level). Example Use Case: --This query shows the
+    TRBC mapping for QAID @honda9 select * from vw_SecurityMasterX aa join vw_TRBCMapping bb on bb.seccode = aa.seccode and
+    bb.typ = aa.typ where aa.id = ''@HONDA9'''
+---
+table: qa_trbc.vw_TRBCHistory
+domain: reference
+columns:
+- name: OrgID
+  type: INTEGER
+  nullable: false
+  description: OrgId is the permanent identifier of the organization.
+- name: TRBCID
+  type: SMALLINT
+  nullable: false
+  description: TRBCId identifies each business entity property.
+- name: HierarchicalID
+  type: BIGINT
+  nullable: true
+  description: HierarchicalId is the numeric code assigned by Reference Data Convergence (RDC).
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The start date of the record.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The end date of the record. LSEG Quantitative Analytics TRBC 15
+- name: EcoSectCode
+  type: BIGINT
+  nullable: true
+  description: HierarchicalId is the numeric code assigned by Reference Data Convergence (RDC) (Economic sector level).
+- name: EcoMnemonic
+  type: varchar
+  nullable: true
+  description: Mnemonic is the char code assigned by RDC (Economic sector level).
+- name: EcoShortTitle
+  type: varchar
+  nullable: true
+  description: ShortTitle is the short property name for each item (Economic sector level).
+- name: EconomicSector
+  type: varchar
+  nullable: true
+  description: Title is the property name for each item (Economic sector level).
+- name: EcoShortDesc
+  type: varchar
+  nullable: true
+  description: ShortDesc is the short description for each item (Economic sector level).
+- name: EcoLongDesc
+  type: varchar
+  nullable: true
+  description: LongDesc is the long description for each item (Economic sector level).
+- name: BusSectCode
+  type: BIGINT
+  nullable: true
+  description: HierarchicalId is the numeric code assigned by Reference Data Convergence (RDC) (Business sector level).
+- name: BusMnemonic
+  type: varchar
+  nullable: true
+  description: Mnemonic is the char code assigned by RDC (Business sector level).
+- name: BusShortTitle
+  type: varchar
+  nullable: true
+  description: ShortTitle is the short property name for each item (Business sector level).
+- name: BusinessSector
+  type: varchar
+  nullable: true
+  description: Title is the property name for each item (Business sector level).
+- name: BusShortDesc
+  type: varchar
+  nullable: true
+  description: ShortDesc is the short description for each item (Business sector level).
+- name: BusLongDesc
+  type: varchar
+  nullable: true
+  description: LongDesc is the long description for each item (Business sector level).
+- name: IndGrpCode
+  type: BIGINT
+  nullable: true
+  description: HierarchicalId is the numeric code assigned by Reference Data Convergence (RDC) (Industry group level).
+- name: IndGrpMnemonic
+  type: varchar
+  nullable: true
+  description: Mnemonic is the char code assigned by RDC (Industry group level).
+- name: IndGrpShortTitle
+  type: varchar
+  nullable: true
+  description: ShortTitle is the short property name for each item (Industry group level).
+- name: IndustryGroup
+  type: varchar
+  nullable: true
+  description: Title is the property name for each item (Industry group level).
+- name: IndGrpShortDesc
+  type: varchar
+  nullable: true
+  description: ShortDesc is the short description for each item (Industry group level).
+- name: IndGrpLongDesc
+  type: varchar
+  nullable: true
+  description: LongDesc is the long description for each item (Industry group level).
+- name: IndCode
+  type: BIGINT
+  nullable: true
+  description: HierarchicalId is the numeric code assigned by Reference Data Convergence (RDC) (Industry level).
+- name: IndMnemonic
+  type: varchar
+  nullable: true
+  description: Mnemonic is the char code assigned by RDC (Industry level).
+- name: IndShortTitle
+  type: varchar
+  nullable: true
+  description: ShortTitle is the short property name for each item (Industry level).
+- name: Industry
+  type: varchar
+  nullable: true
+  description: Title is the property name for each item (Industry level).
+- name: IndShortDesc
+  type: varchar
+  nullable: true
+  description: ShortDesc is the short description for each item (Industry level).
+- name: IndLongDesc
+  type: varchar
+  nullable: true
+  description: LongDesc is the long description for each item (Industry level).
+- name: ActCode
+  type: BIGINT
+  nullable: true
+  description: HierarchicalId is the numeric code assigned by Reference Data Convergence (RDC) (Activity level).
+- name: ActMnemonic
+  type: varchar
+  nullable: true
+  description: Mnemonic is the char code assigned by RDC (Activity level).
+- name: ActShortTitle
+  type: varchar
+  nullable: true
+  description: ShortTitle is the short property name for each item (Activity level).
+- name: Activity
+  type: varchar
+  nullable: true
+  description: Title is the property name for each item (Activity level).
+- name: ActShortDesc
+  type: varchar
+  nullable: true
+  description: ShortDesc is the short description for each item (Activity level).
+- name: ActLongDesc
+  type: varchar
+  nullable: true
+  description: 'LongDesc is the long description for each item (Activity level). Example Use Case: --This query shows the
+    TRBC history for QAID @HONDA9 select aa.*, cc.* from vw_SecurityMasterX aa LSEG Quantitative Analytics TRBC 16 join vw_TRBCMapping
+    bb on bb.seccode = aa.seccode and bb.typ = aa.typ join vw_TRBCHistory cc on cc.OrgId = bb.OrgID where aa.id = ''@HONDA9''
+    order by cc.StartDate'
+---
+table: qa_trbc.vw_TRBCOrgInfo
+domain: reference
+---
+table: qa_trbc.OrgID
+domain: reference
+columns:
+- name: OrgId
+  type: INTEGER
+  nullable: false
+  description: OrgId is the permanent identifier of the organization.
+- name: CommonName
+  type: varchar
+  nullable: true
+  description: CommonName is the name of the organization in mixed case, manually limited to 80 characters to meet OptionX
+    requirements. The organization’s legal name is used to populate this field when the legal name does not exceed 80 characters.
+- name: LegalName
+  type: varchar
+  nullable: true
+  description: LegalName is the fully registered legal name of the company, or the official name of the institution.
+- name: ShortName
+  type: varchar
+  nullable: true
+  description: ShortName is the short name of the organization in mixed case (unless it is a recognized acronym entered in
+    uppercase, such as IBM for International Business Machines Corp), manually limited to a maximum of 16 characters.
+- name: orgStatus
+  type: varchar
+  nullable: true
+  description: 'OrgStatus is the role-to-issue status of the organization. It can have the following values: • AC = Active
+    • DC = Inactive. Values are to be populated automatically, according to the type of organization. Values are never populated
+    or maintained manually.'
+- name: CntryHQISOCode
+  type: char
+  nullable: true
+  description: CntryHQISOCode is the geographical headquarters of the organization.
+- name: CntryHQ
+  type: varchar
+  nullable: true
+  description: The description of CntryHQISOCode.
+- name: CntryOfIncCode
+  type: char
+  nullable: true
+  description: CntryOfIncCode is the country in which the party received its charter, allowing it to operate as a corporation.
+    If the country of incorporation is not disclosed, or if the company is not a corporation, then this would be populated
+    the same as the current country or where the company was formed.
+- name: CntryOfInc
+  type: varchar
+  nullable: true
+  description: The description of CntryOfIncCode.
+- name: ISOCurrCode
+  type: char
+  nullable: true
+  description: ISOCurrCode is the currency of record of the fund entity.
+- name: Currency
+  type: varchar
+  nullable: true
+  description: The description of ISOCurrCode.
+- name: OrgTypeCode
+  type: varchar
+  nullable: true
+  description: OrgTypeCode is the organization type.
+- name: OrgType
+  type: varchar
+  nullable: true
+  description: 'The description of OrgTypeCode. Example Use Case: --This query shows the basic information for Microsoft select
+    aa.*, cc.* from vw_SecurityMasterX aa join vw_TRBCMapping bb on bb.seccode = aa.seccode and bb.typ = aa.typ LSEG Quantitative
+    Analytics TRBC 17 join vw_TRBCOrgInfo cc on cc.OrgId = bb.OrgID where aa.id = ''MSFT'''
+---
+table: qa_trbc.vw_TRBCInstrInfo
+domain: reference
+---
+table: qa_trbc.InstrID
+domain: reference
+columns:
+- name: InstrID
+  type: INTEGER
+  nullable: false
+  description: InstrID is the Permanent Identifier of the instrument.
+- name: InstrStatusCode
+  type: char
+  nullable: true
+  description: For non-debt issues, if an issue asset/instrument has at least one quote that is active (AssetState = 'AC'),
+    then AssetState is Active 'AC'. If all quote assets are deactivated (AssetState = 'DC'), then AssetState is Deactivated
+    'DC'. AssetState is derived for all asset types except debt issues that are maintained by the DBS forward feed. AssetState
+    is 'NA' (Not Applicable) when no quote asset is found against the issue/instrument. In particular, new issues get 'NA'
+    status as soon as they are cr
+- name: InstrStatus
+  type: varchar
+  nullable: true
+  description: The description of InstrStatusCode.
+- name: CommonName
+  type: varchar
+  nullable: true
+  description: In most instances, ComName is not populated, except for equity indices and warrants sourced from DBS.
+- name: InstrType
+  type: varchar
+  nullable: true
+  description: InstrType is the single-level, broad asset classification scheme, used principally as an internal scheme for
+    time series classification. This field is always mapped to the more granular AssetCategory scheme.
+- name: IssueISOCurrCode
+  type: char
+  nullable: true
+  description: 'IssueISOCurrCode is derived according to logic from the following fields: • Valuation Quote''s Base Currency
+    for Equity Issues • Principal Currency for Fixed Income (Debt) Issues • Quote Asset''s Quotation Currency for Warrant
+    Issues. The issue currency data is system-driven. It is a derived attribute that is not able to be updated by applications.
+    It will be updated by changes to the source fields (the currency held in either Valuation Quote Currency or Principal
+    Currency fields). All changes mad'
+- name: IssueCurrency
+  type: varchar
+  nullable: true
+  description: The description of IssueISOCurrCode.
+- name: RCSAssetCla
+  type: varchar
+  nullable: true
+  description: RCSAssetCla is the Reference Classification Scheme classification.
+- name: OrgID
+  type: INTEGER
+  nullable: true
+  description: 'OrgID is the permanent identifier of the organization. Example Use Case: --This query shows the basic information
+    for all the instruments linked to Microsoft. select aa.*, cc.* from vw_SecurityMasterX aa join vw_TRBCMapping bb on bb.seccode
+    = aa.seccode and bb.typ = aa.typ join vw_TRBCInstrInfo cc on cc.OrgId = bb.OrgID where aa.id = ''MSFT'' LSEG Quantitative
+    Analytics TRBC Copyright © 2024 London Stock Exchange Group plc and its group of companies (LSEG) and/or its affiliates.
+    All rights reserve'
