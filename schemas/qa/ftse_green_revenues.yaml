@@ -1,0 +1,219 @@
+table: qa_ftse_green.GRFinPerDet
+domain: esg
+description: Financial Period Details | This table contains financial period details.
+update_cadence: Monthly
+columns:
+- name: OrgPermID
+  type: BIGINT
+  nullable: false
+  description: Organization ID represents the permanent identifier (Perm ID) of an organization assigned to each unique entity.
+    The Perm ID is unique for an entity and remains unchanged.
+- name: PerID
+  type: BIGINT
+  nullable: false
+  description: Period ID is associated with the period end date used to report the financial data of the business at the end
+    of the financial period for annual and interims. Period end date differs for each company, however, most of the financial
+    periods are based on the tax period of the country in order to easily track corporate tax filing.
+- name: FY
+  type: INTEGER
+  nullable: true
+  description: Fiscal Year is associated with the financial year based on the annual period end of the company. Period end
+    date differs for each company, however, most of the financial periods are based on the tax period of the country in order
+    to easily track corporate tax filing. Fiscal Year is collected in the format YYYY and generally it is associated with
+    the year of the period end date. For example, if the period end is 03/31/2020, then the fiscal year is 2020. However,
+    the annual cut-off date is 15th Ja
+- name: PerStrtDt
+  type: date
+  nullable: true
+  description: Period Start Date is the start date of the associated financial period.
+- name: PerEndDt
+  type: date
+  nullable: true
+  description: Period End Date is the end date of the financial period that a company selects to close the financial accounts
+    of its business. The period end date differs for each company, however, most of the financial periods are based on the
+    tax period of the country in order to easily track corporate tax filing.
+---
+table: qa_ftse_green.GRSummDet
+domain: esg
+description: Company Summary Data | This table contains company's summary data.
+update_cadence: Monthly
+columns:
+- name: OrgPermID
+  type: BIGINT
+  nullable: false
+  description: Organization ID represents the permanent identifier (Perm ID) of an organization assigned to each unique entity.
+    The Perm ID is unique for an entity and remains unchanged.
+- name: PerID
+  type: BIGINT
+  nullable: false
+  description: Period ID is associated with the period end date used to report the financial data of the business at the end
+    of the financial period for annual and interims. LSEG Quantitative Analytics Database Schema for FTSE Green Revenues 7
+- name: CrtdDt
+  type: TIMESTAMP(6)
+  nullable: true
+  description: This indicates the datetime when the green revenue numbers where first distributed for the period.
+- name: EstEUTaxEligRvnPct
+  type: double
+  nullable: true
+  description: Estimated green revenue percentage eligibility with European Union taxonomy.
+- name: EstTypCode
+  type: varchar(50)
+  nullable: true
+  description: Estimation Type Code indicates if the sector revenues were disclosed by the company or derived by the analyst
+    using the estimation methodology.
+- name: GRPct
+  type: double
+  nullable: true
+  description: Reported or estimated green revenue as a proportion of total revenue.
+- name: LstModDt
+  type: TIMESTAMP(6)
+  nullable: true
+  description: This indicates the datetime when the green revenues were last modified for the fiscal year.
+- name: MaxGRExNclrPct
+  type: double
+  nullable: true
+  description: Estimated maximum green revenue percentage for ex nuclear.
+- name: MaxGRPct
+  type: double
+  nullable: true
+  description: Estimated maximum green revenue percentage.
+- name: MinGRExNclrPct
+  type: double
+  nullable: true
+  description: Estimated minimum green revenue percentage for ex nuclear.
+- name: MinGRPct
+  type: double
+  nullable: true
+  description: Estimated minimum green revenue percentage.
+- name: RepRevAmt
+  type: double
+  nullable: true
+  description: Reported Revenue Amount is the value reported by the company for a given financial year.
+- name: RepRevISOCurrCode
+  type: char(3)
+  nullable: true
+  description: Reported Revenue ISO Currency Code.
+- name: Tier1and2GRPct
+  type: double
+  nullable: true
+  description: Reported or estimated tier 1 and 2 green revenue as a proportion of total revenue.
+- name: Tier1GRPct
+  type: double
+  nullable: true
+  description: Reported or estimated tier 1 green revenue as a proportion of total revenue.
+- name: Tier2GRPct
+  type: double
+  nullable: true
+  description: Reported or estimated tier 2 green revenue as a proportion of total revenue.
+- name: Tier3GRPct
+  type: double
+  nullable: true
+  description: Reported or estimated tier 3 green revenue as a proportion of total revenue.
+- name: CorpCommFlg
+  type: nvarchar(150)
+  nullable: true
+  description: This is a placeholder for a new element to be added to the summary file later in Q3.
+---
+table: qa_ftse_green.GRSecRev
+domain: esg
+description: Sector Level Information and Revenue Percentage | This table contains sector-level information and the associated
+  revenue percentage. | This maps to the Item number from the GRItem table corresponding to the
+update_cadence: Monthly
+columns:
+- name: OrgPermID
+  type: BIGINT
+  nullable: false
+  description: Organization ID represents the permanent identifier (Perm ID) of an organization assigned to each unique entity.
+    The Perm ID is unique for an entity and remains unchanged.
+- name: PerID
+  type: BIGINT
+  nullable: false
+  description: Period ID is associated with the period end date used to report the financial data of the business at the end
+    of the financial period for annual and interims. Period end date differs for each company, however, most of the financial
+    periods are based on the tax period of the country in order to easily track corporate tax filing.
+- name: SecCode
+  type: SMALLINT
+  nullable: false
+  description: Sector Code uniquely identifies the green sector from which the company is generating revenues. This maps to
+    the Item number from the GRItem table corresponding to the Sector Code (Feed Field Name). LSEG Quantitative Analytics
+    Database Schema for FTSE Green Revenues 8
+- name: SecRevPct
+  type: double
+  nullable: true
+  description: Reported or estimated green revenue from the sector as a proportion of total revenue.
+---
+table: qa_ftse_green.GRCode
+domain: esg
+description: Integer Code Descriptions | This table contains descriptions for the integer codes.
+update_cadence: Monthly
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Enlists types of codified data items.
+- name: Code
+  type: BIGINT
+  nullable: false
+  description: Code represents the Value_ data item from any Green Revenue data.
+- name: Desc_
+  type: varchar(500)
+  nullable: true
+  description: Contains the coded data item description.
+---
+table: qa_ftse_green.GRItem
+domain: esg
+description: Green Revenue Metadata | This table contains the metadata of all Green Revenue metrics and Green Revenue Sector
+  hierarchical level.
+update_cadence: Monthly
+columns:
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: An item code to uniquely identify each GR metric that is a part of the feed.
+- name: FeedFieldName
+  type: varchar(100)
+  nullable: true
+  description: Internal LSEG source feed field name.
+- name: Title
+  type: varchar(200)
+  nullable: true
+  description: Description pertaining to the Item.
+- name: Description
+  type: varchar(1000)
+  nullable: true
+  description: Detailed description pertaining to the Item.
+- name: DataType
+  type: varchar(20)
+  nullable: true
+  description: This indicates the datatype of the GR metric.
+- name: Units
+  type: varchar(100)
+  nullable: true
+  description: This indicates the unit of the data metric value.
+- name: Hierarchy
+  type: varchar(20)
+  nullable: true
+  description: This identifies the hierarchy of the GR metric.
+- name: Polarity
+  type: varchar(30)
+  nullable: true
+  description: This indicates whether a higher data measure value is positive or negative.
+- name: SecType
+  type: varchar(50)
+  nullable: true
+  description: 'This code identifies the hierarchical level of the Sector Codes within the Green Revenue Classification Schema.
+    Schema has 3 levels: at the top level of the Schema there are 10 Sectors followed by 64 Sub Sectors and then, at the most
+    granular level, there are 133 Micro Sectors.'
+- name: ParentSecCode
+  type: varchar(30)
+  nullable: true
+  description: This code indicates the Parent Node of the Sector. When Sector is top level that is Green Revenue Sector, then
+    Parent Code would be NULL.
+- name: Tier
+  type: TINYINT
+  nullable: true
+  description: 'Tiering identifies the overall environmental impact associated with the green activity: – Tier 1 covers activities
+    with significant and clear environmental – Tier 2 covers activities with more limited but net positive environmental –
+    Tier 3 covers activities (micro sectors) which have some environmental benefits but are overall net neutral or negative.
+    LSEG Quantitative Analytics Database Schema for FTSE Green Revenues Copyright © 2025 London Stock Exchange Group plc and
+    its group of companies ('

@@ -1,0 +1,393 @@
+table: qa_gics.SPG2CmpInfo
+domain: reference
+description: S&P GICS Company Information | This table contains all company information, including active and inactive companies.
+update_cadence: Daily
+columns:
+- name: GvKey
+  type: INTEGER
+  nullable: false
+  description: GvKey is the S&P Global Vantage Key for the company. GvKey is also the primary link across SPG* tables.
+- name: Name_
+  type: varchar(255)
+  nullable: true
+  description: Name_ is the company name.
+- name: IncISOCtryCode
+  type: char(3)
+  nullable: true
+  description: IncISOCtryCode is the ISO country code of the country of incorporation.
+- name: DomISOCtryCode
+  type: char(3)
+  nullable: true
+  description: DomISOCtryCode is the ISO country code of the country of domicile.
+- name: IsActive
+  type: TINYINT
+  nullable: true
+  description: 'IsActive indicates if the company is currently active. It can be: – 0 = Inactive – 1 = Active'
+---
+table: qa_gics.SPG2Code
+domain: reference
+description: S&P GICS and Exchange Codes | This table contains GICS code values and the exchange code values and their descriptions.
+update_cadence: Daily
+columns:
+- name: Type_
+  type: TINYINT
+  nullable: false
+  description: Type_ is a numeric code for a type of data.
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is a coded value for an element of Type_. When Type_ = 0, Code is the numeric code for each Type_ other
+    than 0 and Desc_ is a description of each Type_.
+- name: Desc_
+  type: varchar(240)
+  nullable: true
+  description: Desc_ is a plain-language description of the element defined by Type_ and Code.
+---
+table: qa_gics.SPG2Desc
+domain: reference
+description: S&P GICS Country and Issue Type Codes | This table contains country code values and issue type codes and their
+  descriptions.
+update_cadence: Daily
+columns:
+- name: Type_
+  type: TINYINT
+  nullable: false
+  description: Type_ is a numeric code for a type of data.
+- name: Code
+  type: varchar(20)
+  nullable: false
+  description: Code is a coded value for an element of Type_. When Type_ = 0, Code is the numeric code for each Type_ other
+    than 0 and Desc_ is a description of each Type_.
+- name: Desc_
+  type: varchar(240)
+  nullable: true
+  description: Desc_ is a plain-language description of the element defined by Type_ and Code. LSEG Quantitative Analytics
+    S&P GICS 8
+---
+table: qa_gics.SPG2DGICS
+domain: reference
+description: S&P GICS Direct Data | This table contains current industrial classification information related to all active
+  companies located globally.
+update_cadence: Daily
+columns:
+- name: GvKey
+  type: INTEGER
+  nullable: false
+  description: GvKey is the S&P Global Vantage Key for the company. GvKey is also the primary link across SPG* tables.
+- name: GSubInd
+  type: INTEGER
+  nullable: true
+  description: GsubInd is the fourth and last level of the Global Industrial Classification.
+---
+table: qa_gics.SPG2HGICS
+domain: reference
+description: S&P GICS Industrial Classification Changes | This table contains changes to the industrial classification information
+  related to all North American companies.
+update_cadence: Daily
+columns:
+- name: GvKey
+  type: INTEGER
+  nullable: false
+  description: GvKey is the S&P Global Vantage Key for the company. GvKey is also the primary link across SPG* tables.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the date from which the classification is effective.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the date on which the classification is no longer effective. EndDate
+- name: will
+  type: be
+  nullable: true
+  description: for the current record only, while all other records associated with GvKey will have a value populated in the
+    EndDate field.
+- name: GSubInd
+  type: INTEGER
+  nullable: true
+  description: GsubInd is the fourth and last level of the Global Industrial Classification.
+---
+table: qa_gics.SPG2SecInfo
+domain: reference
+description: S&P GICS Security-Level Data | This table contains the security-level data associated with active and inactive
+  North American securities and
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is a unique security identifier generated sequentially by Quantitative Data Warehouse (QDW). Code is derived
+    from GvKey and the issue identifier (IID).
+- name: GvKey
+  type: INTEGER
+  nullable: false
+  description: GvKey is the S&P Global Vantage Key for the company. GvKey is also the primary link across SPG* tables.
+- name: IID
+  type: varchar(10)
+  nullable: false
+  description: IID is the issue identifier.
+- name: Ticker
+  type: varchar(20)
+  nullable: true
+  description: Ticker is the S&P security issue ticker.
+- name: IssueDesc
+  type: varchar(28)
+  nullable: true
+  description: IssueDesc is the security description.
+- name: IssueTypeCode
+  type: varchar(10)
+  nullable: true
+  description: IssueTypeCode is the security issue type. SPG2SecInfo.IssueTypeCode cross-references with SPG2Desc.Code where
+    Type_ = 1. LSEG Quantitative Analytics S&P GICS 9
+- name: ExchCode
+  type: SMALLINT
+  nullable: true
+  description: ExchCode is the security issue listing exchange. SPG2SecInfo.ExchCode cross-references with SPG2Code.Code where
+    Type_ = 1.
+- name: IsActive
+  type: TINYINT
+  nullable: true
+  description: 'IsActive indicates if the company is currently active. It can be: – 0 = Inactive – 1 = Active'
+---
+table: qa_gics.SPG2SecMktIdent
+domain: reference
+description: S&P GICS Security Licenses | This table contains information about the security licenses. This table maps the
+  Code field (security identifier) to
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is a unique security identifier generated sequentially by Quantitative Data Warehouse (QDW). Code is derived
+    from GvKey and the issue identifier (IID).
+- name: Item
+  type: TINYINT
+  nullable: false
+  description: Item is an item number generated by Quantitative Data Warehouse (QDW) that corresponds to the type of identifier.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is derived from the file’s datetime stamp.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is calculated by subtracting one from the StartDate.
+- name: Value_
+  type: varchar(20)
+  nullable: true
+  description: 'Value_ is the identifier value. Note: The CUSIP value will be truncated to eight characters, and the SEDOL
+    value will be truncated to six characters.'
+- name: LicFlag
+  type: INTEGER
+  nullable: false
+  description: 'LicFlag is the license flag. It can have the following values: – 1 = Unrestricted content items – 2 = CUSIP
+    – 4 = SEDOL LSEG Quantitative Analytics S&P GICS 10 3. S&P GICS History and GICS Direct Data (Legacy)'
+---
+table: qa_gics.Spgcode
+domain: reference
+description: S&P Code Descriptions for GICS History and Direct Data | This table contains S&P code descriptions for GICS history
+  and direct data.
+update_cadence: Daily
+columns:
+- name: Type_
+  type: SMALLINT
+  nullable: false
+  description: 'The combination of Type_ and Code translates codes that are referenced throughout the SPG* tables. Type_ breaks
+    down as follows: – GIC code descriptions – Exchange descriptions – Security type descriptions – ISO country descriptions'
+- name: Code
+  type: varchar(8)
+  nullable: false
+  description: The combination of Code and Type_ translates codes that are referenced throughout the SPG* tables.
+- name: Desc_
+  type: varchar(240)
+  nullable: true
+  description: Desc_ is the description. LSEG Quantitative Analytics S&P GICS 11 4. S&P GICS Direct Data (Legacy)
+---
+table: qa_gics.Spgdcomp
+domain: reference
+description: S&P GICS Direct Companies (Legacy) | This table contains information for S&P GICS direct companies.
+update_cadence: Daily
+columns:
+- name: Ticker
+  type: varchar(8)
+  nullable: true
+  description: Ticker is the S&P Compustat ticker for the company or SEDOL (MSCI companies).
+- name: Cusip
+  type: varchar(8)
+  nullable: true
+  description: 'Note: If you do not have a CUSIP license, this field will be null. Name varchar(40) Y'
+- name: GvKey
+  type: INTEGER
+  nullable: false
+  description: GvKey is the S&P Compustat Global Vantage Key for the company. GvKey is also the primary link across SPG* tables.
+    Sedol varchar(6) Y
+- name: Fic
+  type: varchar(3)
+  nullable: true
+  description: Fic is the ISO country code of the country of incorporation. Fic references Spgcode.Code where Spgcode.Type_=
+    4.
+- name: Loc
+  type: varchar(3)
+  nullable: true
+  description: Loc is the ISO country code of the country of domicile. Loc references Spgcode where Spgcode.Type_= 4 and Spgdcomp.Loc
+    = Spgcode.Code.
+- name: Active
+  type: BOOLEAN
+  nullable: true
+  description: 'Active indicates if the company is currently active. It can be: – 0 = Inactive – 1 = Active'
+---
+table: qa_gics.Spgdgics
+domain: reference
+description: S&P GICS Direct GICS (Legacy) | This table contains information for S&P GICS direct GICS
+update_cadence: Daily
+columns:
+- name: GvKey
+  type: INTEGER
+  nullable: false
+  description: GvKey is the S&P Compustat Global Vantage Key for the company. GvKey is also the primary link across SPG* tables.
+    FromDate smalldatetime Y ToDate smalldatetime Y
+- name: SubInd
+  type: INTEGER
+  nullable: true
+  description: SubInd is the GICS subindustry. SubInd references Spgcode where Spgcode.Type_= 1 and Spgdgics.SubInd = Spgcode.Code.
+    LSEG Quantitative Analytics S&P GICS 12
+---
+table: qa_gics.Spgdsec
+domain: reference
+description: S&P GICS Direct Securities (Legacy) | This table contains information for S&P GICS direct securities.
+update_cadence: Daily
+columns:
+- name: GvKey
+  type: INTEGER
+  nullable: false
+  description: GvKey is the S&P Compustat Global Vantage Key for the company. GvKey is also the primary link across SPG* tables.
+- name: Cid
+  type: varchar(8)
+  nullable: true
+  description: Cid is the company identifier (S&P Compustat ticker or SEDOL for MSCI companies).
+- name: Iid
+  type: varchar(3)
+  nullable: false
+  description: Iid is the issue identifier.
+- name: Ticker
+  type: varchar(8)
+  nullable: true
+  description: Ticker is the S&P Compustat security issue ticker.
+- name: Dsci
+  type: varchar(28)
+  nullable: true
+  description: Dsci is the security description. Sedol varchar(6) Y
+- name: Isin
+  type: varchar(12)
+  nullable: true
+  description: Isin is the security ISIN.
+- name: Tpci
+  type: varchar(8)
+  nullable: true
+  description: Tpci is the security issue type. Tpci references Spgcode where Spgcode.Type_= 3 and Spgdsec.Tpci = Spgcode.Code.
+- name: Exchg
+  type: SMALLINT
+  nullable: true
+  description: Exchg is the security issue listing exchange. Exchg references Spgcode where Spgcode.Type_= 2 and Spgdsec.Exchg
+    = Spgcode.Code.
+- name: Active
+  type: BOOLEAN
+  nullable: true
+  description: 'Active indicates if the security issue is currently active. It can be: – 0 = Inactive – 1 = Active LSEG Quantitative
+    Analytics S&P GICS 13 5. S&P GICS History Data (Legacy)'
+---
+table: qa_gics.Spghcomp
+domain: reference
+description: S&P GICS History Companies (Legacy) | This table contains information for S&P GICS history companies.
+update_cadence: Daily
+columns:
+- name: Ticker
+  type: varchar(8)
+  nullable: true
+  description: Ticker is the S&P Compustat ticker for the company or SEDOL (MSCI companies).
+- name: Cusip
+  type: varchar(8)
+  nullable: true
+  description: 'Note: If you do not have a CUSIP license, this field will be null. Name varchar(40) Y'
+- name: GvKey
+  type: INTEGER
+  nullable: false
+  description: GvKey is the S&P Compustat Global Vantage Key for the company. GvKey is also the primary link across SPG* tables.
+    Sedol varchar(6) Y
+- name: Fic
+  type: varchar(3)
+  nullable: true
+  description: Fic is the ISO country code of the country of incorporation. Fic references Spgcode where Spgcode.Type_ = 4
+    and Spghcomp.Fic = Spgcode.Code_.
+- name: Loc
+  type: varchar(3)
+  nullable: true
+  description: Loc is the ISO country code of the country of domicile. Loc references Spgcode where Spgcode.Type_= 4 and Spghcomp.Loc
+    = Spgcode.Code.
+- name: Active
+  type: BOOLEAN
+  nullable: true
+  description: 'Active indicates if the company is currently active. It can be: – 0 = Inactive – 1 = Active'
+---
+table: qa_gics.Spghgics
+domain: reference
+description: S&P GICS History GICS (Legacy) | This table contains information for S&P GICS history GICS.
+update_cadence: Daily
+columns:
+- name: GvKey
+  type: INTEGER
+  nullable: false
+  description: GvKey is the S&P Compustat Global Vantage Key for the company. GvKey is also the primary link across SPG* tables.
+    FromDate smalldatetime N ToDate smalldatetime Y
+- name: SubInd
+  type: INTEGER
+  nullable: true
+  description: SubInd is the GICS subindustry. SubInd references Spgcode where Spgcode.Type_= 1 and Spghgics.SubInd = Spgcode.Code.
+    LSEG Quantitative Analytics S&P GICS 14
+---
+table: qa_gics.Spghsec
+domain: reference
+description: S&P GICS History Securities (Legacy) | This table contains information for S&P GICS history securities.
+update_cadence: Daily
+columns:
+- name: GvKey
+  type: INTEGER
+  nullable: false
+  description: GvKey is the S&P Compustat Global Vantage Key for the company. GvKey is also the primary link across SPG* tables.
+- name: Cid
+  type: varchar(8)
+  nullable: true
+  description: Cid is the company identifier (S&P Compustat ticker or SEDOL for MSCI companies).
+- name: Iid
+  type: varchar(3)
+  nullable: false
+  description: Iid is the issue identifier.
+- name: Ticker
+  type: varchar(8)
+  nullable: true
+  description: Ticker is the S&P Compustat security issue ticker.
+- name: Dsci
+  type: varchar(28)
+  nullable: true
+  description: Dsci is the security description. Sedol varchar(6) Y
+- name: Isin
+  type: varchar(12)
+  nullable: true
+  description: Isin is the security ISIN.
+- name: Tpci
+  type: varchar(8)
+  nullable: true
+  description: Tpci is the security issue type. Tpci references Spgcode where Spgcode.Type_= 3 and Spghsec.Tpci = Spgcode.Code.
+- name: Exchg
+  type: SMALLINT
+  nullable: true
+  description: Exchg is the security issue listing exchange. Exchg references Spgcode where Spgcode.Type_= 2 and Spghsec.Exchg
+    = Spgcode.Code.
+- name: Active
+  type: BOOLEAN
+  nullable: true
+  description: 'Active indicates if the security issue is currently active. It can be: – 0 = Inactive – 1 = Active LSEG Quantitative
+    Analytics S&P GICS Copyright © 2024 London Stock Exchange Group plc and its group of companies (LSEG) and/or its affiliates.
+    All rights reserved. The LSEG content received through this service is the intellectual property of LSEG or its third
+    party suppliers. Republicati on or redistribution of content provided by LSEG is expressly prohibited without the prior
+    written consent of L'

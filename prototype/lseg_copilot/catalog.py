@@ -1,6 +1,6 @@
-"""Catalog loader: reads schemas/catalog.json and the per-table YAML schemas
-into typed Pydantic models, plus builds a lightweight symbol index used by
-the retriever and the SQL planner."""
+"""Catalog loader: reads schemas/catalog.json (mock) and schemas/qa_catalog.json
+(real QA extracted) into typed Pydantic models, plus builds a lightweight
+symbol index used by the retriever and the SQL planner."""
 from __future__ import annotations
 
 import json
@@ -89,7 +89,7 @@ class CatalogManifest(BaseModel):
 
 
 class Catalog:
-    """In-memory representation of the entire LSEG mock data catalog."""
+    """In-memory representation of the LSEG data catalog (mock + real QA)."""
 
     def __init__(
         self,
@@ -126,7 +126,7 @@ class Catalog:
     # ----- loading -----
 
     @classmethod
-    def load(cls, *, base_path: Path | None = None) -> "Catalog":
+    def load(cls, *, base_path: Path | None = None, include_qa: bool = True) -> "Catalog":
         paths = workspace_paths()
         root = base_path or paths["root"]
         manifest_path = root / "schemas" / "catalog.json"
@@ -134,45 +134,64 @@ class Catalog:
         manifest = CatalogManifest(**manifest_raw)
 
         tables: dict[str, TableSpec] = {}
-        for entry in manifest_raw["tables"]:
-            schema_rel = entry.get("schema_path")
-            yaml_path = root / schema_rel if schema_rel else None
-            yaml_docs: list[dict[str, Any]] = []
-            if yaml_path and yaml_path.exists():
-                with yaml_path.open("r", encoding="utf-8") as fh:
-                    for doc in yaml.safe_load_all(fh):
-                        if doc:
-                            yaml_docs.append(doc)
+        _load_catalog_tables(manifest_raw["tables"], root, tables)
 
-            # If the YAML file holds multiple tables, pick the one whose
-            # `table:` field matches this catalog entry's fqn. If none match
-            # (older schema files that only have one doc and use a slightly
-            # different fqn), fall back to the single doc.
-            entry_fqn = entry["fqn"]
-            matched_docs = [d for d in yaml_docs if d.get("table") == entry_fqn]
-            if matched_docs:
-                docs_to_use = matched_docs
-            elif len(yaml_docs) == 1:
-                docs_to_use = yaml_docs
-            else:
-                docs_to_use = [{}]  # no schema details available
-
-            for yaml_doc in docs_to_use:
-                yaml_doc = _normalize_yaml_doc(yaml_doc)
-                fqn = yaml_doc.get("table") or entry_fqn
-                spec_kwargs = {
-                    **{k: v for k, v in entry.items() if k not in {"fqn", "schema_path"}},
-                    **yaml_doc,
-                    "fqn": fqn,
-                    "schema_path": schema_rel,
-                }
-                # Drop catalog-only keys that aren't in TableSpec
-                spec_kwargs.pop("doc_path", None)
-                spec = TableSpec(**spec_kwargs)
-                tables[spec.fqn] = spec
+        # Merge real QA catalog if available.
+        qa_catalog_path = root / "schemas" / "qa_catalog.json"
+        if include_qa and qa_catalog_path.exists():
+            qa_raw = json.loads(qa_catalog_path.read_text(encoding="utf-8"))
+            _load_catalog_tables(qa_raw.get("tables", []), root, tables)
+            for domain in qa_raw.get("extra_domains", []):
+                if not any(d.code == domain["code"] for d in manifest.domains):
+                    manifest.domains.append(DomainSpec(**domain))
 
         symbol_index = _build_symbol_index(tables)
         return cls(manifest=manifest, tables=tables, symbol_index=symbol_index)
+
+
+def _load_catalog_tables(
+    entries: list[dict[str, Any]],
+    root: Path,
+    tables: dict[str, TableSpec],
+) -> None:
+    """Load table entries from a catalog manifest into *tables* (mutating)."""
+    _yaml_cache: dict[str, list[dict[str, Any]]] = {}
+
+    for entry in entries:
+        schema_rel = entry.get("schema_path")
+        yaml_path = root / schema_rel if schema_rel else None
+
+        # Cache YAML file loads — QA schemas hold many tables per file.
+        yaml_docs: list[dict[str, Any]] = []
+        if yaml_path and yaml_path.exists():
+            cache_key = str(yaml_path)
+            if cache_key not in _yaml_cache:
+                with yaml_path.open("r", encoding="utf-8") as fh:
+                    _yaml_cache[cache_key] = [d for d in yaml.safe_load_all(fh) if d]
+            yaml_docs = _yaml_cache[cache_key]
+
+        entry_fqn = entry["fqn"]
+        matched_docs = [d for d in yaml_docs if d.get("table") == entry_fqn]
+        if matched_docs:
+            docs_to_use = matched_docs
+        elif len(yaml_docs) == 1:
+            docs_to_use = yaml_docs
+        else:
+            docs_to_use = [{}]
+
+        for yaml_doc in docs_to_use:
+            yaml_doc = _normalize_yaml_doc(yaml_doc)
+            fqn = yaml_doc.get("table") or entry_fqn
+            spec_kwargs = {
+                **{k: v for k, v in entry.items() if k not in {"fqn", "schema_path", "source_document"}},
+                **yaml_doc,
+                "fqn": fqn,
+                "schema_path": schema_rel,
+            }
+            spec_kwargs.pop("doc_path", None)
+            spec_kwargs.pop("join_hints", None)
+            spec = TableSpec(**spec_kwargs)
+            tables[spec.fqn] = spec
 
 
 def _normalize_yaml_doc(doc: dict[str, Any]) -> dict[str, Any]:

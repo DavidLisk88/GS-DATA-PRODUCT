@@ -1,0 +1,541 @@
+table: qa_us_insider.InsCode
+domain: ownership
+description: United States Insider Codes | This table provides descriptions for the coded fields in the US Insider tables.
+  | This table is shared between the US Insider Filing and US Insider Trading Data tables.
+update_cadence: Daily
+columns:
+- name: Type_
+  type: SMALLINT
+  nullable: false
+  description: Type_ identifies the reference type. Types are defined where Type_ = 0 and Code identifies Type_.
+- name: Code
+  type: varchar(5)
+  nullable: false
+  description: Code is described by Desc_. Code is cross-referenced from other tables.
+- name: StrCode
+  type: varchar(10)
+  nullable: true
+  description: StrCode is the character code provided by the vendor, if applicable. If not available, StrCode is the same
+    as Code.
+- name: Desc_
+  type: varchar(1000)
+  nullable: true
+  description: Desc_ is the description of code.
+join_hints:
+- to: other
+  evidence: Code is cross-referenced from other tables.
+  type: cross_reference
+---
+table: qa_us_insider.InsFData
+domain: ownership
+description: Insider Data Values | This table provides the data values for all Insider items.
+update_cadence: Daily
+columns:
+- name: DCNCode
+  type: INTEGER
+  nullable: false
+  description: DCNCode is the Document Control Number code. This is a LSEG generated code.
+- name: SeqNum
+  type: SMALLINT
+  nullable: false
+  description: SeqNum is an identifier for each of the individual transactions on a form, as a single filing may contain multiple
+    transactions. You can use SeqNum in conjunction with the DCNCode to uniquely identify every record.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item is the unique item number. Item cross-references with InsItem.
+- name: FileCode
+  type: SMALLINT
+  nullable: false
+  description: FileCode is a LSEG assigned number indicating the file type, such as, TableOne, TableTwo, Form144, and so on.
+    Cross-reference FileCode with InsCode where FileCode = InsCode.Code and InsCode.Type_ = 14.
+- name: SecurityID
+  type: INTEGER
+  nullable: true
+  description: SecurityID is a LSEG internally assigned unique identifier for a security. This identifier enables you to link
+    company data, regardless of changes in company name or ticker symbol.
+- name: PersonID
+  type: INTEGER
+  nullable: true
+  description: PersonID is a LSEG internally assigned unique identifier for an individual insider. This identifier ensures
+    that an insider is not represented multiple times within his or her own company (for example as John Ronald Smith, John
+    R. Smith, and so on). This unique identifier also enables you to accurately track an individual’s transactions over time.
+- name: TransDate
+  type: INTEGER
+  nullable: true
+  description: For Forms 3, 4, and 5, TransDate is either the date of the transaction or the date of the holdings report.
+    For Form 144, this is the best estimate of the future sale date.
+- name: AmendIndCode
+  type: SMALLINT
+  nullable: true
+  description: AmendIndCode indicates whether a record represents an amendment made to an earlier filing. Amended filings
+    are noted with an A. Otherwise, the field is blank.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the item value.
+- name: CreateDate
+  type: INTEGER
+  nullable: true
+  description: CreateDate is the creation date of the record, in the format YYYYMMDD. LSEG Quantitative Analytics Database
+    Schema for US Insider 8
+join_hints:
+- to: InsItem
+  evidence: Item cross-references with InsItem.
+  type: cross_reference
+---
+table: qa_us_insider.InsFDCNInfo
+domain: ownership
+description: Insiders Profile Identifier Changes | This table contains a history of identifier changes for the Insider profile,
+  based on the document control number
+update_cadence: Daily
+columns:
+- name: DCNCode
+  type: INTEGER
+  nullable: false
+  description: DCNCode is the Document Control Number code. This is a LSEG generated code.
+- name: DCN
+  type: varchar(10)
+  nullable: true
+  description: DCN is the Document Control Number. This is a unique number assigned to each document that enables you to track
+    the information back to the original source.
+- name: SecurityID
+  type: INTEGER
+  nullable: true
+  description: SecurityID is a LSEG internally assigned unique identifier for a security. This identifier enables you to link
+    company data, regardless of changes in company name or ticker symbol.
+- name: PersonID
+  type: INTEGER
+  nullable: true
+  description: PersonID is a LSEG internally assigned unique identifier for an individual insider. This identifier ensures
+    that an insider is not represented multiple times within his or her own company (for example as John Ronald Smith, John
+    R. Smith, and so on). This unique identifier also enables you to accurately track an individual’s transactions over time.
+- name: FileDate
+  type: INTEGER
+  nullable: true
+  description: FileDate is the date the file was created, in the format YYYYMMDD.
+- name: CreateDate
+  type: INTEGER
+  nullable: true
+  description: CreateDate is the creation date of the record, in the format YYYYMMDD.
+- name: FormType
+  type: varchar(7)
+  nullable: true
+  description: FormType is the type of form the insider filed, with possible values of 3, 4, 5, or 144.
+- name: FullName
+  type: varchar(60)
+  nullable: true
+  description: FullName is the filing insider's complete name displayed as last name, first name, middle name, and suffix.
+- name: StAddr1
+  type: varchar(40)
+  nullable: true
+  description: StAddr1 is the insider's reported street address.
+- name: StAddr2
+  type: varchar(40)
+  nullable: true
+  description: StrAddr2 is the insider's reported suite or building number. A post office box number may also be included,
+    if provided.
+- name: City
+  type: varchar(50)
+  nullable: true
+  description: City is the insider's reported city of residence.
+- name: StateCode
+  type: char(2)
+  nullable: true
+  description: StateCode is the two-character abbreviation for the insider's reported state of residence. This field applies
+    only for domestic addresses. InsFDCNInfo.StateCode cross-references with InsCode.Code where Type_ = 7.
+- name: PostalCode
+  type: varchar(10)
+  nullable: true
+  description: PostalCode is the insider's reported US zip code or international postal code. CtryCode varchar(3) CtryCode
+    identifies the insider's reported country of residence. InsFDCNInfo.CtryCode cross-references with InsCode.Code where
+    Type_ = 8.
+- name: Phone
+  type: varchar(18)
+  nullable: true
+  description: Phone is the insider's phone number, if provided.
+- name: RoleCode1
+  type: char(3)
+  nullable: true
+  description: Role Codes 1-4 are the insider’s roles or positions within the company, as reported on the filing. InsFDCNInfo.RoleCode*
+    cross-references with InsCode.Code where Type_ = 1. RoleCode2 char(3) Y RoleCode3 char(3) Y RoleCode4 char(3) Y
+- name: SECReceiptDate
+  type: INTEGER
+  nullable: true
+  description: SECReceiptDate is the date the filing was received by the Securities and Exchange Commission, in the format
+    YYYYMMDD. This is the SEC Stamp Date.
+- name: SigDate
+  type: INTEGER
+  nullable: true
+  description: SigDate is the date that the filing was signed by the insider or by a person authorized to sign on behalf of
+    the insider, in the format YYYYMMDD.
+- name: LastMaintDate
+  type: INTEGER
+  nullable: true
+  description: LastMaintDate is the last day that a record was modified, in the format YYYYMMDD. LSEG Quantitative Analytics
+    Database Schema for US Insider 9
+---
+table: qa_us_insider.InsFIndRet
+domain: ownership
+description: Insider Historical Transaction Returns | This table contains information on a stock’s historical performance
+  following an insider's transactions. When
+update_cadence: Daily
+columns:
+- name: PersonID
+  type: INTEGER
+  nullable: false
+  description: PersonID is a LSEG internally assigned unique identifier that allows for consistent and accurate identification
+    of individual insiders. This identifier ensures that an insider is not represented multiple times (for example, John Ronald
+    Smith, John R. Smith, etc.) within his or her own company. This unique identifier also allows you to accurately track
+    an individual’s transactions over time.
+- name: SecurityID
+  type: INTEGER
+  nullable: false
+  description: SecurityID is a LSEG internally assigned unique identifier for a security. This identifier enables you to link
+    company data, regardless of changes in company name or ticker symbol.
+- name: Avg3MthRtnBuys
+  type: FLOAT
+  nullable: true
+  description: Avg3MthRtnBuys is the average three-month performance returns following a given insider’s purchase decisions.
+- name: Avg3MthRtnSells
+  type: FLOAT
+  nullable: true
+  description: Avg3MthRtnSells is the average three-month performance returns following a given insider’s sell decisions.
+- name: Avg6MthRtnBuys
+  type: FLOAT
+  nullable: true
+  description: Avg6MthRtnBuys is the average six-month performance returns following a given insider’s purchase decisions.
+- name: Avg6MthRtnSells
+  type: FLOAT
+  nullable: true
+  description: Avg6MthRtnSells is the average six-month performance returns following a given insider’s sell decisions.
+- name: BuyCnt
+  type: INTEGER
+  nullable: true
+  description: The number of historic buy decisions by the insider.
+- name: SellCnt
+  type: INTEGER
+  nullable: true
+  description: The number of historic sell decisions by the insider.
+---
+table: qa_us_insider.InsFNatAcq
+domain: ownership
+description: Insider Nature of Acquisition Data | Use this table to retrieve nature of acquisition data for Form 144 filings.
+update_cadence: Daily
+columns:
+- name: DCNCode
+  type: INTEGER
+  nullable: false
+  description: DCNCode is the Document Control Number code. This is a LSEG generated code.
+- name: SeqNum
+  type: SMALLINT
+  nullable: false
+  description: SeqNum is an identifier for each of the individual transactions on a form, as a single filing may contain multiple
+    transactions. You can use SeqNum in conjunction with the DCN to uniquely identify every record.
+- name: CreateDate
+  type: INTEGER
+  nullable: true
+  description: CreateDate is the creation date of the record, in the format YYYYMMDD.
+- name: SecurityID
+  type: INTEGER
+  nullable: true
+  description: SecurityID is a LSEG internally assigned unique identifier for a security. This identifier enables you to link
+    company data, regardless of changes in company name or ticker symbol.
+- name: PersonID
+  type: INTEGER
+  nullable: true
+  description: PersonID is a LSEG internally assigned unique identifier for an individual insider. This identifier ensures
+    that an insider is not represented multiple times within his or her own company (for example as John Ronald Smith, John
+    R. Smith, and so on). This unique identifier also enables you to accurately track an individual’s transactions over time.
+- name: NatAcq
+  type: varchar(50)
+  nullable: true
+  description: NatAcq describes how the shares were acquired by the insider. For example, shares may have been acquired through
+    the exercise of stock options or by the founder during an initial public offering. LSEG Quantitative Analytics Database
+    Schema for US Insider 10
+---
+table: qa_us_insider.InsFProInfo
+domain: ownership
+description: Insider Profiles | This table contains the current profile for all insiders.
+update_cadence: Daily
+columns:
+- name: PersonID
+  type: INTEGER
+  nullable: false
+  description: PersonID is a LSEG internally assigned unique identifier for an individual insider. This identifier ensures
+    that an insider is not represented multiple times within his or her own company (for example as John Ronald Smith, John
+    R. Smith, and so on). This unique identifier also enables you to accurately track an individual’s transactions over time.
+- name: FullName
+  type: varchar(60)
+  nullable: true
+  description: FullName is the filing insider's complete name in the order of last name, first name, middle name, and suffix.
+- name: StAddr1
+  type: varchar(40)
+  nullable: true
+  description: StAddr1 is the insider's reported street address.
+- name: StrAddr2
+  type: varchar(40)
+  nullable: true
+  description: StrAddr2 is the insider's reported suite or building number. A post office box number may also be included,
+    if provided.
+- name: City
+  type: varchar(50)
+  nullable: true
+  description: City is the insider's reported city of residence.
+- name: StateCode
+  type: char(2)
+  nullable: true
+  description: StateCode is the two-character abbreviation for the insider's reported state of residence. This field applies
+    only for domestic addresses. InsFProInfo.StateCode cross-references with InsCode.Code where Type_ = 7.
+- name: PostalCode
+  type: varchar(10)
+  nullable: true
+  description: PostalCode is the insider's reported US zip code or international postal code.
+- name: CtryCode
+  type: varchar(3)
+  nullable: true
+  description: CtryCode identifies the insider's reported country of residence. InsFProInfo.CtryCode cross-references with
+    InsCode.Code where Type_ = 8.
+- name: Phone
+  type: varchar(18)
+  nullable: true
+  description: Phone is the insider's phone number, if provided.
+- name: LastMaintDate
+  type: INTEGER
+  nullable: true
+  description: LastMaintDate is the last day that a record was modified, in the format YYYYMMDD.
+---
+table: qa_us_insider.InsFRoles
+domain: ownership
+description: Insider Roles | Use this table to retrieve information on the roles for each insider within a company.
+update_cadence: Daily
+columns:
+- name: PersonID
+  type: INTEGER
+  nullable: false
+  description: PersonID is a LSEG internally assigned unique identifier for an individual insider. This identifier ensures
+    that an insider is not represented multiple times within his or her own company (for example as John Ronald Smith, John
+    R. Smith, and so on). This unique identifier also enables you to accurately track an individual’s transactions over time.
+- name: SecurityID
+  type: INTEGER
+  nullable: false
+  description: SecurityID is a LSEG internally assigned unique identifier for a security. This identifier enables you to link
+    company data, regardless of changes in company name or ticker symbol.
+- name: RoleCode1
+  type: char(3)
+  nullable: true
+  description: Role Codes 1-4 are the insider’s roles or positions within the company, as reported on the filing. InsFRoles.RoleCode*
+    cross-references with InsCode.Code where Type_ = 1. RoleCode2 char(3) Y RoleCode3 char(3) Y RoleCode4 char(3) Y LSEG Quantitative
+    Analytics Database Schema for US Insider 11
+---
+table: qa_us_insider.InsInfo
+domain: ownership
+description: Security-level Identifying Information | This table contains security-level identifying information. | This table
+  is shared between the US Insider Filing and US Insider Trading Data tables.
+update_cadence: Daily
+columns:
+- name: SecurityID
+  type: INTEGER
+  nullable: false
+  description: SecurityID is a LSEG internally assigned unique identifier for a security. This identifier enables you to link
+    company data, regardless of changes in company name or ticker symbol.
+- name: CmpNum
+  type: varchar(10)
+  nullable: true
+  description: CmpNum is the internal company number.
+- name: CmpName
+  type: varchar(60)
+  nullable: true
+  description: CmpName is the name of the company or issuer at the time of the filing.
+- name: Cusip
+  type: varchar(8)
+  nullable: true
+  description: Cusip is the CUSIP number. It is a unique identifier for issuers and issues of securities and financial instruments.
+    Issuer CUSIP refers to the company. Issue CUSIP refers to the security type, for example, common stock or preferred stock.
+- name: CusipCheck
+  type: char(1)
+  nullable: true
+  description: CusipCheck is the CUSIP check digit. This is the ninth digit of the CUSIP number and it provides a means of
+    mathematically verifying the accuracy of the CUSIP issuer and issue numbers.
+- name: Ticker
+  type: varchar(6)
+  nullable: true
+  description: Ticker is the ticker symbol of the company with which the insider is affiliated at the time of the transaction.
+    If the company is inactive at the time that the data is run, the ticker field is blank.
+- name: SectIndCode
+  type: varchar(4)
+  nullable: true
+  description: SectIndCode is the Sector/Industry code. This identifies the sector and industry in which the company primarily
+    operates. Cross-reference SectIndCode with InsCode where SectIndCode = InsCode.Code and InsCode.Type_ = 6.
+---
+table: qa_us_insider.InsInfoChg
+domain: ownership
+description: Security-level Identifying Information | Use this table to retrieve historical changes to security-level identifying
+  information on a go-forward basis.
+update_cadence: Daily
+columns:
+- name: SecurityID
+  type: INTEGER
+  nullable: false
+  description: SecurityID is a LSEG internally assigned unique identifier for a security. This identifier enables you to link
+    company data, regardless of changes in company name or ticker symbol.
+- name: StartDate
+  type: INTEGER
+  nullable: false
+  description: StartDate is the first date the record is active.
+- name: EndDate
+  type: INTEGER
+  nullable: true
+  description: EndDate is the last date the record is active. If the record is currently active, then this is NULL.
+- name: CmpNum
+  type: varchar(10)
+  nullable: true
+  description: CmpNum is the internal company number.
+- name: CmpName
+  type: varchar(60)
+  nullable: true
+  description: CmpName is the name of the company or issuer at the time of the filing.
+- name: Cusip
+  type: varchar(8)
+  nullable: true
+  description: Cusip is the CUSIP number. It is a unique identifier for issuers and issues of securities and financial instruments.
+    Issuer CUSIP refers to the company. Issue CUSIP refers to the security type, for example, common stock or preferred stock.
+- name: CusipCheck
+  type: char(1)
+  nullable: true
+  description: CusipCheck is the CUSIP check digit. This is the ninth digit of the CUSIP number and it provides a means of
+    mathematically verifying the accuracy of the CUSIP issuer and issue numbers. LSEG Quantitative Analytics Database Schema
+    for US Insider 12
+- name: Ticker
+  type: varchar(6)
+  nullable: true
+  description: Ticker is the ticker symbol of the company with which the insider is affiliated at the time of the transaction.
+    If the company is inactive at the time that the data is run, the ticker field is blank.
+- name: SectIndCode
+  type: varchar(4)
+  nullable: true
+  description: SectIndCode is the Sector/Industry code. This identifies the sector and industry in which the company primarily
+    operates. Cross-reference SectIndCode with InsCode where SectIndCode = InsCode.Code and InsCode.Type_ = 6.
+- name: UIDFlag
+  type: char(1)
+  nullable: true
+  description: UIDFlag is for internal use only.
+---
+table: qa_us_insider.InsItem
+domain: ownership
+description: Insider Filing and Insider Trading Models | This table provides identifying information for each data item in
+  the Insider Filing and Insider Trading models. | The InsItem table and the InsInfo table are shared between the US Insider
+  Filing data tables and the US Insider Trading data
+update_cadence: Daily
+columns:
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item is the unique LSEG generated code that uniquely identifies each data item.
+- name: Mnemonic
+  type: varchar(24)
+  nullable: true
+  description: Mnemonic is the LSEG generated character code that uniquely identifies each data item.
+- name: ItemName
+  type: varchar(50)
+  nullable: true
+  description: ItemName is the item description.
+- name: FileCode
+  type: SMALLINT
+  nullable: true
+  description: FileCode is a LSEG assigned number indicating the file type, such as, TableOne, TableTwo, Form144, and so on.
+    Cross-reference FileCode with InsCode where FileCode = InsCode.Code and InsCode.Type_ = 14.
+- name: DataTypeCode
+  type: SMALLINT
+  nullable: true
+  description: DataTypeCode identifies the SQL data type for each field. Cross- reference DataTypeCode with InsCode where
+    DataTypeCode = InsCode.Code and InsCode.Type_ = 13. LSEG Quantitative Analytics Database Schema for US Insider 13 3. United
+    States Insider Trading This diagram shows the relationship between the US Insider Trading data tables. The InsItem table
+    and the InsInfo table are shared between the US Insider Filing data tables and the US Insider Trading data tables. PK,FK1
+    SecurityID int PK ScoreDat
+---
+table: qa_us_insider.InsTMv1
+domain: ownership
+description: Insider Trading Model (Version 1) Items | This table contains the data values for the Insider Trading Model (Version
+  1) items.
+update_cadence: Weekly
+columns:
+- name: SecurityID
+  type: INTEGER
+  nullable: false
+  description: SecurityID is a LSEG internally assigned unique identifier for a security. This identifier enables you to link
+    company data, regardless of changes in company name or ticker symbol.
+- name: ScoreDate
+  type: INTEGER
+  nullable: false
+  description: ScoreDate is the week ending date of the score, in the format YYYY-MM-DD.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item is the unique item number. Item cross-references with InsItem.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the item value.
+---
+table: qa_us_insider.InsTMv2Dly
+domain: ownership
+description: Daily Insider Trading Model (Version 2) Items | This table contains the data values for the Insider Trading Model
+  (Version 2) items on a daily basis.
+update_cadence: Daily
+columns:
+- name: SecurityID
+  type: INTEGER
+  nullable: false
+  description: SecurityID is a LSEG internally assigned unique identifier for a security. This identifier enables you to link
+    company data, regardless of changes in company name or ticker symbol.
+- name: ScoreDate
+  type: INTEGER
+  nullable: false
+  description: ScoreDate is the week ending date of the score, in the format YYYY-MM-DD.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item is the unique item number. Item cross-references with InsItem.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the item value.
+---
+table: qa_us_insider.InsTMv2Wk
+domain: ownership
+description: Weekly Insider Trading Model (Version 2) Items | This table contains the data values for the Insider Trading
+  Model (Version 2) items on a weekly basis.
+update_cadence: Weekly
+columns:
+- name: SecurityID
+  type: INTEGER
+  nullable: false
+  description: SecurityID is a LSEG internally assigned unique identifier for a security. This identifier enables you to link
+    company data, regardless of changes in company name or ticker symbol.
+- name: ScoreDate
+  type: INTEGER
+  nullable: false
+  description: ScoreDate is the week ending date of the score, in the format YYYY-MM-DD.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item is the unique item number. Item cross-references with InsItem.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the item value. LSEG Quantitative Analytics Database Schema for US Insider Copyright © 2024 London
+    Stock Exchange Group plc and its group of companies (LSEG) and/or its affiliates. All rights reserved. The LSEG content
+    received through this service is the intellectual property of LSEG or its third party suppliers. Republicati on or redistribution
+    of content provided by LSEG is expressly prohibited without the prior written consent of LSEG, except where permitted
+    by the terms of the rel
+join_hints:
+- to: InsItem
+  evidence: Item cross-references with InsItem.
+  type: cross_reference
+- to: InsItem
+  evidence: Item cross-references with InsItem.
+  type: cross_reference
+- to: InsItem
+  evidence: Item cross-references with InsItem.
+  type: cross_reference

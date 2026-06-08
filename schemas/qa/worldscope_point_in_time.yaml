@@ -1,0 +1,1068 @@
+table: qa_wscope_pit.WSPITCalPrd
+domain: fundamentals
+description: Worldscope PIT Calendar Information | This table contains calendar information about a fiscal period, such as
+  the period end date and the corresponding
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all WSPIT* tables.
+- name: PointDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: PointDate is the date the record was created in the content database upstream of LSEG Quantitative Analytics.
+    The record will then be picked up by RQA in the next daily update (6AM CT, M- F), assuming no processing delays. There
+    is no time associated with the PointDate. All timestamps are 00:00:00.000.
+- name: FreqCode
+  type: TINYINT
+  nullable: false
+  description: 'FreqCode is the frequency: – 1 = Annual (A) – 2 = Restated – Annual (B) – 3 = Restated – Quarterly (C) – 4
+    = Restated – Quarterly Cumulative (E) – 5 = Restated – Semi-Annual (F) – 6 = Restated – Trimester (K) – 7 = Restated –
+    Trimester Cumulative (L) – 8 = Quarterly (Q) – 9 = Quarterly – Cumulative (R) – 10 = Semi-Annual (S) – 11 = Trimester
+    (T) – 12 = Trimester – Cumulative (U) – 13 = Weekly (W) – 14 = Monthly (M) This field cross-references with WSPITCode.Code
+    where Type_ = 11. Cross- referenc'
+- name: FiscalPrd
+  type: INTEGER
+  nullable: false
+  description: FiscalPrd is the fiscal period.
+- name: CalFiscalPrd
+  type: INTEGER
+  nullable: true
+  description: CalFiscalPrd is the calendar period value.
+- name: PrdEndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: PrdEndDate is the fiscal period end date.
+- name: CalPrdEndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: CalPrdEndDate is the fiscal period end month.
+- name: UpdTypeCode
+  type: SMALLINT
+  nullable: true
+  description: UpdTypeCode is the update type. WSPITCalPrd.UpdTypeCode cross-references with WSPITCode.Code where Type_ =
+    13.
+- name: SrcDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: SrcDate is the document source date. LSEG Quantitative Analytics Worldscope Point in Time 7
+join_hints:
+- to: WSPITCode
+  evidence: 'FreqCode tinyint N FreqCode is the frequency: – 1 = Annual (A) – 2 = Restated – Annual (B) – 3 = Restated – Quarterly
+    (C) – 4 = Restated – Quarterly Cumulative (E) – 5 = Restated – Semi-Annual (F) – 6 = Restated – Trimester (K) – 7 = Restated
+    – Trimester Cumulative (L) – 8 = Quarterly (Q) – 9 = Quar'
+  type: cross_reference
+---
+table: qa_wscope_pit.WSPITCmpIssDData
+domain: fundamentals
+description: Worldscope PIT Company and Security-Level | This table contains company and security-level data.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the unique integer sequential code generated for every unique Worldscope ID.
+- name: StartDate
+  type: INTEGER
+  nullable: false
+  description: StartDate is the Worldscope Point in Time start date.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: This field cross-references with WSPITItem.Item.
+- name: EndDate
+  type: INTEGER
+  nullable: true
+  description: EndDate is the point date.
+- name: Value_
+  type: INTEGER
+  nullable: true
+  description: Value_ is the value for the corresponding Item.
+---
+table: qa_wscope_pit.WSPITCmpIssFData
+domain: fundamentals
+description: Worldscope PIT Company and Security-Level | This table contains company and security-level float data.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the unique integer sequential code generated for every unique Worldscope ID.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the Worldscope Point in Time start date.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: This field cross-references with WSPITItem.Item.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the point date.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the value for the corresponding Item.
+---
+table: qa_wscope_pit.WSPITCmpIssFtNote
+domain: fundamentals
+description: Worldscope PIT Company and Security-Level
+---
+table: qa_wscope_pit.Footnotes
+domain: fundamentals
+description: This table contains company and security-level footnotes.
+update_cadence: 'Daily Adjusted: N/A'
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the unique integer sequential code generated for every unique Worldscope ID.
+- name: StartDate
+  type: INTEGER
+  nullable: false
+  description: StartDate is the Worldscope Point in Time start date.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: This field cross-references with WSPITItem.Item.
+- name: SeqNo
+  type: TINYINT
+  nullable: false
+  description: SeqNo is the sequence number for every distinct footnote.
+- name: EndDate
+  type: INTEGER
+  nullable: true
+  description: EndDate is the point date.
+- name: FtNoteCode
+  type: varchar(20)
+  nullable: true
+  description: FtNoteCode is the footnote for the corresponding Item. LSEG Quantitative Analytics Worldscope Point in Time
+    8
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the unique integer sequential code generated for every unique Worldscope ID.
+- name: PointDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: PointDate is the date the record was created in the content database upstream of LSEG Quantitative Analytics.
+    The record will then be picked up by RQA in the next daily update (6AM CT, M-F), assuming no processing delays. There
+    is no time associated with the PointDate. All timestamps are 00:00:00.000.
+- name: FreqCode
+  type: TINYINT
+  nullable: false
+  description: 'FreqCode is the frequency: – 1 = Annual (A) – 2 = Restated – Annual (B) – 3 = Restated – Quarterly (C) – 4
+    = Restated – Quarterly Cumulative (E) – 5 = Restated – Semi-Annual (F) – 6 = Restated – Trimester (K) – 7 = Restated –
+    Trimester Cumulative (L) – 8 = Quarterly (Q) – 9 = Quarterly – Cumulative (R) – 10 = Semi-Annual (S) – 11 = Trimester
+    (T) – 12 = Trimester – Cumulative (U) – 13 = Weekly (W) – 14 = Monthly (M) This field cross-references with WSPITCode.Code
+    where Type_ = 11. Cross- referenc'
+- name: FiscalPrd
+  type: INTEGER
+  nullable: false
+  description: FiscalPrd is the fiscal period.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: This field cross-references with WSPITItem.Item.
+- name: SeqNo
+  type: TINYINT
+  nullable: false
+  description: SeqNo is the sequence number for every distinct footnote.
+- name: FtNoteCode
+  type: varchar(20)
+  nullable: true
+  description: FtNoteCode is the footnote for the corresponding Item. LSEG Quantitative Analytics Worldscope Point in Time
+    10
+join_hints:
+- to: WSPITItem
+  evidence: Item int N This field cross-references with WSPITItem.Item.
+  type: cross_reference
+- to: WSPITItem
+  evidence: Item int N This field cross-references with WSPITItem.Item.
+  type: cross_reference
+- to: WSPITItem
+  evidence: Item int N This field cross-references with WSPITItem.Item.
+  type: cross_reference
+- to: WSPITCode
+  evidence: 'FreqCode tinyint N FreqCode is the frequency: – 1 = Annual (A) – 2 = Restated – Annual (B) – 3 = Restated – Quarterly
+    (C) – 4 = Restated – Quarterly Cumulative (E) – 5 = Restated – Semi-Annual (F) – 6 = Restated – Trimester (K) – 7 = Restated
+    – Trimester Cumulative (L) – 8 = Quarterly (Q) – 9 = Quar'
+  type: cross_reference
+- to: WSPITItem
+  evidence: Item int N This field cross-references with WSPITItem.Item.
+  type: cross_reference
+---
+table: qa_wscope_pit.WSPITCmpIssIData
+domain: fundamentals
+description: Worldscope PIT Company and Security-Level | This table contains company and security-level integer data.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the unique integer sequential code generated for every unique Worldscope ID.
+- name: StartDate
+  type: INTEGER
+  nullable: false
+  description: StartDate is the Worldscope Point in Time start date.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: This field cross-references with WSPITItem.Item.
+- name: EndDate
+  type: INTEGER
+  nullable: true
+  description: EndDate is the point date.
+- name: Value_
+  type: INTEGER
+  nullable: true
+  description: Value_ is the value for the corresponding Item.
+---
+table: qa_wscope_pit.WSPITCmpIssSData
+domain: fundamentals
+description: Worldscope PIT Company and Security-Level | This table contains company and security-level string data.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the unique integer sequential code generated for every unique Worldscope ID.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the Worldscope Point in Time start date.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: This field cross-references with WSPITItem.Item.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the point date.
+- name: Value_
+  type: varchar(127)
+  nullable: true
+  description: Value_ is the value for the corresponding Item.
+join_hints:
+- to: WSPITItem
+  evidence: Item int N This field cross-references with WSPITItem.Item.
+  type: cross_reference
+- to: WSPITItem
+  evidence: Item int N This field cross-references with WSPITItem.Item.
+  type: cross_reference
+---
+table: qa_wscope_pit.WSPITCode
+domain: fundamentals
+description: Worldscope PIT Numeric Codes | This table contains descriptions of Worldscope numeric codes.
+update_cadence: Daily
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Type_ is a numeric code for a type of data.
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is a coded value for an element of Type_. When Type_ = 0, Code is the numeric code for each Type_ other
+    than 0 and Desc_ is a description of each Type_.
+- name: Desc_
+  type: varchar(121)
+  nullable: true
+  description: Desc_ is a plain-language description of the element defined by Type_ and Code. LSEG Quantitative Analytics
+    Worldscope Point in Time 9
+---
+table: qa_wscope_pit.WSPITDesc
+domain: fundamentals
+description: Worldscope PIT Character Code Descriptions | This table contains descriptions of Worldscope character codes.
+update_cadence: Daily
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Type_ is a numeric code for a type of data.
+- name: Code
+  type: varchar(5)
+  nullable: false
+  description: Code is a coded value for an element of Type_. When Type_ = 0, Code is the numeric code for each Type_ other
+    than 0 and Desc_ is a description of each Type_.
+- name: Desc_
+  type: varchar(121)
+  nullable: true
+  description: Desc_ is a plain-language description of the element defined by Type_ and Code.
+---
+table: qa_wscope_pit.WSPITFinFtNote
+domain: fundamentals
+description: Worldscope PIT Company Financial-Level
+---
+table: qa_wscope_pit.Footnotes
+domain: fundamentals
+description: This table contains company fiscal, filing, and financial-level footnotes.
+update_cadence: 'Daily Adjusted: N/A'
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the unique integer sequential code generated for every unique Worldscope ID.
+- name: StartDate
+  type: INTEGER
+  nullable: false
+  description: StartDate is the Worldscope Point in Time start date.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: This field cross-references with WSPITItem.Item.
+- name: SeqNo
+  type: TINYINT
+  nullable: false
+  description: SeqNo is the sequence number for every distinct footnote.
+- name: EndDate
+  type: INTEGER
+  nullable: true
+  description: EndDate is the point date.
+- name: FtNoteCode
+  type: varchar(20)
+  nullable: true
+  description: FtNoteCode is the footnote for the corresponding Item. LSEG Quantitative Analytics Worldscope Point in Time
+    8
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the unique integer sequential code generated for every unique Worldscope ID.
+- name: PointDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: PointDate is the date the record was created in the content database upstream of LSEG Quantitative Analytics.
+    The record will then be picked up by RQA in the next daily update (6AM CT, M-F), assuming no processing delays. There
+    is no time associated with the PointDate. All timestamps are 00:00:00.000.
+- name: FreqCode
+  type: TINYINT
+  nullable: false
+  description: 'FreqCode is the frequency: – 1 = Annual (A) – 2 = Restated – Annual (B) – 3 = Restated – Quarterly (C) – 4
+    = Restated – Quarterly Cumulative (E) – 5 = Restated – Semi-Annual (F) – 6 = Restated – Trimester (K) – 7 = Restated –
+    Trimester Cumulative (L) – 8 = Quarterly (Q) – 9 = Quarterly – Cumulative (R) – 10 = Semi-Annual (S) – 11 = Trimester
+    (T) – 12 = Trimester – Cumulative (U) – 13 = Weekly (W) – 14 = Monthly (M) This field cross-references with WSPITCode.Code
+    where Type_ = 11. Cross- referenc'
+- name: FiscalPrd
+  type: INTEGER
+  nullable: false
+  description: FiscalPrd is the fiscal period.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: This field cross-references with WSPITItem.Item.
+- name: SeqNo
+  type: TINYINT
+  nullable: false
+  description: SeqNo is the sequence number for every distinct footnote.
+- name: FtNoteCode
+  type: varchar(20)
+  nullable: true
+  description: FtNoteCode is the footnote for the corresponding Item. LSEG Quantitative Analytics Worldscope Point in Time
+    10
+join_hints:
+- to: WSPITItem
+  evidence: Item int N This field cross-references with WSPITItem.Item.
+  type: cross_reference
+- to: WSPITItem
+  evidence: Item int N This field cross-references with WSPITItem.Item.
+  type: cross_reference
+- to: WSPITItem
+  evidence: Item int N This field cross-references with WSPITItem.Item.
+  type: cross_reference
+- to: WSPITCode
+  evidence: 'FreqCode tinyint N FreqCode is the frequency: – 1 = Annual (A) – 2 = Restated – Annual (B) – 3 = Restated – Quarterly
+    (C) – 4 = Restated – Quarterly Cumulative (E) – 5 = Restated – Semi-Annual (F) – 6 = Restated – Trimester (K) – 7 = Restated
+    – Trimester Cumulative (L) – 8 = Quarterly (Q) – 9 = Quar'
+  type: cross_reference
+- to: WSPITItem
+  evidence: Item int N This field cross-references with WSPITItem.Item.
+  type: cross_reference
+---
+table: qa_wscope_pit.WSPITFinVal
+domain: fundamentals
+description: Worldscope PIT Financial Values | This table contains the PIT financial values that are dependent on a frequency
+  and fiscal period.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all WSPIT* tables.
+- name: PointDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: PointDate is the date the record was created in the content database upstream of LSEG Quantitative Analytics.
+    The record will then be picked up by RQA in the next daily update (6AM CT, M- F), assuming no processing delays. There
+    is no time associated with the PointDate. All timestamps are 00:00:00.000.
+- name: FreqCode
+  type: TINYINT
+  nullable: false
+  description: 'FreqCode is the frequency: – 1 = Annual (A) – 2 = Restated – Annual (B) – 3 = Restated – Quarterly (C) – 4
+    = Restated – Quarterly Cumulative (E) – 5 = Restated – Semi-Annual (F) – 6 = Restated – Trimester (K) – 7 = Restated –
+    Trimester Cumulative (L) – 8 = Quarterly (Q) – 9 = Quarterly – Cumulative (R) – 10 = Semi-Annual (S) – 11 = Trimester
+    (T) – 12 = Trimester – Cumulative (U) – 13 = Weekly (W) – 14 = Monthly (M) This field cross-references with WSPITCode.Code
+    where Type_ = 11. Cross- referenc'
+- name: FiscalPrd
+  type: INTEGER
+  nullable: false
+  description: FiscalPrd is the fiscal period.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is a Worldscope PIT data item. Refer to WSPITItem.Item for a list of available Worldscope PIT items. For
+    split ratio, use Item = 5576 (Stock Split/Dividend Ratio).
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the value for the corresponding Item.
+- name: CalPrdEndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: CalPrdEndDate is the calendar period value.
+join_hints:
+- to: WSPITCode
+  evidence: 'FreqCode tinyint N FreqCode is the frequency: – 1 = Annual (A) – 2 = Restated – Annual (B) – 3 = Restated – Quarterly
+    (C) – 4 = Restated – Quarterly Cumulative (E) – 5 = Restated – Semi-Annual (F) – 6 = Restated – Trimester (K) – 7 = Restated
+    – Trimester Cumulative (L) – 8 = Quarterly (Q) – 9 = Quar'
+  type: cross_reference
+---
+table: qa_wscope_pit.WSPITInfo
+domain: fundamentals
+description: Worldscope PIT Issue-Level Information | This table stores issue-level information, such as market identifiers,
+  for concordance purposes. This table also
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all WSPIT* tables.
+- name: WSID
+  type: char(9)
+  nullable: false
+  description: WSID is the Worldscope unique identifier. This ID does not change. LSEG Quantitative Analytics Worldscope Point
+    in Time 11
+- name: CmpCode
+  type: INTEGER
+  nullable: true
+  description: CmpCode maps every security (EntityTypeCode = S) to its corresponding company (EntityTypeCode = C).
+- name: EntityTypeCode
+  type: char(1)
+  nullable: true
+  description: 'EntityTypeCode indicates whether the Worldscope identifier represents an average, company, exchange rate,
+    ADR, security, or a stock index. EntityTypeCode can be: – A = ADR/Foreign Filer – C = Company – E = Exchange Rate – F
+    = Country Average – G = Industry Average – I = Index – S = Security'
+- name: IsPrimary
+  type: char(1)
+  nullable: true
+  description: IsPrimary is provided on the security level and is the identifier for the share type selected as the primary
+    issue of the company. The prices and dividends for this share type are shown at the company level. An “X” is provided
+    in this field on the security identifier selected as the primary issue.
+- name: CmpInacDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: CmpInacDate is the date on which the company ceases to exist.
+- name: IssInacDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: IssInacDate is the date on which the share of a company ceases to exist.
+- name: NameShort
+  type: varchar(20)
+  nullable: true
+  description: NameShort is an abbreviated company name no longer than twenty characters.
+- name: NameLong
+  type: varchar(64)
+  nullable: true
+  description: NameLong is the legal name of the company as reported in the 10-K for U.S. companies and the annual report
+    for non-U.S. companies.
+- name: ShareType
+  type: varchar(25)
+  nullable: true
+  description: ShareType is the name of the security that has prices and dividends showing with the fundamental data of the
+    company. This item is provided for all share types at the security level. The share names are generally shown in the language
+    of the country in which the company is domiciled.
+- name: Ticker
+  type: varchar(20)
+  nullable: true
+  description: Ticker is a symbol used to identify the company on the stock exchanges where it is listed. Local Ticker symbols
+    are used for non-U.S. corporations. Quick Code is used for Japanese companies.
+- name: NationCode
+  type: SMALLINT
+  nullable: true
+  description: NationCode represents the country under which the company is followed on Worldscope. The currency of analysis
+    is the currency of the nation indicated by NationCode. WSPITInfo.NationCode cross-references with WSPITCode.Code where
+    Type_ = 12.
+- name: ISOCurrCode
+  type: char(3)
+  nullable: true
+  description: ISOCurrCode is the currency code. WSPITInfo.ISOCurrCode cross-references with WSPITDesc.Code where Type_ =
+    4.
+---
+table: qa_wscope_pit.WSPITItem
+domain: fundamentals
+description: Worldscope PIT Data Items | This table contains information about Worldscope PIT data items. | Code Table
+update_cadence: Daily
+columns:
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is a unique integer code that cross-references all the items in the data tables.
+- name: Name_
+  type: varchar(60)
+  nullable: true
+  description: Name_ is the name of the data item.
+- name: DataType
+  type: char(1)
+  nullable: true
+  description: 'DataType may be: – A = Alphanumeric – N = Numeric LSEG Quantitative Analytics Worldscope Point in Time 12'
+- name: Length_
+  type: SMALLINT
+  nullable: true
+  description: Length_ is the string length and is applicable for a DataType of A.
+- name: SplitFlag
+  type: char(1)
+  nullable: true
+  description: SplitFlag indicates whether the operation performed to adjust the data is multiplication or division. An asterisk
+    character ( * ) indicates multiplication; a slash character ( / ) indicates division.
+- name: TableCode
+  type: char(2)
+  nullable: true
+  description: TableCode is described in the TableCode section on page 12.
+- name: CodeNumb
+  type: INTEGER
+  nullable: true
+  description: 'CodeNumb maps Item to type_code in either WSPITCode or WSPITDesc. TableCode associates the data item with
+    a specific Worldscope data table. TableCode can be: Code Table A WSPITStmtIData B WSPITFinVal C WSPITSupp D WSPITRatios
+    E WSPITSeg F WSPITPrcRetVol G WSPITCmpIssSData H WSPITCmpIssFData I WSPITLicMrktID K WSPITCmpIssIData L WSPITCmpIssDData
+    M WSPITCmpIssFtNote N WSPITStmtDData O WSPITStmtSData P WSPITFinFtNote Q WSPITSegFtNote R WSPITPrcFtNote'
+---
+table: qa_wscope_pit.WSPITLicMrktID
+domain: fundamentals
+description: Worldscope PIT Industrial Class Benchmark
+---
+table: qa_wscope_pit.Codes
+domain: fundamentals
+description: This table stores current and historic Industrial Class Benchmark (ICB) Codes.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all WSPIT* tables.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the Worldscope Point in Time start date.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: This field cross-references with WSPITItem.Item.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the point date.
+- name: Value_
+  type: varchar(12)
+  nullable: true
+  description: Value_ is the value for the corresponding Item.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: 'LicFlag is the licensing flag based on which appropriate data will be distributed: LSEG Quantitative Analytics
+    Worldscope Point in Time 13'
+join_hints:
+- to: WSPITItem
+  evidence: Item int N This field cross-references with WSPITItem.Item.
+  type: cross_reference
+---
+table: qa_wscope_pit.WSPITPrcFtNote
+domain: fundamentals
+description: Worldscope PIT Monthly Pricing Footnote Data | This table contains monthly pricing footnote data.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the unique integer sequential code generated for every unique Worldscope ID.
+- name: PointDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: PointDate is the date the record was created in the content database upstream of LSEG Quantitative Analytics.
+    The record will then be picked up by RQA in the next daily update (6AM CT, M-F), assuming no processing delays. There
+    is no time associated with the PointDate. All timestamps are 00:00:00.000.
+- name: FreqCode
+  type: TINYINT
+  nullable: false
+  description: 'FreqCode is the frequency: – 1 = Annual (A) – 2 = Restated – Annual (B) – 3 = Restated – Quarterly (C) – 4
+    = Restated – Quarterly Cumulative (E) – 5 = Restated – Semi-Annual (F) – 6 = Restated – Trimester (K) – 7 = Restated –
+    Trimester Cumulative (L) – 8 = Quarterly (Q) – 9 = Quarterly – Cumulative (R) – 10 = Semi-Annual (S) – 11 = Trimester
+    (T) – 12 = Trimester – Cumulative (U) – 13 = Weekly (W) – 14 = Monthly (M) This field cross-references with WSPITCode.Code
+    where Type_ = 11. Cross- referenc'
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: This field cross-references with WSPITItem.Item.
+- name: SeqNo
+  type: TINYINT
+  nullable: false
+  description: SeqNo is the sequence number for every distinct footnote.
+- name: FtNoteCode
+  type: varchar(20)
+  nullable: true
+  description: FtNoteCode is the footnote for the corresponding Item. LSEG Quantitative Analytics Worldscope Point in Time
+    14
+join_hints:
+- to: WSPITCode
+  evidence: 'FreqCode tinyint N FreqCode is the frequency: – 1 = Annual (A) – 2 = Restated – Annual (B) – 3 = Restated – Quarterly
+    (C) – 4 = Restated – Quarterly Cumulative (E) – 5 = Restated – Semi-Annual (F) – 6 = Restated – Trimester (K) – 7 = Restated
+    – Trimester Cumulative (L) – 8 = Quarterly (Q) – 9 = Quar'
+  type: cross_reference
+- to: WSPITItem
+  evidence: Item int N This field cross-references with WSPITItem.Item.
+  type: cross_reference
+---
+table: qa_wscope_pit.WSPITPrcRetVol
+domain: fundamentals
+description: Worldscope PIT Pricing, Return, and Volume Data | This table contains all the monthly/weekly pricing, monthly
+  returns, and weekly volume data.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all WSPIT* tables.
+- name: PointDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: PointDate is the date the record was created in the content database upstream of LSEG Quantitative Analytics.
+    The record will then be picked up by RQA in the next daily update (6AM CT, M-F), assuming no processing delays. There
+    is no time associated with the PointDate. All timestamps are 00:00:00.000.
+- name: FreqCode
+  type: TINYINT
+  nullable: false
+  description: 'FreqCode is the frequency: – 1 = Annual (A) – 2 = Restated – Annual (B) – 3 = Restated – Quarterly (C) – 4
+    = Restated – Quarterly Cumulative (E) – 5 = Restated – Semi-Annual (F) – 6 = Restated – Trimester (K) – 7 = Restated –
+    Trimester Cumulative (L) – 8 = Quarterly (Q) – 9 = Quarterly – Cumulative (R) – 10 = Semi-Annual (S) – 11 = Trimester
+    (T) – 12 = Trimester – Cumulative (U) – 13 = Weekly (W) – 14 = Monthly (M) This field cross-references with WSPITCode.Code
+    where Type_ = 11. Cross-reference'
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: This field cross-references with WSPITItem.Item.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the value for the corresponding Item.
+join_hints:
+- to: WSPITItem
+  evidence: Item int N This field cross-references with WSPITItem.Item.
+  type: cross_reference
+---
+table: qa_wscope_pit.WSPITRatios
+domain: fundamentals
+description: Worldscope PIT Ratios Data | This table contains all Ratios data.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all WSPIT* tables.
+- name: PointDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: PointDate is the date the record was created in the content database upstream of LSEG Quantitative Analytics.
+    The record will then be picked up by RQA in the next daily update (6AM CT, M- F), assuming no processing delays. There
+    is no time associated with the PointDate. All timestamps are 00:00:00.000.
+- name: FreqCode
+  type: TINYINT
+  nullable: false
+  description: 'FreqCode is the frequency: – 1 = Annual (A) – 2 = Restated – Annual (B) LSEG Quantitative Analytics Worldscope
+    Point in Time 15'
+- name: FiscalPrd
+  type: INTEGER
+  nullable: false
+  description: FiscalPrd is the fiscal period.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: This field cross-references with WSPITItem.Item.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the value for the corresponding Item.
+- name: CalPrdEndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: CalPrdEndDate is the calendar period value.
+join_hints:
+- to: WSPITCode
+  evidence: 'FreqCode tinyint N FreqCode is the frequency: – 1 = Annual (A) – 2 = Restated – Annual (B) – 3 = Restated – Quarterly
+    (C) – 4 = Restated – Quarterly Cumulative (E) – 5 = Restated – Semi-Annual (F) – 6 = Restated – Trimester (K) – 7 = Restated
+    – Trimester Cumulative (L) – 8 = Quarterly (Q) – 9 = Quar'
+  type: cross_reference
+- to: WSPITItem
+  evidence: Item int N This field cross-references with WSPITItem.Item.
+  type: cross_reference
+---
+table: qa_wscope_pit.WSPITRepPrd
+domain: fundamentals
+description: Worldscope PIT Fiscal Period Data | This table contains fiscal period data.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all WSPIT* tables.
+- name: PointDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: PointDate is the date the record was created in the content database upstream of LSEG Quantitative Analytics.
+    The record will then be picked up by RQA in the next daily update (6AM CT, M-F), assuming no processing delays. There
+    is no time associated with the PointDate. All timestamps are 00:00:00.000.
+- name: FreqCode
+  type: TINYINT
+  nullable: false
+  description: 'FreqCode is the frequency: – 1 = Annual (A) – 2 = Restated – Annual (B) – 3 = Restated – Quarterly (C) – 4
+    = Restated – Quarterly Cumulative (E) – 5 = Restated – Semi-Annual (F) – 6 = Restated – Trimester (K) – 7 = Restated –
+    Trimester Cumulative (L) – 8 = Quarterly (Q) – 9 = Quarterly – Cumulative (R) – 10 = Semi-Annual (S) – 11 = Trimester
+    (T) – 12 = Trimester – Cumulative (U) – 13 = Weekly (W) – 14 = Monthly (M) This field cross-references with WSPITCode.Code
+    where Type_ = 11. Cross-reference'
+- name: FinalPrd
+  type: INTEGER
+  nullable: true
+  description: FinalPrd is the most recently reported period with final data as of the point date.
+- name: AnnPrd
+  type: INTEGER
+  nullable: true
+  description: AnnPrd is the most recently reported period with either final or preliminary data as of the point date.
+join_hints:
+- to: WSPITCode
+  evidence: 'FreqCode tinyint N FreqCode is the frequency: – 1 = Annual (A) – 2 = Restated – Annual (B) – 3 = Restated – Quarterly
+    (C) – 4 = Restated – Quarterly Cumulative (E) – 5 = Restated – Semi-Annual (F) – 6 = Restated – Trimester (K) – 7 = Restated
+    – Trimester Cumulative (L) – 8 = Quarterly (Q) – 9 = Quar'
+  type: cross_reference
+---
+table: qa_wscope_pit.WSPITSeg
+domain: fundamentals
+description: Worldscope PIT Segment Data | This table contains product and geographic segment data.
+update_cadence: Daily
+---
+table: qa_wscope_pit.PointDate
+domain: fundamentals
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all WSPIT* tables.
+- name: PointDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: PointDate is the date the record was created in the content database upstream of LSEG Quantitative Analytics.
+    The record will then be picked up by RQA in the next daily update (6AM CT, M-F), assuming no processing delays. There
+    is no time associated with the PointDate. All timestamps are 00:00:00.000.
+- name: FreqCode
+  type: TINYINT
+  nullable: false
+  description: 'FreqCode is the frequency: – 1 = Annual (A) – 2 = Restated – Annual (B) – 3 = Restated – Quarterly (C) – 4
+    = Restated – Quarterly Cumulative (E) – 5 = Restated – Semi-Annual (F) – 6 = Restated – Trimester (K) – 7 = Restated –
+    Trimester Cumulative (L) – 8 = Quarterly (Q) – 9 = Quarterly – Cumulative (R) – 10 = Semi-Annual (S) – 11 = Trimester
+    (T) – 12 = Trimester – Cumulative (U) – 13 = Weekly (W) – 14 = Monthly (M) This field cross-references with WSPITCode.Code
+    where Type_ = 11. Cross-reference'
+- name: FiscalPrd
+  type: INTEGER
+  nullable: false
+  description: FiscalPrd is the fiscal period.
+- name: SegTypeCode
+  type: TINYINT
+  nullable: false
+  description: 'SegTypeCode is the segment type (product or geographic): – 1 = P = Product – 2 = G = Geographic WSPITSeg.SegTypeCode
+    cross-references with WSPITCode.Code where Type_ = 15. Cross-reference the alphabetic codes with WSPITDesc.Code where
+    Type_ = 6.'
+- name: SegNum
+  type: SMALLINT
+  nullable: false
+  description: SegNum is the segment number.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: This field cross-references with WSPITItem.Item. LSEG Quantitative Analytics Worldscope Point in Time 17
+- name: Value_
+  type: varchar(40)
+  nullable: true
+  description: Value_ is the value for the corresponding Item.
+- name: CalPrdEndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: CalPrdEndDate is the calendar period value.
+join_hints:
+- to: WSPITCode
+  evidence: 'FreqCode tinyint N FreqCode is the frequency: – 1 = Annual (A) – 2 = Restated – Annual (B) – 3 = Restated – Quarterly
+    (C) – 4 = Restated – Quarterly Cumulative (E) – 5 = Restated – Semi-Annual (F) – 6 = Restated – Trimester (K) – 7 = Restated
+    – Trimester Cumulative (L) – 8 = Quarterly (Q) – 9 = Quar'
+  type: cross_reference
+- to: WSPITCode
+  evidence: 'SegTypeCode tinyint N SegTypeCode is the segment type (product or geographic): – 1 = P = Product – 2 = G = Geographic
+    WSPITSeg.SegTypeCode cross-references with WSPITCode.Code where Type_ = 15.'
+  type: cross_reference
+- to: WSPITItem
+  evidence: Item int N This field cross-references with WSPITItem.Item.
+  type: cross_reference
+---
+table: qa_wscope_pit.WSPITSegFtNote
+domain: fundamentals
+description: Worldscope PIT Segment Footnotes | This table contains segment footnotes.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all WSPIT* tables.
+- name: PointDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: PointDate is the date the record was created in the content database upstream of LSEG Quantitative Analytics.
+    The record will then be picked up by RQA in the next daily update (6AM CT, M-F), assuming no processing delays. There
+    is no time associated with the PointDate. All timestamps are 00:00:00.000.
+- name: FreqCode
+  type: TINYINT
+  nullable: false
+  description: 'FreqCode is the frequency: – 1 = Annual (A) – 2 = Restated – Annual (B) – 3 = Restated – Quarterly (C) – 4
+    = Restated – Quarterly Cumulative (E) – 5 = Restated – Semi-Annual (F) – 6 = Restated – Trimester (K) – 7 = Restated –
+    Trimester Cumulative (L) – 8 = Quarterly (Q) – 9 = Quarterly – Cumulative (R) – 10 = Semi-Annual (S) – 11 = Trimester
+    (T) – 12 = Trimester – Cumulative (U) – 13 = Weekly (W) – 14 = Monthly (M) This field cross-references with WSPITCode.Code
+    where Type_ = 11. Cross-reference'
+- name: FiscalPrd
+  type: INTEGER
+  nullable: false
+  description: FiscalPrd is the fiscal period.
+- name: SegTypeCode
+  type: TINYINT
+  nullable: false
+  description: 'SegTypeCode is the segment type (product or geographic): – 1 = P = Product – 2 = G = Geographic WSPITSegFtNote.SegTypeCode
+    cross-references with WSPITCode.Code where Type_ = 15. Cross-reference the alphabetic codes with WSPITDesc.Code where
+    Type_ = 6.'
+- name: SegNum
+  type: SMALLINT
+  nullable: false
+  description: SegNum is the segment number.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: This field cross-references with WSPITItem.Item.
+- name: SeqNo
+  type: TINYINT
+  nullable: false
+  description: SeqNo is the sequence number for every distinct footnote.
+- name: FtNoteCode
+  type: varchar(20)
+  nullable: true
+  description: FtNoteCode is the footnote for the corresponding Item. LSEG Quantitative Analytics Worldscope Point in Time
+    18
+join_hints:
+- to: WSPITCode
+  evidence: 'FreqCode tinyint N FreqCode is the frequency: – 1 = Annual (A) – 2 = Restated – Annual (B) – 3 = Restated – Quarterly
+    (C) – 4 = Restated – Quarterly Cumulative (E) – 5 = Restated – Semi-Annual (F) – 6 = Restated – Trimester (K) – 7 = Restated
+    – Trimester Cumulative (L) – 8 = Quarterly (Q) – 9 = Quar'
+  type: cross_reference
+- to: WSPITCode
+  evidence: 'SegTypeCode tinyint N SegTypeCode is the segment type (product or geographic): – 1 = P = Product – 2 = G = Geographic
+    WSPITSegFtNote.SegTypeCode cross-references with WSPITCode.Code where Type_ = 15.'
+  type: cross_reference
+- to: WSPITItem
+  evidence: Item int N This field cross-references with WSPITItem.Item.
+  type: cross_reference
+---
+table: qa_wscope_pit.WSPITStmtDData
+domain: fundamentals
+description: Worldscope PIT Filing and Statement-Level Data | This table contains all filing and statement-level data.
+update_cadence: 'Daily Adjusted: N/A'
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all WSPIT* tables.
+- name: PointDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: PointDate is the date the record was created in the content database upstream of LSEG Quantitative Analytics.
+    The record will then be picked up by RQA in the next daily update (6AM CT, M- F), assuming no processing delays. There
+    is no time associated with the PointDate. All timestamps are 00:00:00.000.
+- name: FreqCode
+  type: TINYINT
+  nullable: false
+  description: 'FreqCode is the frequency: – 1 = Annual (A) – 2 = Restated – Annual (B) – 3 = Restated – Quarterly (C) – 4
+    = Restated – Quarterly Cumulative (E) – 5 = Restated – Semi-Annual (F) – 6 = Restated – Trimester (K) – 7 = Restated –
+    Trimester Cumulative (L) – 8 = Quarterly (Q) – 9 = Quarterly – Cumulative (R) – 10 = Semi-Annual (S) – 11 = Trimester
+    (T) – 12 = Trimester – Cumulative (U) – 13 = Weekly (W) – 14 = Monthly (M) This field cross-references with WSPITCode.Code
+    where Type_ = 11. Cross- referenc'
+- name: FiscalPrd
+  type: INTEGER
+  nullable: false
+  description: FiscalPrd is the fiscal period.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: This field cross-references with WSPITItem.Item.
+- name: Value_
+  type: INTEGER
+  nullable: true
+  description: Value_ is the value for the corresponding Item.
+- name: CalPrdEndDate
+  type: INTEGER
+  nullable: true
+  description: CalPrdEndDate is the calendar period value.
+join_hints:
+- to: WSPITCode
+  evidence: 'FreqCode tinyint N FreqCode is the frequency: – 1 = Annual (A) – 2 = Restated – Annual (B) – 3 = Restated – Quarterly
+    (C) – 4 = Restated – Quarterly Cumulative (E) – 5 = Restated – Semi-Annual (F) – 6 = Restated – Trimester (K) – 7 = Restated
+    – Trimester Cumulative (L) – 8 = Quarterly (Q) – 9 = Quar'
+  type: cross_reference
+- to: WSPITItem
+  evidence: Item int N This field cross-references with WSPITItem.Item.
+  type: cross_reference
+---
+table: qa_wscope_pit.WSPITStmtIData
+domain: fundamentals
+description: Worldscope PIT Filing and Statement-Level | This table contains all filing and statement-level integer data.
+update_cadence: 'Daily Adjusted: N/A'
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all WSPIT* tables.
+- name: PointDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: PointDate is the date the record was created in the content database upstream of LSEG Quantitative Analytics.
+    LSEG Quantitative Analytics Worldscope Point in Time 19
+- name: FreqCode
+  type: TINYINT
+  nullable: false
+  description: 'FreqCode is the frequency: – 1 = Annual (A) – 2 = Restated – Annual (B) – 3 = Restated – Quarterly (C) – 4
+    = Restated – Quarterly Cumulative (E) – 5 = Restated – Semi-Annual (F) – 6 = Restated – Trimester (K) – 7 = Restated –
+    Trimester Cumulative (L) – 8 = Quarterly (Q) – 9 = Quarterly – Cumulative (R) – 10 = Semi-Annual (S) – 11 = Trimester
+    (T) – 12 = Trimester – Cumulative (U) – 13 = Weekly (W) – 14 = Monthly (M) This field cross-references with WSPITCode.Code
+    where Type_ = 11. Cross- referenc'
+- name: FiscalPrd
+  type: INTEGER
+  nullable: false
+  description: FiscalPrd is the fiscal period.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: This field cross-references with WSPITItem.Item.
+- name: Value_
+  type: INTEGER
+  nullable: true
+  description: Value_ is the value for the corresponding Item.
+- name: CalPrdEndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: CalPrdEndDate is the calendar period value.
+join_hints:
+- to: WSPITItem
+  evidence: Item int N This field cross-references with WSPITItem.Item.
+  type: cross_reference
+---
+table: qa_wscope_pit.WSPITStmtSData
+domain: fundamentals
+description: Worldscope PIT Filing and Statement-Level | This table contains all filing and statement-level string data.
+update_cadence: 'Daily Adjusted: N/A'
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all WSPIT* tables.
+- name: PointDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: PointDate is the date the record was created in the content database upstream of LSEG Quantitative Analytics.
+    The record will then be picked up by RQA in the next daily update (6AM CT, M-F), assuming no processing delays. There
+    is no time associated with the PointDate. All timestamps are 00:00:00.000.
+- name: FreqCode
+  type: TINYINT
+  nullable: false
+  description: 'FreqCode is the frequency: – 1 = Annual (A) – 2 = Restated – Annual (B) – 3 = Restated – Quarterly (C) – 4
+    = Restated – Quarterly Cumulative (E) – 5 = Restated – Semi-Annual (F) – 6 = Restated – Trimester (K) – 7 = Restated –
+    Trimester Cumulative (L) – 8 = Quarterly (Q) – 9 = Quarterly – Cumulative (R) – 10 = Semi-Annual (S) – 11 = Trimester
+    (T) LSEG Quantitative Analytics Worldscope Point in Time 20'
+- name: FiscalPrd
+  type: INTEGER
+  nullable: false
+  description: FiscalPrd is the fiscal period.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: This field cross-references with WSPITItem.Item.
+- name: Value_
+  type: varchar(3)
+  nullable: true
+  description: Value_ is the value for the corresponding Item.
+- name: CalPrdEndDate
+  type: INTEGER
+  nullable: true
+  description: CalPrdEndDate is the calendar period value.
+join_hints:
+- to: WSPITCode
+  evidence: 'FreqCode tinyint N FreqCode is the frequency: – 1 = Annual (A) – 2 = Restated – Annual (B) – 3 = Restated – Quarterly
+    (C) – 4 = Restated – Quarterly Cumulative (E) – 5 = Restated – Semi-Annual (F) – 6 = Restated – Trimester (K) – 7 = Restated
+    – Trimester Cumulative (L) – 8 = Quarterly (Q) – 9 = Quar'
+  type: cross_reference
+---
+table: qa_wscope_pit.WSPITSupp
+domain: fundamentals
+description: Worldscope PIT Supplementary Data | This table contains all supplementary data like KPIs, Pension, and Health
+  plan data.
+update_cadence: 'Daily Adjusted: N/A'
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all WSPIT* tables.
+- name: PointDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: PointDate is the date the record was created in the content database upstream of LSEG Quantitative Analytics.
+    The record will then be picked up by RQA in the next daily update (6AM CT, M- F), assuming no processing delays. There
+    is no time associated with the PointDate. All timestamps are 00:00:00.000.
+- name: FreqCode
+  type: TINYINT
+  nullable: false
+  description: 'FreqCode is the frequency: – 1 = Annual (A) – 2 = Restated – Annual (B) – 3 = Restated – Quarterly (C) – 4
+    = Restated – Quarterly Cumulative (E) – 5 = Restated – Semi-Annual (F) – 6 = Restated – Trimester (K) – 7 = Restated –
+    Trimester Cumulative (L) – 8 = Quarterly (Q) – 9 = Quarterly – Cumulative (R) – 10 = Semi-Annual (S) – 11 = Trimester
+    (T) – 12 = Trimester – Cumulative (U) – 13 = Weekly (W) – 14 = Monthly (M) This field cross-references with WSPITCode.Code
+    where Type_ = 11. Cross- referenc'
+- name: FiscalPrd
+  type: INTEGER
+  nullable: false
+  description: FiscalPrd is the fiscal period.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: This field cross-references with WSPITItem.Item.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the value for the corresponding Item.
+- name: CalPrdEndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: CalPrdEndDate is the calendar period value. LSEG Quantitative Analytics Worldscope Point in Time Copyright
+    © 2024 London Stock Exchange Group plc and its group of companies (LSEG) and/or its affiliates. All rights reserved. The
+    LSEG content received through this service is the intellectual property of LSEG or its third party suppliers. Republicati
+    on or redistribution of content provided by LSEG is expressly prohibited without the prior written consent of LSEG, except
+    where permitted by the term
+join_hints:
+- to: WSPITItem
+  evidence: Item int N This field cross-references with WSPITItem.Item.
+  type: cross_reference
+- to: WSPITCode
+  evidence: 'FreqCode tinyint N FreqCode is the frequency: – 1 = Annual (A) – 2 = Restated – Annual (B) – 3 = Restated – Quarterly
+    (C) – 4 = Restated – Quarterly Cumulative (E) – 5 = Restated – Semi-Annual (F) – 6 = Restated – Trimester (K) – 7 = Restated
+    – Trimester Cumulative (L) – 8 = Quarterly (Q) – 9 = Quar'
+  type: cross_reference
+- to: WSPITItem
+  evidence: Item int N This field cross-references with WSPITItem.Item.
+  type: cross_reference

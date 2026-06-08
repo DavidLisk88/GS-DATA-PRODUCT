@@ -1,0 +1,590 @@
+table: qa_esg_v2.ESGOrgIndCls
+domain: esg
+description: Organization Industry Classifications | This table contains organization industry classification information.
+update_cadence: Weekly
+columns:
+- name: OrgPermId
+  type: BIGINT
+  nullable: false
+  description: LSEG Organization Identifier.
+- name: SICCode
+  type: varchar(10)
+  nullable: true
+  description: The highest ranked/primary Standard Industrial Classification (SIC) code and related description for the company.
+    Corresponding code is in the ESGDesc table. Cross-reference SICCode with ESGDesc.Code where Type_ = 2.
+- name: NAICSCode
+  type: varchar(10)
+  nullable: true
+  description: The highest ranked/primary North American Industry Classification System (NAICS) code and description for the
+    company. Corresponding code description is in the ESGDesc table. Cross-reference NAICSCode with ESGDesc.Code where Type_
+    = 1.
+---
+table: qa_esg_v2.ESGItem
+domain: esg
+description: Data Items | An itemized table for all the ESG metrics. This table stores the metadata of all ESG metrics and
+  the table where | TableCode tinyint Yes The data table in which the value pertaining to the item resides.
+update_cadence: Weekly
+columns:
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: An item code to uniquely identify each and every data point that is a part of the feed. Corresponding code
+    description is in the ESGItem table. Cross- reference Item with ESGItem.Item.
+- name: FeedFieldName
+  type: varchar(100)
+  nullable: true
+  description: Internal LSEG source feed field name.
+- name: Title
+  type: varchar(100)
+  nullable: true
+  description: Description pertaining to the item.
+- name: Description
+  type: varchar(1000)
+  nullable: true
+  description: Detailed description pertaining to the item.
+- name: DataTypeCode
+  type: TINYINT
+  nullable: true
+  description: The data type the item is part of. Corresponding type code is in the ESGCode table. Cross-reference DataTypeCode
+    with ESGCode.Code where Type_ = 2.
+- name: FileCode
+  type: TINYINT
+  nullable: true
+  description: This code specifies which feed file the datapoint belongs to. Corresponding type code is in the ESGCode table.
+    Cross-reference FileCode with ESGCode.Code where Type_ = 1.
+- name: TableCode
+  type: TINYINT
+  nullable: true
+  description: The data table in which the value pertaining to the item resides. Corresponding type code is in the ESGCode
+    table. Cross-reference TableCode with ESGCode.Code where Type_ = 3.
+- name: HeirarchyCode
+  type: TINYINT
+  nullable: true
+  description: 'This code identifies the hierarchy of the ESG data metric. Corresponding type code is in the ESGCode table.
+    HeirarchyCode can take one of the following values: – 1: Data Point LSEG Quantitative Analytics ESG Version 2 8'
+- name: Units
+  type: varchar(100)
+  nullable: true
+  description: This indicates the unit of the data metric value.
+- name: Polarity
+  type: varchar(30)
+  nullable: true
+  description: This indicates whether a higher data measure value is positive or negative.
+- name: IncludedInScores
+  type: Varchar(50)
+  nullable: true
+  description: This defines the specific score(s) which the data measure is associated with.
+- name: PillarItem
+  type: SMALLINT
+  nullable: true
+  description: The code here defines the specific pillar which the datapoint is associated with. Cross-reference PillarItem
+    with ESGCode.Code where Type_ = 5.
+- name: CatItem
+  type: SMALLINT
+  nullable: true
+  description: The code here defines the specific category which the datapoint is associated with. Corresponding category
+    references back to the ESGItem table. Cross-reference CatItem with ESGItem.Item.
+- name: RegLicFlag
+  type: TINYINT
+  nullable: true
+  description: 'LicFlag value associated with a particular EU regulation. Corresponding type code is in the ESGCode table.
+    RegLicFlag can take one of the following values: – 1: BMR – 2: SFDR – 3: Both BMR & SFDR Cross-reference RegLicFlag with
+    ESGCode.Code where Type_ = 6. To translate ESGCode.Desc_, cross-reference ESGCode.Desc_ with ESGDesc.Code where ESGDesc.Type_
+    = 7.'
+- name: ValueScoreExists
+  type: char(1)
+  nullable: true
+  description: 'This flag shows if normalized score is generated for the ESG data point. ValueScoreExists can take one of
+    the following values: “Y” or “N”.'
+- name: AsRepExists
+  type: char(1)
+  nullable: true
+  description: 'This flag shows if as reported data is available for the ESG data point. AsRepExists can take one of the following
+    values: “Y” or “N”.'
+- name: SourceExists
+  type: char(1)
+  nullable: true
+  description: 'This flag shows if source document(s) are available for the ESG data point. SourceExists can take one of the
+    following values: “Y” or “N”.'
+join_hints:
+- to: ESGCode
+  evidence: 'RegLicFlag can take one of the following values: – 1: BMR – 2: SFDR – 3: Both BMR & SFDR Cross-reference RegLicFlag
+    with ESGCode.Code where Type_ = 6.'
+  type: cross_reference
+---
+table: qa_esg_v2.ESGCode
+domain: esg
+description: Integer Code Descriptions | This table contains descriptions for the integer codes.
+update_cadence: Weekly
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Enlists the types of codified data items.
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code represents the Value_ data item from any ESG data.
+- name: Desc_
+  type: varchar(100)
+  nullable: true
+  description: Contains the coded data item description. LSEG Quantitative Analytics ESG Version 2 9
+---
+table: qa_esg_v2.ESGDesc
+domain: esg
+description: Character Codes Descriptions | This table contains descriptions for the character codes.
+update_cadence: Weekly
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Enlists the types of codified data items.
+- name: Code
+  type: varchar(30)
+  nullable: false
+  description: Code represents the Value_ data item from any ESG data.
+- name: Desc_
+  type: varchar(150)
+  nullable: true
+  description: Contains the coded data item description.
+---
+table: qa_esg_v2.ESGEnvDataPoint
+domain: esg
+description: Environmental Data Points | This table contains standardized company data for environmental data points.
+update_cadence: Weekly
+columns:
+- name: OrgPermId
+  type: BIGINT
+  nullable: false
+  description: LSEG Organization Identifier.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: An item code to uniquely identify each and every data point that is a part of the feed. Corresponding code
+    description is in the ESGItem table. Cross-reference Item with ESGItem.Item.
+- name: FY
+  type: SMALLINT
+  nullable: false
+  description: The particular fiscal year for which the data is defined.
+- name: ValueRecDt
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date when the ESG value was entered into the ESG data management system.
+- name: ISOCurrCode
+  type: char(3)
+  nullable: true
+  description: 3 character ISO currency code for the ESG value, where applicable. Corresponding code description is in the
+    ESGDesc table. Cross-reference ISOCurrCode with ESGDesc.Code where Type_ = 6.
+- name: Value_
+  type: varchar(500)
+  nullable: true
+  description: The value of the ESG metric being tracked.
+- name: ValueScore
+  type: FLOAT
+  nullable: true
+  description: ValueScore is a normalized score generated for each of the values. ValueScore is only delivered for the data
+    measures that contribute towards the calculation of the ESG Score.
+---
+table: qa_esg_v2.ESGEnvIndicator
+domain: esg
+description: Environmental Indicators | This table contains standardized company data for environmental indicators.
+update_cadence: Weekly
+columns:
+- name: OrgPermId
+  type: BIGINT
+  nullable: false
+  description: LSEG Organization Identifier.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: An item code to uniquely identify each and every data point that is a part of the feed. LSEG Quantitative Analytics
+    ESG Version 2 10
+- name: FY
+  type: SMALLINT
+  nullable: false
+  description: The particular fiscal year for which the data is defined.
+- name: ValueCalcDt
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date when the ESG value was entered into the ESG data management system.
+- name: ISOCurrCode
+  type: char(3)
+  nullable: true
+  description: 3 character ISO currency code for the ESG value, where applicable. Corresponding code description is in the
+    ESGDesc table. Cross-reference ISOCurrCode with ESGDesc.Code where Type_ = 6.
+- name: Value_
+  type: varchar(500)
+  nullable: true
+  description: The value of the ESG metric being tracked.
+- name: ValueScore
+  type: FLOAT
+  nullable: true
+  description: ValueScore is a normalized score generated for each of the values. ValueScore is only delivered for the data
+    measures that contribute towards the calculation of the ESG score.
+---
+table: qa_esg_v2.ESGSocDataPoint
+domain: esg
+description: Social Data Points | This table contains standardized company data for social data points.
+update_cadence: Weekly
+columns:
+- name: OrgPermId
+  type: BIGINT
+  nullable: false
+  description: LSEG Organization Identifier.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: An item code to uniquely identify each and every data point that is a part of the feed. Corresponding code
+    description is in the ESGItem table. Cross-reference Item with ESGItem.Item.
+- name: FY
+  type: SMALLINT
+  nullable: false
+  description: The particular fiscal year for which the data is defined.
+- name: ValueRecDt
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date when the ESG value was entered into the ESG data management system.
+- name: ISOCurrCode
+  type: char(3)
+  nullable: true
+  description: 3 character ISO currency code for the ESG value, where applicable. Corresponding code description is in the
+    ESGDesc table. Cross-reference ISOCurrCode with ESGDesc.Code where Type_ = 6.
+- name: Value_
+  type: varchar(500)
+  nullable: true
+  description: The value of the ESG metric being tracked.
+- name: ValueScore
+  type: FLOAT
+  nullable: true
+  description: ValueScore is a normalized score generated for each of the values. ValueScore is only delivered for the data
+    measures that contribute towards the calculation of the ESG Score.
+---
+table: qa_esg_v2.ESGSocIndicator
+domain: esg
+description: Social Indicators | This table contains standardized company data for social indicators.
+update_cadence: Weekly
+columns:
+- name: OrgPermId
+  type: BIGINT
+  nullable: false
+  description: LSEG Organization Identifier.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: An item code to uniquely identify each and every data point that is a part of the feed. LSEG Quantitative Analytics
+    ESG Version 2 11
+- name: FY
+  type: SMALLINT
+  nullable: false
+  description: The particular fiscal year for which the data is defined.
+- name: ValueCalcDt
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date when the ESG value was calculated.
+- name: ISOCurrCode
+  type: char(3)
+  nullable: true
+  description: 3 character ISO currency code for the ESG value, where applicable. Corresponding code description is in the
+    ESGDesc table. Cross-reference ISOCurrCode with ESGDesc.Code where Type_ = 6.
+- name: Value_
+  type: varchar(500)
+  nullable: true
+  description: The value of the ESG metric being tracked.
+- name: ValueScore
+  type: FLOAT
+  nullable: true
+  description: ValueScore is a normalized score generated for each of the values. ValueScore is only delivered for the data
+    measures that contribute towards the calculation of the ESG score.
+---
+table: qa_esg_v2.ESGGovDataPoint
+domain: esg
+description: Governance Data Points | This table contains standardized company data for governance data points.
+update_cadence: Weekly
+columns:
+- name: OrgPermId
+  type: BIGINT
+  nullable: false
+  description: LSEG Organization Identifier.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: An item code to uniquely identify each and every data point that is a part of the feed. Corresponding code
+    description is in the ESGItem table. Cross-reference Item with ESGItem.Item.
+- name: FY
+  type: SMALLINT
+  nullable: false
+  description: The particular fiscal year for which the data is defined.
+- name: ValueRecDt
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date when the ESG value was entered into the ESG data management system.
+- name: ISOCurrCode
+  type: char(3)
+  nullable: true
+  description: 3 character ISO currency code for ESG value, where applicable. Corresponding code description is in the ESGDesc
+    table. Cross-reference ISOCurrCode with ESGDesc.Code where Type_ = 6.
+- name: Value_
+  type: varchar(500)
+  nullable: true
+  description: The value of the ESG metric being tracked.
+- name: ValueScore
+  type: FLOAT
+  nullable: true
+  description: ValueScore is a normalized score generated for each of the values. ValueScore is only delivered for the data
+    measures that contribute towards the calculation of the ESG Score
+---
+table: qa_esg_v2.ESGGovIndicator
+domain: esg
+description: Governance Indicators | This table contains standardized company data for governance indicators.
+update_cadence: Weekly
+columns:
+- name: OrgPermId
+  type: BIGINT
+  nullable: false
+  description: LSEG Organization Identifier.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: An item code to uniquely identify each and every data point that is a part of the feed. Corresponding code
+    description is in the ESGItem table. Cross-reference Item with ESGItem.Item. LSEG Quantitative Analytics ESG Version 2
+    12
+- name: FY
+  type: SMALLINT
+  nullable: false
+  description: The particular fiscal year for which the data is defined.
+- name: ValueCalcDt
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date when the ESG value was calculated.
+- name: ISOCurrCode
+  type: char(3)
+  nullable: true
+  description: 3 character ISO currency code for the ESG value, where applicable. Corresponding code description is in the
+    ESGDesc table. Cross-reference ISOCurrCode with ESGDesc.Code where Type_ = 6.
+- name: Value_
+  type: varchar(500)
+  nullable: true
+  description: The value of the ESG metric being tracked.
+- name: ValueScore
+  type: FLOAT
+  nullable: true
+  description: ValueScore is a normalized score generated for each of the values. ValueScore is only delivered for the data
+    measures that contribute towards the calculation of the ESG Score.
+---
+table: qa_esg_v2.ESGAsRepData
+domain: esg
+description: As Reported Data | This table contains the as reported data for the data points.
+update_cadence: Weekly
+columns:
+- name: OrgPermId
+  type: BIGINT
+  nullable: false
+  description: LSEG Organization Identifier.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: An item code to uniquely identify each and every data point that is a part of the feed. Corresponding code
+    description is in the ESGItem table. Cross-reference Item with ESGItem.Item.
+- name: FY
+  type: SMALLINT
+  nullable: false
+  description: The particular fiscal year for which the data is defined.
+- name: ValueId
+  type: BIGINT
+  nullable: false
+  description: ValueId is a machine generated number that uniquely identifies each AsReportedValue instance associated with
+    the EsgValue.
+- name: ScaleCode
+  type: INTEGER
+  nullable: true
+  description: The scale of the as reported data. Corresponding type code is in the ESGCode table. Cross-reference ScaleCode
+    with ESGCode.Code where Type_ = 7.
+- name: UnitCode
+  type: BIGINT
+  nullable: true
+  description: The units of the as reported data. Corresponding type code is in the ESGCode table. Cross-reference UnitCode
+    with ESGCode.Code where Type_ = 8.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: The value of the as reported data.
+---
+table: qa_esg_v2.ESGSourceMap
+domain: esg
+description: Data Item to Source Mapping | This table contains the source data links to the data measures.
+update_cadence: Weekly
+columns:
+- name: OrgPermId
+  type: BIGINT
+  nullable: false
+  description: LSEG Organization Identifier.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: An item code to uniquely identify each and every data point that is a part of the feed. Corresponding code
+    description is in the ESGItem table. Cross-reference Item with ESGItem.Item.
+- name: FY
+  type: SMALLINT
+  nullable: false
+  description: The particular fiscal year for which the data is defined. LSEG Quantitative Analytics ESG Version 2 13
+- name: SourceId
+  type: BIGINT
+  nullable: false
+  description: This is the unique SourceId where the ESG value was detected. SourceId links to the ESGSourceData table. There
+    may be many SourceIds populated for a data measure.
+---
+table: qa_esg_v2.ESGSourceData
+domain: esg
+description: Source Information | This table contains the source information.
+update_cadence: Weekly
+columns:
+- name: SourceID
+  type: BIGINT
+  nullable: false
+  description: The unique SourceId.
+- name: Author
+  type: nvarchar(250)
+  nullable: true
+  description: The author of the news article where the ESG value was detected.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date of the source where the ESG value was detected.
+- name: Page
+  type: nvarchar(25)
+  nullable: true
+  description: The page number or a range of pages in the source where the ESG value was detected.
+- name: Publisher
+  type: nvarchar(140)
+  nullable: true
+  description: The publisher of the source where the ESG value was detected.
+- name: Scope
+  type: char(3)
+  nullable: true
+  description: 'The coverage scope in the source where the ESG value was detected. Scope can take one of the following values:
+    – GBL: Global – REG: Regional – SEG: Segment'
+- name: URL
+  type: nvarchar(2500)
+  nullable: true
+  description: The external URL of the source used to collect the ESG value.
+- name: TitleLangCode
+  type: varchar(35)
+  nullable: true
+  description: BCP-47 language code used for the ESG source title. Corresponding code description is in the ESGDesc table.
+    Cross- reference LangCode with ESGDesc.Code where Type_ = 4.
+- name: CommentLangCode
+  type: varchar(35)
+  nullable: true
+  description: BCP-47 language code used for the ESG source comment. Corresponding code description is in the ESGDesc table.
+    Cross- reference LangCode with ESGDesc.Code where Type_ = 4.
+- name: AbstractLangCode
+  type: varchar(35)
+  nullable: true
+  description: BCP-47 language code used for the ESG source abstract. Corresponding code description is in the ESGDesc table.
+    Cross- reference LangCode with ESGDesc.Code where Type_ = 4.
+- name: Title
+  type: nvarchar(250)
+  nullable: true
+  description: The source title from which the ESG value was collected.
+- name: Comment
+  type: nvarchar(max)
+  nullable: true
+  description: The comment written by the analyst who collected the ESG value.
+- name: Abstract
+  type: nvarchar(max)
+  nullable: true
+  description: The abstract from the source where the ESG value was detected.
+---
+table: qa_esg_v2.ESGScores
+domain: esg
+description: ESG Category, Pillar, and Summary Scores | This table contains the ESG category scores, pillar scores, and summary
+  scores.
+update_cadence: Weekly
+columns:
+- name: OrgPermId
+  type: BIGINT
+  nullable: false
+  description: LSEG Organization Identifier. LSEG Quantitative Analytics ESG Version 2 14
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: An item code to uniquely identify each and every data point that is a part of the feed. Corresponding code
+    description is in the ESGItem table. Cross-reference Item with ESGItem.Item.
+- name: FY
+  type: SMALLINT
+  nullable: false
+  description: The particular fiscal year for which the data is defined.
+- name: ValueCalcDt
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date when the ESG value was calculated.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: The raw ESG score value between 0 to 1.
+- name: ValueGrade
+  type: varchar(5)
+  nullable: true
+  description: The ESG score converted into a grade. Score Range Grade 0.0 <= score <= 0.083333 D - 0.083333 < score <= 0.166666
+    D 0.166666 < score <= 0.250000 D+ 0.250000 < score <= 0.333333 C - 0.333333 < score <= 0.416666 C 0.416666 < score <=
+    0.500000 C + 0.500000 < score <= 0.583333 B - 0.583333 < score <= 0.666666 B 0.666666 < score <= 0.750000 B + 0.750000
+    < score <= 0.833333 A - 0.833333 < score <= 0.916666 A 0.916666 < score <= 1 A +
+---
+table: qa_esg_v2.ESGDnIRatings
+domain: esg
+description: Company Diversity and Inclusion Ratings | This table contains the company's diversity and inclusion ratings.
+update_cadence: Weekly
+columns:
+- name: OrgPermId
+  type: BIGINT
+  nullable: false
+  description: LSEG Organization Identifier.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: An item code to uniquely identify each and every data point that is a part of the feed. Corresponding code
+    description is in the ESGItem table. Cross-reference Item with ESGItem.Item.
+- name: FY
+  type: SMALLINT
+  nullable: false
+  description: The particular fiscal year for which the data is defined.
+- name: ValueCalcDt
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date when the ESG value was calculated.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: The D&I score value between 0 to 1. LSEG Quantitative Analytics ESG Version 2 15
+---
+table: qa_esg_v2.ESGStmtDet
+domain: esg
+description: Financial Period | This table contains financial period details.
+update_cadence: Weekly
+columns:
+- name: OrgPermId
+  type: BIGINT
+  nullable: false
+  description: LSEG Organization Identifier.
+- name: FY
+  type: SMALLINT
+  nullable: false
+  description: The particular fiscal year for which the data is defined.
+- name: PerEndDt
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The period end date of the ESG report.
+- name: PerIsIncomplete
+  type: char(1)
+  nullable: true
+  description: 'PerIsIncomplete can take one of the following values: “Y” or “N”. If the value is “Y” - not all ESG information
+    has been collected for the whole financial period. LSEG publish ESG collected data as soon as it is published. Once all
+    data has been collected for a period, this field will be marked as “N”.'
+- name: CoverageFlg
+  type: char(3)
+  nullable: true
+  description: ESG indicates a full coverage company. ATD indicates an organization for which there is a limited population
+    of shareholders datapoints. Corresponding code description in the ESGDesc table. Cross-reference CoverageFlg with ESGDesc.Code
+    where Type_ = 3. LSEG Quantitative Analytics ESG Version 2 Copyright © 2024 London Stock Exchange Group plc and its group
+    of companies (LSEG) and/or its affiliates. All rights reserved. The LSEG content received through this service is the
+    intellectual property of

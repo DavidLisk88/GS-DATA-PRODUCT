@@ -1,0 +1,450 @@
+table: qa_toyo.TK2AdjFactor
+domain: fundamentals
+description: Adjustment Factors | Use this table to retrieve historical adjustment factors for per share data items.
+columns:
+- name: SecurityID
+  type: INTEGER
+  nullable: false
+  description: SecurityID is a unique ID number assigned by Toyo Keizai to each company covered. If a company has more than
+    one listing of common stock, each has a unique ID.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the effective start date for the adjustment factor.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the effective end date for the adjustment factor.
+- name: Factor
+  type: FLOAT
+  nullable: true
+  description: Factor is the adjustment factor used for stock prices at the event. Events may be stock splits, paid share
+    allotments, capital decreases, or reverse stock splits.
+- name: ExDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: ExDate is the ex-rights date of the capital action.
+- name: RecDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: RecDate is the record date of the capital action.
+- name: PayDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: PayDate is the payment date of the capital action.
+- name: CumFactor
+  type: FLOAT
+  nullable: true
+  description: 'CumFactor is the LSEG-calculated cumulative adjustment factor for historical per share data. CumFactor is
+    derived by LSEG using the following formula: IF current record (that is, if EndDate is NULL), CumFactor = 1 ELSE, CumFactor
+    = (Prev CumFactor / Prev Factor)'
+---
+table: qa_toyo.TK2CumAdjFactor
+domain: fundamentals
+description: Cumulative Adjustment Factors | Use this table to retrieve historical, cumulative adjustment factors for per
+  share data items.
+columns:
+- name: SecurityID
+  type: INTEGER
+  nullable: false
+  description: SecurityID is a unique ID number assigned by Toyo Keizai to each company covered. If a company has more than
+    one listing of common stock, each has a unique ID.
+- name: EvalStartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: The evaluation start date; it is a point-in-time representation of the adjustment factor. A single evaluation
+    point can have multiple observation points.
+- name: ObsStartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: The observation start date; the observation point falls between the observation start and end date. This represents
+    the point in time in which the security is being observed; when backtesting historical observation points should be used.
+- name: EvalEndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The evaluation end date; it is a point-in-time representation of the adjustment factor. A single evaluation
+    point can have multiple observation points.
+- name: ObsEndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The observation end date; the current observation period is represented by ObsEndDate = 1999-12-31.
+- name: CumAdjFactor
+  type: FLOAT
+  nullable: true
+  description: The cumulative adjustment factor.
+---
+table: qa_toyo.TK2Catalog
+domain: fundamentals
+description: Toyo Keizai 2 Catalogs | This table contains the names of the data package services provided by Toyo Keizai and
+  the items that belong to
+columns:
+- name: CatalogCode
+  type: INTEGER
+  nullable: false
+  description: CatalogCode is the unique identifier for each catalog. TK2Catalog.CatalogCode cross-references with TK2Code.Code
+    where Type_ = 12.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is the unique item ID. Item cross-references TK2Item.
+- name: CatalogDescCode
+  type: INTEGER
+  nullable: true
+  description: CatalogDescCode is the catalog description code. TK2Catalog.CatalogDescCode cross-references with TK2Code.Code
+    where Type_ = 13. LSEG Quantitative Analytics Toyo Keizai 8
+---
+table: qa_toyo.TK2Code
+domain: fundamentals
+description: Toyo Keizai 2 Codes | This table contains descriptions for Toyo Keizai coded items.
+columns:
+- name: Type_
+  type: SMALLINT
+  nullable: false
+  description: Type_ identifies the code category. Types are defined where Type_ = 0 and Code identifies Type_.
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is described by DescEng. Code is cross-referenced from other tables.
+- name: DescEng
+  type: varchar(180)
+  nullable: true
+  description: DescEng is the full name or description of Code in English.
+join_hints:
+- to: other
+  evidence: Code is cross-referenced from other tables.
+  type: cross_reference
+---
+table: qa_toyo.TK2Exchange
+domain: fundamentals
+description: Listing Exchanges | Use this table to retrieve the exchange on which each company is listed.
+columns:
+- name: SecurityID
+  type: INTEGER
+  nullable: false
+  description: SecurityID is a unique ID number assigned by Toyo Keizai to each company covered. If a company has more than
+    one listing of common stock, each has a unique ID.
+- name: ExchangeCode
+  type: INTEGER
+  nullable: false
+  description: ExchangeCode indicates the exchange on which the company trades. TK2Exchange.ExchangeCode cross-references
+    with TK2Code.Code where Type_ = 16.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the first listing date.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the last listing date. If the item is active, EndDate is 9999-12-31
+---
+table: qa_toyo.TK2Info
+domain: fundamentals
+description: Company Information | This table lists the companies covered by this implementation of the Toyo Keizai TREND3EPOT
+  datafeed.
+columns:
+- name: SecurityID
+  type: INTEGER
+  nullable: false
+  description: SecurityID is a unique ID number assigned by Toyo Keizai to each company covered. If a company has more than
+    one listing of common stock, each has a unique ID.
+- name: TKC
+  type: INTEGER
+  nullable: true
+  description: TKC indicates the original Toyo Keizai company code.
+- name: CmpNameEng
+  type: varchar(80)
+  nullable: true
+  description: CmpNameEng is the company name in English.
+- name: ISIN
+  type: varchar(12)
+  nullable: true
+  description: ISIN is the company International Securities Identification Number (ISIN).
+- name: EDINET
+  type: varchar(8)
+  nullable: true
+  description: EDINET is the company identifier assigned by the Electronic Disclosure for Investors NETwork (EDINET).
+- name: OrgTypeCode
+  type: TINYINT
+  nullable: true
+  description: OrgTypeCode identifies the type of organization. TK2Info.OrgTypeCode cross-references with TK2Code.Code where
+    Type_ = 1.
+- name: OrgTypePosCode
+  type: TINYINT
+  nullable: true
+  description: OrgTypePosCode identifies the position in the company name of the organization type. For example, if the company
+    name is Sanyo Corporation, then this code indicates that Corporation comes after the company name, Sanyo. TK2Info.OrgTypePosCode
+    cross-references with TK2Code.Code where Type_ = 2.
+- name: SIC
+  type: INTEGER
+  nullable: true
+  description: SIC stands for Securities Identification Code.
+- name: SICSectorCode
+  type: INTEGER
+  nullable: true
+  description: SICSectorCode is a three-digit code that indicates the company sector. TK2Info.SICSectorCode cross-references
+    with TK2Code.Code where Type_ = 17.
+- name: TKSectorCode
+  type: INTEGER
+  nullable: true
+  description: TKSectorCode indicates the company’s fourth-level sector classification based on Toyo Keizai’s original sector
+    hierarchy. LSEG Quantitative Analytics Toyo Keizai 9
+- name: Zip
+  type: varchar(10)
+  nullable: true
+  description: Zip is the company’s zip code.
+- name: Phone
+  type: varchar(12)
+  nullable: true
+  description: Phone is the company’s phone number.
+- name: URL
+  type: varchar(50)
+  nullable: true
+  description: URL is the company’s Web site address.
+- name: EstDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EstDate is the date of establishment of the company.
+---
+table: qa_toyo.TK2InfoChg
+domain: fundamentals
+description: Company Information Changes | This table contains compiled historical changes of any of several identifiers in
+  the TREND3EPOT datafeed.
+columns:
+- name: SecurityID
+  type: INTEGER
+  nullable: false
+  description: SecurityID is a unique ID number assigned by Toyo Keizai to each company covered. If a company has more than
+    one listing of common stock, each has a unique ID.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the valid start date for the element, such as company name or ISIN.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: End Date is the valid end date for the element, such as company name or ISIN.
+- name: TKC
+  type: INTEGER
+  nullable: true
+  description: TKC indicates the original Toyo Keizai company code.
+- name: CmpNameEng
+  type: varchar(80)
+  nullable: true
+  description: CmpNameEng is the company name in English.
+- name: ISIN
+  type: varchar(12)
+  nullable: true
+  description: ISIN is the company International Securities Identification Number (ISIN).
+- name: EDINET
+  type: varchar(8)
+  nullable: true
+  description: EDINET is the company identifier assigned by the Electronic Disclosure for Investors NETwork (EDINET).
+- name: OrgTypeCode
+  type: TINYINT
+  nullable: true
+  description: OrgTypeCode identifies the type of organization. TK2InfoChg.OrgTypeCode cross-references with TK2Code.Code
+    where Type_ = 1.
+- name: OrgTypePosCode
+  type: TINYINT
+  nullable: true
+  description: OrgTypePosCode identifies the position in the company name of the organization type. For example, if the company
+    name is Sanyo Corporation, then this code indicates that Corporation comes after the company name, Sanyo. TK2InfoChg.OrgTypePosCode
+    cross-references with TK2Code.Code where Type_ = 2.
+- name: SIC
+  type: INTEGER
+  nullable: true
+  description: SIC stands for Securities Identification Code.
+- name: SICSectorCode
+  type: INTEGER
+  nullable: true
+  description: SICSectorCode is a three-digit code that indicates the company sector. TK2InfoChg.SICSectorCode cross-references
+    with TK2Code.Code where Type_ = 17.
+- name: TKSectorCode
+  type: INTEGER
+  nullable: true
+  description: TKSectorCode indicates the company’s fourth-level sector classification based on Toyo Keizai’s original sector
+    hierarchy. TK2InfoChg.TKSectorCode cross-references with TK2Code.Code where Type_ = 18.
+- name: Zip
+  type: varchar(10)
+  nullable: true
+  description: Zip is the company’s zip code.
+- name: Phone
+  type: varchar(12)
+  nullable: true
+  description: Phone is the company’s phone number.
+- name: URL
+  type: varchar(50)
+  nullable: true
+  description: URL is the company’s Web site address.
+---
+table: qa_toyo.TK2Item
+domain: fundamentals
+description: Financial Statement Account Items | The data in this table identifies all the account items of financial statements
+  referenced in the TREND3EPOT
+columns:
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is the unique item ID. This ID is cross-referenced from other tables. LSEG Quantitative Analytics Toyo
+    Keizai 10
+- name: ParItem
+  type: INTEGER
+  nullable: true
+  description: ParItem identifies the parent account item, if applicable.
+- name: DescEng
+  type: varchar(150)
+  nullable: true
+  description: DescEng is the full name or description of Item in English.
+- name: FormatCode
+  type: SMALLINT
+  nullable: true
+  description: FormatCode indicates the datatype of the item. TK2Item.FormatCode cross-references with TK2Code.Code where
+    Type_ = 10.
+- name: DisplayOrder
+  type: INTEGER
+  nullable: true
+  description: DisplayOrder indicates the presentation order of each item.
+- name: SignCode
+  type: char(1)
+  nullable: true
+  description: SignCode indicates how each account item is calculated in relation to its parent item. TK2Item.SignCode cross-references
+    with TK2Code.Code where Type_ = 11.
+- name: BizCatCode
+  type: SMALLINT
+  nullable: true
+  description: BizCatCode indicates the business category for each item. TK2Item.BizCatCode cross-references with TK2Code.Code
+    where Type_ = 9.
+- name: AdjustCode
+  type: TINYINT
+  nullable: true
+  description: (Reserved for future development.)
+- name: StmtTypeCode
+  type: TINYINT
+  nullable: true
+  description: StmtTypeCode identifies the source statement of the item. TK2Item.StmtTypeCode cross-references with TK2Code.Code
+    where Type_ = 20.
+---
+table: qa_toyo.TK2Shares
+domain: fundamentals
+description: Historical Shares | This table contains historical shares data. | This table contains data item values and data
+  source information for consolidated data reported under | This table contains data item values and data source information
+  for consolidated data reported under SEC | This table contains data item values and data source information for consolidated
+  data reported under IFRS | This table contains all data item values and source information for parent data reported under
+  Japanese
+columns:
+- name: SecurityID
+  type: INTEGER
+  nullable: false
+  description: SecurityID is a unique ID number assigned by Toyo Keizai to each company covered. If a company has more than
+    one listing of common stock, each has a unique ID.
+- name: ShareTypeCode
+  type: TINYINT
+  nullable: false
+  description: ShareTypeCode indicates the type base for the share. TK2Shares.ShareTypeCode cross-references with TK2Code.Code
+    where Type_ = 21.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the effective start date for the shares value.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the effective end date for the shares value.
+- name: Shares
+  type: FLOAT
+  nullable: true
+  description: 'Shares indicates the number of shares outstanding. TK2*Data: Toyo Keizai 2 Data Tables This section describes
+    the Toyo Keizai data tables. For these tables, the schema is identical, only the content is different. – TK2CJData: Consolidated
+    Data – Japanese Standards This table contains data item values and data source information for consolidated data reported
+    under Japanese standards. – TK2CSData: Consolidated Data – SEC Standards This table contains data item values and data
+    source information f'
+---
+table: qa_toyo.SeqNum
+domain: fundamentals
+columns:
+- name: SecurityID
+  type: INTEGER
+  nullable: false
+  description: SecurityID is a unique ID number assigned by Toyo Keizai to each company covered. If a company has more than
+    one listing of common stock, each has a unique ID.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is the unique item ID. Item cross-references TK2Item.
+- name: PerCode
+  type: SMALLINT
+  nullable: false
+  description: PerCode indicates the type of period. TK2*Data.PerCode cross-references with TK2Code.Code where Type_ = 3.
+- name: PerEndDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: PerEndDate is the period end date.
+- name: FilingDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: 'FilingDate is the date the source documents were filed. Note that for Yuho reports published before March
+    1992, the filing date may not be available. In this case, the date and time provided is: 1900-01-01 00:00:00.'
+- name: SrcCode
+  type: SMALLINT
+  nullable: false
+  description: SrcCode indicates the source document type. TK2*Data.SrcCode cross-references with TK2Code.Code where Type_
+    = 6.
+- name: SeqNum
+  type: FLOAT
+  nullable: false
+  description: SeqNum indicates the order of the company segment.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the value specified for Item by the SrcCode document.
+- name: PerStartDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: PerStartDate is the period start date.
+- name: CurrCode
+  type: TINYINT
+  nullable: true
+  description: CurrCode indicates the reporting currency. TK2*Data.CurrCode cross-references with TK2Code.Code where Type_
+    = 7.
+- name: UnitCode
+  type: TINYINT
+  nullable: true
+  description: UnitCode indicates the unit of measure for Value_. TK2*Data.UnitCode cross-references with TK2Code.Code where
+    Type_ = 8.
+- name: BizCatCode
+  type: SMALLINT
+  nullable: true
+  description: BizCatCode indicates the business category of the company. TK2*Data.BizCatCode cross-references with TK2Code.Code
+    where Type_ = 9.
+- name: SgmtCode
+  type: SMALLINT
+  nullable: true
+  description: SgmtCode is the segment code. It indicates the reporting company segment. LSEG Quantitative Analytics Toyo
+    Keizai 12
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag indicates the licensing for each data point. TK2*Data.LicFlag cross-references with TK2Code.Code where
+    Type_ = 19.
+---
+table: qa_toyo.TK2Notes
+domain: fundamentals
+description: Estimate Footnotes | Use this table to retrieve footnotes for the estimate items in the TREND3EPOT datafeed.
+columns:
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is the unique item ID. Item cross-references TK2Item.
+- name: BizCatCode
+  type: SMALLINT
+  nullable: false
+  description: BizCatCode indicates the business category for each item. Cross-reference BizCatCode with TK2Code where BizCatCode
+    = TK2Code.Code and TK2Code.Type_ = 9.
+- name: Note
+  type: varchar(120)
+  nullable: true
+  description: 'Note is the text of the footnote. LSEG Quantitative Analytics Toyo Keizai Copyright © 2024 London Stock Exchange
+    Group plc and its group of companies (LSEG) and/or its affiliates. All rights reserved. The LSEG content received through
+    this service is the intellectual property of LSEG or its third party suppliers. Republicati on or redistribution of content
+    provided by LSEG is expressly prohibited without the prior written consent of LSEG, except where permitted by the terms
+    of the relevant LSEG '

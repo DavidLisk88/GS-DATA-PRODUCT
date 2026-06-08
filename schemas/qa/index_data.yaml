@@ -1,0 +1,3101 @@
+table: qa_index.IdxDaily
+domain: indices
+description: Index Daily Prices | This table contains daily index prices.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code cross-references with IdxInfo where idxdaily.Code = idxinfo.Code.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the date of the daily index pricing data.
+- name: Open_
+  type: FLOAT
+  nullable: true
+  description: Open_ is the opening index daily price.
+- name: High
+  type: FLOAT
+  nullable: true
+  description: High is the high index daily price.
+- name: Low
+  type: FLOAT
+  nullable: true
+  description: Low is the low index daily price.
+- name: Close_
+  type: FLOAT
+  nullable: true
+  description: Close_ is the closing index daily price.
+---
+table: qa_index.IdxRDaily
+domain: indices
+description: Russell Index Daily Prices | This table contains daily index prices for Russell indexes only.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code cross-references with IdxInfo where idxrdaily.Code = idxinfo.Code.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date of the daily index pricing data.
+- name: Open_
+  type: FLOAT
+  nullable: true
+  description: Open_ is the opening index daily price.
+- name: High
+  type: FLOAT
+  nullable: true
+  description: High is the high index daily price.
+- name: Low
+  type: FLOAT
+  nullable: true
+  description: Low is the low index daily price.
+- name: Close_
+  type: FLOAT
+  nullable: true
+  description: Close_ is the closing index daily price. LSEG Quantitative Analytics Database Schema for Index Data 8
+---
+table: qa_index.IdxInfo
+domain: indices
+description: Index Information | Use this table to retrieve basic index information such as the name of the index, the type
+  of index, and the index | Use this table to map security codes from the SecMstrX table to security codes in the index tables.
+  | The table dbo.IdxSec is a legacy table that should be disregarded. | PrcCode int Y PrcCode provides the link to the security
+  master table SecMstrX where
+update_cadence: Daily
+columns:
+- name: Ticker
+  type: varchar(30)
+  nullable: true
+  description: Ticker is the ticker identifier of the index.
+- name: Cusip
+  type: varchar(8)
+  nullable: true
+  description: Cusip is the CUSIP identifier of the index.
+- name: Name
+  type: varchar(60)
+  nullable: true
+  description: Name is the name of the index.
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link to all IDX* tables.
+- name: Type_
+  type: SMALLINT
+  nullable: true
+  description: 'Type_ indicates the index compositions and may be: – 0 (no index compositions) – 1 (S&P compositions) – 2
+    (Russell compositions, excluding MicroCap and Top 50) – 3 (Nasdaq compositions) – 4 (DOW30 compositions) – 5 (Russell
+    MicroCap) – 6 (Russell Top 50) prc.IdxSec: Index Composition Security Universe Use this table to map security codes from
+    the SecMstrX table to security codes in the index tables. The table dbo.IdxSec is a legacy table that should be disregarded.'
+- name: Vendor
+  type: SMALLINT
+  nullable: false
+  description: 'Vendor indicates the supplier of the index composition and may be: – 1 (S&P) – 2 (Russell) – 3 (Nasdaq) –
+    4 (DOW30)'
+- name: Cusip
+  type: varchar(8)
+  nullable: true
+  description: Cusip is the CUSIP of the security.
+- name: Ticker
+  type: varchar(8)
+  nullable: true
+  description: Ticker is the ticker of the security.
+- name: Name
+  type: varchar(60)
+  nullable: true
+  description: Name is the name of the security.
+- name: FirstDate
+  type: smalldatetime
+  nullable: true
+  description: FirstDate and LastDate provide the coverage of the security in the composition. LastDate smalldatetime Y LSEG
+    Quantitative Analytics Database Schema for Index Data 9
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code, with Vendor, provides the cross-reference to the composition tables (Idx*Cmp).
+- name: PrcCode
+  type: INTEGER
+  nullable: true
+  description: PrcCode provides the link to the security master table SecMstrX where PrcCode = SecMstrX.SecCode. For more
+    information about SecMstrX, refer to the Quantitative Analytics Database Schema for Core Tables posted on the LSEG Quantitative
+    Analytics product page on MyAccount. LSEG Quantitative Analytics Database Schema for Index Data 10 3. DJX Index Compositions
+    Tables beginning with the prefix IdxDj* contain data on Dow Jones Industrial Average indexes. These tables are included
+    in the core Quantita
+---
+table: qa_index.IdxDjCmp
+domain: indices
+description: Dow Index Compositions | This table contains information about Dow index compositions.
+update_cadence: Daily
+columns:
+- name: IdxCode
+  type: INTEGER
+  nullable: false
+  description: IdxCode cross-references idxinfo.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ represents the date of index composition data.
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode is the security code. Cross-reference SecCode with prc.IdxSec where SecCode = prc.IdxSec.Code and prc.IdxSec.Vendor
+    = 4.
+- name: Industry
+  type: SMALLINT
+  nullable: true
+  description: (Not Available)
+- name: Sector1
+  type: SMALLINT
+  nullable: true
+  description: (Not Available)
+- name: Sector2
+  type: SMALLINT
+  nullable: true
+  description: (Not Available)
+- name: Weight
+  type: FLOAT
+  nullable: true
+  description: Weight is the weight of the security, expressed in percent.
+- name: Shares
+  type: FLOAT
+  nullable: true
+  description: Shares is the security’s shares used to calculate Weight.
+- name: AdjWeight
+  type: FLOAT
+  nullable: true
+  description: (Not Available)
+- name: AdjShares
+  type: FLOAT
+  nullable: true
+  description: (Not Available)
+---
+table: qa_index.IdxDjCtr
+domain: indices
+description: Dow 30 Contributions | This table contains information about Dow 30 Contributions.
+update_cadence: Daily
+columns:
+- name: IdxCode
+  type: INTEGER
+  nullable: false
+  description: IdxCode cross-references idxinfo.
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode is the security code. Cross-reference SecCode with prc.IdxSec where SecCode = prc.IdxSec.Code and prc.IdxSec.Vendor
+    = 4.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date of index contribution data.
+- name: BegVal
+  type: FLOAT
+  nullable: true
+  description: BegVal is the market cap of the security in the index, at the beginning of the day.
+- name: Contrib
+  type: FLOAT
+  nullable: true
+  description: Contrib is the change in market cap of the security for that day, from open to close. LSEG Quantitative Analytics
+    Database Schema for Index Data 11
+---
+table: qa_index.IdxDjMkt
+domain: indices
+description: Dow 30 Market Values | This table contains information about Dow 30 Market Values.
+update_cadence: Daily
+columns:
+- name: IdxCode
+  type: INTEGER
+  nullable: false
+  description: IdxCode cross-references idxinfo.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date of the index market values data.
+- name: Mkt
+  type: FLOAT
+  nullable: true
+  description: Mkt is the index market cap as of the day’s close.
+- name: AdjMkt
+  type: FLOAT
+  nullable: true
+  description: AdjMkt is the index market cap as of next day’s open.
+- name: Divisor
+  type: FLOAT
+  nullable: true
+  description: Divisor is the index divisor as of the day’s close.
+- name: AdjDivisor
+  type: FLOAT
+  nullable: true
+  description: 'AdjDivisor is the index divisor as of the next day’s open. The standard formula to calculate the index is:
+    index daily price = (index market value) / (index divisor). LSEG Quantitative Analytics Database Schema for Index Data
+    12 4. NDX Index Compositions Tables beginning with the prefix IdxNd* contain data on NASDAQ indexes.'
+---
+table: qa_index.IdxNdCmp
+domain: indices
+description: Nasdaq Index Compositions | This table contains general information about NASDAQ index compositions.
+update_cadence: Daily
+columns:
+- name: IdxCode
+  type: INTEGER
+  nullable: false
+  description: IdxCode cross-references idxinfo.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date of index composition data.
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode is the security code. Cross-reference SecCode with prc.IdxSec where SecCode = prc.IdxSec.Code and prc.IdxSec.Vendor
+    = 3.
+- name: Industry
+  type: SMALLINT
+  nullable: true
+  description: (Not Available)
+- name: Sector1
+  type: SMALLINT
+  nullable: true
+  description: (Not Available)
+- name: Sector2
+  type: SMALLINT
+  nullable: true
+  description: (Not Available)
+- name: Weight
+  type: FLOAT
+  nullable: true
+  description: Weight is the security’s weight, expressed in percent.
+- name: Shares
+  type: FLOAT
+  nullable: true
+  description: Shares is the security’s shares, used to calculate Weight.
+- name: AdjWeight
+  type: FLOAT
+  nullable: true
+  description: (Not Available)
+- name: AdjShares
+  type: FLOAT
+  nullable: true
+  description: (Not Available)
+---
+table: qa_index.IdxNDCtr
+domain: indices
+description: NASDAQ Contributions | This table contains information about NASDAQ Contributions.
+update_cadence: Daily
+columns:
+- name: IdxCode
+  type: INTEGER
+  nullable: false
+  description: IdxCode cross-references idxinfo.
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode is the security code. Cross-reference SecCode with prc.IdxSec where SecCode = prc.IdxSec.Code and prc.IdxSec.Vendor
+    = 3.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date of index contribution data.
+- name: BegVal
+  type: FLOAT
+  nullable: true
+  description: BegVal is the market cap of the security in the index, at the beginning of the day.
+- name: Contrib
+  type: FLOAT
+  nullable: true
+  description: Contrib is the change in market cap of the security for that day, from open to close. LSEG Quantitative Analytics
+    Database Schema for Index Data 13
+---
+table: qa_index.IdxNDMkt
+domain: indices
+description: NASDAQ Market Values | This table contains information about NASDAQ Market Values.
+update_cadence: Daily
+columns:
+- name: IdxCode
+  type: INTEGER
+  nullable: false
+  description: IdxCode cross-references idxinfo.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date of the index market values data.
+- name: Mkt
+  type: FLOAT
+  nullable: true
+  description: Mkt is the index market cap as of the day’s close.
+- name: AdjMkt
+  type: FLOAT
+  nullable: true
+  description: AdjMkt is the index market cap as of the next day’s open.
+- name: Divisor
+  type: FLOAT
+  nullable: true
+  description: Divisor is the index divisor as of the day’s close.
+- name: AdjDivisor
+  type: FLOAT
+  nullable: true
+  description: 'AdjDivisor is the index divisor as of the next day’s open. The standard formula to calculate index is: index
+    daily price = (index market value) / (index divisor). LSEG Quantitative Analytics Database Schema for Index Data 14 5.
+    Russell Index Compositions These prefixes indicate these corresponding Russell indexes: – IdxRF* indicates Russell Top
+    50 and Russell Top 50 History – IdxRL* indicates Russell Index and Russell Index History – IdxRP* indicates Russell Microcap
+    and Russell Microcap History'
+---
+table: qa_index.IdxRfCmp
+domain: indices
+description: Russell Top 50 Daily Index Compositions | This table contains information about Russell Top 50 Daily Index Compositions.
+update_cadence: Daily
+columns:
+- name: IdxCode
+  type: INTEGER
+  nullable: false
+  description: IdxCode cross-references idxinfo.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date of index composition data.
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode is the security code. Cross-reference SecCode with prc.IdxSec where SecCode = prc.IdxSec.Code and prc.IdxSec.Vendor
+    = 2.
+- name: Industry
+  type: INTEGER
+  nullable: true
+  description: Industry provides the ICB Industry code. For more information, see IdxRlClsCode.
+- name: Sector1
+  type: INTEGER
+  nullable: true
+  description: Sector1 is the ICB Sector code. For more information, see IdxRlClsCode.
+- name: Sector2
+  type: INTEGER
+  nullable: true
+  description: Sector2 is the ICB Subsector code. For more information, see IdxRlClsCode.
+- name: Weight
+  type: FLOAT
+  nullable: true
+  description: Weight is the security’s weight, expressed in percent.
+- name: Shares
+  type: FLOAT
+  nullable: true
+  description: Shares is the security’s float shares used to calculate weight.
+- name: AdjWeight
+  type: FLOAT
+  nullable: true
+  description: AdjWeight and AdjShares represent the next day's compositions. As a result, the data in these columns are the
+    new weights or shares as of the next day for any changed compositions. AdjShares float Y
+---
+table: qa_index.IdxRfCtr
+domain: indices
+description: Russell Top 50 Daily Contributions | Use this table to retrieve data on the Russell Top 50 Daily Contributions.
+update_cadence: Daily
+columns:
+- name: IdxCode
+  type: INTEGER
+  nullable: false
+  description: IdxCode cross-references IdxInfo. LSEG Quantitative Analytics Database Schema for Index Data 15
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode is the security code. Cross-reference SecCode with prc.IdxSec where SecCode = prc.IdxSec.Code and prc.IdxSec.Vendor
+    = 2.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date of the index contribution data.
+- name: BegVal
+  type: FLOAT
+  nullable: true
+  description: BegVal is the security’s market cap in the index at the beginning of the day.
+- name: Contrib
+  type: FLOAT
+  nullable: true
+  description: Contrib is the security’s change in market cap for that day from open to close.
+---
+table: qa_index.IdxRfMkt
+domain: indices
+description: Russell Top 50 Daily Market Values | Use this table to retrieve information on Russell Top 50 Daily Market Values.
+update_cadence: Daily
+columns:
+- name: IdxCode
+  type: INTEGER
+  nullable: false
+  description: IdxCode cross-references IdxInfo.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date of the index market values data.
+- name: Mkt
+  type: FLOAT
+  nullable: true
+  description: Mkt is the index market cap as of the day’s close.
+- name: AdjMkt
+  type: FLOAT
+  nullable: true
+  description: AdjMkt is the index market cap as of the next day’s open.
+- name: Divisor
+  type: FLOAT
+  nullable: true
+  description: Divisor is the index divisor as of the day’s close.
+- name: AdjDivisor
+  type: FLOAT
+  nullable: true
+  description: 'AdjDivisor is the index divisor as of the next day’s open. The standard formula to calculate index is: index
+    daily price = (index market value) / (index divisor).'
+---
+table: qa_index.IdxRlClsCode
+domain: indices
+description: Russell Daily Index Classification Codes | referenced the PrcCode2 table in the IDC Equities Pricing schema.
+  In those implementations it was not possible | to track industry or sector changes over time. This table overcomes that
+  obstacle by providing a way to track | The start date for the data in this table is 29 June 2009.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is cross-referenced from other Russell tables. It is equivalent to Industry, Sector1, or Sector2.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: 'If no change in the industry or sector description has taken place, StartDate is the date the of the original
+    classification. If the industry or sector description has changed, this is the date the new classification began. Note:
+    Because Russell reclassified all records for reconstitution in this table, the initial StartDate for all records is 29
+    June 2009, unless the classification changed after 29 June 2009.'
+- name: CodeDesc
+  type: varchar(256)
+  nullable: true
+  description: For the records with start dates from 29 June 2009 to 20 September 2020, CodeDesc represents the description
+    of the industry or sector (RGS codes). For the records with start dates from 21 September 2020, this field represents
+    the description of industry, sector, subsector or supersector (ICB codes).
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the date a classification changed. If no EndDate is present, then the shown classification is current.
+    EndDate is given as the StartDate for the new classification, minus one day.
+---
+table: qa_index.IdxRlCmp
+domain: indices
+description: Russell Daily Index Compositions | Use this table to retrieve data on Russell Daily Index Compositions.
+update_cadence: Daily
+columns:
+- name: IdxCode
+  type: INTEGER
+  nullable: false
+  description: IdxCode cross-references idxinfo.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date of index composition data.
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode is the security code. Cross-reference SecCode with prc.IdxSec where SecCode = prc.IdxSec.Code and prc.IdxSec.Vendor
+    = 2.
+- name: Industry
+  type: INTEGER
+  nullable: true
+  description: Industry provides the ICB Industry code. For more information, see IdxRlClsCode.
+- name: Sector1
+  type: INTEGER
+  nullable: true
+  description: Sector1 is the ICB Sector code. For more information, see IdxRlClsCode.
+- name: Sector2
+  type: INTEGER
+  nullable: true
+  description: Sector2 is the ICB Subsector code. For more information, see IdxRlClsCode.
+- name: Weight
+  type: FLOAT
+  nullable: true
+  description: Weight is the security’s weight, expressed in percent.
+- name: Shares
+  type: FLOAT
+  nullable: true
+  description: Shares is the security’s float shares used to calculate weight. This value is displayed in thousands.
+- name: AdjWeight
+  type: FLOAT
+  nullable: true
+  description: AdjWeight and AdjShares represent the next day's compositions. As a result, the data in these columns are new
+    weights/shares as of the next day for any changed compositions. The AdjShares value is displayed in thousands. AdjShares
+    float Y LSEG Quantitative Analytics Database Schema for Index Data 17 For more information about PrcCode2, refer to the
+    Quantitative Analytics Database Schema for IDC Pricing posted on the LSEG Quantitative Analytics product page on MyAccount.
+---
+table: qa_index.IdxRLCtr
+domain: indices
+description: Russell Daily Contributions | This table contains Russell Daily Contributions data.
+update_cadence: Daily
+columns:
+- name: IdxCode
+  type: INTEGER
+  nullable: false
+  description: IdxCode cross-references idxinfo.
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode is the security code. Cross-reference SecCode with prc.IdxSec where SecCode = prc.IdxSec.Code and prc.IdxSec.Vendor
+    = 2.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date of index contribution data.
+- name: BegVal
+  type: FLOAT
+  nullable: true
+  description: BegVal is the security’s market cap in the index, at the beginning of the day.
+- name: Contrib
+  type: FLOAT
+  nullable: true
+  description: Contrib is the security’s change in market cap for that day, from open to close.
+---
+table: qa_index.IdxRlMkt
+domain: indices
+description: Russell Daily Market Values | This table contains Russell Daily Market Values data.
+update_cadence: Daily
+columns:
+- name: IdxCode
+  type: INTEGER
+  nullable: false
+  description: IdxCode cross-references idxinfo.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date of the index market values data.
+- name: Mkt
+  type: FLOAT
+  nullable: true
+  description: Mkt is the index market cap as of the day’s close.
+- name: AdjMkt
+  type: FLOAT
+  nullable: true
+  description: AdjMkt is the index market cap as of the next day’s open.
+- name: Divisor
+  type: FLOAT
+  nullable: true
+  description: Divisor is the index divisor as of the day’s close.
+- name: AdjDivisor
+  type: FLOAT
+  nullable: true
+  description: 'AdjDivisor is the index divisor as of the next day’s open. The standard formula to calculate index is: index
+    daily price = (index market value) / (index divisor).'
+---
+table: qa_index.IdxRpCmp
+domain: indices
+description: Russell MicroCap Daily Index Compositions | This table contains Russell Micro Cap Daily Index Compositions data.
+update_cadence: Daily
+columns:
+- name: IdxCode
+  type: INTEGER
+  nullable: false
+  description: IdxCode cross-references idxinfo.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date of index composition data.
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode is the security code. Cross-reference SecCode with prc.IdxSec where SecCode = prc.IdxSec.Code and prc.IdxSec.Vendor
+    = 2.
+- name: Industry
+  type: INTEGER
+  nullable: true
+  description: Industry provides the ICB Industry code. For more information, see IdxRlClsCode.
+- name: Sector1
+  type: INTEGER
+  nullable: true
+  description: Sector1 is the ICB Sector code. For more information, see IdxRlClsCode.
+- name: Sector2
+  type: INTEGER
+  nullable: true
+  description: Sector2 is the ICB Subsector code. For more information, see IdxRlClsCode.
+- name: Weight
+  type: FLOAT
+  nullable: true
+  description: Weight is the security’s weight, expressed in percent.
+- name: Shares
+  type: FLOAT
+  nullable: true
+  description: Shares is the security’s float shares used to calculate weight.
+- name: AdjWeight
+  type: FLOAT
+  nullable: true
+  description: AdjWeight and AdjShares represent the next day's compositions. As a result, the data in these columns are new
+    weights/shares as of the next day for any changed compositions. AdjShares float Y For more information about PrcCode2,
+    refer to the Quantitative Analytics Database Schema for IDC Pricing posted on the LSEG Quantitative Analytics product
+    page on MyAccount.
+---
+table: qa_index.IdxRpCtr
+domain: indices
+description: Russell MicroCap Daily Contributions | This table contains Russell Micro Cap Daily Index Compositions data.
+update_cadence: Daily
+columns:
+- name: IdxCode
+  type: INTEGER
+  nullable: false
+  description: IdxCode cross-references idxinfo.
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode is the security code. Cross-reference SecCode with prc.IdxSec where SecCode = prc.IdxSec.Code and prc.IdxSec.Vendor
+    = 2.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date of index contribution data.
+- name: BegVal
+  type: FLOAT
+  nullable: true
+  description: BegVal is the security’s market cap in the index, at the beginning of the day.
+- name: Contrib
+  type: FLOAT
+  nullable: true
+  description: Contrib is the security’s change in market cap for that day, from open to close.
+---
+table: qa_index.IdxRpMkt
+domain: indices
+description: Russell MicroCap Daily Market Values | This table contains Russell Micro Cap Daily Market Values data.
+update_cadence: Daily
+columns:
+- name: IdxCode
+  type: INTEGER
+  nullable: false
+  description: IdxCode cross-references idxinfo.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date of the index market values data. LSEG Quantitative Analytics Database Schema for Index Data
+    19
+- name: Mkt
+  type: FLOAT
+  nullable: true
+  description: Mkt is the index market cap as of the day’s close.
+- name: AdjMkt
+  type: FLOAT
+  nullable: true
+  description: AdjMkt is the index market cap as of the next day’s open.
+- name: Divisor
+  type: FLOAT
+  nullable: true
+  description: Divisor is the index divisor as of the day’s close.
+- name: AdjDivisor
+  type: FLOAT
+  nullable: true
+  description: 'AdjDivisor is the index divisor as of the next day’s open. The standard formula to calculate index is: index
+    daily price = (index market value) / (index divisor).'
+---
+table: qa_index.Idxrudly
+domain: indices
+description: Russell Daily Index Composition Data | This table contains Russell Daily Index Composition data.
+update_cadence: Daily
+columns:
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date of index contribution data.
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode is the primary link across all Idx* tables.
+- name: Return_
+  type: FLOAT
+  nullable: true
+  description: Return_ is the daily total return.
+- name: MTDReturn
+  type: FLOAT
+  nullable: true
+  description: MTDReturn is the month-to-date total return.
+- name: MktValue
+  type: FLOAT
+  nullable: true
+  description: MktValue is the market value based on total available shares.
+- name: GroShares
+  type: FLOAT
+  nullable: true
+  description: GroShares is the growth shares.
+- name: ValShares
+  type: FLOAT
+  nullable: true
+  description: ValShares is the value shares.
+- name: ShareChg
+  type: FLOAT
+  nullable: true
+  description: ShareChg is the daily change in total available shares. The following tables are part of the Russell Index
+    reconstitution process. Russell US Indexes reconstitutes its Indexes in Ju ne every year. The reconstitution changes impact
+    the current data model schema and will be implemented on the existing legacy implementation.
+---
+table: qa_index.IdxRuReconClsCode
+domain: indices
+description: Russell Daily Index Classification Codes | This table is similar in structure and definition to the IdxRlClsCode
+  table. The only difference is that
+update_cadence: As necessary
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is cross-referenced from other Russell tables. It is equivalent to Industry, Sector1, or Sector2.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: 'If no change in the industry or sector description has taken place, StartDate is the date the of the original
+    classification. If the industry or sector description has changed, this is the date the new classification began. Note:
+    Because Russell reclassified all records for reconstitution in this table, the initial StartDate for all records is 29
+    June 2009, unless the classification changed after 29 June 2009. LSEG Quantitative Analytics Database Schema for Index
+    Data 20'
+- name: CodeDesc
+  type: varchar(256)
+  nullable: true
+  description: For the records with start dates from 29 June 2009 to 20 September 2020, CodeDesc represents the description
+    of the industry or sector (RGS codes). For the records with start dates from 21 September 2020, this field represents
+    the description of industry, sector, subsector or supersector (ICB codes).
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the date a classification changed. If no EndDate is present, then the shown classification is current.
+    EndDate is given as the StartDate for the new classification, minus one day.
+---
+table: qa_index.IdxRuReconLegCmp
+domain: indices
+description: Russell Old Index Constituents (after | This table is no longer maintained. It is described for your reference,
+  but using this table is not recommended. | This table reflects constituents of the old index after reconstitution, and the
+  corresponding values, assuming no
+update_cadence: Daily
+columns:
+- name: IdxCode
+  type: INTEGER
+  nullable: false
+  description: IdxCode cross-references idxinfo.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the date of index composition data.
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode is the security code. Cross-reference SecCode with prc.IdxSec where SecCode = prc.IdxSec.Code and prc.IdxSec.Vendor
+    = 2.
+- name: Industry
+  type: SMALLINT
+  nullable: true
+  description: Industry describes the index industry. For more information, see IdxRlClsCode.
+- name: Sector1
+  type: SMALLINT
+  nullable: true
+  description: Sector1 is the index sector. For more information, see IdxRlClsCode.
+- name: Sector2
+  type: SMALLINT
+  nullable: true
+  description: Sector2 is the index sub-sector. For more information, see IdxRlClsCode.
+- name: Weight
+  type: FLOAT
+  nullable: true
+  description: Weight is the security’s weight, expressed in percent.
+- name: Shares
+  type: FLOAT
+  nullable: true
+  description: Shares is the security’s float shares used to calculate weight.
+- name: AdjWeight
+  type: FLOAT
+  nullable: true
+  description: AdjWeight and AdjShares represent the next day's compositions. As a result, the data in these columns are new
+    weights/shares as of the next day for any changed compositions. AdjShares float Y
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: 'LicFlag is the licensing flag. It can have the following values: – 1 = Russell Top 50 Index codes – 2 = Russell
+    Microcap Index codes – 4 = For remaining all Index codes LSEG Quantitative Analytics Database Schema for Index Data 21'
+---
+table: qa_index.IdxRuReconLegDly
+domain: indices
+description: Russell Daily Index Composition Data (after | This table is no longer maintained. It is described for your reference,
+  but using this table is not recommended. | This table reflects daily index composition data for securities after reconstitution,
+  assuming no changes are
+update_cadence: Daily
+columns:
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode is the security code. Cross-reference SecCode with prc.IdxSec where SecCode = prc.IdxSec.Code and prc.IdxSec.Vendor
+    = 2.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the date of index composition data.
+- name: Return_
+  type: FLOAT
+  nullable: true
+  description: Return_ is the price return.
+- name: MTDReturn
+  type: FLOAT
+  nullable: true
+  description: MTDReturn is the month to date total return.
+- name: MktValue
+  type: FLOAT
+  nullable: true
+  description: MktValue is the market value based on total available shares.
+- name: GroShares
+  type: FLOAT
+  nullable: true
+  description: GroShares is the growth shares.
+- name: ValShares
+  type: FLOAT
+  nullable: true
+  description: ValShares is the value shares.
+- name: ShareChg
+  type: FLOAT
+  nullable: true
+  description: ShareChg is the daily change in total available shares.
+---
+table: qa_index.IdxRuReconMem
+domain: indices
+description: Russell Index Member Constituents (after | This table indicates what constituents will be members of the index
+  after reconstitution.
+update_cadence: As necessary
+columns:
+- name: IdxCode
+  type: INTEGER
+  nullable: false
+  description: IdxCode cross-references IdxInfo.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the date of index composition data.
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode is the security code. Cross-reference SecCode with prc.IdxSec where SecCode = prc.IdxSec.Code and prc.IdxSec.Vendor
+    = 2.
+- name: Industry
+  type: SMALLINT
+  nullable: true
+  description: Industry describes the index industry. For more information, see IdxRlClsCode.
+- name: Sector1
+  type: SMALLINT
+  nullable: true
+  description: Sector1 is the index sector. For more information, see IdxRlClsCode.
+- name: Sector2
+  type: SMALLINT
+  nullable: true
+  description: Sector2 is the index sub-sector. For more information, see IdxRlClsCode.
+- name: Shares
+  type: FLOAT
+  nullable: true
+  description: Shares is the security’s float shares used to calculate weight.
+- name: ValShares
+  type: FLOAT
+  nullable: true
+  description: ValShares is the value shares.
+- name: GroShares
+  type: FLOAT
+  nullable: true
+  description: GroShares is the growth shares. LSEG Quantitative Analytics Database Schema for Index Data 22
+- name: ShareChg
+  type: FLOAT
+  nullable: true
+  description: ShareChg is the daily change in total available shares.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: 'LicFlag is the licensing flag. It can have the following values: – 1 = Russell Top 50 Index codes – 2 = Russell
+    Microcap Index codes – 4 = For remaining all Index codes'
+---
+table: qa_index.IdxRuReconMvmt
+domain: indices
+description: Russell Index Constituent Movements (during | This table reflects constituent movements within indexes during
+  reconstitution.
+update_cadence: As necessary
+columns:
+- name: IdxCode
+  type: INTEGER
+  nullable: false
+  description: IdxCode cross-references idxinfo.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the date of index composition data.
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode is the security code. Cross-reference SecCode with prc.IdxSec where SecCode = prc.IdxSec.Code and prc.IdxSec.Vendor
+    = 2.
+- name: AddDelFlag
+  type: char(1)
+  nullable: true
+  description: AddDelFlag indicates whether the particular security is newly added or deleted from the Index as part of the
+    reconstitution process.
+- name: SrcDestIdxName
+  type: varchar(15)
+  nullable: true
+  description: For AddDelFlag value “A”, SrcDestIdxName indicates the security’s index origin before being added to this Index.
+    For AddDelFlag value “D”, SrcDestIdxName indicates the security’s index destination afetr being deleted from this Index.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: 'LicFlag is the licensing flag. It can have the following values: – 1 = Russell Top 50 Index codes – 2 = Russell
+    Microcap Index codes – 4 = For remaining all Index codes'
+---
+table: qa_index.IdxRuReconPreCmp
+domain: indices
+description: Russell New Index Constituents (before | This table reflects constituents of the new index prior to reconstitution,
+  and the corresponding values, assuming
+update_cadence: Daily
+columns:
+- name: IdxCode
+  type: INTEGER
+  nullable: false
+  description: IdxCode cross-references IdxInfo.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the date of index composition data.
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode is the security code. Cross-reference SecCode with prc.IdxSec where SecCode = prc.IdxSec.Code and prc.IdxSec.Vendor
+    = 2.
+- name: Industry
+  type: SMALLINT
+  nullable: true
+  description: Industry describes the index industry. For more information, see IdxRlClsCode.
+- name: Sector1
+  type: SMALLINT
+  nullable: true
+  description: Sector1 is the index sector. For more information, see IdxRlClsCode.
+- name: Sector2
+  type: SMALLINT
+  nullable: true
+  description: Sector2 is the index sub-sector. For more information, see IdxRlClsCode.
+- name: Weight
+  type: FLOAT
+  nullable: true
+  description: Weight is the security’s weight, expressed in percent.
+- name: Shares
+  type: FLOAT
+  nullable: true
+  description: Shares is the security’s float shares used to calculate weight.
+- name: AdjWeight
+  type: FLOAT
+  nullable: true
+  description: AdjWeight and AdjShares represent the next day's compositions. As a result, the data in these columns are new
+    weights/shares as of the next day for any changed compositions. AdjShares float Y
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: 'LicFlag is the licensing flag. It can have the following values: – 1 = Russell Top 50 Index codes – 2 = Russell
+    Microcap Index codes – 4 = For remaining all Index codes'
+---
+table: qa_index.IdxRuReconPreDly
+domain: indices
+description: Russell Daily Index Composition Data (before | This table reflects daily index composition data for securities
+  prior to reconstitution, assuming reconstitution is | The table IdxSpGrp has been discontinued and should be disregarded.
+update_cadence: Daily
+columns:
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode is the security code. Cross-reference SecCode with prc.IdxSec where SecCode = prc.IdxSec.Code and prc.IdxSec.Vendor
+    = 2.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the date of index composition data.
+- name: Return_
+  type: FLOAT
+  nullable: true
+  description: Return_ is the price return.
+- name: MTDReturn
+  type: FLOAT
+  nullable: true
+  description: MTDReturn is the month to date total return.
+- name: MktValue
+  type: FLOAT
+  nullable: true
+  description: MktValue is the market value based on total available shares.
+- name: GroShares
+  type: FLOAT
+  nullable: true
+  description: GroShares is the growth shares.
+- name: ValShares
+  type: FLOAT
+  nullable: true
+  description: ValShares is the value shares.
+- name: ShareChg
+  type: FLOAT
+  nullable: true
+  description: ShareChg is the daily change in total available shares. LSEG Quantitative Analytics Database Schema for Index
+    Data 24 6. S&P Index Compositions Tables beginning with the prefix IdxSp* contain data on S&P indexes. See also S&P BMI
+    Index Data. The table IdxSpGrp has been discontinued and should be disregarded.
+---
+table: qa_index.IdxDiv
+domain: indices
+description: S&P Index Dividends | This table contains index dividend pricing.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code cross-references with IdxInfo where idxdiv.Code = idxinfo.Code.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item represents the dividend item and may be 1 (Index Dividend Impact) or 2 (Index Total Return).
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date is the date of index dividend data.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the daily value of the corresponding item.
+---
+table: qa_index.IdxSpCmp
+domain: indices
+description: S&P Index Compositions | This table contains S&P Index Compositions data. | from the table IdxSpDet to adjust
+  the shares data.
+update_cadence: Daily
+columns:
+- name: IdxCode
+  type: INTEGER
+  nullable: false
+  description: IdxCode cross-references IdxInfo.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date of index composition data
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode is the security code. Cross-reference SecCode with prc.IdxSec where SecCode = prc.IdxSec.Code and prc.IdxSec.Vendor
+    = 1.
+- name: Industry
+  type: SMALLINT
+  nullable: true
+  description: Industry cross-references with PrcCode2 where PrcCode2.Type_ = 8 and PrcCode2.Code = Industry.
+- name: Sector1
+  type: SMALLINT
+  nullable: true
+  description: Sector1 is the index sector. Sector1 cross-references with PrcCode2 where PrcCode2.Type_ in (9,12) and PrcCode2.Code
+    = Sector1. Type 12 is used currently and Type 9 historically. LSEG Quantitative Analytics Database Schema for Index Data
+    25
+- name: Sector2
+  type: SMALLINT
+  nullable: true
+  description: Sector2 is the index sub-sector. Sector2 cross-references with PrcCode2 where PrcCode2.Type_ = 9 and PrcCode2.Code
+    = Sector2.
+- name: Weight
+  type: FLOAT
+  nullable: true
+  description: Weight is the security’s weight, expressed in percent as of the day’s close.
+- name: Shares
+  type: FLOAT
+  nullable: true
+  description: Shares is the security’s shares used to calculate weight as of the day’s close. This value is displayed in
+    millions. Shares are stored float adjusted. To get shares outstanding, use the iwf factor from the table IdxSpDet to adjust
+    the shares data.
+- name: AdjWeight
+  type: FLOAT
+  nullable: true
+  description: AdjWeight is the security’s weight, expressed in percent as of the next day’s open.
+- name: AdjShares
+  type: FLOAT
+  nullable: true
+  description: AdjShares is the security’s shares used to calculate weight as of next day’s open. This value is displayed
+    in millions. For more information about PrcCode2, refer to the Quantitative Analytics Database Schema for IDC Pricing
+    posted on the LSEG Quantitative Analytics product page on MyAccount.
+join_hints:
+- to: PrcCode2
+  evidence: Industry smallint Y Industry cross-references with PrcCode2 where PrcCode2.Type_ = 8 and PrcCode2.Code = Industry.
+  type: cross_reference
+- to: PrcCode2
+  evidence: Sector1 cross-references with PrcCode2 where PrcCode2.Type_ in (9,12) and PrcCode2.Code = Sector1.
+  type: cross_reference
+- to: PrcCode2
+  evidence: Sector2 cross-references with PrcCode2 where PrcCode2.Type_ = 9 and PrcCode2.Code = Sector2.
+  type: cross_reference
+---
+table: qa_index.IdxSpCtr
+domain: indices
+description: S&P Contributions | This table contains S&P Contributions data.
+update_cadence: Daily
+columns:
+- name: IdxCode
+  type: INTEGER
+  nullable: false
+  description: IdxCode cross-references IdxInfo.
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode is the security code. Cross-reference SecCode with prc.IdxSec where SecCode = prc.IdxSec.Code and prc.IdxSec.Vendor
+    = 1.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date of index contribution data.
+- name: BegVal
+  type: FLOAT
+  nullable: true
+  description: BegVal is the security’s market cap in the index, at the beginning of the day.
+- name: Contrib
+  type: FLOAT
+  nullable: true
+  description: Contrib is the security’s change in market cap for that day, from open to close.
+---
+table: qa_index.IdxSpDet
+domain: indices
+description: S&P Index Detail | This table contains S&P Index Detail data.
+update_cadence: Daily
+columns:
+- name: IdxCode
+  type: INTEGER
+  nullable: false
+  description: IdxCode cross-references IdxInfo.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date of the index detail data.
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode is the security code. Cross-reference SecCode with prc.IdxSec where SecCode = prc.IdxSec.Code and prc.IdxSec.Vendor
+    = 1. Ric varchar (7) Y RIC is the LSEG Identification Code. BloomTkr varchar (7) Y BloomTkr is the Bloomberg ticker. Isin
+    varchar (12) Y Isin is the ISIN number. Sedol varchar (12) Y Sedol is the SEDOL. LSEG Quantitative Analytics Database
+    Schema for Index Data 26
+- name: PriceLot
+  type: FLOAT
+  nullable: true
+  description: PriceLot is the lot size for price quotes.
+- name: LocalPrice
+  type: FLOAT
+  nullable: true
+  description: LocalPrice is the local closing price. CurrCode varchar (5) Y CurrCode is the ISO Currency code of the currency
+    in which the closing price is stated.
+- name: FxRate
+  type: FLOAT
+  nullable: true
+  description: FxRate is the foreign exchange rate (local currency to index currency).
+- name: Iwf
+  type: FLOAT
+  nullable: true
+  description: Iwf is the investible weight factor. This is the float adjustment factor. To unadjust weight to not float adjusted,
+    divide weight by the Iwf.
+---
+table: qa_index.IdxSpGic
+domain: indices
+description: S&P Industry Group History by GIC | This table contains S&P Industry Group History by GIC.
+update_cadence: Daily
+columns:
+- name: IdxCode
+  type: INTEGER
+  nullable: false
+  description: IdxCode cross-references IdxInfo.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date of the S&P industry data.
+- name: GicCode
+  type: INTEGER
+  nullable: false
+  description: GicCode cross-references with PrcCode2 where GicCode = PrcCode2.Code and PrcCode2.Type_ = 12.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the closing index value.
+- name: OldMkt
+  type: FLOAT
+  nullable: true
+  description: OldMkt is the index market cap at close.
+- name: OldDiv
+  type: FLOAT
+  nullable: true
+  description: OldDiv is the index divisor at close.
+- name: OldNum
+  type: SMALLINT
+  nullable: true
+  description: OldNum is the number of constituents at close.
+- name: NewMkt
+  type: FLOAT
+  nullable: true
+  description: NewMkt is the index market cap following changes.
+- name: NewDiv
+  type: FLOAT
+  nullable: true
+  description: New Div is the index divisor following changes.
+- name: NewNum
+  type: SMALLINT
+  nullable: true
+  description: NewNum is the number of constituents following changes.
+- name: ChgFlag
+  type: TINYINT
+  nullable: true
+  description: ChgFlag indicates change in the group/industry components.
+- name: TotRet
+  type: FLOAT
+  nullable: true
+  description: TotRet is the index total return value. For more information about PrcCode2, refer to the Quantitative Analytics
+    Database Schema for IDC Pricing posted on the LSEG Quantitative Analytics product page on MyAccount.
+join_hints:
+- to: PrcCode2
+  evidence: GicCode int N GicCode cross-references with PrcCode2 where GicCode = PrcCode2.Code and PrcCode2.Type_ = 12.
+  type: cross_reference
+---
+table: qa_index.IdxSpGrp
+domain: indices
+description: S&P Industry Group History by Old Industry
+---
+table: qa_index.Classification
+domain: indices
+description: This is a legacy table containing old industry classifications. It has a cut-off date of 2/7/2002. Refer to IdxSpGic
+update_cadence: Does not update
+columns:
+- name: IdxCode
+  type: INTEGER
+  nullable: false
+  description: IdxCode cross-references IdxInfo. LSEG Quantitative Analytics Database Schema for Index Data 27
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date of the S&P industry data.
+- name: Group_
+  type: SMALLINT
+  nullable: false
+  description: Group_ cross-references with PrcCode2 where PrcCode2.Type_ = 8 and PrcCode.Code = Group_.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the item value.
+- name: OldMkt
+  type: FLOAT
+  nullable: true
+  description: OldMkt is the old industry group market value.
+- name: OldDiv
+  type: FLOAT
+  nullable: true
+  description: OldDiv is the old industry group divisor.
+- name: OldNum
+  type: SMALLINT
+  nullable: true
+  description: OldNum is the old industry group number of components.
+- name: NewMkt
+  type: FLOAT
+  nullable: true
+  description: NewMkt is the new industry group market value.
+- name: NewDiv
+  type: FLOAT
+  nullable: true
+  description: NewDiv is the new industry group divisor.
+- name: NewNum
+  type: SMALLINT
+  nullable: true
+  description: NewNum is the new industry group number of components.
+- name: ChgFlag
+  type: TINYINT
+  nullable: true
+  description: ChgFlag indicates a change in the industry group components. For more information about PrcCode2, refer to
+    the Quantitative Analytics Database Schema for IDC Pricing posted on the LSEG Quantitative Analytics product page on MyAccount.
+join_hints:
+- to: PrcCode2
+  evidence: Group_ smallint N Group_ cross-references with PrcCode2 where PrcCode2.Type_ = 8 and PrcCode.Code = Group_.
+  type: cross_reference
+---
+table: qa_index.IdxSPMkt
+domain: indices
+description: S&P Market Values | This table contains S&P Market Values data.
+update_cadence: Daily
+columns:
+- name: IdxCode
+  type: INTEGER
+  nullable: false
+  description: IdxCode cross-references IdxInfo.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date of the S&P market values data.
+- name: Mkt
+  type: FLOAT
+  nullable: true
+  description: Mkt is the index market cap as of the day’s close.
+- name: AdjMkt
+  type: FLOAT
+  nullable: true
+  description: AdjMkt is the index market cap as of the next day’s open.
+- name: Divisor
+  type: FLOAT
+  nullable: true
+  description: Divisor is the index divisor as of the day’s close.
+- name: AdjDivisor
+  type: FLOAT
+  nullable: true
+  description: 'AdjDivisor is the index divisor as of the next day’s open. The standard formula to calculate index is: index
+    daily price = (index market value) / (index divisor).'
+---
+table: qa_index.IdxSpOth
+domain: indices
+description: S&P Index Compositions Additional Constituent Data | This table contains S&P Index Compositions Additional Constituent
+  data.
+update_cadence: Daily
+columns:
+- name: IdxCode
+  type: INTEGER
+  nullable: false
+  description: IdxCode cross-references IdxInfo.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date of index composition data. LSEG Quantitative Analytics Database Schema for Index Data 28
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode is the security code. Cross-reference SecCode with prc.IdxSec where SecCode = prc.IdxSec.Code and prc.IdxSec.Vendor
+    = 1.
+- name: Price
+  type: FLOAT
+  nullable: true
+  description: Price is the security’s closing price (end of day).
+- name: MktCap
+  type: FLOAT
+  nullable: true
+  description: MktCap is the security’s market capitalization (end of day).
+- name: AdjPrice
+  type: FLOAT
+  nullable: true
+  description: AdjPrice is the security’s closing price (next day).
+- name: AdjMktCap
+  type: FLOAT
+  nullable: true
+  description: AdjMktCap is the security’s market capitalization (next day).
+- name: Beta
+  type: FLOAT
+  nullable: true
+  description: Beta is the security’s beta.
+- name: GicCode
+  type: INTEGER
+  nullable: true
+  description: GicCode cross-references with PrcCode2 where GicCode = PrcCode2.Code and PrcCode2.Type_ = 12.
+- name: Exchange
+  type: varchar(2)
+  nullable: true
+  description: Exchange is the exchange of the stock.
+- name: GroVal
+  type: varchar(1)
+  nullable: true
+  description: GroVal is the growth/value indicator where G is Growth and V is Value.
+- name: SP100
+  type: TINYINT
+  nullable: true
+  description: SP100 is the SP100 index membership flag. SP100 can be 0 (Part of SP500 only) or 1 (Part of SP100 also).
+- name: Fitu
+  type: varchar(1)
+  nullable: true
+  description: Fitu classifies the security as Financial/Industrial/Transportation/Utilities For more information about PrcCode2,
+    refer to the Quantitative Analytics Database Schema for IDC Pricing posted on the LSEG Quantitative Analytics product
+    page on MyAccount. LSEG Quantitative Analytics Database Schema for Index Data 29 7. S&P Broad Market Index (BMI) Data
+    All S&P Broad Market Index (BMI) tables have the prefix IdxBMI*. This data is comprised of the S&P Developed BMI and S&P
+    Emerging BMI indexes with hi
+join_hints:
+- to: PrcCode2
+  evidence: GicCode int Y GicCode cross-references with PrcCode2 where GicCode = PrcCode2.Code and PrcCode2.Type_ = 12.
+  type: cross_reference
+---
+table: qa_index.IdxBMIDesc
+domain: indices
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Type_ is a numeric code for a type of data.
+- name: Code
+  type: varchar(10)
+  nullable: false
+  description: Code is a coded value for an element of Type_. When Type_ = 0, Code is the numeric code for each Type_ other
+    than 0 and Desc_ is a description of each Type_.
+- name: Desc_
+  type: varchar(75)
+  nullable: true
+  description: Desc_ is a plain-language description of the element defined by Type_ and Code.
+---
+table: qa_index.IdxBMICode
+domain: indices
+description: S&P BMI Index Integer Code Lookup | This table contains S&P BMI Index integer code descriptions.
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Type_ is a numeric code for a type of data.
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is a coded value for an element of Type_. When Type_ = 0, Code is the numeric code for each Type_ other
+    than 0 and Desc_ is a description of each Type_.
+- name: Desc_
+  type: varchar(75)
+  nullable: true
+  description: Desc_ is a plain-language description of the element defined by Type_ and Code.
+---
+table: qa_index.IdxBMICtyRegMap
+domain: indices
+description: S&P BMI Index Country Region Mapping | This table contains data for mapping country regions.
+columns:
+- name: RegCode
+  type: char(3)
+  nullable: false
+  description: RegCode is the region code. RegCode cross-references with IdxBMIDesc.Code where IdxBMIDesc.Type_ = 14. LSEG
+    Quantitative Analytics Database Schema for Index Data 30
+- name: CtryCode
+  type: char(2)
+  nullable: false
+  description: CtryCode is the ISO country code. CtryCode cross-references with IdxBMIDesc.Code where IdxBMIDesc.Type_ = 4.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: If no change in the industry or sector description has taken place, StartDate is the date the of the original
+    classification. If the industry or sector description has changed, this is the date the new classification began.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the date a classification changed. If no EndDate is present, then the shown classification is current.
+    EndDate is given as the StartDate for the new classification, minus one day.
+join_hints:
+- to: IdxBMIDesc
+  evidence: RegCode cross-references with IdxBMIDesc.Code where IdxBMIDesc.Type_ = 14.
+  type: cross_reference
+- to: IdxBMIDesc
+  evidence: CtryCode cross-references with IdxBMIDesc.Code where IdxBMIDesc.Type_ = 4.
+  type: cross_reference
+---
+table: qa_index.IdxBMIDesc
+domain: indices
+description: S&P BMI Index Character Code Lookup | This table contains S&P BMI Index character code descriptions.
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Type_ is a numeric code for a type of data.
+- name: Code
+  type: varchar(10)
+  nullable: false
+  description: Code is a coded value for an element of Type_. When Type_ = 0, Code is the numeric code for each Type_ other
+    than 0 and Desc_ is a description of each Type_.
+- name: Desc_
+  type: varchar(75)
+  nullable: true
+  description: Desc_ is a plain-language description of the element defined by Type_ and Code.
+---
+table: qa_index.IdxBMIFxRate
+domain: indices
+description: S&P BMI Index Exchange Rates | This table contains information about exchange rates. | This diagram shows the
+  relationship between the index-level tables. Note that the table IdxBMIConst is shared
+columns:
+- name: CurrCode
+  type: INTEGER
+  nullable: false
+  description: CurrCode is the ISO currency code. CurrCode cross-references with IdxBMICode.Code where IdxBMICode.Type_ =
+    2. Cross-reference IdxBMICode.Desc with IdxBMIDesc.Code where IdxBMIDesc.Type_ = 3.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the effective date of data.
+- name: Rate
+  type: FLOAT
+  nullable: true
+  description: Rate is the WM spot rate.
+- name: Rate1MthFwd
+  type: FLOAT
+  nullable: true
+  description: Rate1MthFwd is the one-month forward rate. LSEG Quantitative Analytics Database Schema for Index Data 31 S&P
+    BMI Index-level Tables This diagram shows the relationship between the index-level tables. Note that the table IdxBMIConst
+    is shared between the index-level tables and the constituent-level tables described beginning on page 34. PK,FK1 IdxCode
+    LONG Name_ TEXT(200) IndexMnem TEXT(200) IndexKey TEXT(40) GICCode LONG CurrCode LONG ReturnCode SHORT ModDate DATETIME
+    PK IdxCode LONG PK StartDat
+join_hints:
+- to: IdxBMICode
+  evidence: CurrCode cross-references with IdxBMICode.Code where IdxBMICode.Type_ = 2.
+  type: cross_reference
+---
+table: qa_index.IdxBMIConst
+domain: indices
+columns:
+- name: IdxCode
+  type: INTEGER
+  nullable: false
+  description: IdxCode is the unique index identifier.
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode is the unique security identifier.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: If no change in the industry or sector description has taken place, StartDate is the date the of the original
+    classification. If the industry or sector description has changed, this is the date the new classification began.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the date a classification changed. If no EndDate is present, then the shown classification is current.
+    EndDate is given as the StartDate for the new classification, minus one day.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is the licensing flag. LSEG Quantitative Analytics Database Schema for Index Data 32
+---
+table: qa_index.IdxBMIConst
+domain: indices
+description: S&P BMI Index Constituents | This table contains constituent information for S&P BMI Indexes. | This table is
+  shared with S&P BMI constituent-level tables.
+columns:
+- name: IdxCode
+  type: INTEGER
+  nullable: false
+  description: IdxCode is the unique index identifier.
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode is the unique security identifier.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: If no change in the industry or sector description has taken place, StartDate is the date the of the original
+    classification. If the industry or sector description has changed, this is the date the new classification began.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the date a classification changed. If no EndDate is present, then the shown classification is current.
+    EndDate is given as the StartDate for the new classification, minus one day.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is the licensing flag. LSEG Quantitative Analytics Database Schema for Index Data 32
+---
+table: qa_index.IdxBMIDaily
+domain: indices
+description: S&P BMI Index Daily Information | This table contains daily S&P BMI Index data.
+columns:
+- name: IdxCode
+  type: INTEGER
+  nullable: false
+  description: IdxCode is the unique index identifier.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the effective date of data.
+- name: Close_
+  type: FLOAT
+  nullable: true
+  description: Close_ is the closing price of index.
+- name: MarketCap
+  type: FLOAT
+  nullable: true
+  description: MarketCap is the closing market cap of index.
+- name: AdjMktCap
+  type: FLOAT
+  nullable: true
+  description: AdjMktCap is the adjusted market cap of index.
+- name: Return_
+  type: FLOAT
+  nullable: true
+  description: Return_ is the day/day percent change.
+---
+table: qa_index.IdxBMIData
+domain: indices
+description: S&P BMI Index Level Data | This table contains S&P BMI Index data.
+columns:
+- name: IdxCode
+  type: INTEGER
+  nullable: false
+  description: IdxCode is the unique index identifier.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: If no change in the industry or sector description has taken place, StartDate is the date the of the original
+    classification. If the industry or sector description has changed, this is the date the new classification began.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the date a classification changed. If no EndDate is present, then the shown classification is current.
+    EndDate is given as the StartDate for the new classification, minus one day.
+- name: Divisor
+  type: FLOAT
+  nullable: true
+  description: Divisor is the index divisor at close.
+- name: AdjDivisor
+  type: FLOAT
+  nullable: true
+  description: AdjDivisor is the index divisor following changes.
+- name: SecCount
+  type: INTEGER
+  nullable: true
+  description: SecCount is the number of constituents at close.
+- name: AdjSecCount
+  type: INTEGER
+  nullable: true
+  description: AdjSecCount is the number of constituents following changes.
+---
+table: qa_index.IdxBMIDiv
+domain: indices
+description: S&P BMI Index Dividend Data | This table contains dividend data for S&P BMI Indexes.
+columns:
+- name: IdxCode
+  type: INTEGER
+  nullable: false
+  description: IdxCode is the unique index identifier.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the effective date of data.
+- name: Div
+  type: FLOAT
+  nullable: true
+  description: Div is the index dividend.
+---
+table: qa_index.IdxBMIInfo
+domain: indices
+description: S&P BMI Index Information | This table contains S&P BMI Index data, and links to idxinfo described on page 7.
+columns:
+- name: IdxCode
+  type: INTEGER
+  nullable: false
+  description: IdxCode is the unique index identifier.
+- name: Name_
+  type: varchar(200)
+  nullable: true
+  description: Name_ is the index name.
+- name: IndexMnem
+  type: varchar(200)
+  nullable: true
+  description: IndexMnem is the detailed index mnemonic.
+- name: IndexKey
+  type: varchar(40)
+  nullable: true
+  description: IndexKey is the S&P legacy index key. LSEG Quantitative Analytics Database Schema for Index Data 33
+- name: GICCode
+  type: INTEGER
+  nullable: true
+  description: Reserved for future development.
+- name: CurrCode
+  type: INTEGER
+  nullable: true
+  description: CurrCode is the ISO currency code. This field cross-references with IdxBMICode.Code where Type_ = 2. Cross-reference
+    IdxBMICode.Desc with IdxBMIDesc.Code where IdxBMIDesc.Type_ = 3.
+- name: ReturnCode
+  type: TINYINT
+  nullable: true
+  description: 'ReturnCode is the code for the return. ReturnCode may be: – 1 = P- = Primary Index (Price Return Index) –
+    2 = N- = Net Total Return – 3 = T- = Gross Total Return – 4 = PH = Hedged Index (Price Return Hedged) – 5 = NH = Hedged
+    Net Total Return – 6 = TH = Hedged Gross Total Return – 7 = D- = Dividend Return This field cross-references with IdxBMICode.Code
+    where Type_ = 5. The character codes are extracted from position 18-19 in the IndexKey field. For example, if IndexKey
+    = "SPGBBMBMI-USDFF--P-AR-'
+- name: ModDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: ModDate is the last modified date.
+---
+table: qa_index.IdxBMIMap
+domain: indices
+description: S&P BMI Index Variant Mapping | This table contains data for mapping S&P BMI Index variants.
+columns:
+- name: IdxCode
+  type: INTEGER
+  nullable: false
+  description: IdxCode is the unique index identifier.
+- name: ReturnCode
+  type: TINYINT
+  nullable: true
+  description: 'ReturnCode is the code for the return. ReturnCode may be: – 1 = P- = Primary Index (Price Return Index) –
+    2 = N- = Net Total Return – 3 = T- = Gross Total Return – 4 = PH = Hedged Index (Price Return Hedged) – 5 = NH = Hedged
+    Net Total Return – 6 = TH = Hedged Gross Total Return – 7 = D- = Dividend Return This field cross-references with IdxBMICode.Code
+    where Type_ = 5. The character codes are extracted from position 18-19 in the IndexKey field. For example, if IndexKey
+    = "SPGBBMBMI-USDFF--P-AR-'
+- name: ParentCode
+  type: INTEGER
+  nullable: true
+  description: ParentCode is the index of the parent (price return) index.
+join_hints:
+- to: IdxBMICode
+  evidence: 'ReturnCode may be: – 1 = P- = Primary Index (Price Return Index) – 2 = N- = Net Total Return – 3 = T- = Gross
+    Total Return – 4 = PH = Hedged Index (Price Return Hedged) – 5 = NH = Hedged Net Total Return – 6 = TH = Hedged Gross
+    Total Return – 7 = D- = Dividend Return This field cross-references with'
+  type: cross_reference
+- to: IdxBMICode
+  evidence: 'ReturnCode may be: – 1 = P- = Primary Index (Price Return Index) – 2 = N- = Net Total Return – 3 = T- = Gross
+    Total Return – 4 = PH = Hedged Index (Price Return Hedged) – 5 = NH = Hedged Net Total Return – 6 = TH = Hedged Gross
+    Total Return – 7 = D- = Dividend Return This field cross-references with'
+  type: cross_reference
+---
+table: qa_index.IdxBMIMth
+domain: indices
+description: S&P BMI Index Level Monthly Data | This table contains monthly S&P Index data. | The following diagram shows
+  the relationship between the S&P BMI constituent-level tables. Note that the table
+columns:
+- name: IdxCode
+  type: INTEGER
+  nullable: false
+  description: IdxCode is the security code.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the effective date of data.
+- name: PE
+  type: FLOAT
+  nullable: true
+  description: PE is the price to earnings ratio (P/E).
+- name: PriceToBook
+  type: FLOAT
+  nullable: true
+  description: PriceToBook is the price to book value ratio. LSEG Quantitative Analytics Database Schema for Index Data 34
+- name: DivYld
+  type: FLOAT
+  nullable: true
+  description: DivYld is the dividend yield.
+- name: PriceToCF
+  type: FLOAT
+  nullable: true
+  description: PriceToCF is the price to cash flow ratio.
+- name: PriceToSales
+  type: FLOAT
+  nullable: true
+  description: PriceToSales is the price to sales ratio.
+- name: ROE
+  type: FLOAT
+  nullable: true
+  description: ROE is the return on equity.
+- name: PE1YrFwd
+  type: FLOAT
+  nullable: true
+  description: PE1YrFwd is the 1-Year Forward P/E.
+- name: PE2YrFwd
+  type: FLOAT
+  nullable: true
+  description: PE2YrFwd is the 2-Year Forward P/E.
+- name: PE12MTrail
+  type: FLOAT
+  nullable: true
+  description: PE12MTrail is the 12-Month Trailing P/E.
+- name: ValueTraded
+  type: FLOAT
+  nullable: true
+  description: ValueTraded is the value at which it traded. S&P BMI Constituent-level Tables The following diagram shows the
+    relationship between the S&P BMI constituent-level tables. Note that the table IdxBMIConst is shared between the constituent-level
+    tables and the index-level tables described beginning on page 31. LSEG Quantitative Analytics Database Schema for Index
+    Data 35
+---
+table: qa_index.IdxBMICorAx
+domain: indices
+description: S&P BMI Constituent Corporate Actions (Future and Historical) | This table contains information on S&P BMI constituent
+  corporate actions, future (proposed) and historical. | The table below provides the Item Codes and corresponding Item Names.
+columns:
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode is the unique stock identifier.
+- name: EstEffDate
+  type: INTEGER
+  nullable: false
+  description: EstEffDate is the Ex-Date for this action; it can be historical or future.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item is the item code.
+- name: Seq
+  type: INTEGER
+  nullable: false
+  description: Seq is the sequence ID.
+- name: EventId
+  type: INTEGER
+  nullable: true
+  description: EventId is the S&P event ID.
+- name: Event_
+  type: varchar(20)
+  nullable: true
+  description: Event_ is the text describing change type.
+- name: Value_
+  type: varchar(250)
+  nullable: true
+  description: Value_ is the value as of EstEffDate.
+- name: LastModDate
+  type: INTEGER
+  nullable: true
+  description: LastModDate is the date of the last update.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is the licensing flag. The table below provides the Item Codes and corresponding Item Names. Item ItemName
+    1 Name 2 RIC 3 BloomTkr 4 Exchange 5 Ticker 6 CtryCode 7 GICCode 8 SecID 9 AdjFactor 10 Close_ 11 ISOCurrCode 12 SharesChg
+    13 Shares 14 IWF 15 IdxShares 16 Distribution 17 RegionCode 18 Growth 19 Value_ 20 PropertyCode 21 CapRngCode 22 Size
+    23 Comments 24 Add 25 Drop 26 ACQUIRERNAME 27 CASHAMOUNT 28 SPINTARGETNAME 29 SPINTARGETTICKER 30 SPINTARGETSTOCKKEY 31
+    SPINTARGETMIC 32 SPINTAR
+---
+table: qa_index.IdxBMISecAdj
+domain: indices
+description: S&P BMI Index Security Adjustments | This table contains information about security adjustments for S&P BMI Indexes.
+columns:
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode is the unique stock identifier.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the effective date of data.
+- name: Seq
+  type: INTEGER
+  nullable: false
+  description: Seq is the item sequence number.
+- name: EventID
+  type: INTEGER
+  nullable: true
+  description: EventID is the adjustment ID provided by S&P.
+- name: AdjFactor
+  type: FLOAT
+  nullable: true
+  description: AdjFactor is the split adjustment factor for per-share data.
+- name: SharesChg
+  type: BIGINT
+  nullable: true
+  description: SharesChg is the adjustment for shares.
+- name: CumAdjFactor
+  type: FLOAT
+  nullable: true
+  description: CumAdjFactor is the cumulative adjustment factor.
+- name: CumShareChg
+  type: BIGINT
+  nullable: true
+  description: CumShareChg is the cumulative share change.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is the licensing flag.
+---
+table: qa_index.IdxBMISecDaily
+domain: indices
+description: S&P BMI Index Security Level Daily Data | This table contains daily security-level S&P BMI Index data.
+columns:
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode is the unique stock identifier.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the effective date of data.
+- name: CurrCode
+  type: INTEGER
+  nullable: true
+  description: CurrCode is the ISO currency code. CurrCode cross-references with IdxBMICode.Code where IdxBMICode.Type_ =
+    2. Cross-reference IdxBMICode.Desc with IdxBMIDesc.Code where IdxBMIDesc.Type_ = 3.
+- name: PriceLot
+  type: INTEGER
+  nullable: true
+  description: PriceLot is the lot size for price quotes.
+- name: Close_
+  type: FLOAT
+  nullable: true
+  description: Close_ is the closing price of the security in the local currency.
+- name: AdjClose_
+  type: FLOAT
+  nullable: true
+  description: AdjClose_ is the adjusted closing price of the security in the local currency.
+- name: MarketCap
+  type: FLOAT
+  nullable: true
+  description: MarketCap is the unadjusted constituent market cap in USD.
+- name: AdjMarketCap
+  type: FLOAT
+  nullable: true
+  description: AdjMarketCap is the adjusted constituent market cap in USD.
+- name: PriceReturn
+  type: FLOAT
+  nullable: true
+  description: PriceReturn is the price return.
+- name: TotalReturn
+  type: FLOAT
+  nullable: true
+  description: TotalReturn is the total return.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is the licensing flag.
+join_hints:
+- to: IdxBMICode
+  evidence: CurrCode cross-references with IdxBMICode.Code where IdxBMICode.Type_ = 2.
+  type: cross_reference
+---
+table: qa_index.IdxBMISecDiv
+domain: indices
+description: S&P BMI Index Security Dividend | This table contains security dividend data for S&P Indexes.
+columns:
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode is the unique stock identifier.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the effective date of data.
+- name: Div
+  type: FLOAT
+  nullable: true
+  description: Div is the index dividend.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is the licensing flag. LSEG Quantitative Analytics Database Schema for Index Data 37
+---
+table: qa_index.IdxBMISecFlags
+domain: indices
+description: S&P BMI Index Security Level Inclusion Flags | This table contains security-level inclusion flag data for S&P
+  Indexes.
+columns:
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode is the unique stock identifier.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: If no change in the industry or sector description has taken place, StartDate is the date the of the original
+    classification. If the industry or sector description has changed, this is the date the new classification began.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the date a classification changed. If no EndDate is present, then the shown classification is current.
+    EndDate is given as the StartDate for the new classification, minus one day.
+- name: RegionCode
+  type: TINYINT
+  nullable: true
+  description: RegionCode indicates the region is classified as developed (1) or emerging (2).
+- name: Growth
+  type: FLOAT
+  nullable: true
+  description: Growth is the growth factor.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the value factor.
+- name: PropertyCode
+  type: varchar(4)
+  nullable: true
+  description: PropertyCode is the property type. PropertyCode cross-references with IdxBMIDesc.Code where IdxBMIDesc.Type_
+    = 1.
+- name: CapRngCode
+  type: varchar(10)
+  nullable: true
+  description: CapRngCode is the cap range identifier. Cross-reference CapRngCode with IdxBMIDesc.Code where IdxBMIDesc.Type_
+    = 15.
+- name: Size_
+  type: char(1)
+  nullable: true
+  description: Size_ indicates the market size as S (small), M (medium), L (large), or X (extra-large).
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is the licensing flag.
+join_hints:
+- to: IdxBMIDesc
+  evidence: PropertyCode cross-references with IdxBMIDesc.Code where IdxBMIDesc.Type_ = 1.
+  type: cross_reference
+---
+table: qa_index.IdxBMISecInfo
+domain: indices
+description: S&P BMI Index Security Level Information | This table contains information on S&P Index securities.
+columns:
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode is the unique stock identifier.
+- name: Name
+  type: varchar(200)
+  nullable: true
+  description: Name is the company name.
+- name: RIC
+  type: varchar(20)
+  nullable: true
+  description: RIC is the LSEG Identification Code.
+- name: BloomTkr
+  type: varchar(20)
+  nullable: true
+  description: BloomTkr is the Bloomberg ticker.
+- name: Cusip
+  type: char(8)
+  nullable: true
+  description: Cusip is the CUSIP identifier of the index.
+- name: ISIN
+  type: char(12)
+  nullable: true
+  description: ISIN is the ISIN of the index.
+- name: Sedol
+  type: char(6)
+  nullable: true
+  description: Sedol is the SEDOL of the index.
+- name: Exchange
+  type: char(4)
+  nullable: true
+  description: Exchange is the SEDOL market identifier.
+- name: Ticker
+  type: varchar(20)
+  nullable: true
+  description: Ticker is the ticker on the exchange where constituent is traded.
+- name: CntyCode
+  type: char(2)
+  nullable: true
+  description: CntyCode is the ISO Country Code of domicile country. CtryCode is the ISO country code. CtryCode cross-references
+    with IdxBMIDesc.Code where IdxBMIDesc.Type_ = 4.
+- name: GICCode
+  type: INTEGER
+  nullable: true
+  description: GICCode is the GIC industry classification. Cross-reference GICCode with IdxBMIDesc.Code where IdxBMIDesc.Type_
+    = 2.
+- name: GVKey
+  type: INTEGER
+  nullable: true
+  description: GVKey is the GV Key.
+- name: IID
+  type: varchar(4)
+  nullable: true
+  description: IID is the instrument identifier.
+- name: SecID
+  type: char(10)
+  nullable: true
+  description: SecID is the security identifier.
+- name: LegacyKey
+  type: varchar(25)
+  nullable: true
+  description: LegacyKey is the legacy stock identifier. As of April 5, 2011, the LegacyKey LSEG Quantitative Analytics Database
+    Schema for Index Data 38
+- name: StockKey
+  type: INTEGER
+  nullable: true
+  description: StockKey is the unique stock identifier.
+- name: ModDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: ModDate is the last modified date.
+---
+table: qa_index.IdxBMISecInfoChg
+domain: indices
+description: S&P BMI Index Security Level Information Changes | This table contains security information change data for S&P
+  BMI Indexes.
+columns:
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode is the unique stock identifier.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: If no change in the industry or sector description has taken place, StartDate is the date the of the original
+    classification. If the industry or sector description has changed, this is the date the new classification began.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the date a classification changed. If no EndDate is present, then the shown classification is current.
+    EndDate is given as the StartDate for the new classification, minus one day.
+- name: Name
+  type: varchar(200)
+  nullable: true
+  description: Name is the company name.
+- name: RIC
+  type: varchar(20)
+  nullable: true
+  description: RIC is the LSEG Identification Code.
+- name: BloomTkr
+  type: varchar(20)
+  nullable: true
+  description: BloomTkr is the Bloomberg ticker.
+- name: Cusip
+  type: char(8)
+  nullable: true
+  description: Cusip is the CUSIP identifier of the index.
+- name: ISIN
+  type: char(12)
+  nullable: true
+  description: ISIN is the ISIN of the index
+- name: Sedol
+  type: char(6)
+  nullable: true
+  description: Sedol is the SEDOL of the index.
+- name: Exchange
+  type: char(4)
+  nullable: true
+  description: Exchange is the SEDOL market identifier.
+- name: Ticker
+  type: varchar(20)
+  nullable: true
+  description: Ticker is the ticker on exchange where constituent is traded.
+- name: CntyCode
+  type: char(2)
+  nullable: true
+  description: CntyCode is the ISO Country Code of domicile country. CtryCode is the ISO country code. CtryCode cross-references
+    with IdxBMIDesc.Code where IdxBMIDesc.Type_ = 4.
+- name: GICCode
+  type: INTEGER
+  nullable: true
+  description: GICCode is the GIC industry classification. Cross-reference GICCode with IdxBMIDesc.Code where IdxBMIDesc.Type_
+    = 2.
+- name: GVKey
+  type: INTEGER
+  nullable: true
+  description: GVKey is the GV Key.
+- name: IID
+  type: varchar(4)
+  nullable: true
+  description: IID is the instrument identifier.
+- name: SecID
+  type: char(10)
+  nullable: true
+  description: SecID is the security identifier.
+- name: LegacyKey
+  type: varchar(25)
+  nullable: true
+  description: LegacyKey is the legacy stock identifier. As of April 5, 2011, the LegacyKey
+- name: StockKey
+  type: INTEGER
+  nullable: true
+  description: StockKey is the unique stock identifier.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is the licensing flag.
+---
+table: qa_index.IdxBMISecMth
+domain: indices
+description: S&P BMI Index Security Level Monthly Data | This table contains monthly data at the security level on S&P BMI
+  Indexes. Historical monthly data is available
+columns:
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode is the security code.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the effective date of data.
+- name: PE
+  type: FLOAT
+  nullable: true
+  description: PE is the price-earnings ratio (P/E).
+- name: PriceToBook
+  type: FLOAT
+  nullable: true
+  description: PriceToBook is the price-book value ratio (P/BV).
+- name: PriceToCF
+  type: FLOAT
+  nullable: true
+  description: PriceToCF is the Cash Flow for the current fiscal year.
+- name: PriceToSales
+  type: FLOAT
+  nullable: true
+  description: PriceToSales is the price to sales ratio for the current fiscal year.
+- name: DivYield
+  type: FLOAT
+  nullable: true
+  description: DivYield is the dividend/yield for the last 12 months. LSEG Quantitative Analytics Database Schema for Index
+    Data 39
+- name: High
+  type: FLOAT
+  nullable: true
+  description: High is the high price.
+- name: Low
+  type: FLOAT
+  nullable: true
+  description: Low is the low price.
+- name: ValueTraded
+  type: FLOAT
+  nullable: true
+  description: ValueTraded is the total value traded in millions.
+- name: SharesTraded
+  type: FLOAT
+  nullable: true
+  description: SharesTraded is the number of shares traded.
+- name: DaysTraded
+  type: INTEGER
+  nullable: true
+  description: DaysTraded is the number of days traded.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is the licensing flag.
+---
+table: qa_index.IdxBMISecShares
+domain: indices
+description: S&P BMI Index Security Shares | This table contains security shares data for S&P BMI Indexes.
+columns:
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode is the unique stock identifier.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: If no change in the industry or sector description has taken place, StartDate is the date the of the original
+    classification. If the industry or sector description has changed, this is the date the new classification began.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the date a classification changed. If no EndDate is present, then the shown classification is current.
+    EndDate is given as the StartDate for the new classification, minus one day.
+- name: Shares
+  type: BIGINT
+  nullable: true
+  description: Shares is the number of shares outstanding.
+- name: AdjShares
+  type: BIGINT
+  nullable: true
+  description: AdjShares is the number of adjusted shares outstanding.
+- name: IWF
+  type: FLOAT
+  nullable: true
+  description: IWF is the investible weight factor.
+- name: AdjIWF
+  type: FLOAT
+  nullable: true
+  description: AdjIWF is the adjusted investible weight factor.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is the licensing flag.
+---
+table: qa_index.IdxBMISecWeights
+domain: indices
+description: S&P BMI Index Security Weights (Index-Dependent) | This table contains security weights data for S&P BMI Indexes.
+  Note that this information is index-dependent.
+update_cadence: Daily
+columns:
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode is the unique stock identifier.
+- name: IndexFamCode
+  type: TINYINT
+  nullable: false
+  description: IndexFamCode is the Index Family identifier. IndexFamCode cross- references with IdxBMICode.Code where IdxBMICode.Type_
+    = 4.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the effective date of data.
+- name: IndexNumShares
+  type: FLOAT
+  nullable: true
+  description: IndexNumShares is the total adjusted shares (except Growth and Value Indices) for the Index Family.
+- name: IndexWeight
+  type: FLOAT
+  nullable: true
+  description: IndexWeight is the total security weight in Index Family.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is the licensing flag. LSEG Quantitative Analytics Database Schema for Index Data 40 8. S&P ASX – Australian
+    Index S&P ASX index tables have the prefix IdxSPG*. Security-level ASX tables have the prefix IdxSPGSec*. SPG represents
+    S&P Global. reported. S&P ASX Index Lookup Tables
+---
+table: qa_index.IdxSPGCode
+domain: indices
+description: S&P ASX Index Code Lookups | This table contains information on S&P ASX index codes.
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Type_ is a numeric code for a type of data.
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is a coded value for an element of Type_. When Type_ = 0, Code is the numeric code for each Type_ other
+    than 0 and Desc_ is a description of each Type_.
+- name: Desc_
+  type: varchar(75)
+  nullable: true
+  description: Desc_ is a plain-language description of the element defined by Type_ and Code.
+---
+table: qa_index.IdxSPGDesc
+domain: indices
+description: S&P Index Code Lookups | This table contains information on S&P index code lookups.
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Type_ is a numeric code for a type of data.
+- name: Code
+  type: varchar(10)
+  nullable: false
+  description: Code is a coded value for an element of Type_. When Type_ = 0, Code is the numeric code for each Type_ other
+    than 0 and Desc_ is a description of each Type_.
+- name: Desc_
+  type: varchar(75)
+  nullable: true
+  description: Desc_ is a plain-language description of the element defined by Type_ and Code. S&P ASX Index-level Tables
+---
+table: qa_index.IdxSPGConst
+domain: indices
+description: S&P ASX Index Constituents | This table contains information on S&P ASX index constituents.
+columns:
+- name: IdxCode
+  type: INTEGER
+  nullable: false
+  description: IdxCode is the index identifier.
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode s the unique stock identifier. LSEG Quantitative Analytics Database Schema for Index Data 41
+- name: StartDate
+  type: INTEGER
+  nullable: false
+  description: If no change in the industry or sector description has taken place, StartDate is the date the of the original
+    classification. If the industry or sector description has changed, this is the date the new classification began.
+- name: EndDate
+  type: INTEGER
+  nullable: true
+  description: EndDate is the date a classification changed. If no EndDate is present, then the shown classification is current.
+    EndDate is given as the StartDate for the new classification, minus one day.
+- name: LicFlagI
+  type: INTEGER
+  nullable: true
+  description: LicFlagI is the index licensing flag.
+- name: LicFlagC
+  type: INTEGER
+  nullable: true
+  description: LicFlagC is the security licensing flag.
+---
+table: qa_index.IdxSPGCorAx
+domain: indices
+description: S&P ASX Constituent Corporate Actions (Future and Historical) | This table contains information on S&P ASX constituent
+  corporate actions, future (proposed) and historical.
+columns:
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode is the unique stock identifier.
+- name: IdxFamCode
+  type: INTEGER
+  nullable: false
+  description: IdxFamCode indicates the index family. Cross-reference IdxFamCode with IdxSPGCode.Code where Type_ = 3.
+- name: EstEffDate
+  type: INTEGER
+  nullable: false
+  description: EstEffDate is the Ex-Date for this action; it can be historical or future.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item is the item code.
+- name: Seq
+  type: INTEGER
+  nullable: false
+  description: Seq is the sequence ID.
+- name: EventId
+  type: INTEGER
+  nullable: true
+  description: EventId is the S&P event ID.
+- name: Event_
+  type: varchar(20)
+  nullable: true
+  description: Event_ is the text describing change type.
+- name: Value_
+  type: varchar(250)
+  nullable: true
+  description: Value_ is the value as of EstEffDate.
+- name: LastModDate
+  type: INTEGER
+  nullable: true
+  description: LastModDate is the date of the last update.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is the licensing flag.
+---
+table: qa_index.IdxSPGDaily
+domain: indices
+description: S&P ASX Index Daily Information | This table contains S&P ASX index daily information.
+columns:
+- name: IdxCode
+  type: INTEGER
+  nullable: false
+  description: IdxCode is the index identifier.
+- name: Date_
+  type: INTEGER
+  nullable: false
+  description: Date_ is the effective date of data.
+- name: Close_
+  type: FLOAT
+  nullable: true
+  description: Close_ is the closing price of index.
+- name: MarketCap
+  type: FLOAT
+  nullable: true
+  description: MarketCap is the closing market cap of index.
+- name: AdjMktCap
+  type: FLOAT
+  nullable: true
+  description: AdjMktCap is the adjusted market cap of index.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is the index-level license flag.
+---
+table: qa_index.IdxSPGData
+domain: indices
+description: S&P ASX Index Level Data | This table contains S&P ASX index-level data.
+columns:
+- name: IdxCode
+  type: INTEGER
+  nullable: false
+  description: IdxCode is the unique index identifier.
+- name: StartDate
+  type: INTEGER
+  nullable: false
+  description: If no change in the industry or sector description has taken place, StartDate is the date the of the original
+    classification. If the industry or sector description has changed, this is the date the new classification began. LSEG
+    Quantitative Analytics Database Schema for Index Data 42
+- name: EndDate
+  type: INTEGER
+  nullable: true
+  description: EndDate is the date a classification changed. If no EndDate is present, then the shown classification is current.
+    EndDate is given as the StartDate for the new classification, minus one day.
+- name: Divisor
+  type: FLOAT
+  nullable: true
+  description: Divisor is the index divisor at close.
+- name: AdjDivisor
+  type: FLOAT
+  nullable: true
+  description: AdjDivisor is the index divisor following changes.
+- name: SecCount
+  type: INTEGER
+  nullable: true
+  description: SecCount is the number of constituents at close.
+- name: AdjSecCount
+  type: INTEGER
+  nullable: true
+  description: AdjSecCount number of constituents following changes.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is the index-level license flag.
+---
+table: qa_index.IdxSPGDiv
+domain: indices
+description: S&P ASX Index Dividend Data | This table contains S&P ASX index dividend data.
+columns:
+- name: IdxCode
+  type: INTEGER
+  nullable: false
+  description: IdxCode is the index identifier.
+- name: Date_
+  type: INTEGER
+  nullable: false
+  description: Date_ is the effective date of data.
+- name: Div
+  type: FLOAT
+  nullable: true
+  description: Div is the index dividend.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is the index-level license flag.
+---
+table: qa_index.IdxSPGFamRtn
+domain: indices
+description: S&P ASX Supported Return Types | This table indicates what return types are supported by each index family.
+columns:
+- name: IdxFamCode
+  type: INTEGER
+  nullable: false
+  description: IdxFamCode indicates the index family. Cross-reference IdxFamCode with IdxSPGCode.Code where Type_ = 3.
+- name: ReturnCode
+  type: TINYINT
+  nullable: false
+  description: ReturnCode is the code for the return. ReturnCode cross-references with IdxSPGCode.Code where Type_ = 4.
+---
+table: qa_index.IdxSPGInfo
+domain: indices
+description: S&P ASX Index Information | This table contains S&P index information.
+columns:
+- name: IdxCode
+  type: INTEGER
+  nullable: false
+  description: IdxCode is the unique index identifier.
+- name: Name_
+  type: varchar(200)
+  nullable: true
+  description: Name_ is the index name.
+- name: IndexMnem
+  type: varchar(100)
+  nullable: true
+  description: IndexMnem is the legacy S&P index code.
+- name: IndexKey
+  type: varchar(40)
+  nullable: true
+  description: IndexKey is the S&P index key*.
+- name: GICCode
+  type: varchar(8)
+  nullable: true
+  description: GICCode is the GICS classification. Cross-reference GICCode with IdxSPGDesc.Code where Type_ = 2.
+- name: ISOCurrCode
+  type: char(3)
+  nullable: true
+  description: ISOCurrCode is the ISO currency code. Cross-reference ISOCurrCode with IdxSPGDesc.Code where Type_ = 3.
+- name: ReturnCode
+  type: TINYINT
+  nullable: true
+  description: ReturnCode is the code for the return. ReturnCode cross-references with IdxSPGCode.Code where Type_ = 4.
+- name: IdxFamCode
+  type: INTEGER
+  nullable: true
+  description: IdxFamCode indicates the index family. Cross-reference IdxFamCode with IdxSPGCode.Code where Type_ = 3.
+- name: ParentCode
+  type: INTEGER
+  nullable: true
+  description: ParentCode indicates the parent index. Cross-reference ParentCode with IdxCode, above. LSEG Quantitative Analytics
+    Database Schema for Index Data 43
+- name: IdxPkgCode
+  type: SMALLINT
+  nullable: true
+  description: IdxPkgCode indicates the index package, for example ASX or ASX Plus. Cross-reference IdxPkgCode with IdxSPGCode.Code
+    where Type_ = 5.
+- name: HdlnCode
+  type: INTEGER
+  nullable: true
+  description: HdlnCode is the headline index code. HdlnCode cross-references IdxCode, above, for the headline index.
+- name: ModDate
+  type: INTEGER
+  nullable: true
+  description: ModDate is the last modified date.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is the index-level license flag.
+join_hints:
+- to: IdxSPGCode
+  evidence: ReturnCode cross-references with IdxSPGCode.Code where Type_ = 4.
+  type: cross_reference
+- to: IdxSPGCode
+  evidence: ReturnCode cross-references with IdxSPGCode.Code where Type_ = 4.
+  type: cross_reference
+---
+table: qa_index.IdxSPGISINChg
+domain: indices
+description: S&P ISIN Changes | This table contains information on S&P ISIN changes.
+columns:
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode is the unique stock identifier.
+- name: StartDate
+  type: INTEGER
+  nullable: false
+  description: If no change in the industry or sector description has taken place, StartDate is the date the of the original
+    classification. If the industry or sector description has changed, this is the date the new classification began.
+- name: EndDate
+  type: INTEGER
+  nullable: true
+  description: EndDate is the date a classification changed. If no EndDate is present, then the shown classification is current.
+    EndDate is given as the StartDate for the new classification, minus one day.
+- name: ISIN
+  type: char(12)
+  nullable: true
+  description: ISIN is the ISIN of the index.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is the security licensing flag.
+---
+table: qa_index.IdxSPGRtn
+domain: indices
+description: S&P ASX Index Return Daily Information | This table contains S&P ASX index return daily information.
+columns:
+- name: IdxCode
+  type: INTEGER
+  nullable: false
+  description: IdxCode is the index identifier.
+- name: Date_
+  type: INTEGER
+  nullable: false
+  description: Date_ is the effective date of data.
+- name: ReturnCode
+  type: TINYINT
+  nullable: true
+  description: ReturnCode is the code for the return. ReturnCode cross-references with IdxSPGCode.Code where Type_ = 4.
+- name: Return_
+  type: FLOAT
+  nullable: true
+  description: Return_ is the price return.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is the index-level license flag. S&P ASX Constituent-level Tables
+join_hints:
+- to: IdxSPGCode
+  evidence: ReturnCode cross-references with IdxSPGCode.Code where Type_ = 4.
+  type: cross_reference
+---
+table: qa_index.IdxSPGSecAdj
+domain: indices
+description: S&P ASX Security Adjustments | This table contains information on S&P ASX security adjustments.
+columns:
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode is the unique stock identifier.
+- name: IdxFamCode
+  type: INTEGER
+  nullable: false
+  description: IdxFamCode indicates the index family. Cross-reference IdxFamCode with IdxSPGCode.Code where Type_ = 3.
+- name: Date_
+  type: INTEGER
+  nullable: false
+  description: Date_ is the effective date.
+- name: Seq
+  type: INTEGER
+  nullable: false
+  description: Seq is the item sequence number.
+- name: EventId
+  type: INTEGER
+  nullable: true
+  description: EventId is the adjustment ID provided by the vendor.
+- name: AdjFactor
+  type: FLOAT
+  nullable: true
+  description: AdjFactor is the split adjustment factor for per-share data. LSEG Quantitative Analytics Database Schema for
+    Index Data 44
+- name: SharesChg
+  type: FLOAT
+  nullable: true
+  description: SharesChg is the adjustment for shares.
+- name: CumAdjFactor
+  type: FLOAT
+  nullable: true
+  description: CumAdjFactor is the cumulative adjustment factor.
+- name: CumShareChg
+  type: FLOAT
+  nullable: true
+  description: CumShareChg is the cumulative share change.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is the security licensing flag.
+---
+table: qa_index.IdxSPGSecChg
+domain: indices
+description: S&P Index Security Level Information Changes | This table contains changes in S&P index security-level information.
+columns:
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode is the unique stock identifier.
+- name: StartDate
+  type: INTEGER
+  nullable: false
+  description: If no change in the industry or sector description has taken place, StartDate is the date the of the original
+    classification. If the industry or sector description has changed, this is the date the new classification began.
+- name: EndDate
+  type: INTEGER
+  nullable: true
+  description: EndDate is the date a classification changed. If no EndDate is present, then the shown classification is current.
+    EndDate is given as the StartDate for the new classification, minus one day.
+- name: Name_
+  type: varchar(200)
+  nullable: true
+  description: Name is the company name.
+- name: RIC
+  type: varchar(20)
+  nullable: true
+  description: RIC is the LSEG Identification Code.
+- name: BloomTkr
+  type: varchar(20)
+  nullable: true
+  description: BloomTkr is the Bloomberg Ticker.
+- name: Exchange
+  type: char(4)
+  nullable: true
+  description: Exchange is the SEDOL market identifier.
+- name: Ticker
+  type: varchar(20)
+  nullable: true
+  description: Ticker is the ticker on exchange where constituent is traded.
+- name: CtryCode
+  type: char(2)
+  nullable: true
+  description: CtryCode is the ISO country code of domicile country.
+- name: GICCode
+  type: INTEGER
+  nullable: true
+  description: GICCode is the GICS classification. Cross-reference GICCode with IdxSPGDesc.Code where Type_ = 2.
+- name: GVKey
+  type: INTEGER
+  nullable: true
+  description: GVKey is the GV Key.
+- name: IID
+  type: varchar(4)
+  nullable: true
+  description: IID is the instrument identifier.
+- name: SecID
+  type: varchar(10)
+  nullable: true
+  description: SecID is the security identifier.
+- name: LegacyKey
+  type: varchar(25)
+  nullable: true
+  description: LegacyKey is the legacy stock identifier. As of April 5, 2011, the LegacyKey field has been discontinued.
+- name: StockKey
+  type: INTEGER
+  nullable: true
+  description: StockKey is the unique stock identifier.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is the security-level licensing flag.
+---
+table: qa_index.IdxSPGSecDaily
+domain: indices
+description: S&P Security Level Daily Data | This table contains S&P security-level daily data.
+columns:
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode s the unique stock identifier.
+- name: IdxFamCode
+  type: INTEGER
+  nullable: false
+  description: IdxFamCode indicates the index family. Cross-reference IdxFamCode with IdxSPGCode.Code where Type_ = 3.
+- name: Date_
+  type: INTEGER
+  nullable: false
+  description: Date_ is the effective date.
+- name: ISOCurrCode
+  type: char(3)
+  nullable: true
+  description: ISOCurrCode is the ISO currency code. Cross-reference ISOCurrCode with IdxSPGDesc.Code where Type_ = 3.
+- name: MarketCap
+  type: FLOAT
+  nullable: true
+  description: MarketCap is the constituent market cap – unadjusted.
+- name: AdjMarketCap
+  type: FLOAT
+  nullable: true
+  description: AdjMarketCap is the unadjusted Adjusted Constituent Market Cap.
+- name: Return_
+  type: FLOAT
+  nullable: true
+  description: Return_ is the price return. LSEG Quantitative Analytics Database Schema for Index Data 45
+- name: TotReturn
+  type: FLOAT
+  nullable: true
+  description: TotReturn total return.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is the security licensing flag.
+---
+table: qa_index.IdxSPGSecDiv
+domain: indices
+description: S&P Index Security Dividend | This table contains S&P Index security dividend information.
+columns:
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode s the unique stock identifier.
+- name: Date_
+  type: INTEGER
+  nullable: false
+  description: Date_ is the effective date.
+- name: ISOCurrCode
+  type: char(3)
+  nullable: true
+  description: ISOCurrCode is the ISO currency code. Cross-reference ISOCurrCode with IdxSPGDesc.Code where Type_ = 3.
+- name: Div
+  type: FLOAT
+  nullable: true
+  description: Div is the index dividend.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is the security licensing flag.
+---
+table: qa_index.IdxSPGSecFlags
+domain: indices
+description: S&P Index Security Level Inclusion Flags | This table contains information on S&P index security-level inclusion
+  flags.
+columns:
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode s the unique stock identifier.
+- name: IdxFamCode
+  type: INTEGER
+  nullable: false
+  description: IdxFamCode indicates the index family. Cross-reference IdxFamCode with IdxSPGCode.Code where Type_ = 3.
+- name: StartDate
+  type: INTEGER
+  nullable: false
+  description: If no change in the industry or sector description has taken place, StartDate is the date the of the original
+    classification. If the industry or sector description has changed, this is the date the new classification began.
+- name: EndDate
+  type: INTEGER
+  nullable: true
+  description: EndDate is the date a classification changed. If no EndDate is present, then the shown classification is current.
+    EndDate is given as the StartDate for the new classification, minus one day.
+- name: RegionCode
+  type: TINYINT
+  nullable: true
+  description: RegionCode is the developed world or emerging market.
+- name: Growth
+  type: FLOAT
+  nullable: true
+  description: Growth is the growth factor.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the value factor.
+- name: PropertyCode
+  type: varchar(4)
+  nullable: true
+  description: PropertyCode is the property type.
+- name: CapRngCode
+  type: varchar(10)
+  nullable: true
+  description: CapRngCode is the cap range identifier.
+- name: Size_
+  type: char(1)
+  nullable: true
+  description: Size_ is the market or size flag (S, M, L, or X ).
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is the security licensing flag.
+---
+table: qa_index.IdxSPGSecInfo
+domain: indices
+description: S&P Index Security Level Information | This table contains S&P index security-level information.
+columns:
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode is the unique stock identifier.
+- name: Name_
+  type: varchar(200)
+  nullable: true
+  description: Name is the company name
+- name: RIC
+  type: varchar(20)
+  nullable: true
+  description: RIC is the LSEG Identification Code.
+- name: BloomTkr
+  type: varchar(20)
+  nullable: true
+  description: BloomTkr is the Bloomberg Ticker.
+- name: Exchange
+  type: char(4)
+  nullable: true
+  description: Exchange is the SEDOL market identifier. LSEG Quantitative Analytics Database Schema for Index Data 46
+- name: Ticker
+  type: varchar(20)
+  nullable: true
+  description: Ticker is the ticker on exchange where constituent is traded.
+- name: CtryCode
+  type: char(2)
+  nullable: true
+  description: CtryCode is the ISO country code of domicile country.
+- name: GICCode
+  type: INTEGER
+  nullable: true
+  description: GICCode is the GICS classification. Cross-reference GICCode with IdxSPGDesc.Code where Type_ = 2.
+- name: GVKey
+  type: INTEGER
+  nullable: true
+  description: GVKey is the GV Key.
+- name: IID
+  type: varchar(4)
+  nullable: true
+  description: IID is the instrument identifier.
+- name: SecID
+  type: varchar(10)
+  nullable: true
+  description: SecID is the security identifier.
+- name: LegacyKey
+  type: varchar(25)
+  nullable: true
+  description: LegacyKey is the legacy stock identifier. As of April 5, 2011, the LegacyKey field has been discontinued.
+- name: StockKey
+  type: INTEGER
+  nullable: true
+  description: StockKey is the unique stock identifier.
+- name: ModDate
+  type: INTEGER
+  nullable: true
+  description: ModDate is the last modified date.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is the security-level licensing flag.
+---
+table: qa_index.IdxSPGSecPrice
+domain: indices
+description: S&P Security Level Daily Price | This table contains S&P security-level daily price information.
+columns:
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode s the unique stock identifier.
+- name: Date_
+  type: INTEGER
+  nullable: false
+  description: Date_ is the effective date.
+- name: ISOCurrCode
+  type: char(3)
+  nullable: true
+  description: ISOCurrCode is the ISO currency code. Cross-reference ISOCurrCode with IdxSPGDesc.Code where Type_ = 3.
+- name: PriceLot
+  type: INTEGER
+  nullable: true
+  description: PriceLot is the lot size for price quotes.
+- name: Close_
+  type: FLOAT
+  nullable: true
+  description: Close_ is the closing price in local currency.
+- name: AdjClose
+  type: FLOAT
+  nullable: true
+  description: AdjClose is the adjusted closing price in local currency.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is the security licensing flag.
+---
+table: qa_index.IdxSPGSecShares
+domain: indices
+description: S&P Index Security Shares | This table contains information on S&P index security shares.
+columns:
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode s the unique stock identifier.
+- name: IdxFamCode
+  type: INTEGER
+  nullable: false
+  description: IdxFamCode indicates the index family. Cross-reference IdxFamCode with IdxSPGCode.Code where Type_ = 3.
+- name: StartDate
+  type: INTEGER
+  nullable: false
+  description: If no change in the industry or sector description has taken place, StartDate is the date the of the original
+    classification. If the industry or sector description has changed, this is the date the new classification began.
+- name: EndDate
+  type: INTEGER
+  nullable: true
+  description: EndDate is the date a classification changed. If no EndDate is present, then the shown classification is current.
+    EndDate is given as the StartDate for the new classification, minus one day.
+- name: Shares
+  type: FLOAT
+  nullable: true
+  description: Shares is the shares outstanding.
+- name: AdjShares
+  type: FLOAT
+  nullable: true
+  description: AdjShares is the adjusted shares outstanding.
+- name: IWF
+  type: FLOAT
+  nullable: true
+  description: IWF is the investible weight factor.
+- name: AdjIWF
+  type: FLOAT
+  nullable: true
+  description: AdjIWF is the adjusted investible weight factor.
+- name: AWF
+  type: FLOAT
+  nullable: true
+  description: AWF is the adjustable weight factor.
+- name: AdjAWF
+  type: FLOAT
+  nullable: true
+  description: AdjAWF is the adjusted adjustable weight factor.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is the security licensing flag. LSEG Quantitative Analytics Database Schema for Index Data 47
+---
+table: qa_index.IdxSPGSecWeights
+domain: indices
+description: S&P Index Security Shares, Weights, Factors, and | This table contains information on S&P index security shares,
+  weights, factors, and dividend (index dependent).
+columns:
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode is the unique stock identifier.
+- name: HdlnCode
+  type: INTEGER
+  nullable: false
+  description: HdlnCode is the numeric code for Headline Code.
+- name: Date_
+  type: INTEGER
+  nullable: false
+  description: Date_ is the effective date.
+- name: IdxNumShares
+  type: FLOAT
+  nullable: true
+  description: IdxNumShares is the total adjusted shares (except growth and value indices) for Index Family.
+- name: IdxWeight
+  type: FLOAT
+  nullable: true
+  description: IdxWeight is the total security weight in Index Family.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is the security licensing flag.
+---
+table: qa_index.IdxSPGSedChg
+domain: indices
+description: S&P SEDOL Changes | This table contains information on S&P SEDOL changes.
+columns:
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode is the unique stock identifier.
+- name: StartDate
+  type: INTEGER
+  nullable: false
+  description: If no change in the industry or sector description has taken place, StartDate is the date the of the original
+    classification. If the industry or sector description has changed, this is the date the new classification began.
+- name: EndDate
+  type: INTEGER
+  nullable: true
+  description: EndDate is the date a classification changed. If no EndDate is present, then the shown classification is current.
+    EndDate is given as the StartDate for the new classification, minus one day.
+- name: SEDOL
+  type: char(6)
+  nullable: true
+  description: SEDOL is the SEDOL of the index.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is the security licensing flag.
+---
+table: qa_index.TQACtryExch
+domain: indices
+description: Generic Lookup Table for Countries | This table is a generic lookup table for countries.
+columns:
+- name: ISOCtryCode
+  type: char(2)
+  nullable: false
+  description: ISOCurrCode is the ISO currency code. Cross-reference ISOCurrCode with IdxSPGDesc.Code where Type_ = 3.
+- name: MIC
+  type: char(4)
+  nullable: false
+  description: MIC is the market identifier code.
+- name: CtryName
+  type: varchar(150)
+  nullable: true
+  description: CtryName is the country name.
+- name: ExchName
+  type: varchar(150)
+  nullable: true
+  description: ExchName is the exchange name.
+- name: Acr
+  type: varchar(20)
+  nullable: true
+  description: Acr is the exchange acronym.
+- name: City
+  type: varchar(50)
+  nullable: true
+  description: City is the city name.
+- name: Website
+  type: varchar(150)
+  nullable: true
+  description: 'Website is the exchange website. LSEG Quantitative Analytics Database Schema for Index Data Copyright © 2024
+    London Stock Exchange Group plc and its group of companies (LSEG) and/or its affiliates. All rights reserved. The LSEG
+    content received through this service is the intellectual property of LSEG or its third party suppliers. Republicati on
+    or redistribution of content provided by LSEG is expressly prohibited without the prior written consent of LSEG, except
+    where permitted by the terms of '

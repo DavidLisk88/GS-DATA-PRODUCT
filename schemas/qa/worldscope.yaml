@@ -1,0 +1,842 @@
+table: qa_wscope.Wscode
+domain: fundamentals
+description: Worldscope Numeric Code Descriptions | This table contains descriptions of Worldscope numeric codes.
+update_cadence: Daily
+columns:
+- name: Section_
+  type: varchar(1)
+  nullable: false
+  description: 'Section_ may be: • A: Accounting Standards and Industry Codes • C: SIC Codes • D: Stock Exchanges, Stock Indexes
+    • F: Country Information'
+- name: Field
+  type: INTEGER
+  nullable: false
+  description: Field cross-references with the Wsndata or Wsidata tables where
+- name: Value_
+  type: INTEGER
+  nullable: false
+  description: Value_ cross-references with the Wsndata or Wsidata tables where Value_ = Ws*data.Value_."
+- name: Desc_
+  type: varchar(120)
+  nullable: true
+  description: Desc_ is the translation of Field + Value_.
+join_hints:
+- to: the
+  evidence: Value_ int N Value_ cross-references with the Wsndata or Wsidata tables where Value_ = Ws*data.Value_." Desc_
+    varchar(120) Y Desc_ is the translation of Field + Value_.
+  type: cross_reference
+---
+table: qa_wscope.Wscurr
+domain: fundamentals
+description: Worldscope Currency Data | Use this table to identify a country’s former and current currency.
+update_cadence: Daily
+columns:
+- name: NatCode
+  type: INTEGER
+  nullable: false
+  description: NatCode is the nation code.
+- name: NatDesc
+  type: varchar(30)
+  nullable: true
+  description: NatDesc is country name corresponding to NatCode.
+- name: EuroFlag
+  type: TINYINT
+  nullable: true
+  description: EuroFlag indicates whether the corresponding country uses the euro as its currency.
+- name: IsoCode
+  type: varchar(3)
+  nullable: true
+  description: 'IsoCode is the legacy ISO currency code. Chapter 3: Wordscope Schema: Data Tables Refinitiv Quantitative Analytics
+    - Database Schema for Worldscope Version 1.2.5 Page 10 of 28'
+- name: IsoDesc
+  type: varchar(30)
+  nullable: true
+  description: IsoDesc is the textual description of the legacy ISO currency.
+- name: IsoUsed
+  type: varchar(3)
+  nullable: true
+  description: IsoUsed is the country’s current currency.
+---
+table: qa_wscope.Wsddata
+domain: fundamentals
+description: Worldscope Date-Related Data | Use this table to retrieve Worldscope date-related data.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all Worldscope (Ws*) tables.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item cross-references with Wsitem where Item = Wsitem.Number.
+- name: Freq
+  type: varchar(1)
+  nullable: false
+  description: Freq is described in the Freq section on page 10.
+- name: Year_
+  type: SMALLINT
+  nullable: false
+  description: Year_ represents the fiscal year for the period end date or reference observation period.
+- name: Seq
+  type: SMALLINT
+  nullable: false
+  description: Seq represents the order of Item + Freq where Item and Freq are constant.
+- name: Date_
+  type: smalldatetime
+  nullable: true
+  description: Date_ represents the period end date, such as the fiscal year end, or reference observation period.
+- name: Value_
+  type: smalldatetime
+  nullable: true
+  description: 'Value_ is the date associated with period end date or reference observation period. In Wstext, Value_ cross-references
+    with Wsndata, Wsldata, Wsmdata, or Wssdata where Value_ = Ws*data.Value_. Freq is the frequency. It can be: Code Description
+    A Annual B Restated – Annual C Current D Daily E Restated – Quarterly Cumulative F Restated – Semi-Annual G Annual U.S.
+    GAAP Data (ADRs only) H Quarterly U.S. GAAP Data (ADRs only) Chapter 3: Wordscope Schema: Data Tables Refinitiv Quantitative
+    Analytics -'
+join_hints:
+- to: Wsitem
+  evidence: Item int N Item cross-references with Wsitem where Item = Wsitem.Number.
+  type: cross_reference
+---
+table: qa_wscope.Wsfnote
+domain: fundamentals
+description: Worldscope Footnotes | Use this table to retrieve Worldscope footnote data.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all Worldscope (Ws*) tables.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item cross-references with Wsitem where Item = Wsitem.Number.
+- name: Freq
+  type: varchar(1)
+  nullable: false
+  description: Freq is described in the Freq section on page 10.
+- name: Year_
+  type: SMALLINT
+  nullable: false
+  description: Year_ represents the fiscal year for the period end date or reference observation period.
+- name: Seq
+  type: SMALLINT
+  nullable: false
+  description: Seq represents the order of Item + Freq where Item and Freq are constant.
+- name: Note
+  type: varchar(4)
+  nullable: false
+  description: Note cross-references with Wsftext where Note = Wsftext.Note_, and with Wstext where Item = Wstext.Field and
+    Wstext.Section_ = E.
+- name: Date_
+  type: smalldatetime
+  nullable: true
+  description: Date_ represents the period end date, such as the fiscal year end, or reference observation period.
+- name: HasText
+  type: TINYINT
+  nullable: true
+  description: 'HasText is a bit flag that signals the availability of a description in Wsftext. A value of 1 indicates the
+    description is available, and a value of 0 indicates that no description is available. Chapter 3: Wordscope Schema: Data
+    Tables Refinitiv Quantitative Analytics - Database Schema for Worldscope Version 1.2.5 Page 12 of 28'
+join_hints:
+- to: Wsitem
+  evidence: Item int N Item cross-references with Wsitem where Item = Wsitem.Number.
+  type: cross_reference
+- to: Wsftext
+  evidence: Note varchar(4) N Note cross-references with Wsftext where Note = Wsftext.Note_, and with Wstext where Item =
+    Wstext.Field and Wstext.Section_ = E.
+  type: cross_reference
+---
+table: qa_wscope.Wsftext
+domain: fundamentals
+description: Worldscope Custom Footnote Text | Use this table to retrieve Worldscope custom footnote text.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all Worldscope (Ws*) tables.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item cross-references with Wsitem where Item = Wsitem.Number.
+- name: Freq
+  type: varchar(1)
+  nullable: false
+  description: Freq is described in the Freq section on page 10.
+- name: Year_
+  type: SMALLINT
+  nullable: false
+  description: Year_ represents the fiscal year for the period end date or reference observation period.
+- name: Seq
+  type: SMALLINT
+  nullable: false
+  description: Seq represents the order of Item + Freq where Item and Freq are constant.
+- name: Note
+  type: varchar(4)
+  nullable: false
+  description: Note is the code associated with the description Text.
+- name: Text
+  type: varchar(253)
+  nullable: true
+  description: Text contains the custom footnote text.
+join_hints:
+- to: Wsitem
+  evidence: Item int N Item cross-references with Wsitem where Item = Wsitem.Number.
+  type: cross_reference
+---
+table: qa_wscope.Wsfye
+domain: fundamentals
+description: Worldscope Fiscal Year End Dates | This table returns fiscal year end dates for a given Worldscope entity ID.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all Worldscope (Ws*) tables.
+- name: Year_
+  type: SMALLINT
+  nullable: false
+  description: Year_ represents the fiscal year for the period end date or reference observation period.
+- name: Date_
+  type: smalldatetime
+  nullable: true
+  description: 'Date_ represents the period end date, such as the fiscal year end, or reference observation period. Chapter
+    3: Wordscope Schema: Data Tables Refinitiv Quantitative Analytics - Database Schema for Worldscope Version 1.2.5 Page
+    13 of 28'
+---
+table: qa_wscope.Wsidata
+domain: fundamentals
+description: Worldscope Integer Data | Use this table to retrieve Worldscope integer data.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all Worldscope (Ws*) tables.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item cross-references with Wsitem where Item = Wsitem.Number.
+- name: Freq
+  type: varchar(1)
+  nullable: false
+  description: Freq is described in the Freq section on page 10.
+- name: Year_
+  type: SMALLINT
+  nullable: false
+  description: Year_ represents the fiscal year for the period end date or reference observation period.
+- name: Seq
+  type: SMALLINT
+  nullable: false
+  description: Seq represents the order of Item + Freq where Item and Freq are constant.
+- name: Date_
+  type: smalldatetime
+  nullable: true
+  description: Date_ represents the period end date, such as the fiscal year end, or reference observation period.
+- name: Value_
+  type: INTEGER
+  nullable: true
+  description: Value_ is the value of the specified item.
+join_hints:
+- to: Wsitem
+  evidence: Item int N Item cross-references with Wsitem where Item = Wsitem.Number.
+  type: cross_reference
+---
+table: qa_wscope.Wsinfo
+domain: fundamentals
+description: Worldscope Entity Information | This table contains information on Worldscope entities.
+update_cadence: Daily
+columns:
+- name: WsId
+  type: varchar(9)
+  nullable: false
+  description: WsId is the Worldscope unique identifier. This ID does not change.
+- name: Cusip
+  type: varchar(8)
+  nullable: true
+  description: Cusip is the entity CUSIP identifier.
+- name: Sedol
+  type: varchar(6)
+  nullable: true
+  description: Sedol is the entity Sedol identifier.
+- name: CuSed
+  type: varchar(8)
+  nullable: true
+  description: CuSed will contain the CUSIP if present, otherwise it contains the SEDOL.
+- name: Name
+  type: varchar(152)
+  nullable: true
+  description: Name is the entity name.
+- name: Entity
+  type: varchar(1)
+  nullable: true
+  description: 'Entity describes the entity type and may be: • A: ADR • C: Company • E: Exchange rate • F: Country average
+    • G: Industry average • I: Index • S: Security'
+- name: Country
+  type: SMALLINT
+  nullable: true
+  description: Country is the Worldscope country code.
+- name: IsoCtry
+  type: varchar(3)
+  nullable: true
+  description: IsoCtry is the ISO country code.
+- name: Code
+  type: INTEGER
+  nullable: true
+  description: Code is the primary link across all Ws* tables.
+---
+table: qa_wscope.Wsitem
+domain: fundamentals
+description: Worldscope Data Items | This table contains information on Worldscope data items. | field corresponds to the
+  table where the data is stored. For example,
+update_cadence: Daily
+columns:
+- name: Number
+  type: INTEGER
+  nullable: false
+  description: Number cross-references with all Ws*DATA tables where Number = Ws*data.Item.
+- name: Name
+  type: varchar(55)
+  nullable: true
+  description: Name is the name of the data item.
+- name: Frequency
+  type: varchar(1)
+  nullable: true
+  description: 'Frequency may be: • C: Current, meaning this item represents a current value • H: Historical, meaning this
+    item is available on a historical basis'
+- name: DataType
+  type: varchar(1)
+  nullable: true
+  description: 'DataType may be: • A: Data item is Alphanumeric. • N: Data item is Numeric. Chapter 3: Wordscope Schema: Data
+    Tables Refinitiv Quantitative Analytics - Database Schema for Worldscope Version 1.2.5 Page 15 of 28'
+- name: Length_
+  type: SMALLINT
+  nullable: true
+  description: Length_ represents the string length and is applicable for a DataType of A.
+- name: QType
+  type: varchar(1)
+  nullable: true
+  description: 'QType is the designation assigned to the data item by Refinitiv. This a QType of N indicates that the data
+    item is Numeric and is found in the Wsndata table. QType may be: • A: Alphanumeric (Wssdata, Wsmdata, Wsldata, Wsxdata,
+    and depends on Length_) • D: Date (Wsddata) • F: Flag (Wsfnote) • I: Integer (Wsidata) • N: Numeric (Wsndata)'
+- name: SplitFlag
+  type: varchar(1)
+  nullable: true
+  description: SplitFlag indicates whether the operation performed to adjust the data is multiplication or division. A star
+    character (“*”) indicates multiplication; a slash character (“/”)indicates division.
+- name: Industry
+  type: varchar(6)
+  nullable: true
+  description: 'This field indicates the industry category using 0 and/or 1 to indicate the industry out of 6 possibilities.
+    Reading the values listed below from left to right: Industrial farthest on the left and Other Financial farthest right.
+    Examples: • An Industry of ''111'' means it is available in Industrial, Utility, and Transportation. • An Industry of
+    ''000101'' means it is available in Bank and Other Financial. Position 1 = INDUSTRIAL Position 2 = UTILITY Position 3
+    = TRANSPORTATION Position 4 = BANK Posi'
+- name: Units
+  type: TINYINT
+  nullable: true
+  description: 'Units may be: • The item is U.S. dollar denominated (0) • The item is non-U.S. dollar denominated (1)'
+- name: RefSect
+  type: varchar(1)
+  nullable: true
+  description: RefSect cross-references with Wscode where RefSect = WSCODE.Section_.
+- name: RefNumb
+  type: INTEGER
+  nullable: true
+  description: 'RefNumb cross-references with Wscode and Wstext depending on whether the QType is A, N, or I. For example,
+    QTypes of N or I cross-reference with Wscode where RefNumb = Wscode.Field and RefSect = Wscode.Section_. Chapter 3: Wordscope
+    Schema: Data Tables Refinitiv Quantitative Analytics - Database Schema for Worldscope Version 1.2.5 Page 16 of 28'
+- name: Table_
+  type: varchar(1)
+  nullable: true
+  description: 'Table_ associates the data item with a specific Ws*data table. Table_ may be: • D: Wsddata • I: Wsidata •
+    L: Wsldata • M: Wsmdata • N: Wsndata • S: Wssdata • X: Wsxdata'
+- name: UsBasis
+  type: varchar(1)
+  nullable: true
+  description: UsBasis indicates whether the item is on a United States calendar basis (C) or a United States fiscal basis
+    (F).
+- name: NonUsBasis
+  type: varchar(1)
+  nullable: true
+  description: NonUsBasis indicates whether the item is on a Non-United States calendar basis (C) or Non-United States fiscal
+    basis (F).
+- name: Month_
+  type: TINYINT
+  nullable: true
+  description: Month_ indicates the calendar month, denoted by 1 (for January) through 12 (for December). A Month_ value of
+    0 indicates that Month_ is not applicable to the data item.
+join_hints:
+- to: Wscode
+  evidence: RefNumb int Y RefNumb cross-references with Wscode and Wstext depending on whether the QType is A, N, or I.
+  type: cross_reference
+---
+table: qa_wscope.Wsldata
+domain: fundamentals
+description: Worldscope Long String Data | This table contains information on Worldscope long string data.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all Worldscope (Ws*) tables.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item cross-references with Wsitem where Item = Wsitem.Number.
+- name: Freq
+  type: varchar(1)
+  nullable: false
+  description: Freq is described in the Freq section on page 10.
+- name: Year_
+  type: SMALLINT
+  nullable: false
+  description: Year_ represents the fiscal year for the period end date or reference observation period.
+- name: Seq
+  type: SMALLINT
+  nullable: false
+  description: Seq represents the order of Item + Freq where Item and Freq are constant.
+- name: Date_
+  type: smalldatetime
+  nullable: true
+  description: Date_ represents the period end date, such as the fiscal year end, or reference observation period.
+- name: Value_
+  type: varchar(80)
+  nullable: true
+  description: 'Value_ is the value of the specified item. Chapter 3: Wordscope Schema: Data Tables Refinitiv Quantitative
+    Analytics - Database Schema for Worldscope Version 1.2.5 Page 17 of 28'
+join_hints:
+- to: Wsitem
+  evidence: Item int N Item cross-references with Wsitem where Item = Wsitem.Number.
+  type: cross_reference
+---
+table: qa_wscope.Wsmdata
+domain: fundamentals
+description: Worldscope Medium String Data | This table contains information on Worldscope medium string data.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all Worldscope (Ws*) tables.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item cross-references with Wsitem where Item = Wsitem.Number.
+- name: Freq
+  type: varchar(1)
+  nullable: false
+  description: Freq is described in the Freq section on page 10.
+- name: Year_
+  type: SMALLINT
+  nullable: false
+  description: Year_ represents the fiscal year for the period end date or reference observation period.
+- name: Seq
+  type: SMALLINT
+  nullable: false
+  description: Seq represents the order of Item + Freq where Item and Freq are constant.
+- name: Date_
+  type: smalldatetime
+  nullable: true
+  description: Date_ represents the period end date, such as the fiscal year end, or reference observation period.
+- name: Value_
+  type: varchar(40)
+  nullable: true
+  description: Value_ is the value of the specified item.
+---
+table: qa_wscope.Wsndata
+domain: fundamentals
+description: Worldscope Numeric Data Items | This table contains information on Worldscope numeric data items.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all Worldscope (Ws*) tables.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item cross-references with Wsitem where Item = Wsitem.Number.
+- name: Freq
+  type: varchar(1)
+  nullable: false
+  description: Freq is described in the Freq section on page 10.
+- name: Year_
+  type: SMALLINT
+  nullable: false
+  description: Year_ represents the fiscal year for the period end date or reference observation period.
+- name: Seq
+  type: SMALLINT
+  nullable: false
+  description: Seq represents the order of Item + Freq where Item and Freq are constant.
+- name: Date_
+  type: smalldatetime
+  nullable: true
+  description: Date_ represents the period end date, such as the fiscal year end, or reference observation period.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: 'Value_ is the value of the specified item. Chapter 3: Wordscope Schema: Data Tables Refinitiv Quantitative
+    Analytics - Database Schema for Worldscope Version 1.2.5 Page 18 of 28'
+join_hints:
+- to: Wsitem
+  evidence: Item int N Item cross-references with Wsitem where Item = Wsitem.Number.
+  type: cross_reference
+- to: Wsitem
+  evidence: Item int N Item cross-references with Wsitem where Item = Wsitem.Number.
+  type: cross_reference
+---
+table: qa_wscope.Wssdata
+domain: fundamentals
+description: Worldscope Short String Data | This table contains information on Worldscope short string data.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all Worldscope (Ws*) tables.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item cross-references with Wsitem where Item = Wsitem.Number.
+- name: Freq
+  type: varchar(1)
+  nullable: false
+  description: Freq is described in the Freq section on page 10.
+- name: Year_
+  type: SMALLINT
+  nullable: false
+  description: Year_ represents the fiscal year for the period end date or reference observation period.
+- name: Seq
+  type: SMALLINT
+  nullable: false
+  description: Seq represents the order of Item + Freq where Item and Freq are constant.
+- name: Date_
+  type: smalldatetime
+  nullable: true
+  description: Date_ represents the period end date, such as the fiscal year end, or reference observation period.
+- name: Value_
+  type: varchar(12)
+  nullable: true
+  description: Value_ is the value of the specified item.
+join_hints:
+- to: Wsitem
+  evidence: Item int N Item cross-references with Wsitem where Item = Wsitem.Number.
+  type: cross_reference
+---
+table: qa_wscope.Wstext
+domain: fundamentals
+description: Worldscope Text Code Descriptions | Use this table to retrieve descriptions of Woldscope text code data.
+update_cadence: Rarely
+columns:
+- name: Section_
+  type: varchar(1)
+  nullable: false
+  description: 'Section_ may be: • A: Accounting Standards and Industry Codes • C: SIC Codes • D: Stock Exchanges, Stock Indexes
+    • E: Everything else. (General) • F: Country Information'
+- name: Field
+  type: INTEGER
+  nullable: false
+  description: Field cross-references with Wsxdata, Wsldata, Wsmdata, or Wssdata where Field = Ws*data.Item.
+- name: Value_
+  type: varchar(4)
+  nullable: false
+  description: 'Value_ is the date associated with period end date or reference observation period. In Wstext, Value_ cross-references
+    with Wsndata, Wsldata, Wsmdata, or Wssdata where Value_ = Ws*data.Value_. Chapter 3: Wordscope Schema: Data Tables Refinitiv
+    Quantitative Analytics - Database Schema for Worldscope Version 1.2.5 Page 19 of 28'
+- name: Desc_
+  type: varchar(120)
+  nullable: true
+  description: Desc_ is the translation of Field + Value_.
+---
+table: qa_wscope.Wsxdata
+domain: fundamentals
+description: Worldscope Extra Long String Data | This table contains Worldscope extra long string data.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all Worldscope (Ws*) tables.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item cross-references with Wsitem where Item = Wsitem.Number.
+- name: Freq
+  type: varchar(1)
+  nullable: false
+  description: Freq is described in the Freq section on page 10.
+- name: Year_
+  type: SMALLINT
+  nullable: false
+  description: Year_ represents the fiscal year for the period end date or reference observation period.
+- name: Seq
+  type: SMALLINT
+  nullable: false
+  description: Seq represents the order of Item + Freq where Item and Freq are constant.
+- name: Date_
+  type: smalldatetime
+  nullable: true
+  description: Date_ represents the period end date, such as the fiscal year end, or reference observation period.
+- name: Value_
+  type: varchar(8000)
+  nullable: true
+  description: 'Value_ is the value of the specified item. Chapter 4: SQL Views Refinitiv Quantitative Analytics - Database
+    Schema for Worldscope Version 1.2.5 Page 20 of 28 4 SQL Views A library of sophisticated SQL Views, developed by the Refinitiv
+    Support Team, are available to customers. The SQL Views provide simplified calls that run complex SQL code and address
+    key data nuances and mapping requests in the Refinitiv Quantitative Analytics database, making it much easier to access
+    data through Refinitiv Qua'
+join_hints:
+- to: Wsitem
+  evidence: Item int N Item cross-references with Wsitem where Item = Wsitem.Number.
+  type: cross_reference
+---
+table: qa_wscope.vw_WSItemUnits
+domain: fundamentals
+---
+table: qa_wscope.item
+domain: fundamentals
+---
+table: qa_wscope.itemName
+domain: fundamentals
+columns:
+- name: code
+  type: INTEGER
+  nullable: false
+  description: code is the primary link across all Worldscope (Ws*) tables.
+- name: item
+  type: INTEGER
+  nullable: false
+  description: item cross-references with all Ws*DATA tables where item = Ws*data.Item.
+- name: itemName
+  type: varchar(55)
+  nullable: true
+  description: itemName is the name of the data item.
+- name: itemUnits
+  type: varchar(9)
+  nullable: true
+  description: 'itemUnits describes the units this item is stored in and can be: • ‘Shares’ • ‘Persons’ • currency eg ‘USD’
+    • currency per share eg ‘CHF/share’ Note: This is the Worldscope currency and not the reported Example Use Case: itemName,
+    itemUnits from vw_WSItemUnits where item = 1001 -- net sales or revenues and code = 51904 -- Thomson Reuters Chapter 4:
+    SQL Views Refinitiv Quantitative Analytics - Database Schema for Worldscope Version 1.2.5 Page 21 of 28 This view presents
+    the Worldscope numeric ite'
+- name: code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all Worldscope (Ws*) tables.
+- name: item
+  type: INTEGER
+  nullable: false
+  description: item cross-references with all Ws*DATA tables where item = Ws*data.Item.
+- name: Freq
+  type: Varchar(1)
+  nullable: false
+  description: Freq describes the periodicity of the data item, as described in “Quantitative Analytics Database Schema -
+    Worldscope” eg ‘A’ means annual, ‘Q’ means quarterly, ‘C’ means current etc
+- name: year_
+  type: SMALLINT
+  nullable: false
+  description: Year_ represents the fiscal year for the period end date or reference observation period.
+- name: seq
+  type: SMALLINT
+  nullable: false
+  description: Seq represents the order of Item + Freq where Item and Freq are constant
+- name: fiscalPeriodEndDate
+  type: smalldatetime
+  nullable: true
+  description: fiscalPeriodEndDate contains the month, day and year on which the company's fiscal period ended
+- name: epsReportDate
+  type: smalldatetime
+  nullable: true
+  description: epsReportDate represents the source date for the earnings reported by the company for the corresponding
+- name: periodUpdateFlag
+  type: varchar(12)
+  nullable: true
+  description: 'periodUpdateFlag is a code for the periodUpdateDescription, below. It can be: 1. Preliminary 2. FAST 3. Final
+    4. Only Specified Unconsolidated Data Fields are available. 5. Preliminary – Flash 6. Final – Flash varchar(120) Y periodUpdateDescription
+    indicates the status of data provided in the annual and interim time series, as detailed in "Worldscope Data Definition
+    Guide".'
+- name: currencyOfDocument
+  type: varchar(12)
+  nullable: true
+  description: 'currencyOfDocument represents the ISO currency code in which the company''s financial statements are filed.
+    currencyOfDocument is not the currency used to represent the data in Worldscope Chapter 4: SQL Views Refinitiv Quantitative
+    Analytics - Database Schema for Worldscope Version 1.2.5 Page 22 of 28 e'
+- name: periodSource
+  type: varchar(3)
+  nullable: false
+  description: periodSource indicates time series which have had data sourced from the Refinitiv Financials product. An item
+    meeting this criterion will have ‘RKD’ in this field; otherwise it will have ‘WS’
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the value of the specified item.
+- name: itemUnits
+  type: Varchar(9)
+  nullable: true
+  description: 'units describes the units this item is stored in and can be: • ‘Shares’ • ‘Persons’ • currency eg ‘USD’ •
+    currency per share eg ‘CHF/share’ Note: This is the Worldscope currency, not the currency of document, above Example Use
+    Case: m.id as qaID,m.sedol,m.name,d.fiscalPeriodEndDate,d.epsReportDate,d.periodUpdateFlag,d.periodU pdateDescription,
+    d.currencyOfDocument,d.periodSource,d.Value_,d.itemUnits from vw_SecurityMasterX m join vw_WsCompanyMapping w on w.code
+    = m.seccode and w.type_ = m.typ le'
+- name: code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all Worldscope (Ws*) tables.
+- name: WsId
+  type: varchar(9)
+  nullable: false
+  description: WsId is the Worldscope unique identifier. This ID does not change.
+- name: Sedol
+  type: varchar(6)
+  nullable: true
+  description: Sedol is the entity Sedol identifier.
+- name: Cusip
+  type: varchar(8)
+  nullable: true
+  description: Cusip is the entity CUSIP identifier.
+- name: companyName
+  type: Varchar(152)
+  nullable: true
+  description: companyName is the entity name.
+- name: worldscopeNationCode
+  type: INTEGER
+  nullable: true
+  description: NATION CODE represents the country under which the company is followed on Worldscope. The currency of analysis
+    is the currency of the nation indicated by NATION CODE. NATION CODE usually corresponds to the country of domicile but
+    there are some exceptions.
+- name: nationCodeDescription
+  type: Varchar(30)
+  nullable: true
+  description: nationCodeDescription is the name of the country name of this company
+- name: worldscopeCurrency
+  type: Varchar(3)
+  nullable: true
+  description: worldscopeCurrency is the ISO code of the country’s current currency.
+- name: icbIndustryDescription
+  type: Varchar(120)
+  nullable: true
+  description: icbIndustryDescription gives the text corresponding to the icbIndustryId eg 0001 is “Oil & Gas”
+- name: icbIndustryId
+  type: INTEGER
+  nullable: true
+  description: The industry code is the highest level in the hierarchical structure. on Varchar(120) Y icbSuperSectorDescription
+    gives the text corresponding to the icbSuperSector eg 0500 is “Oil & Gas”
+- name: icbSuperSectorId
+  type: INTEGER
+  nullable: true
+  description: 'The SuperSector code is the second highest level in the hierarchical structure. Chapter 4: SQL Views Refinitiv
+    Quantitative Analytics - Database Schema for Worldscope Version 1.2.5 Page 24 of 28'
+- name: icbSectorDescription
+  type: Varchar(120)
+  nullable: true
+  description: icbSectorDescription gives the text corresponding to the icbSector eg 0530 is “Oil & Gas Producers”
+- name: icbSectorId
+  type: INTEGER
+  nullable: true
+  description: The Sector code is the second lowest level in the hierarchical structure. n Varchar(120) Y icbSubSectorDescription
+    gives the text corresponding to the icbSubSector eg 0533 is “Exploration & Production”
+- name: icbSubSectorId
+  type: INTEGER
+  nullable: true
+  description: The SubSector code is the lowest level in the hierarchical structure.
+- name: active
+  type: INTEGER
+  nullable: false
+  description: 'the active field represents whether a company is active. Can be: • 0: a company that became privately held,
+    merged, liquidated, or otherwise became inactive. • 1: an active company'
+- name: dataSource
+  type: varchar(3)
+  nullable: false
+  description: 'dataSource indicates time series which have had data sourced from the Refinitiv Financials product. A company
+    meeting this criterion will have ‘RKD’ in this field; otherwise it will have ‘WS’ Example Use Case: wsid, Sedol, Cusip,
+    companyName, worldscopeNationCode, nationCodeDescription, worldscopeCurrency, icbIndustryDescription, icbIndustryId, icbSuperSectorDescription,
+    icbSuperSectorId, icbSectorDescription, icbSectorId, icbSubSectorDescription, icbSubSectorId, active,dataSource from vw_WsComp'
+---
+table: qa_wscope.vw_WsFXAdjustment
+domain: fundamentals
+columns:
+- name: code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all Worldscope (Ws*) tables.
+- name: item
+  type: INTEGER
+  nullable: false
+  description: item cross-references with all Ws*DATA tables where item = Ws*data.Item.
+- name: Freq
+  type: Varchar(1)
+  nullable: false
+  description: Freq describes the periodicity of the data item, as described in “Quantitative Analytics Database Schema -
+    Worldscope” eg ‘A’ means annual, ‘Q’ means quarterly, ‘C’ means current etc
+- name: year_
+  type: SMALLINT
+  nullable: false
+  description: Year_ represents the fiscal year for the period end date or reference observation period.
+- name: seq
+  type: SMALLINT
+  nullable: false
+  description: Seq represents the order of Item + Freq where Item and Freq are constant fiscalPeriodEndDate smalldatetim e
+    Y fiscalPeriodEndDate contains the month, day and year on which the company's fiscal period ended epsReportDate smalldatetim
+    e Y epsReportDate represents the source date for the earnings reported by the company for the corresponding
+- name: periodUpdateFlag
+  type: varchar(12)
+  nullable: true
+  description: 'periodUpdateFlag is a code for the periodUpdateDescription, below. It can be: 1. Preliminary 2. FAST 3. Final
+    4. Only Specified Unconsolidated Data Fields are available. 5. Preliminary – Flash 6. Final – Flash varchar(120) Y periodUpdateDescription
+    indicates the status of data provided in the annual and interim time series, as detailed in "Worldscope Data Definition
+    Guide".'
+- name: currencyOfDocument
+  type: varchar(12)
+  nullable: true
+  description: 'currencyOfDocument represents the ISO currency code in which the company''s financial statements are filed.
+    currencyOfDocument is not the currency used to represent the data in Worldscope Chapter 4: SQL Views Refinitiv Quantitative
+    Analytics - Database Schema for Worldscope Version 1.2.5 Page 26 of 28'
+- name: periodSource
+  type: varchar(3)
+  nullable: false
+  description: periodSource indicates time series which have had data sourced from the Refinitiv Financials product. An item
+    meeting this criterion will have ‘RKD’ in this field; otherwise it will have ‘WS’
+- name: rate
+  type: FLOAT
+  nullable: true
+  description: rate is the exchange rate from the Worldscope currency to the currency of document
+- name: reportedValue
+  type: FLOAT
+  nullable: true
+  description: Value_ is the value of the specified item in the currency of document rather than the Worldscope currency (This
+    WSItemDataVw and dividing by rate)
+- name: itemUnits
+  type: Varchar(9)
+  nullable: true
+  description: 'units describes the units this item is stored in and can be: • ‘Shares’ • ‘Persons’ • currency eg ‘USD’ •
+    currency per share eg ‘CHF/share’ Note: This is the currency of document above, not the Worldscope currency Example Use
+    Case: m.id as qaID,m.sedol,m.name,d.fiscalPeriodEndDate,d.epsReportDate,d.periodUpdateFlag,d.periodU pdateDescription,
+    d.currencyOfDocument,d.periodSource,d.rate,d.reportedValue,d.itemUnits from vw_SecurityMasterX m join vw_WsCompanyMapping
+    w on w.code = m.seccode and w.typ'
+---
+table: qa_wscope.vw_wsCompanyMapping
+domain: fundamentals
+columns:
+- name: Isrcode
+  type: INTEGER
+  nullable: false
+  description: IsrCode is the issuer code. Cross-reference with prc.PRCISS where prc.PRCISR.isrcode = prc.PRCISS.isrcode.
+- name: seccode
+  type: SMALLINT
+  nullable: false
+  description: Seccode is the code links across the master tables.
+- name: typ
+  type: INTEGER
+  nullable: false
+  description: 'Typ is the security type and can be: • 1 (North American Equities) • 6 (Global Equities)'
+- name: vencode
+  type: INTEGER
+  nullable: true
+  description: 'VenCode is the corresponding vendor’s unique code. Example Use Case: m.id,m.cusip, p.isrCode,p.vencode from
+    vw_securityMasterX m join vw_wsCompanyMapping p on p.seccode = m.seccode and p.typ = m.typ where m.id in (''45920030'',''@INTLB1'',''ibm'')
+    -- These QA Id''s are all securities for the IBM Company © Refinitiv 2022. All Rights Reserved. Republication or redistribution
+    of Refinitiv content, including by framing or similar means, is prohibited without the prior written consent of Refinitiv.
+    Refiniti'

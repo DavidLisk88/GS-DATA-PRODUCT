@@ -172,7 +172,7 @@ def build_index(
         for chunk in chunk_markdown(text, rel):
             chunks.append(tag_symbols(chunk, catalog_symbols))
 
-    # YAML schemas — treat each schema as one chunk
+    # YAML schemas (mock) — treat each schema as one chunk
     for yaml_path in sorted(paths["schemas_dir"].glob("*.yaml")):
         rel = yaml_path.relative_to(paths["root"]).as_posix()
         text = yaml_path.read_text(encoding="utf-8")
@@ -188,7 +188,47 @@ def build_index(
             )
         )
 
-    LOGGER.info("Indexed %d chunks", len(chunks))
+    # QA YAML schemas (real extracted from PDFs)
+    qa_schemas_dir = paths.get("qa_schemas_dir")
+    if qa_schemas_dir and qa_schemas_dir.exists():
+        for yaml_path in sorted(qa_schemas_dir.glob("*.yaml")):
+            rel = yaml_path.relative_to(paths["root"]).as_posix()
+            text = yaml_path.read_text(encoding="utf-8")
+            chunks.append(
+                tag_symbols(
+                    Chunk(
+                        chunk_id=_chunk_id(rel, "qa_schema"),
+                        source_path=rel,
+                        title=f"QA Schema: {yaml_path.stem}",
+                        text=text,
+                    ),
+                    catalog_symbols,
+                )
+            )
+
+    # QA extracted text chunks (from PDF pages)
+    qa_chunks_path = paths.get("qa_extracted_dir")
+    if qa_chunks_path:
+        chunks_jsonl = qa_chunks_path / "chunks.jsonl"
+        if chunks_jsonl.exists():
+            for line in chunks_jsonl.read_text(encoding="utf-8").splitlines():
+                if not line.strip():
+                    continue
+                rec = json.loads(line)
+                source = f"QA-DOCS/{rec.get('filename', 'unknown')}"
+                chunks.append(
+                    tag_symbols(
+                        Chunk(
+                            chunk_id=f"qa_{rec.get('chunk_id', 'unknown')}",
+                            source_path=source,
+                            title=f"QA PDF p{rec.get('page', '?')}",
+                            text=rec.get("text", ""),
+                        ),
+                        catalog_symbols,
+                    )
+                )
+
+    LOGGER.info("Indexed %d chunks (including QA docs)", len(chunks))
 
     bm25_tokens = [_tokenise(c.text) for c in chunks]
     bm25 = BM25Okapi(bm25_tokens)

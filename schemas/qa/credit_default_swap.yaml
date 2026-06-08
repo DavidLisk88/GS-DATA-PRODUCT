@@ -1,0 +1,155 @@
+table: qa_cds.TRCDSDesc
+domain: fixed_income
+description: CDS Extendible Type-Code Mapping | This table maps codes to descriptions.
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Type_ is a numeric code for a type of data.
+- name: Code
+  type: varchar(50)
+  nullable: false
+  description: Code is a coded value for an element of Type_. When Type_ = 0, Code is the numeric code for each Type_ other
+    than 0 and Desc_ is a description of each Type_.
+- name: Desc_
+  type: varchar(100)
+  nullable: true
+  description: Desc_ is a plain-language description of the element defined by Type_ and Code.
+---
+table: qa_cds.TRCDSInfo
+domain: fixed_income
+description: CDS Informational Data | This table contains informational data.
+columns:
+- name: IsrCode
+  type: INTEGER
+  nullable: false
+  description: IsrCode identifies an issuer or a company as provided by Datastream. It is used to uniquely identify a CDS
+    entity.
+- name: DSIsrCode
+  type: INTEGER
+  nullable: true
+  description: DSIsrCode is the borrower’s issuer code.
+- name: IsrName
+  type: varchar(150)
+  nullable: true
+  description: IsrName is the name of the issuer.
+- name: Country
+  type: varchar(30)
+  nullable: true
+  description: Country is the ISO country code location of the issuer.
+- name: Region
+  type: varchar(30)
+  nullable: true
+  description: Region is the geographic region to which the CDS instrument belongs.
+- name: Sector
+  type: varchar(50)
+  nullable: true
+  description: Sector is the industry sector to which the CDS issuing company belongs.
+- name: SubSector
+  type: varchar(50)
+  nullable: true
+  description: SubSector is the industry subsector to which the CDS issuing company belongs.
+---
+table: qa_cds.TRCDSInstrument
+domain: fixed_income
+description: CDS Instrument-Level Data | This table contains instrument-level data.
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is the instrument series unique identifier created by Quantitative Analytics to define a CDS curve.
+- name: IsrCode
+  type: INTEGER
+  nullable: true
+  description: IsrCode identifies an issuer or a company as provided by the Datastream feed.
+- name: InstrName
+  type: varchar(80)
+  nullable: true
+  description: InstrName provides the instrument name and term.
+- name: Ident
+  type: varchar(10)
+  nullable: true
+  description: Ident identifies each series with a mnemonic.
+- name: Tenor
+  type: char(3)
+  nullable: true
+  description: Tenor is the tenor date of the instrument.
+- name: SnrtyType
+  type: varchar(8)
+  nullable: true
+  description: SnrtyType is the code for seniority type. This field cross-references with TRCDSDesc where Type_ = 1.
+- name: RestrcType
+  type: char(2)
+  nullable: true
+  description: RestrcType identifies the restructuring type for the instrument. This field cross-references with TRCDSDesc
+    where Type_ = 2.
+- name: ISOCurrCode
+  type: char(3)
+  nullable: true
+  description: ISOCurrCode identifies the ISO Currency code.
+- name: RIC
+  type: varchar(13)
+  nullable: true
+  description: RIC is the LSEG unique identifier for the instrument.
+- name: DSCode
+  type: varchar(6)
+  nullable: false
+  description: DSCode is the instrument series unique identifier to define a CDS curve. It is derived from or mapped to the
+    actual field in Datastream.
+---
+table: qa_cds.TRCDSMap
+domain: fixed_income
+description: CDS Extendible Type-Code Mapping | This table maps issuers from CDS to Quantitative Analytics's normalized issuer
+  tables using either manual
+columns:
+- name: IsrCode
+  type: INTEGER
+  nullable: false
+  description: IsrCode identifies an issuer or a company as provided by Datastream. It is used to uniquely identify a CDS
+    entity.
+- name: IsrName
+  type: varchar(150)
+  nullable: true
+  description: IsrName is the CDS issuer name.
+- name: PrcIsrCode
+  type: INTEGER
+  nullable: true
+  description: PrcIsrCode cross-references to prc.PRCISR where PRCISRCODE = prc.PRCISR.IsrCode.
+- name: PrcIsrName
+  type: varchar(50)
+  nullable: true
+  description: PrcIsrName is the issuer name from prc.PRCISR.
+- name: Score
+  type: FLOAT
+  nullable: true
+  description: Score is the confidence level of the algorithmic mapping where 1 is a perfect match.
+- name: Type_
+  type: char(1)
+  nullable: true
+  description: Type_ identifies the method used to map the CDS issuer to the prc.PRCISR issuer where A is Algorithm and M
+    is Manual.
+---
+table: qa_cds.TRCDSREDCodeMap
+domain: fixed_income
+description: This table is for internal use only.
+---
+table: qa_cds.TRCDSSpread
+domain: fixed_income
+description: CDS Generic Time Series Data | This table contains generic time series data.
+columns:
+- name: InstrCode
+  type: INTEGER
+  nullable: false
+  description: InstrCode is the instrument series unique identifier created by Quantitative Analytics to define a CDS curve.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the observation date.
+- name: MidValue
+  type: FLOAT
+  nullable: true
+  description: MidValue is the mid value of the Premium that the protection buyer pays to the seller for buying the CDS instrument.
+    LSEG Quantitative Analytics Database Schema for Credit Default Swap Copyright © 2024 London Stock Exchange Group plc and
+    its group of companies (LSEG) and/or its affiliates. All rights reserved. The LSEG content received through this service
+    is the intellectual property of LSEG or its third party suppliers. Republication or redistribution of content provided
+    by LSEG is expressly p
