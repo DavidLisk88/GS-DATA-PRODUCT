@@ -110,7 +110,7 @@ def chunk_markdown(text: str, source_path: str) -> list[Chunk]:
 
 
 def _chunk_id(source_path: str, key: str) -> str:
-    digest = hashlib.sha1(f"{source_path}::{key}".encode("utf-8")).hexdigest()[:12]
+    digest = hashlib.sha256(f"{source_path}::{key}".encode("utf-8")).hexdigest()[:12]
     return f"chk_{digest}"
 
 
