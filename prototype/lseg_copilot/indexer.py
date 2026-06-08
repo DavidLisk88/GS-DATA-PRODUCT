@@ -29,7 +29,7 @@ try:
     from sentence_transformers import SentenceTransformer  # type: ignore
 
     _EMBEDDINGS_AVAILABLE = True
-except Exception:  # pragma: no cover - optional dep
+except ImportError:  # pragma: no cover - optional dep
     _EMBEDDINGS_AVAILABLE = False
 
 

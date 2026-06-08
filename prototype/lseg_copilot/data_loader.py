@@ -2,12 +2,15 @@
 fully-qualified ``schema.table`` name from the catalog manifest."""
 from __future__ import annotations
 
+import logging
 from pathlib import Path
 
 import duckdb
 
 from .catalog import Catalog, TableSpec
 from .paths import workspace_paths
+
+LOGGER = logging.getLogger(__name__)
 
 
 # Maps the CSV filename (sans .csv) to the canonical FQN it should be loaded as.
@@ -66,14 +69,19 @@ def load_sample_data(
         if schema not in schemas_seen:
             con.execute(f'CREATE SCHEMA IF NOT EXISTS "{schema}"')
             schemas_seen.add(schema)
-        con.execute(
-            f'CREATE OR REPLACE TABLE "{schema}"."{table}" AS '
-            f"SELECT * FROM read_csv_auto('{csv_path.as_posix()}', header=True, sample_size=-1)"
-        )
-        row_count = con.execute(
-            f'SELECT COUNT(*) FROM "{schema}"."{table}"'
-        ).fetchone()[0]
-        loaded[fqn] = int(row_count)
+        try:
+            con.execute(
+                f'CREATE OR REPLACE TABLE "{schema}"."{table}" AS '
+                f"SELECT * FROM read_csv_auto('{csv_path.as_posix()}', header=True, sample_size=-1)"
+            )
+            row = con.execute(
+                f'SELECT COUNT(*) FROM "{schema}"."{table}"'
+            ).fetchone()
+            row_count = int(row[0]) if row else 0
+            loaded[fqn] = row_count
+        except duckdb.Error as exc:
+            LOGGER.error("Failed to load CSV %s as %s: %s", csv_path.name, fqn, exc)
+            raise
 
     # Catalog tables that have no CSV: create an empty view so downstream
     # planner doesn't trip on "table not found" when schema is correct.
@@ -127,8 +135,12 @@ def summarise_warehouse(con: duckdb.DuckDBPyConnection) -> dict[str, dict[str, i
     result: dict[str, dict[str, int]] = {}
     for schema, table in rows:
         try:
-            count = con.execute(f'SELECT COUNT(*) FROM "{schema}"."{table}"').fetchone()[0]
-        except duckdb.Error:
+            row = con.execute(f'SELECT COUNT(*) FROM "{schema}"."{table}"').fetchone()
+            count = int(row[0]) if row else 0
+        except duckdb.Error as exc:
+            LOGGER.warning(
+                "Could not count rows in %s.%s: %s", schema, table, exc
+            )
             count = 0
-        result.setdefault(schema, {})[table] = int(count)
+        result.setdefault(schema, {})[table] = count
     return result
