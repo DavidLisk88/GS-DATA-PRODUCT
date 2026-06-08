@@ -1,0 +1,2607 @@
+table: qa_idc_na.Schema
+domain: pricing
+description: Canadian Pricing | This table contains capital actions adjustment factors for Canadian equities. Use this table
+  to adjust historical | This table contains ADR ratios for depository receipt securities that trade at a ratio other than
+  1:1 in their home | This table contains historical CUSIP change information for Canadian equities. If a security has more
+  than one | This table contains historical dividend and capital action information for Canadian securities, including items
+  such | as exdate and r
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all CPrc* tables
+- name: AdjType
+  type: SMALLINT
+  nullable: false
+  description: 'AdjType can be: split adjustment factor (1), or split and spin-off adjustment factor (2).'
+- name: StartDate
+  type: smalldatetime
+  nullable: false
+  description: StartDate is the effective date of the change.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the last date before the change.
+- name: Factor
+  type: FLOAT
+  nullable: true
+  description: 'Factor is the multiplier to use with the previous price to make the adjustment. dbo.CPrcAdr: Canadian ADR
+    Ratios This table contains ADR ratios for depository receipt securities that trade at a ratio other than 1:1 in their
+    home market. Use this data to adjust shares outstanding for depository receipts that use a ratio when listed on a non-
+    home exchange.'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all CPrc* tables.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the expiration date on which the ratio takes effect.
+- name: Ratio
+  type: FLOAT
+  nullable: true
+  description: 'Ratio is a divisor for shares outstanding. Cross-reference Ratio with prc.PrcShr and apply the ratio to shares
+    outstanding for the specified time period. The Ratio is a cumulative factor. Note that many ADRs have more than one divisor
+    throughout their history. LSEG Quantitative Analytics Database Schema for IDC Equity Pricing (North American) 10 dbo.CPrcChg:
+    Canadian CUSIP Change History This table contains historical CUSIP change information for Canadian equities. If a security
+    has more than on'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all CPrc* tables.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the first date for which the CUSIP change in question applies. The CUSIP initialization date for the
+    Pricing universe is January 1, 1960. Subsequent changes reflect the expiration date of the change.
+- name: Cusip
+  type: varchar(8)
+  nullable: true
+  description: 'Cusip is the new or existing CUSIP. dbo.CPrcDiv: Canadian Dividend Information This table contains historical
+    dividend and capital action information for Canadian securities, including items such as exdate and rate. This table is
+    supplemented by dbo.CPrcDiv2.'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all CPrc* tables.
+- name: SeqCode
+  type: INTEGER
+  nullable: false
+  description: SeqCode is the TRQA unique identifier for each dividend record.
+- name: ExDate
+  type: smalldatetime
+  nullable: true
+  description: ExDate is the ex-dividend date. The ex-dividend date is the date on and after which security transactions are
+    generally not eligible for the income payment. If not available, it is nine-filled.
+- name: PayDate
+  type: smalldatetime
+  nullable: true
+  description: PayDate is the date declared by a company on which a payment is to be made to stockholders, or on which a split
+    occurs.
+- name: RecDate
+  type: smalldatetime
+  nullable: true
+  description: RecDate is the record date for the dividend.
+- name: AnnDate
+  type: smalldatetime
+  nullable: true
+  description: AnnDate is the announced date of the dividend, or the date on which the corporation or fund declared a split.
+- name: PayType
+  type: SMALLINT
+  nullable: true
+  description: PayType cross-references with dbo.PrcCode2 where PayType = PrcCode2.Code and PrcCode2.Type_ = 3.
+- name: SuppType
+  type: SMALLINT
+  nullable: true
+  description: SuppType_ is the supplemental payment type code. SuppType_ cross- references with dbo.PrcCode2 where SuppType
+    = PrcCode2.Code and PrcCode2.Type_ = 4.
+- name: DivType
+  type: SMALLINT
+  nullable: true
+  description: 'DivType can be a: Non-cash dividend (0) Cash dividend (1) Split (2) LSEG Quantitative Analytics Database Schema
+    for IDC Equity Pricing (North American) 11'
+- name: CurrCode
+  type: SMALLINT
+  nullable: true
+  description: 'CurrCode is a currency code. CurrCode can be: Unknown currency, paired with PayType 9 (currency other than
+    US or Canadian) (-1) No currency conversion is necessary (0) Currency conversion is applicable (1) For all other values,
+    cross-reference CurrCode with prc.PrcCur.Code.'
+- name: Rate
+  type: FLOAT
+  nullable: true
+  description: Rate is given in local currency and is unadjusted.
+- name: CCFactor
+  type: FLOAT
+  nullable: true
+  description: CCFactor is the currency conversion factor. If CCFactor is less than or greater than one, the data is denominated
+    in a currency other than CAD. The factor represents the spot rate on the trading date.
+- name: Currency_
+  type: varchar(3)
+  nullable: true
+  description: Currency_ returns the three-letter abbreviation for a currency.
+- name: SpecFld
+  type: varchar(80)
+  nullable: true
+  description: 'SpecFld contains the gross rate to an ADR/ORD basis of 1.000 (applicable to non-U.S. denominated stocks).
+    For example: 00000007031000 0001000 = Gross rate: 0.7031000, ADR/ORD basis: 1.000000000070312500000000000 0001000 = Gross
+    rate: 0.7031250, Fee: 0.00000, ADR/ORD basis: 1.000 dbo.CPrcDiv2: Canadian Dividend Supplemental Information This table
+    contains additional information for dividend information provided in dbo.CPrcDiv. Such items may include revision indicators,
+    whether the dividend is su'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all CPrc* tables.
+- name: SeqCode
+  type: INTEGER
+  nullable: false
+  description: SeqCode is the TRQA unique identifier for each dividend record.
+- name: ExDate
+  type: smalldatetime
+  nullable: true
+  description: ExDate is the ex-dividend date. The ex-dividend date is the date on and after which security transactions are
+    generally not eligible for the income payment. If not available, it is nine-filled.
+- name: DivType
+  type: SMALLINT
+  nullable: true
+  description: 'DivType can be a: Non-cash dividend (0) Cash dividend (1) Split (2)'
+- name: DTCReinvCode
+  type: SMALLINT
+  nullable: true
+  description: DTCReinvCode dividend reinvestment code can be either 0 (does not qualify) or 1 (does qualify).
+- name: STAFlag
+  type: char(1)
+  nullable: true
+  description: STAFlag is described in the STAFlag section on page 12.
+- name: TaxStatCode
+  type: char(1)
+  nullable: true
+  description: TaxStatCode is described in the TaxStatCode section on page 12.
+- name: ReinvPlanCode
+  type: SMALLINT
+  nullable: true
+  description: 'ReinvPlanCode is the dividend reinvestment plan code. ReinvPlanCode can be: None (0) Reinvestment plan is
+    offered (1) Reinvestment plan is offered at a discount (2)'
+- name: PayFreqCode
+  type: varchar(3)
+  nullable: true
+  description: PayFreqCode is described in the PayFreqCode section on page 13.
+- name: IAD
+  type: FLOAT
+  nullable: true
+  description: IAD is the Indicated Annual Dividend. It is the IDC approximate indicator of dividend performance. LSEG Quantitative
+    Analytics Database Schema for IDC Equity Pricing (North American) 12
+- name: IADFootnote
+  type: char(1)
+  nullable: true
+  description: IADFootnote is described in the IADFootnote section on page 14.
+- name: AnnEntryCode
+  type: SMALLINT
+  nullable: true
+  description: AnnEntryCode is described in the AnnEntryCode section on page 14.
+- name: LateRevCode
+  type: SMALLINT
+  nullable: true
+  description: 'LateRevCode is the late/revision code. LateRevCode can be: Does not apply (0) Late announcement (1) Revision
+    (2) Revision after late announcement (3)'
+- name: TransferCode
+  type: char(1)
+  nullable: true
+  description: 'TransferCode can be: New York City (0) Number of days from New York by first class mail (1-4) Unknown (9)
+    Foreign transfer agent (–)'
+- name: MFDateInd
+  type: SMALLINT
+  nullable: true
+  description: 'MFDateInd is defined as the Dividend Declaration Code. As the Dividend Declaration Code MFDateInd indicates:
+    Dividend paid at opening of business, for mutual funds (0) Dividend paid at close of business, for mutual funds (1) Dividends
+    declared daily, for mutual funds (2) Not quoted ex by exchange; ex-date field contains effective date, if available (3)
+    Does not apply (9)'
+- name: UITPFAnnFlag
+  type: SMALLINT
+  nullable: true
+  description: 'UITPFAnnFlag is the UIT preliminary/final announcement flag. UITPFAnnFlag can be: Preliminary announcement
+    (1) Final announcement (2) Does not apply (9)'
+- name: SuppType2
+  type: SMALLINT
+  nullable: true
+  description: SuppType2 is the second supplemental payment type code. SuppType2 cross-references with dbo.PrcCode2 where
+    SuppType2 = PrcCode2.Code and PrcCode2.Type_ = 4.
+- name: RevInd1
+  type: char(1)
+  nullable: true
+  description: RevInd1 is the first revision indicator. This field identifies revised fields in the record.
+- name: RevInd2
+  type: char(1)
+  nullable: true
+  description: RevInd2 is the second revision indicator. This field identifies revised fields in the record.
+- name: RevInd3
+  type: char(1)
+  nullable: true
+  description: RevInd3 is the third revision indicator. This field identifies revised fields in the record.
+- name: TaxPct
+  type: FLOAT
+  nullable: true
+  description: TaxPct is the tax percentage of the foreign tax rate paid by U.S. residents on dividends issued by non-U.S.
+    companies. TaxPct is nine-filled when not available.
+- name: DueBillOnDate
+  type: smalldatetime
+  nullable: true
+  description: DueBillOnDate is the business date, after the record date, on which all physical security receipts/deliveries
+    must be accompanied by a due bill.
+- name: DueBillOffDate
+  type: smalldatetime
+  nullable: true
+  description: 'DueBillOffDate is the date on or after which presented due bills are to be paid. STAFlag is the Subject-to-Approval
+    flag. STAFlag can be: Code Description A Subject to shareholder approval B Subject to SEC approval C Both A and B apply
+    D Dividend approved by shareholders E Dividend or stock distribution approved by SEC F Both D and E apply LSEG Quantitative
+    Analytics Database Schema for IDC Equity Pricing (North American) 13 Code Description G Dividend or stock distribution
+    rejected 9 N/A TaxSta'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all Prc* tables.
+- name: AdjType
+  type: SMALLINT
+  nullable: false
+  description: 'AdjType can be: split adjustment factor (1), or split and spin-off adjustment factor (2).'
+- name: StartDate
+  type: smalldatetime
+  nullable: false
+  description: StartDate is the effective date of the change.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the last date before the change.
+- name: Factor
+  type: FLOAT
+  nullable: true
+  description: 'Factor is the multiplier to use with the previous price to make the adjustment. prc.PrcAdr: Pricing ADR Ratio
+    This table contains ADR ratios for depository receipt securities that trade at a ratio other than 1:1 in their home market.
+    Use this data to adjust shares outstanding for depository receipts that use a ratio when listed on a non- home exchange.'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all Prc* tables.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date on which the ratio takes effect.
+- name: Ratio
+  type: FLOAT
+  nullable: true
+  description: 'Ratio is a divisor for shares outstanding. Cross-reference Ratio with prc.PrcShr and apply the ratio to shares
+    outstanding for the specified time period. The Ratio is a cumulative factor. Note that many ADRs have more than one divisor
+    throughout their history. LSEG Quantitative Analytics Database Schema for IDC Equity Pricing (North American) 26 prc.PrcChg:
+    Pricing CUSIP Change History This table contains historical CUSIP change information for United States equities. If a
+    security has more than'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all Prc* tables.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the first date for which the CUSIP change in question is applied.
+- name: Cusip
+  type: varchar(8)
+  nullable: true
+  description: 'Cusip is the new or existing CUSIP. Note that the CUSIP initialization date for the Pricing universe is January
+    1, 1960. Subsequent changes reflect the expiration date of the change. dbo.PrcCode2: Pricing Code Descriptions This table
+    contains plain language descriptions for codes and symbols used throughout the IDC equity pricing tables.'
+- name: Type_
+  type: SMALLINT
+  nullable: false
+  description: Type_ is described in the Type_section on page 26.
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is an integer that requires translation. Refer to Type_ for translation.
+- name: Desc_
+  type: varchar(80)
+  nullable: true
+  description: 'Desc_ provides a plain-language description for Code defined by Type_ and Code. Type_ is (the integer codes
+    correspond to the ASCII equivalent): Code Description 1 Security type description. For example, right, warrant, common,
+    preferred, and so on. 2 Exchange description 3 Primary dividend payment type code description 4 Supplemental dividend
+    payment type code description 5 Issue status description. For example, merged, acquired, bankrupt, and so on 6 Option
+    Exchange name 7 Standard Industry Cl'
+- name: Currency_
+  type: varchar(3)
+  nullable: false
+  description: Currency_ returns the three-letter abbreviation for a currency.
+- name: Country
+  type: varchar(2)
+  nullable: true
+  description: Country returns the two-letter ISO country code for the issuer’s country of incorporation. It cross-references
+    with prc.PrcCur where Country = PrcCur.Country for the country name.
+- name: CurrDesc
+  type: varchar(40)
+  nullable: true
+  description: CurrDesc states the ISO full name of the country or currency area followed by the name of the currency.
+- name: CtryDesc
+  type: varchar(40)
+  nullable: true
+  description: CtryDesc returns the full name of the country or currency area.
+- name: RateCusip
+  type: varchar(8)
+  nullable: true
+  description: RateCusip is the CUSIP for the trading foreign exchange.
+- name: Code
+  type: SMALLINT
+  nullable: true
+  description: Code links to prc.PrcDiv where Code = PrcDiv.CurrCode, and the code is ISO.
+- name: RateCode
+  type: INTEGER
+  nullable: true
+  description: 'RateCode links to PrcINFO where RateCode = PrcINFO.Code. A RateCode of 0 indicates no link to historical data
+    (data is not contained within PrcIDX). prc.PrcDiv: Pricing Dividend Information This table contains historical dividend
+    and capital action information for United States securities, including items such as exdate and rate. This table is supplemented
+    by prc.PrcDiv2.'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all Prc* tables.
+- name: SeqCode
+  type: INTEGER
+  nullable: false
+  description: SeqCode is the TRQA unique identifier for each dividend record.
+- name: ExDate
+  type: smalldatetime
+  nullable: true
+  description: ExDate is the ex-dividend date. The ex-dividend date is the date on and after which security transactions are
+    generally not eligible for the income payment. If not available, it is nine-filled.
+- name: PayDate
+  type: smalldatetime
+  nullable: true
+  description: PayDate is the date declared by a company on which a payment is to be made to stockholders, or on which a split
+    occurs.
+- name: RecDate
+  type: smalldatetime
+  nullable: true
+  description: RecDate is the date on which listed owners of a security are entitled to receive the declared dividend payment.
+    LSEG Quantitative Analytics Database Schema for IDC Equity Pricing (North American) 28
+- name: AnnDate
+  type: smalldatetime
+  nullable: true
+  description: AnnDate is the announced date of the dividend, or the date on which the corporation or fund declared a split.
+- name: PayType
+  type: SMALLINT
+  nullable: true
+  description: PayType cross-references with dbo.PrcCode2 where PayType = PrcCode2.Code and PrcCode2.Type_ = 3.
+- name: SuppType
+  type: SMALLINT
+  nullable: true
+  description: SuppType_ is the supplemental payment type code. SuppType_ cross- references with dbo.PrcCode2 where SuppType
+    = PrcCode2.Code and PrcCode2.Type_ = 4.
+- name: DivType
+  type: SMALLINT
+  nullable: true
+  description: 'DivType can be a: Non-cash dividend (0) Cash dividend (1) Split (2)'
+- name: CurrCode
+  type: SMALLINT
+  nullable: true
+  description: 'CurrCode is a currency code. CurrCode can be: Unknown currency, paired with PayType 9 (currency other than
+    US or Canadian) (-1) No currency conversion is necessary (0) Currency conversion is applicable (1) For all other values,
+    cross-reference CurrCode with prc.PrcCur.Code.'
+- name: Rate
+  type: FLOAT
+  nullable: true
+  description: Rate is stored in its local currency and is unadjusted.
+- name: CCFactor
+  type: FLOAT
+  nullable: true
+  description: CCFactor is the currency conversion factor. If CCFactor is less than or greater than one, the data is denominated
+    in a currency other than USD. The factor represents the spot rate on the trading date.
+- name: Currency_
+  type: varchar(3)
+  nullable: true
+  description: Currency_ returns the three-letter abbreviation for a currency.
+- name: SpecFld
+  type: varchar(80)
+  nullable: true
+  description: 'SpecFld contains the gross rate to an ADR/ORD basis of 1.000 (applicable to non-U.S. denominated stocks).
+    For example: 00000007031000 0001000 = Gross rate: 0.7031000, ADR/ORD basis: 1.000000000070312500000000000 0001000 = Gross
+    rate: 0.7031250, Fee: 0.00000, ADR/ORD basis: 1.000 prc.PrcDiv2: Pricing Dividend Information Supplemental This table
+    contains additional information for dividend information provided in prc.PrcDiv. Such items may include revision indicators,
+    whether the dividend is subje'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all Prc* tables.
+- name: SeqCode
+  type: INTEGER
+  nullable: false
+  description: SeqCode is the TRQA unique identifier for each dividend record.
+- name: ExDate
+  type: smalldatetime
+  nullable: true
+  description: ExDate is the ex-dividend date. The ex-dividend date is the date on and after which security transactions are
+    generally not eligible for the income payment. If not available, it is nine-filled.
+- name: DivType
+  type: SMALLINT
+  nullable: true
+  description: 'DivType can be a: Non-cash dividend (0) Cash dividend (1) Split (2)'
+- name: DTCReinvCode
+  type: SMALLINT
+  nullable: true
+  description: DTC dividend reinvestment code can be 0 (does not qualify) or 1 (does qualify).
+- name: STAFlag
+  type: char(1)
+  nullable: true
+  description: STAFlag is described in the STAFlag section on page 12. LSEG Quantitative Analytics Database Schema for IDC
+    Equity Pricing (North American) 29
+- name: TaxStatCode
+  type: char(1)
+  nullable: true
+  description: TaxStatCode is described in the TaxStatCode section on page 12.
+- name: ReinvPlanCode
+  type: SMALLINT
+  nullable: true
+  description: 'ReinvPlanCode is the dividend reinvestment plan code. ReinvPlanCode can be: None (0) Reinvestment plan is
+    offered (1) Reinvestment plan is offered at a discount (2)'
+- name: PayFreqCode
+  type: varchar(3)
+  nullable: true
+  description: PayFreqCode is described in the PayFreqCode section on page 13.
+- name: IAD
+  type: FLOAT
+  nullable: true
+  description: IAD is the Indicated Annual Dividend. It is the IDC approximate indicator of dividend performance.
+- name: IADFootnote
+  type: char(1)
+  nullable: true
+  description: IADFootnote is described in the IADFootnote section on page 14.
+- name: AnnEntryCode
+  type: SMALLINT
+  nullable: true
+  description: AnnEntryCode is described in the AnnEntryCode section on page 14.
+- name: LateRevCode
+  type: SMALLINT
+  nullable: true
+  description: 'LateRevCode is the late/revision code. LateRevCode can be: Does not apply (0) Late announcement (1) Revision
+    (2) Revision after late announcement (3)'
+- name: TransferCode
+  type: char(1)
+  nullable: true
+  description: 'TransferCode can be: New York City (0) Number of days from New York by first class mail (1-4) Unknown (9)
+    Foreign transfer agent (–)'
+- name: MFDateInd
+  type: SMALLINT
+  nullable: true
+  description: 'MFDateInd is defined as the Dividend Declaration Code. As the Dividend Declaration Code MFDateInd indicates:
+    Dividend paid at opening of business, for mutual funds (0) Dividend paid at close of business, for mutual funds (1) Dividends
+    declared daily, for mutual funds (2) Not quoted ex by exchange; ex-date field contains effective date, if available (3)
+    Does not apply (9)'
+- name: UITPFAnnFlag
+  type: SMALLINT
+  nullable: true
+  description: 'UITPFAnnFlag is the UIT preliminary/final announcement flag. UITPFAnnFlag can be: Preliminary announcement
+    (1) Final announcement (2) Does not apply (9)'
+- name: SuppType2
+  type: SMALLINT
+  nullable: true
+  description: SuppType2 is the second supplemental payment type code. SuppType2 cross-references with dbo.PrcCode2 where
+    SuppType2 = PrcCode2.Code and PrcCode2.Type_ = 4.
+- name: RevInd1
+  type: char(1)
+  nullable: true
+  description: RevInd1 is the first revision indicator. This field identifies revised fields in the record.
+- name: RevInd2
+  type: char(1)
+  nullable: true
+  description: RevInd2 is the second revision indicator. This field identifies revised fields in the record.
+- name: RevInd3
+  type: char(1)
+  nullable: true
+  description: RevInd3 is the third revision indicator. This field identifies revised fields in the record.
+- name: TaxPct
+  type: FLOAT
+  nullable: true
+  description: TaxPct is the tax percentage of the foreign tax rate paid by U.S. residents on dividends issued by non-U.S.
+    companies. TaxPct is nine- filled when not available.
+- name: DueBillOnDate
+  type: smalldatetime
+  nullable: true
+  description: DueBillOnDate is the business date, after the record date, on which all physical security receipts/deliveries
+    must be accompanied by a due bill.
+- name: DueBillOffDate
+  type: smalldatetime
+  nullable: true
+  description: 'DueBillOffDate is the date on or after which presented due bills are to be paid. LSEG Quantitative Analytics
+    Database Schema for IDC Equity Pricing (North American) 30 prc.PrcDly: Composite Pricing This table contains daily equity
+    composite pricing information, including the open and close prices. Use this table to find the value of an equity by date
+    for a composite value. All data fields are stored in local currency.'
+join_hints:
+- to: dbo
+  evidence: PayType smallint Y PayType cross-references with dbo.PrcCode2 where PayType = PrcCode2.Code and PrcCode2.Type_
+    = 3.
+  type: cross_reference
+- to: PayType
+  evidence: 'CurrCode can be: Unknown currency, paired with PayType 9 (currency other than US or Canadian) (-1) No currency
+    conversion is necessary (0) Currency conversion is applicable (1) For all other values, cross-reference CurrCode with
+    prc.PrcCur.Code.'
+  type: cross_reference
+- to: dbo
+  evidence: SuppType2 cross-references with dbo.PrcCode2 where SuppType2 = PrcCode2.Code and PrcCode2.Type_ = 4.
+  type: cross_reference
+- to: dbo
+  evidence: PayType smallint Y PayType cross-references with dbo.PrcCode2 where PayType = PrcCode2.Code and PrcCode2.Type_
+    = 3.
+  type: cross_reference
+- to: PayType
+  evidence: 'CurrCode can be: Unknown currency, paired with PayType 9 (currency other than US or Canadian) (-1) No currency
+    conversion is necessary (0) Currency conversion is applicable (1) For all other values, cross-reference CurrCode with
+    prc.PrcCur.Code.'
+  type: cross_reference
+- to: dbo
+  evidence: SuppType2 cross-references with dbo.PrcCode2 where SuppType2 = PrcCode2.Code and PrcCode2.Type_ = 4.
+  type: cross_reference
+---
+table: qa_idc_na.CCFactor
+domain: pricing
+description: 'CCFactor real Y CCFactor is the currency conversion factor. Prices provided in this table are in | This table
+  has been discontinued. It is documented for your convenience, but using the data in this table is not | This table contains
+  earnings per share data. Use the information in this table to determine historical earnings per | This table contains pricing
+  for the primary exchange of a given security. All data fields are stored in local currency. | Use this table to locate the
+  primary exchange '
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all CPrc* tables.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date for which the pricing applies.
+- name: Open_
+  type: FLOAT
+  nullable: true
+  description: Open_ is the first price at which a security traded on a given date.
+- name: High
+  type: FLOAT
+  nullable: true
+  description: High is the highest price at which a security traded on a given date.
+- name: Low
+  type: FLOAT
+  nullable: true
+  description: Low is the lowest price at which a security traded on a given date.
+- name: Close_
+  type: FLOAT
+  nullable: true
+  description: Close_ is the price at the close of the market. For stocks that do not trade on a given trading day, Close_
+    is an average of Bid and Ask.
+- name: Volume
+  type: FLOAT
+  nullable: true
+  description: Volume is the number of shares traded on the specified date, or within the specified period.
+- name: TotRet
+  type: FLOAT
+  nullable: true
+  description: TotRet is the gross total return as a percent of the first close price. It is an index starting at 100 from
+    the IPO date or, if the company history extends beyond the date the data has been stored, it is 100 from the point at
+    which the data starts in the TRQA database (January 2, 1975). TotalRet takes into account price movement, dividends, spin-offs,
+    and takeovers.
+- name: CCFactor
+  type: FLOAT
+  nullable: true
+  description: CCFactor is the currency conversion factor. Prices provided in this table are in CAD and to convert them to
+    USD, multiply by the CCFactor.
+- name: Flags
+  type: TINYINT
+  nullable: true
+  description: 'Flags have been discontinued and should not be used. dbo.CPrcEps: Canadian Earnings Information This table
+    has been discontinued. It is documented for your convenience, but using the data in this table is not recommended. This
+    table contains earnings per share data. Use the information in this table to determine historical earnings per share.'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary reference across all CPrc* tables.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date of the price.
+- name: EpsMon
+  type: SMALLINT
+  nullable: true
+  description: EpsMon is the last month in an annual earnings per share period.
+- name: Eps
+  type: FLOAT
+  nullable: true
+  description: Eps is the basic or diluted earnings per share for the most recent twelve months.
+- name: EarnInd
+  type: varchar(1)
+  nullable: true
+  description: EarnInd is described in the EarnInd section on page 16.
+- name: IADModifier
+  type: SMALLINT
+  nullable: true
+  description: 'IADModifier identifies the manner in which the value in the IAD field must be adjusted to arrive at a final
+    value. IADModifier can be: Regular rate/no adjustment (0) Add $10 to the IAD (1) LSEG Quantitative Analytics Database
+    Schema for IDC Equity Pricing (North American) 16'
+- name: IAD
+  type: FLOAT
+  nullable: true
+  description: 'IAD is the Indicated Annual Dividend. It is the IDC approximate indicator of dividend performance. EarnInd
+    is the multiplier used with the Eps field to arrive at the final Eps value. EarnInd can be: Code Description A 10 * earnings
+    B 100 * earnings C 1,000 * earnings – -1 * earnings L -10 * earnings M -100 * earnings N - 1,000 * earnings 9 Not available
+    or not applicable [blank] 1 * earnings dbo.CPrcExc: Canadian Primary Exchange Pricing This table contains pricing for
+    the primary exchange of a '
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary reference across all CPrc* tables.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date for which the pricing applies.
+- name: Open_
+  type: FLOAT
+  nullable: true
+  description: Open_ is the first price at which a security traded on a given date.
+- name: High
+  type: FLOAT
+  nullable: true
+  description: High is the highest price at which a security traded on a given date.
+- name: Low
+  type: FLOAT
+  nullable: true
+  description: Low is the lowest price at which a security traded on a given date.
+- name: Close_
+  type: FLOAT
+  nullable: true
+  description: Close_ is the price at the close of the market. For stocks that do not trade on a given trading day, Close_
+    is an average of Bid and Ask.
+- name: Bid
+  type: FLOAT
+  nullable: true
+  description: Bid is the most recent bid price.
+- name: Ask
+  type: FLOAT
+  nullable: true
+  description: Ask is the most recent ask price.
+- name: Volume
+  type: FLOAT
+  nullable: true
+  description: Volume is the number of shares traded on the specified date, or within the specified period.
+- name: CCFactor
+  type: FLOAT
+  nullable: true
+  description: CCFactor is the currency conversion factor. If CCFactor is less than or greater than one, the data is denominated
+    in a currency other than CAD. The factor represents the spot rate on the trading date.
+- name: Flags
+  type: TINYINT
+  nullable: true
+  description: 'Flags have been discontinued and should not be used. LSEG Quantitative Analytics Database Schema for IDC Equity
+    Pricing (North American) 17 dbo.CPrcIdx: Canadian Index Closes This table contains pricing data for Canadian indexes.
+    This data can also be found in the Index table dbo.idxdaily.'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary reference across all CPrc* tables. To determine the multiplier (primarily for currencies),
+    cross-reference Code with dbo.CPrcInfo.Issue where CPrcIdx.Code = CPrcInfo.Code.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date for which the pricing applies.
+- name: Close_
+  type: FLOAT
+  nullable: true
+  description: 'Close_ is the price at the close of the market. For stocks that do not trade on a given trading day, Close_
+    is an average of Bid and Ask. dbo.CPrcInd: Canadian Security Indicators This table returns security indicator information.
+    This table is not maintained, and data may be unreliable. Information on this table is provided as a convenience; however,
+    using this table is not recommended.'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary reference across all CPrc* tables.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date for which the pricing applies.
+- name: ExpDate
+  type: smalldatetime
+  nullable: true
+  description: ExpDate is the expiration date or ending date for options, futures, and warrants and rights.
+- name: AdjFactor
+  type: FLOAT
+  nullable: true
+  description: AdjFactor is the adjustment factor used to adjust all per share data for stock splits, dividends, and other
+    capitalization changes. The adjustment factors apply to the time periods prior to the capitalization change, so that the
+    data reflect the current share units.
+- name: MarginCode
+  type: varchar(1)
+  nullable: true
+  description: MarginCode is described in the MarginCode section on page 18.
+- name: EvalDate
+  type: smalldatetime
+  nullable: true
+  description: EvalDate is the date based on the exchange-specific pricing for the last day the security traded or quoted
+    on its primary exchange.
+- name: IssueType
+  type: varchar(1)
+  nullable: true
+  description: IssueType is described in the IssueType section on page 18.
+- name: TradeType
+  type: varchar(1)
+  nullable: true
+  description: TradeType is described in the TradeType section on page 18.
+- name: IssueStatus
+  type: varchar(1)
+  nullable: true
+  description: IssueStatus indicates the status of a security, as assigned by IDC. IssueStatus cross-references with dbo.PrcCode2
+    where ascii(IssueStatus) = PrcCode2.Code and PrcCode2.Type_ = 5.
+- name: SPCode
+  type: varchar(1)
+  nullable: true
+  description: 'SPCode is described in the SPCode section on page 19. LSEG Quantitative Analytics Database Schema for IDC
+    Equity Pricing (North American) 18 MarginCode identifies whether the security is marginable and whether the security is
+    DTC-eligible. MarginCode can be: Code Description 0 Exchange-listed marginable 1 Not marginable 2 Marginable OTC A Exchange-listed
+    marginable, DTC, CNS B Exchange-listed marginable, DTC D Exchange-listed marginable, not DTC/CNS eligible E Not marginable
+    OTC, DTC F Not margi'
+- name: Cusip
+  type: varchar(8)
+  nullable: true
+  description: Cusip is the new or existing CUSIP.
+- name: Issuer
+  type: varchar(30)
+  nullable: true
+  description: Issuer is the name of the company that issued the security.
+- name: Issue
+  type: varchar(20)
+  nullable: true
+  description: Issue is a text description of the security type. The text description is non- uniform and non-standard. Use
+    SecType for classifying the stock as common, preferred, warrant, ADR, etc.
+- name: Ticker
+  type: varchar(12)
+  nullable: true
+  description: Ticker represents BaseTicker + Group_ + Series, concatenated (blank spaces removed).
+- name: Sedol
+  type: varchar(6)
+  nullable: true
+  description: Sedol is the Stock Exchange Daily Official List (SEDOL) number assigned to a security. If the table contains
+    SEDOL change data, Sedol is the active SEDOL for the security during the period between the start and end date.
+- name: Country
+  type: varchar(2)
+  nullable: true
+  description: Country returns the two-letter ISO country code for the issuer’s country of incorporation. It cross-references
+    with prc.PrcCur where Country = PrcCur.Country for the country name.
+- name: CurrEx
+  type: varchar(1)
+  nullable: true
+  description: CurrEx is the current trading location or security group. It cross-references with dbo.PrcCode2 where ascii(CurrEx)
+    = PrcCode2.Code and PrcCode2.Type_ = 2.
+- name: HistEx
+  type: varchar(1)
+  nullable: true
+  description: HistEx is the historical location. It cross-references with dbo.PrcCode2 where ascii(HistEx) = PrcCode2.Code
+    and PrcCode2.Type_ = 2.
+- name: SecType
+  type: varchar(1)
+  nullable: true
+  description: SecType is a code representing the security type. It cross-references with dbo.PrcCode2 where ascii(SecType)
+    = PrcCode2.Code and PrcCode2.Type_ = 1.
+- name: Status
+  type: varchar(1)
+  nullable: true
+  description: Status indicates the status of a security, assigned by IDC. It cross-references with dbo.PrcCode2 where ascii(Status)
+    = PrcCode2.Code and PrcCode2.Type_ = 5.
+- name: SIC
+  type: SMALLINT
+  nullable: true
+  description: SIC is the SIC code that classifies a company by its primary business activity. It cross-references with dbo.PrcCode2
+    where SIC = PrcCode2.Code and PrcCode2.Type_ = 7.
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all CPrc* tables.
+- name: PrimaryFlag
+  type: SMALLINT
+  nullable: true
+  description: PrimaryFlag is a flag for dually listed stocks that indicates the order in which a security is listed. A value
+    of 1 indicates the security is listed first; a value of 0 indicates the security is not listed first.
+- name: LastUpdate
+  type: smalldatetime
+  nullable: true
+  description: 'LastUpdate indicates the last time the information was updated. LSEG Quantitative Analytics Database Schema
+    for IDC Equity Pricing (North American) 21 dbo.CPrcMcr: Canadian Market Cap Ranks This table contains the ranking of securities
+    by market capitalization. Use the data in this table to find where a security ranks by market capitalization when compared
+    to other stocks.'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all CPrc* tables.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the first date for which ranking is valid.
+- name: RankAll
+  type: INTEGER
+  nullable: true
+  description: RankAll is computed once a month and includes ADRs.
+- name: RankStk
+  type: INTEGER
+  nullable: true
+  description: 'RankStk is Canadian-based only and does not include ADR; it is computed once a month. dbo.CPrcScChg: Canadian
+    Historical Ticker, CUSIP, and Name'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all Prc* tables.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date for which the pricing applies.
+- name: Open_
+  type: FLOAT
+  nullable: true
+  description: Open_ is the first price at which a security traded on a given date.
+- name: High
+  type: FLOAT
+  nullable: true
+  description: High is the highest price at which a security traded on a given date.
+- name: Low
+  type: FLOAT
+  nullable: true
+  description: Low is the lowest price at which a security traded on a given date.
+- name: Close_
+  type: FLOAT
+  nullable: true
+  description: Close_ is the price at the close of the market. For stocks that do not trade on a given trading day, Close_
+    is an average of Bid and Ask.
+- name: Volume
+  type: FLOAT
+  nullable: true
+  description: Volume is the number of shares traded on the specified date, or within the specified period.
+- name: TotRet
+  type: FLOAT
+  nullable: true
+  description: TotRet is the gross total return as a percent of the first close price. It is an index starting at 100 from
+    the IPO date or, if the company history extends beyond the date the data has been stored, it is 100 from the point at
+    which the data starts in the TRQA database (January 2, 1975). TotalRet takes into account price movement, dividends, spin-offs,
+    and takeovers.
+- name: CCFactor
+  type: FLOAT
+  nullable: true
+  description: CCFactor is the currency conversion factor. If CCFactor is less than or greater than one, the data is denominated
+    in a currency other than USD. The factor represents the spot rate on the trading date.
+- name: Flags
+  type: TINYINT
+  nullable: true
+  description: 'Flags have been discontinued and should not be used. prc.PrcEps: Pricing Earnings Information This table has
+    been discontinued. It is documented for your convenience, but using the data in this table is not recommended. This table
+    contains earnings per share data. Use the information in this table to determine historical earnings per share.'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary reference across all Prc* tables.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date of the price.
+- name: EpsMon
+  type: SMALLINT
+  nullable: true
+  description: EpsMon is the last month in an annual earnings per share period.
+- name: Eps
+  type: FLOAT
+  nullable: true
+  description: Eps is the basic or diluted earnings per share for the most recent twelve months.
+- name: EarnInd
+  type: varchar(1)
+  nullable: true
+  description: EarnInd is described in the EarnInd section on page 16.
+- name: IADModifier
+  type: SMALLINT
+  nullable: true
+  description: 'IADModifier identifies the manner in which the value in the IAD field must be adjusted to arrive at a final
+    value. IADModifier can be: Regular rate/no adjustment (0) LSEG Quantitative Analytics Database Schema for IDC Equity Pricing
+    (North American) 31'
+- name: IAD
+  type: FLOAT
+  nullable: true
+  description: 'IAD is the Indicated Annual Dividend. It is the IDC approximate indicator of dividend performance. prc.PrcExc:
+    Primary Exchange Pricing This table contains pricing for the primary exchange of a given security. All data fields are
+    stored in local currency.'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary reference across all Prc* tables.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date for which the pricing applies.
+- name: Open_
+  type: FLOAT
+  nullable: true
+  description: Open_ is the first price at which a security traded on a given date.
+- name: High
+  type: FLOAT
+  nullable: true
+  description: High is the highest price at which a security traded on a given date.
+- name: Low
+  type: FLOAT
+  nullable: true
+  description: Low is the lowest price at which a security traded on a given date.
+- name: Close_
+  type: FLOAT
+  nullable: true
+  description: Close_ is the price at the close of the market. For stocks that do not trade on a given trading day, Close_
+    is an average of Bid and Ask.
+- name: Bid
+  type: FLOAT
+  nullable: true
+  description: Bid is the most recent bid price.
+- name: Ask
+  type: FLOAT
+  nullable: true
+  description: Ask is the most recent ask price.
+- name: Volume
+  type: FLOAT
+  nullable: true
+  description: Volume is the number of shares traded on the specified date, or within the specified period.
+- name: CCFactor
+  type: FLOAT
+  nullable: true
+  description: CCFactor is the currency conversion factor. If CCFactor is less than or greater than one, the data is denominated
+    in a currency other than USD. The factor represents the spot rate on the trading date.
+- name: Flags
+  type: TINYINT
+  nullable: true
+  description: 'Flags have been discontinued and should not be used. prc.PrcIdx: Pricing Index Closes This table contains
+    pricing data for United States index closes.'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary reference across all Prc* tables. To determine the multiplier (primarily for currencies),
+    cross-reference Code with PrcInfo.Issue where PrcIdx.Code = PrcInfo.Code.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date for which the pricing applies.
+- name: Close_
+  type: FLOAT
+  nullable: true
+  description: 'Close_ is the price at the close of the market. For stocks that do not trade on a given trading day, Close_
+    is an average of Bid and Ask. LSEG Quantitative Analytics Database Schema for IDC Equity Pricing (North American) 32 prc.PrcInd:
+    Pricing Securities Indicators This table returns security indicator information. This table is not maintained and data
+    may be unreliable. Information on this table is provided as a convenience; however, using this table is not recommended.'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary reference across all Prc* tables.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date for which the pricing applies.
+- name: ExpDate
+  type: smalldatetime
+  nullable: true
+  description: ExpDate is the expiration date or ending date for options, futures, and warrants and rights.
+- name: AdjFactor
+  type: FLOAT
+  nullable: true
+  description: AdjFactor is the adjustment factor used to adjust all per share data for stock splits, dividends, and other
+    capitalization changes. The adjustment factors apply to the time periods prior to the capitalization change, so that the
+    data reflect the current share units.
+- name: MarginCode
+  type: varchar(1)
+  nullable: true
+  description: MarginCode is described in the MarginCode section on page 18.
+- name: EvalDate
+  type: smalldatetime
+  nullable: true
+  description: EvalDate is the date based on the exchange-specific pricing for the last day the security traded or quoted
+    on its primary exchange.
+- name: IssueType
+  type: varchar(1)
+  nullable: true
+  description: IssueType is described in the IssueType section on page 18.
+- name: TradeType
+  type: varchar(1)
+  nullable: true
+  description: TradeType is described in the TradeType section on page 18.
+- name: IssueStatus
+  type: varchar(1)
+  nullable: true
+  description: IssueStatus indicates the status of a security, as assigned by IDC. IssueStatus cross-references with dbo.PrcCode2
+    where ascii(IssueStatus) = PrcCode2.Code and PrcCode2.Type_ = 5.
+- name: SPCode
+  type: varchar(1)
+  nullable: true
+  description: 'SPCode is described in the SPCode section on page 19. prc.PrcInfo: United States Security Description Information
+    This table contains key security information, including security type, exchange traded, and ticker. Use the data in this
+    table to describe and define a security.'
+- name: Cusip
+  type: varchar(8)
+  nullable: false
+  description: Cusip is the new or existing CUSIP.
+- name: Issuer
+  type: varchar(30)
+  nullable: true
+  description: Issuer is the name of the company that issued the security.
+- name: Issue
+  type: varchar(20)
+  nullable: true
+  description: Issue is a text description of the security type. The text description is non- uniform and non-standard. Use
+    SecType for classifying the stock as common, preferred, warrant, ADR, etc.
+- name: Ticker
+  type: varchar(12)
+  nullable: true
+  description: Ticker represents BaseTicker + Group_ + Series, concatenated (blank spaces removed). LSEG Quantitative Analytics
+    Database Schema for IDC Equity Pricing (North American) 33
+- name: Sedol
+  type: varchar(6)
+  nullable: true
+  description: Sedol is the Stock Exchange Daily Official List (SEDOL) number assigned to a security. If the table contains
+    SEDOL change data, Sedol is the active SEDOL for the security during the period between the start and end date.
+- name: Country
+  type: varchar(2)
+  nullable: true
+  description: Country returns the two-letter ISO country code for the issuer’s country of incorporation. It cross-references
+    with prc.PrcCur where Country = PrcCur.Country for the country name.
+- name: CurrEx
+  type: varchar(1)
+  nullable: true
+  description: CurrEx is the current trading location or security group. It cross-references with dbo.PrcCode2 where ascii(CurrEx)
+    = PrcCode2.Code and PrcCode2.Type_ = 2.
+- name: HistEx
+  type: varchar(1)
+  nullable: true
+  description: HistEx is the historical location. It cross-references with dbo.PrcCode2 where ascii(HistEx) = PrcCode2.Code
+    and PrcCode2.Type_ = 2.
+- name: SecType
+  type: varchar(1)
+  nullable: true
+  description: SecType is a code representing the security type. It cross-references with dbo.PrcCode2 where ascii(SecType)
+    = PrcCode2.Code and PrcCode2.Type_ = 1.
+- name: Status
+  type: varchar(1)
+  nullable: true
+  description: Status indicates the status of a security, assigned by IDC. It cross-references with dbo.PrcCode2 where ascii(Status)
+    = PrcCode2.Code and PrcCode2.Type_ = 5.
+- name: SIC
+  type: SMALLINT
+  nullable: true
+  description: SIC cross-references with dbo.PrcCode2 where SIC = PrcCode2.Code and PrcCode2.Type_ = 7.
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all Prc* tables.
+- name: PrimaryFlag
+  type: SMALLINT
+  nullable: true
+  description: PrimaryFlag is a flag for dually listed stocks that indicates the order in which a security is listed. A value
+    of 1 indicates the security is listed first, a value of 0 indicates the security is not listed first.
+- name: LastUpdate
+  type: smalldatetime
+  nullable: true
+  description: 'LastUpdate indicates the last time the information was updated. To provide historical stock membership for
+    domestic issues, join prc.PrcInfo to prc.PrcScChg. For example, the following query returns all the common stock issues
+    that were trading on NASDAQ: DECLARE @DATE SMALLDATETIME SET @DATE = ''5/15/2001'''
+join_hints:
+- to: dbo
+  evidence: IssueStatus cross-references with dbo.PrcCode2 where ascii(IssueStatus) = PrcCode2.Code and PrcCode2.Type_ = 5.
+  type: cross_reference
+- to: dbo
+  evidence: IssueStatus cross-references with dbo.PrcCode2 where ascii(IssueStatus) = PrcCode2.Code and PrcCode2.Type_ = 5.
+  type: cross_reference
+- to: dbo
+  evidence: SIC smallint Y SIC cross-references with dbo.PrcCode2 where SIC = PrcCode2.Code and PrcCode2.Type_ = 7.
+  type: cross_reference
+---
+table: qa_idc_na.Changes
+domain: pricing
+description: This table contains change records for security identifiers. Use the data in this table to find non-current identifiers.
+  | a security. If the table contains SEDOL change data, Sedol is the active | This table contains historical SEDOLS assigned
+  to a security. Use the data in this table to find an old SEDOL. | security. If the table contains SEDOL change data, Sedol
+  is the active SEDOL | This table contains shares outstanding data for a security over time. Use the data in this table to
+  find curre
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all CPrc* tables.
+- name: StartDate
+  type: smalldatetime
+  nullable: false
+  description: StartDate is the effective date of the change.
+- name: EndDate
+  type: smalldatetime
+  nullable: true
+  description: EndDate is the last date before the change.
+- name: Cusip
+  type: varchar(8)
+  nullable: true
+  description: Cusip is the new or existing CUSIP.
+- name: Ticker
+  type: varchar(12)
+  nullable: true
+  description: Ticker represents BaseTicker + Group_ + Series, concatenated (blank spaces removed).
+- name: Sedol
+  type: varchar(6)
+  nullable: true
+  description: Sedol is the Stock Exchange Daily Official List (SEDOL) number assigned to a security. If the table contains
+    SEDOL change data, Sedol is the active SEDOL for the security during the period between the start and end date.
+- name: Issuer
+  type: varchar(40)
+  nullable: true
+  description: Issuer is the name of the company that issued the security.
+- name: FullTicker
+  type: varchar(6)
+  nullable: true
+  description: FullTicker represents BaseTicker + Group_ + Series. BaseTicker reserves positions 1 through 4, Group_ reserves
+    position 5, and Series reserves position 6.
+- name: BaseTicker
+  type: varchar(4)
+  nullable: true
+  description: BaseTicker is the base ticker without any Group_ or Series appendage.
+- name: Group_
+  type: varchar(1)
+  nullable: true
+  description: Group_ cross-references with dbo.PrcCode2 where ascii(Group_) = PrcCode2.Code and Type_ = 13 (for listed equities)
+    or Type_ = 14 (for non-listed equities).
+- name: Series
+  type: varchar(1)
+  nullable: true
+  description: Series cross-references with dbo.PrcCode2 where ascii(Series) = PrcCode2.Code and Type_ = 15 (for listed equities)
+    or Type_ = 16 (for non-listed equities).
+- name: Exchange
+  type: varchar(1)
+  nullable: true
+  description: Exchange is described in the Exchange section on page 22. LSEG Quantitative Analytics Database Schema for IDC
+    Equity Pricing (North American) 22 Exchange is used to determine listed or non-listed when looking up Group_ and Series
+    descriptions. Exchange can be any of the following. The exchange list is fluid and can and will change in the future if
+    there are exchange re-names or new exchanges added. Code Description % Pink Sheet 1 Other Equity A New York Stock Exchange
+    equity B NYSE Market (Forme
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all CPrc* tables.
+- name: StartDate
+  type: smalldatetime
+  nullable: false
+  description: StartDate is the effective date of the change.
+- name: EndDate
+  type: smalldatetime
+  nullable: true
+  description: EndDate is the last date before the change.
+- name: Sedol
+  type: varchar(6)
+  nullable: true
+  description: 'Sedol is the Stock Exchange Daily Official List (SEDOL) number assigned to a security. If the table contains
+    SEDOL change data, Sedol is the active SEDOL for the security during the period between the start and end date. LSEG Quantitative
+    Analytics Database Schema for IDC Equity Pricing (North American) 23 dbo.CPrcShr: Canadian Shares Outstanding This table
+    contains shares outstanding data for a security over time. Use the data in this table to find current or historical shares
+    outstanding.'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all Prc* tables.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date associated with the shares outstanding.
+- name: Shares
+  type: FLOAT
+  nullable: true
+  description: 'Shares are the unadjusted shares outstanding. Note: Shares are stored on a monthly basis up to December 31,
+    2000, unless a split occurred mid-month. After December 31, 2000, shares are stored on a daily basis. For example, on
+    May 27, 1999 IBM has an entry of 1841302016. May 27, 1999 is considered a mid-month split prior to December 31, 2000;
+    therefore, the split factor was applied to the prior month''s shares 920651008 to compute the value for May 27, 1999.
+    dbo.CPrctkchg: Canadian Historical Tick'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all Prc* tables.
+- name: StartDate
+  type: smalldatetime
+  nullable: false
+  description: StartDate is the effective date of the change.
+- name: EndDate
+  type: smalldatetime
+  nullable: true
+  description: EndDate is the last date before the change.
+- name: Ticker
+  type: varchar(12)
+  nullable: true
+  description: 'Ticker represents BaseTicker + Group_ + Series, concatenated (blank spaces removed). dbo.CPrcVol: Canadian
+    Specialty Volume Series This table contains a breakdown of a given day’s trading volume and related metrics. Use the data
+    in this table to assess trade action and volume weighted average trade value for a given day.'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all CPrc* tables.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is date associated with the volume and trade entry.
+- name: Bid
+  type: FLOAT
+  nullable: true
+  description: Bid is the most recent bid price.
+- name: Ask
+  type: FLOAT
+  nullable: true
+  description: Ask is the most recent ask price.
+- name: Vwap
+  type: FLOAT
+  nullable: true
+  description: Vwap is the Volume Weighted Average price. This price is based on regular trading volume as well as pre-market
+    and post-market volume, and it is adjusted for cancels and corrections.
+- name: AvgTrade
+  type: FLOAT
+  nullable: true
+  description: AvgTrade is the average number of shares per NumTrades.
+- name: BlockVol
+  type: FLOAT
+  nullable: true
+  description: BlockVol is the composite block volume.
+- name: NumTrades
+  type: FLOAT
+  nullable: true
+  description: NumTrades is the composite number of trades executed.
+- name: CCFactor
+  type: FLOAT
+  nullable: true
+  description: CCFactor is the currency conversion factor. If CCFactor is less than or greater than one, the data is denominated
+    in a currency other than CAD. The factor represents the spot rate on the trading date.
+- name: Flags
+  type: TINYINT
+  nullable: true
+  description: 'Flags have been discontinued and should not be used. dbo.CSplitAnn: Canadian Split Dates and Rates Use this
+    table to retrieve split dates and rates.'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the link to dbo.CPrcInfo where Code = CPrcInfo.Code.
+- name: AnnDate
+  type: smalldatetime
+  nullable: false
+  description: AnnDate is the announced date of the dividend, or the date on which the corporation or fund declared a split.
+- name: ExDate
+  type: smalldatetime
+  nullable: true
+  description: ExDate is the ex-dividend date. The ex-dividend date is the date on and after which security transactions are
+    generally not eligible for the income payment. If not available, it is nine-filled.
+- name: PayDate
+  type: smalldatetime
+  nullable: true
+  description: PayDate is the date declared by a company on which a payment is to be made to stockholders, or on which a split
+    occurs.
+- name: Ratio
+  type: FLOAT
+  nullable: true
+  description: Ratio is a divisor for shares outstanding. Cross-reference Ratio with prc.PrcShr and apply the ratio to shares
+    outstanding for the specified time period. The Ratio is a cumulative factor. Note that many ADRs have more than one divisor
+    throughout their history. LSEG Quantitative Analytics Database Schema for IDC Equity Pricing (North American) 25 4. IDC
+    North American Pricing
+join_hints:
+- to: dbo
+  evidence: Group_ varchar(1) Y Group_ cross-references with dbo.PrcCode2 where ascii(Group_) = PrcCode2.Code and Type_ =
+    13 (for listed equities) or Type_ = 14 (for non-listed equities).
+  type: cross_reference
+- to: dbo
+  evidence: Series varchar(1) Y Series cross-references with dbo.PrcCode2 where ascii(Series) = PrcCode2.Code and Type_ =
+    15 (for listed equities) or Type_ = 16 (for non-listed equities).
+  type: cross_reference
+---
+table: qa_idc_na.Schema
+domain: pricing
+description: United States Pricing | This table contains capital actions adjustment factors for United States equities. Use
+  this table to adjust historical | This table contains ADR ratios for depository receipt securities that trade at a ratio
+  other than 1:1 in their home | This table contains historical CUSIP change information for United States equities. If a
+  security has more than | This table contains plain language descriptions for codes and symbols used throughout the IDC equity
+  pricing | This table c
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all CPrc* tables
+- name: AdjType
+  type: SMALLINT
+  nullable: false
+  description: 'AdjType can be: split adjustment factor (1), or split and spin-off adjustment factor (2).'
+- name: StartDate
+  type: smalldatetime
+  nullable: false
+  description: StartDate is the effective date of the change.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the last date before the change.
+- name: Factor
+  type: FLOAT
+  nullable: true
+  description: 'Factor is the multiplier to use with the previous price to make the adjustment. dbo.CPrcAdr: Canadian ADR
+    Ratios This table contains ADR ratios for depository receipt securities that trade at a ratio other than 1:1 in their
+    home market. Use this data to adjust shares outstanding for depository receipts that use a ratio when listed on a non-
+    home exchange.'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all CPrc* tables.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the expiration date on which the ratio takes effect.
+- name: Ratio
+  type: FLOAT
+  nullable: true
+  description: 'Ratio is a divisor for shares outstanding. Cross-reference Ratio with prc.PrcShr and apply the ratio to shares
+    outstanding for the specified time period. The Ratio is a cumulative factor. Note that many ADRs have more than one divisor
+    throughout their history. LSEG Quantitative Analytics Database Schema for IDC Equity Pricing (North American) 10 dbo.CPrcChg:
+    Canadian CUSIP Change History This table contains historical CUSIP change information for Canadian equities. If a security
+    has more than on'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all CPrc* tables.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the first date for which the CUSIP change in question applies. The CUSIP initialization date for the
+    Pricing universe is January 1, 1960. Subsequent changes reflect the expiration date of the change.
+- name: Cusip
+  type: varchar(8)
+  nullable: true
+  description: 'Cusip is the new or existing CUSIP. dbo.CPrcDiv: Canadian Dividend Information This table contains historical
+    dividend and capital action information for Canadian securities, including items such as exdate and rate. This table is
+    supplemented by dbo.CPrcDiv2.'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all CPrc* tables.
+- name: SeqCode
+  type: INTEGER
+  nullable: false
+  description: SeqCode is the TRQA unique identifier for each dividend record.
+- name: ExDate
+  type: smalldatetime
+  nullable: true
+  description: ExDate is the ex-dividend date. The ex-dividend date is the date on and after which security transactions are
+    generally not eligible for the income payment. If not available, it is nine-filled.
+- name: PayDate
+  type: smalldatetime
+  nullable: true
+  description: PayDate is the date declared by a company on which a payment is to be made to stockholders, or on which a split
+    occurs.
+- name: RecDate
+  type: smalldatetime
+  nullable: true
+  description: RecDate is the record date for the dividend.
+- name: AnnDate
+  type: smalldatetime
+  nullable: true
+  description: AnnDate is the announced date of the dividend, or the date on which the corporation or fund declared a split.
+- name: PayType
+  type: SMALLINT
+  nullable: true
+  description: PayType cross-references with dbo.PrcCode2 where PayType = PrcCode2.Code and PrcCode2.Type_ = 3.
+- name: SuppType
+  type: SMALLINT
+  nullable: true
+  description: SuppType_ is the supplemental payment type code. SuppType_ cross- references with dbo.PrcCode2 where SuppType
+    = PrcCode2.Code and PrcCode2.Type_ = 4.
+- name: DivType
+  type: SMALLINT
+  nullable: true
+  description: 'DivType can be a: Non-cash dividend (0) Cash dividend (1) Split (2) LSEG Quantitative Analytics Database Schema
+    for IDC Equity Pricing (North American) 11'
+- name: CurrCode
+  type: SMALLINT
+  nullable: true
+  description: 'CurrCode is a currency code. CurrCode can be: Unknown currency, paired with PayType 9 (currency other than
+    US or Canadian) (-1) No currency conversion is necessary (0) Currency conversion is applicable (1) For all other values,
+    cross-reference CurrCode with prc.PrcCur.Code.'
+- name: Rate
+  type: FLOAT
+  nullable: true
+  description: Rate is given in local currency and is unadjusted.
+- name: CCFactor
+  type: FLOAT
+  nullable: true
+  description: CCFactor is the currency conversion factor. If CCFactor is less than or greater than one, the data is denominated
+    in a currency other than CAD. The factor represents the spot rate on the trading date.
+- name: Currency_
+  type: varchar(3)
+  nullable: true
+  description: Currency_ returns the three-letter abbreviation for a currency.
+- name: SpecFld
+  type: varchar(80)
+  nullable: true
+  description: 'SpecFld contains the gross rate to an ADR/ORD basis of 1.000 (applicable to non-U.S. denominated stocks).
+    For example: 00000007031000 0001000 = Gross rate: 0.7031000, ADR/ORD basis: 1.000000000070312500000000000 0001000 = Gross
+    rate: 0.7031250, Fee: 0.00000, ADR/ORD basis: 1.000 dbo.CPrcDiv2: Canadian Dividend Supplemental Information This table
+    contains additional information for dividend information provided in dbo.CPrcDiv. Such items may include revision indicators,
+    whether the dividend is su'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all CPrc* tables.
+- name: SeqCode
+  type: INTEGER
+  nullable: false
+  description: SeqCode is the TRQA unique identifier for each dividend record.
+- name: ExDate
+  type: smalldatetime
+  nullable: true
+  description: ExDate is the ex-dividend date. The ex-dividend date is the date on and after which security transactions are
+    generally not eligible for the income payment. If not available, it is nine-filled.
+- name: DivType
+  type: SMALLINT
+  nullable: true
+  description: 'DivType can be a: Non-cash dividend (0) Cash dividend (1) Split (2)'
+- name: DTCReinvCode
+  type: SMALLINT
+  nullable: true
+  description: DTCReinvCode dividend reinvestment code can be either 0 (does not qualify) or 1 (does qualify).
+- name: STAFlag
+  type: char(1)
+  nullable: true
+  description: STAFlag is described in the STAFlag section on page 12.
+- name: TaxStatCode
+  type: char(1)
+  nullable: true
+  description: TaxStatCode is described in the TaxStatCode section on page 12.
+- name: ReinvPlanCode
+  type: SMALLINT
+  nullable: true
+  description: 'ReinvPlanCode is the dividend reinvestment plan code. ReinvPlanCode can be: None (0) Reinvestment plan is
+    offered (1) Reinvestment plan is offered at a discount (2)'
+- name: PayFreqCode
+  type: varchar(3)
+  nullable: true
+  description: PayFreqCode is described in the PayFreqCode section on page 13.
+- name: IAD
+  type: FLOAT
+  nullable: true
+  description: IAD is the Indicated Annual Dividend. It is the IDC approximate indicator of dividend performance. LSEG Quantitative
+    Analytics Database Schema for IDC Equity Pricing (North American) 12
+- name: IADFootnote
+  type: char(1)
+  nullable: true
+  description: IADFootnote is described in the IADFootnote section on page 14.
+- name: AnnEntryCode
+  type: SMALLINT
+  nullable: true
+  description: AnnEntryCode is described in the AnnEntryCode section on page 14.
+- name: LateRevCode
+  type: SMALLINT
+  nullable: true
+  description: 'LateRevCode is the late/revision code. LateRevCode can be: Does not apply (0) Late announcement (1) Revision
+    (2) Revision after late announcement (3)'
+- name: TransferCode
+  type: char(1)
+  nullable: true
+  description: 'TransferCode can be: New York City (0) Number of days from New York by first class mail (1-4) Unknown (9)
+    Foreign transfer agent (–)'
+- name: MFDateInd
+  type: SMALLINT
+  nullable: true
+  description: 'MFDateInd is defined as the Dividend Declaration Code. As the Dividend Declaration Code MFDateInd indicates:
+    Dividend paid at opening of business, for mutual funds (0) Dividend paid at close of business, for mutual funds (1) Dividends
+    declared daily, for mutual funds (2) Not quoted ex by exchange; ex-date field contains effective date, if available (3)
+    Does not apply (9)'
+- name: UITPFAnnFlag
+  type: SMALLINT
+  nullable: true
+  description: 'UITPFAnnFlag is the UIT preliminary/final announcement flag. UITPFAnnFlag can be: Preliminary announcement
+    (1) Final announcement (2) Does not apply (9)'
+- name: SuppType2
+  type: SMALLINT
+  nullable: true
+  description: SuppType2 is the second supplemental payment type code. SuppType2 cross-references with dbo.PrcCode2 where
+    SuppType2 = PrcCode2.Code and PrcCode2.Type_ = 4.
+- name: RevInd1
+  type: char(1)
+  nullable: true
+  description: RevInd1 is the first revision indicator. This field identifies revised fields in the record.
+- name: RevInd2
+  type: char(1)
+  nullable: true
+  description: RevInd2 is the second revision indicator. This field identifies revised fields in the record.
+- name: RevInd3
+  type: char(1)
+  nullable: true
+  description: RevInd3 is the third revision indicator. This field identifies revised fields in the record.
+- name: TaxPct
+  type: FLOAT
+  nullable: true
+  description: TaxPct is the tax percentage of the foreign tax rate paid by U.S. residents on dividends issued by non-U.S.
+    companies. TaxPct is nine-filled when not available.
+- name: DueBillOnDate
+  type: smalldatetime
+  nullable: true
+  description: DueBillOnDate is the business date, after the record date, on which all physical security receipts/deliveries
+    must be accompanied by a due bill.
+- name: DueBillOffDate
+  type: smalldatetime
+  nullable: true
+  description: 'DueBillOffDate is the date on or after which presented due bills are to be paid. STAFlag is the Subject-to-Approval
+    flag. STAFlag can be: Code Description A Subject to shareholder approval B Subject to SEC approval C Both A and B apply
+    D Dividend approved by shareholders E Dividend or stock distribution approved by SEC F Both D and E apply LSEG Quantitative
+    Analytics Database Schema for IDC Equity Pricing (North American) 13 Code Description G Dividend or stock distribution
+    rejected 9 N/A TaxSta'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all Prc* tables.
+- name: AdjType
+  type: SMALLINT
+  nullable: false
+  description: 'AdjType can be: split adjustment factor (1), or split and spin-off adjustment factor (2).'
+- name: StartDate
+  type: smalldatetime
+  nullable: false
+  description: StartDate is the effective date of the change.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the last date before the change.
+- name: Factor
+  type: FLOAT
+  nullable: true
+  description: 'Factor is the multiplier to use with the previous price to make the adjustment. prc.PrcAdr: Pricing ADR Ratio
+    This table contains ADR ratios for depository receipt securities that trade at a ratio other than 1:1 in their home market.
+    Use this data to adjust shares outstanding for depository receipts that use a ratio when listed on a non- home exchange.'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all Prc* tables.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date on which the ratio takes effect.
+- name: Ratio
+  type: FLOAT
+  nullable: true
+  description: 'Ratio is a divisor for shares outstanding. Cross-reference Ratio with prc.PrcShr and apply the ratio to shares
+    outstanding for the specified time period. The Ratio is a cumulative factor. Note that many ADRs have more than one divisor
+    throughout their history. LSEG Quantitative Analytics Database Schema for IDC Equity Pricing (North American) 26 prc.PrcChg:
+    Pricing CUSIP Change History This table contains historical CUSIP change information for United States equities. If a
+    security has more than'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all Prc* tables.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the first date for which the CUSIP change in question is applied.
+- name: Cusip
+  type: varchar(8)
+  nullable: true
+  description: 'Cusip is the new or existing CUSIP. Note that the CUSIP initialization date for the Pricing universe is January
+    1, 1960. Subsequent changes reflect the expiration date of the change. dbo.PrcCode2: Pricing Code Descriptions This table
+    contains plain language descriptions for codes and symbols used throughout the IDC equity pricing tables.'
+- name: Type_
+  type: SMALLINT
+  nullable: false
+  description: Type_ is described in the Type_section on page 26.
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is an integer that requires translation. Refer to Type_ for translation.
+- name: Desc_
+  type: varchar(80)
+  nullable: true
+  description: 'Desc_ provides a plain-language description for Code defined by Type_ and Code. Type_ is (the integer codes
+    correspond to the ASCII equivalent): Code Description 1 Security type description. For example, right, warrant, common,
+    preferred, and so on. 2 Exchange description 3 Primary dividend payment type code description 4 Supplemental dividend
+    payment type code description 5 Issue status description. For example, merged, acquired, bankrupt, and so on 6 Option
+    Exchange name 7 Standard Industry Cl'
+- name: Currency_
+  type: varchar(3)
+  nullable: false
+  description: Currency_ returns the three-letter abbreviation for a currency.
+- name: Country
+  type: varchar(2)
+  nullable: true
+  description: Country returns the two-letter ISO country code for the issuer’s country of incorporation. It cross-references
+    with prc.PrcCur where Country = PrcCur.Country for the country name.
+- name: CurrDesc
+  type: varchar(40)
+  nullable: true
+  description: CurrDesc states the ISO full name of the country or currency area followed by the name of the currency.
+- name: CtryDesc
+  type: varchar(40)
+  nullable: true
+  description: CtryDesc returns the full name of the country or currency area.
+- name: RateCusip
+  type: varchar(8)
+  nullable: true
+  description: RateCusip is the CUSIP for the trading foreign exchange.
+- name: Code
+  type: SMALLINT
+  nullable: true
+  description: Code links to prc.PrcDiv where Code = PrcDiv.CurrCode, and the code is ISO.
+- name: RateCode
+  type: INTEGER
+  nullable: true
+  description: 'RateCode links to PrcINFO where RateCode = PrcINFO.Code. A RateCode of 0 indicates no link to historical data
+    (data is not contained within PrcIDX). prc.PrcDiv: Pricing Dividend Information This table contains historical dividend
+    and capital action information for United States securities, including items such as exdate and rate. This table is supplemented
+    by prc.PrcDiv2.'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all Prc* tables.
+- name: SeqCode
+  type: INTEGER
+  nullable: false
+  description: SeqCode is the TRQA unique identifier for each dividend record.
+- name: ExDate
+  type: smalldatetime
+  nullable: true
+  description: ExDate is the ex-dividend date. The ex-dividend date is the date on and after which security transactions are
+    generally not eligible for the income payment. If not available, it is nine-filled.
+- name: PayDate
+  type: smalldatetime
+  nullable: true
+  description: PayDate is the date declared by a company on which a payment is to be made to stockholders, or on which a split
+    occurs.
+- name: RecDate
+  type: smalldatetime
+  nullable: true
+  description: RecDate is the date on which listed owners of a security are entitled to receive the declared dividend payment.
+    LSEG Quantitative Analytics Database Schema for IDC Equity Pricing (North American) 28
+- name: AnnDate
+  type: smalldatetime
+  nullable: true
+  description: AnnDate is the announced date of the dividend, or the date on which the corporation or fund declared a split.
+- name: PayType
+  type: SMALLINT
+  nullable: true
+  description: PayType cross-references with dbo.PrcCode2 where PayType = PrcCode2.Code and PrcCode2.Type_ = 3.
+- name: SuppType
+  type: SMALLINT
+  nullable: true
+  description: SuppType_ is the supplemental payment type code. SuppType_ cross- references with dbo.PrcCode2 where SuppType
+    = PrcCode2.Code and PrcCode2.Type_ = 4.
+- name: DivType
+  type: SMALLINT
+  nullable: true
+  description: 'DivType can be a: Non-cash dividend (0) Cash dividend (1) Split (2)'
+- name: CurrCode
+  type: SMALLINT
+  nullable: true
+  description: 'CurrCode is a currency code. CurrCode can be: Unknown currency, paired with PayType 9 (currency other than
+    US or Canadian) (-1) No currency conversion is necessary (0) Currency conversion is applicable (1) For all other values,
+    cross-reference CurrCode with prc.PrcCur.Code.'
+- name: Rate
+  type: FLOAT
+  nullable: true
+  description: Rate is stored in its local currency and is unadjusted.
+- name: CCFactor
+  type: FLOAT
+  nullable: true
+  description: CCFactor is the currency conversion factor. If CCFactor is less than or greater than one, the data is denominated
+    in a currency other than USD. The factor represents the spot rate on the trading date.
+- name: Currency_
+  type: varchar(3)
+  nullable: true
+  description: Currency_ returns the three-letter abbreviation for a currency.
+- name: SpecFld
+  type: varchar(80)
+  nullable: true
+  description: 'SpecFld contains the gross rate to an ADR/ORD basis of 1.000 (applicable to non-U.S. denominated stocks).
+    For example: 00000007031000 0001000 = Gross rate: 0.7031000, ADR/ORD basis: 1.000000000070312500000000000 0001000 = Gross
+    rate: 0.7031250, Fee: 0.00000, ADR/ORD basis: 1.000 prc.PrcDiv2: Pricing Dividend Information Supplemental This table
+    contains additional information for dividend information provided in prc.PrcDiv. Such items may include revision indicators,
+    whether the dividend is subje'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all Prc* tables.
+- name: SeqCode
+  type: INTEGER
+  nullable: false
+  description: SeqCode is the TRQA unique identifier for each dividend record.
+- name: ExDate
+  type: smalldatetime
+  nullable: true
+  description: ExDate is the ex-dividend date. The ex-dividend date is the date on and after which security transactions are
+    generally not eligible for the income payment. If not available, it is nine-filled.
+- name: DivType
+  type: SMALLINT
+  nullable: true
+  description: 'DivType can be a: Non-cash dividend (0) Cash dividend (1) Split (2)'
+- name: DTCReinvCode
+  type: SMALLINT
+  nullable: true
+  description: DTC dividend reinvestment code can be 0 (does not qualify) or 1 (does qualify).
+- name: STAFlag
+  type: char(1)
+  nullable: true
+  description: STAFlag is described in the STAFlag section on page 12. LSEG Quantitative Analytics Database Schema for IDC
+    Equity Pricing (North American) 29
+- name: TaxStatCode
+  type: char(1)
+  nullable: true
+  description: TaxStatCode is described in the TaxStatCode section on page 12.
+- name: ReinvPlanCode
+  type: SMALLINT
+  nullable: true
+  description: 'ReinvPlanCode is the dividend reinvestment plan code. ReinvPlanCode can be: None (0) Reinvestment plan is
+    offered (1) Reinvestment plan is offered at a discount (2)'
+- name: PayFreqCode
+  type: varchar(3)
+  nullable: true
+  description: PayFreqCode is described in the PayFreqCode section on page 13.
+- name: IAD
+  type: FLOAT
+  nullable: true
+  description: IAD is the Indicated Annual Dividend. It is the IDC approximate indicator of dividend performance.
+- name: IADFootnote
+  type: char(1)
+  nullable: true
+  description: IADFootnote is described in the IADFootnote section on page 14.
+- name: AnnEntryCode
+  type: SMALLINT
+  nullable: true
+  description: AnnEntryCode is described in the AnnEntryCode section on page 14.
+- name: LateRevCode
+  type: SMALLINT
+  nullable: true
+  description: 'LateRevCode is the late/revision code. LateRevCode can be: Does not apply (0) Late announcement (1) Revision
+    (2) Revision after late announcement (3)'
+- name: TransferCode
+  type: char(1)
+  nullable: true
+  description: 'TransferCode can be: New York City (0) Number of days from New York by first class mail (1-4) Unknown (9)
+    Foreign transfer agent (–)'
+- name: MFDateInd
+  type: SMALLINT
+  nullable: true
+  description: 'MFDateInd is defined as the Dividend Declaration Code. As the Dividend Declaration Code MFDateInd indicates:
+    Dividend paid at opening of business, for mutual funds (0) Dividend paid at close of business, for mutual funds (1) Dividends
+    declared daily, for mutual funds (2) Not quoted ex by exchange; ex-date field contains effective date, if available (3)
+    Does not apply (9)'
+- name: UITPFAnnFlag
+  type: SMALLINT
+  nullable: true
+  description: 'UITPFAnnFlag is the UIT preliminary/final announcement flag. UITPFAnnFlag can be: Preliminary announcement
+    (1) Final announcement (2) Does not apply (9)'
+- name: SuppType2
+  type: SMALLINT
+  nullable: true
+  description: SuppType2 is the second supplemental payment type code. SuppType2 cross-references with dbo.PrcCode2 where
+    SuppType2 = PrcCode2.Code and PrcCode2.Type_ = 4.
+- name: RevInd1
+  type: char(1)
+  nullable: true
+  description: RevInd1 is the first revision indicator. This field identifies revised fields in the record.
+- name: RevInd2
+  type: char(1)
+  nullable: true
+  description: RevInd2 is the second revision indicator. This field identifies revised fields in the record.
+- name: RevInd3
+  type: char(1)
+  nullable: true
+  description: RevInd3 is the third revision indicator. This field identifies revised fields in the record.
+- name: TaxPct
+  type: FLOAT
+  nullable: true
+  description: TaxPct is the tax percentage of the foreign tax rate paid by U.S. residents on dividends issued by non-U.S.
+    companies. TaxPct is nine- filled when not available.
+- name: DueBillOnDate
+  type: smalldatetime
+  nullable: true
+  description: DueBillOnDate is the business date, after the record date, on which all physical security receipts/deliveries
+    must be accompanied by a due bill.
+- name: DueBillOffDate
+  type: smalldatetime
+  nullable: true
+  description: 'DueBillOffDate is the date on or after which presented due bills are to be paid. LSEG Quantitative Analytics
+    Database Schema for IDC Equity Pricing (North American) 30 prc.PrcDly: Composite Pricing This table contains daily equity
+    composite pricing information, including the open and close prices. Use this table to find the value of an equity by date
+    for a composite value. All data fields are stored in local currency.'
+join_hints:
+- to: dbo
+  evidence: PayType smallint Y PayType cross-references with dbo.PrcCode2 where PayType = PrcCode2.Code and PrcCode2.Type_
+    = 3.
+  type: cross_reference
+- to: PayType
+  evidence: 'CurrCode can be: Unknown currency, paired with PayType 9 (currency other than US or Canadian) (-1) No currency
+    conversion is necessary (0) Currency conversion is applicable (1) For all other values, cross-reference CurrCode with
+    prc.PrcCur.Code.'
+  type: cross_reference
+- to: dbo
+  evidence: SuppType2 cross-references with dbo.PrcCode2 where SuppType2 = PrcCode2.Code and PrcCode2.Type_ = 4.
+  type: cross_reference
+- to: dbo
+  evidence: PayType smallint Y PayType cross-references with dbo.PrcCode2 where PayType = PrcCode2.Code and PrcCode2.Type_
+    = 3.
+  type: cross_reference
+- to: PayType
+  evidence: 'CurrCode can be: Unknown currency, paired with PayType 9 (currency other than US or Canadian) (-1) No currency
+    conversion is necessary (0) Currency conversion is applicable (1) For all other values, cross-reference CurrCode with
+    prc.PrcCur.Code.'
+  type: cross_reference
+- to: dbo
+  evidence: SuppType2 cross-references with dbo.PrcCode2 where SuppType2 = PrcCode2.Code and PrcCode2.Type_ = 4.
+  type: cross_reference
+---
+table: qa_idc_na.CCFactor
+domain: pricing
+description: This table has been discontinued. It is documented for your convenience, but using the data in this table is
+  not | This table contains earnings per share data. Use the information in this table to determine historical earnings per
+  | This table contains pricing for the primary exchange of a given security. All data fields are stored in local currency.
+  | This table contains pricing data for United States index closes. | This table returns security indicator information.
+  | This table is not maintai
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all CPrc* tables.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date for which the pricing applies.
+- name: Open_
+  type: FLOAT
+  nullable: true
+  description: Open_ is the first price at which a security traded on a given date.
+- name: High
+  type: FLOAT
+  nullable: true
+  description: High is the highest price at which a security traded on a given date.
+- name: Low
+  type: FLOAT
+  nullable: true
+  description: Low is the lowest price at which a security traded on a given date.
+- name: Close_
+  type: FLOAT
+  nullable: true
+  description: Close_ is the price at the close of the market. For stocks that do not trade on a given trading day, Close_
+    is an average of Bid and Ask.
+- name: Volume
+  type: FLOAT
+  nullable: true
+  description: Volume is the number of shares traded on the specified date, or within the specified period.
+- name: TotRet
+  type: FLOAT
+  nullable: true
+  description: TotRet is the gross total return as a percent of the first close price. It is an index starting at 100 from
+    the IPO date or, if the company history extends beyond the date the data has been stored, it is 100 from the point at
+    which the data starts in the TRQA database (January 2, 1975). TotalRet takes into account price movement, dividends, spin-offs,
+    and takeovers.
+- name: CCFactor
+  type: FLOAT
+  nullable: true
+  description: CCFactor is the currency conversion factor. Prices provided in this table are in CAD and to convert them to
+    USD, multiply by the CCFactor.
+- name: Flags
+  type: TINYINT
+  nullable: true
+  description: 'Flags have been discontinued and should not be used. dbo.CPrcEps: Canadian Earnings Information This table
+    has been discontinued. It is documented for your convenience, but using the data in this table is not recommended. This
+    table contains earnings per share data. Use the information in this table to determine historical earnings per share.'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary reference across all CPrc* tables.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date of the price.
+- name: EpsMon
+  type: SMALLINT
+  nullable: true
+  description: EpsMon is the last month in an annual earnings per share period.
+- name: Eps
+  type: FLOAT
+  nullable: true
+  description: Eps is the basic or diluted earnings per share for the most recent twelve months.
+- name: EarnInd
+  type: varchar(1)
+  nullable: true
+  description: EarnInd is described in the EarnInd section on page 16.
+- name: IADModifier
+  type: SMALLINT
+  nullable: true
+  description: 'IADModifier identifies the manner in which the value in the IAD field must be adjusted to arrive at a final
+    value. IADModifier can be: Regular rate/no adjustment (0) Add $10 to the IAD (1) LSEG Quantitative Analytics Database
+    Schema for IDC Equity Pricing (North American) 16'
+- name: IAD
+  type: FLOAT
+  nullable: true
+  description: 'IAD is the Indicated Annual Dividend. It is the IDC approximate indicator of dividend performance. EarnInd
+    is the multiplier used with the Eps field to arrive at the final Eps value. EarnInd can be: Code Description A 10 * earnings
+    B 100 * earnings C 1,000 * earnings – -1 * earnings L -10 * earnings M -100 * earnings N - 1,000 * earnings 9 Not available
+    or not applicable [blank] 1 * earnings dbo.CPrcExc: Canadian Primary Exchange Pricing This table contains pricing for
+    the primary exchange of a '
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary reference across all CPrc* tables.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date for which the pricing applies.
+- name: Open_
+  type: FLOAT
+  nullable: true
+  description: Open_ is the first price at which a security traded on a given date.
+- name: High
+  type: FLOAT
+  nullable: true
+  description: High is the highest price at which a security traded on a given date.
+- name: Low
+  type: FLOAT
+  nullable: true
+  description: Low is the lowest price at which a security traded on a given date.
+- name: Close_
+  type: FLOAT
+  nullable: true
+  description: Close_ is the price at the close of the market. For stocks that do not trade on a given trading day, Close_
+    is an average of Bid and Ask.
+- name: Bid
+  type: FLOAT
+  nullable: true
+  description: Bid is the most recent bid price.
+- name: Ask
+  type: FLOAT
+  nullable: true
+  description: Ask is the most recent ask price.
+- name: Volume
+  type: FLOAT
+  nullable: true
+  description: Volume is the number of shares traded on the specified date, or within the specified period.
+- name: CCFactor
+  type: FLOAT
+  nullable: true
+  description: CCFactor is the currency conversion factor. If CCFactor is less than or greater than one, the data is denominated
+    in a currency other than CAD. The factor represents the spot rate on the trading date.
+- name: Flags
+  type: TINYINT
+  nullable: true
+  description: 'Flags have been discontinued and should not be used. LSEG Quantitative Analytics Database Schema for IDC Equity
+    Pricing (North American) 17 dbo.CPrcIdx: Canadian Index Closes This table contains pricing data for Canadian indexes.
+    This data can also be found in the Index table dbo.idxdaily.'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary reference across all CPrc* tables. To determine the multiplier (primarily for currencies),
+    cross-reference Code with dbo.CPrcInfo.Issue where CPrcIdx.Code = CPrcInfo.Code.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date for which the pricing applies.
+- name: Close_
+  type: FLOAT
+  nullable: true
+  description: 'Close_ is the price at the close of the market. For stocks that do not trade on a given trading day, Close_
+    is an average of Bid and Ask. dbo.CPrcInd: Canadian Security Indicators This table returns security indicator information.
+    This table is not maintained, and data may be unreliable. Information on this table is provided as a convenience; however,
+    using this table is not recommended.'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary reference across all CPrc* tables.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date for which the pricing applies.
+- name: ExpDate
+  type: smalldatetime
+  nullable: true
+  description: ExpDate is the expiration date or ending date for options, futures, and warrants and rights.
+- name: AdjFactor
+  type: FLOAT
+  nullable: true
+  description: AdjFactor is the adjustment factor used to adjust all per share data for stock splits, dividends, and other
+    capitalization changes. The adjustment factors apply to the time periods prior to the capitalization change, so that the
+    data reflect the current share units.
+- name: MarginCode
+  type: varchar(1)
+  nullable: true
+  description: MarginCode is described in the MarginCode section on page 18.
+- name: EvalDate
+  type: smalldatetime
+  nullable: true
+  description: EvalDate is the date based on the exchange-specific pricing for the last day the security traded or quoted
+    on its primary exchange.
+- name: IssueType
+  type: varchar(1)
+  nullable: true
+  description: IssueType is described in the IssueType section on page 18.
+- name: TradeType
+  type: varchar(1)
+  nullable: true
+  description: TradeType is described in the TradeType section on page 18.
+- name: IssueStatus
+  type: varchar(1)
+  nullable: true
+  description: IssueStatus indicates the status of a security, as assigned by IDC. IssueStatus cross-references with dbo.PrcCode2
+    where ascii(IssueStatus) = PrcCode2.Code and PrcCode2.Type_ = 5.
+- name: SPCode
+  type: varchar(1)
+  nullable: true
+  description: 'SPCode is described in the SPCode section on page 19. LSEG Quantitative Analytics Database Schema for IDC
+    Equity Pricing (North American) 18 MarginCode identifies whether the security is marginable and whether the security is
+    DTC-eligible. MarginCode can be: Code Description 0 Exchange-listed marginable 1 Not marginable 2 Marginable OTC A Exchange-listed
+    marginable, DTC, CNS B Exchange-listed marginable, DTC D Exchange-listed marginable, not DTC/CNS eligible E Not marginable
+    OTC, DTC F Not margi'
+- name: Cusip
+  type: varchar(8)
+  nullable: true
+  description: Cusip is the new or existing CUSIP.
+- name: Issuer
+  type: varchar(30)
+  nullable: true
+  description: Issuer is the name of the company that issued the security.
+- name: Issue
+  type: varchar(20)
+  nullable: true
+  description: Issue is a text description of the security type. The text description is non- uniform and non-standard. Use
+    SecType for classifying the stock as common, preferred, warrant, ADR, etc.
+- name: Ticker
+  type: varchar(12)
+  nullable: true
+  description: Ticker represents BaseTicker + Group_ + Series, concatenated (blank spaces removed).
+- name: Sedol
+  type: varchar(6)
+  nullable: true
+  description: Sedol is the Stock Exchange Daily Official List (SEDOL) number assigned to a security. If the table contains
+    SEDOL change data, Sedol is the active SEDOL for the security during the period between the start and end date.
+- name: Country
+  type: varchar(2)
+  nullable: true
+  description: Country returns the two-letter ISO country code for the issuer’s country of incorporation. It cross-references
+    with prc.PrcCur where Country = PrcCur.Country for the country name.
+- name: CurrEx
+  type: varchar(1)
+  nullable: true
+  description: CurrEx is the current trading location or security group. It cross-references with dbo.PrcCode2 where ascii(CurrEx)
+    = PrcCode2.Code and PrcCode2.Type_ = 2.
+- name: HistEx
+  type: varchar(1)
+  nullable: true
+  description: HistEx is the historical location. It cross-references with dbo.PrcCode2 where ascii(HistEx) = PrcCode2.Code
+    and PrcCode2.Type_ = 2.
+- name: SecType
+  type: varchar(1)
+  nullable: true
+  description: SecType is a code representing the security type. It cross-references with dbo.PrcCode2 where ascii(SecType)
+    = PrcCode2.Code and PrcCode2.Type_ = 1.
+- name: Status
+  type: varchar(1)
+  nullable: true
+  description: Status indicates the status of a security, assigned by IDC. It cross-references with dbo.PrcCode2 where ascii(Status)
+    = PrcCode2.Code and PrcCode2.Type_ = 5.
+- name: SIC
+  type: SMALLINT
+  nullable: true
+  description: SIC is the SIC code that classifies a company by its primary business activity. It cross-references with dbo.PrcCode2
+    where SIC = PrcCode2.Code and PrcCode2.Type_ = 7.
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all CPrc* tables.
+- name: PrimaryFlag
+  type: SMALLINT
+  nullable: true
+  description: PrimaryFlag is a flag for dually listed stocks that indicates the order in which a security is listed. A value
+    of 1 indicates the security is listed first; a value of 0 indicates the security is not listed first.
+- name: LastUpdate
+  type: smalldatetime
+  nullable: true
+  description: 'LastUpdate indicates the last time the information was updated. LSEG Quantitative Analytics Database Schema
+    for IDC Equity Pricing (North American) 21 dbo.CPrcMcr: Canadian Market Cap Ranks This table contains the ranking of securities
+    by market capitalization. Use the data in this table to find where a security ranks by market capitalization when compared
+    to other stocks.'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all CPrc* tables.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the first date for which ranking is valid.
+- name: RankAll
+  type: INTEGER
+  nullable: true
+  description: RankAll is computed once a month and includes ADRs.
+- name: RankStk
+  type: INTEGER
+  nullable: true
+  description: 'RankStk is Canadian-based only and does not include ADR; it is computed once a month. dbo.CPrcScChg: Canadian
+    Historical Ticker, CUSIP, and Name'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all Prc* tables.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date for which the pricing applies.
+- name: Open_
+  type: FLOAT
+  nullable: true
+  description: Open_ is the first price at which a security traded on a given date.
+- name: High
+  type: FLOAT
+  nullable: true
+  description: High is the highest price at which a security traded on a given date.
+- name: Low
+  type: FLOAT
+  nullable: true
+  description: Low is the lowest price at which a security traded on a given date.
+- name: Close_
+  type: FLOAT
+  nullable: true
+  description: Close_ is the price at the close of the market. For stocks that do not trade on a given trading day, Close_
+    is an average of Bid and Ask.
+- name: Volume
+  type: FLOAT
+  nullable: true
+  description: Volume is the number of shares traded on the specified date, or within the specified period.
+- name: TotRet
+  type: FLOAT
+  nullable: true
+  description: TotRet is the gross total return as a percent of the first close price. It is an index starting at 100 from
+    the IPO date or, if the company history extends beyond the date the data has been stored, it is 100 from the point at
+    which the data starts in the TRQA database (January 2, 1975). TotalRet takes into account price movement, dividends, spin-offs,
+    and takeovers.
+- name: CCFactor
+  type: FLOAT
+  nullable: true
+  description: CCFactor is the currency conversion factor. If CCFactor is less than or greater than one, the data is denominated
+    in a currency other than USD. The factor represents the spot rate on the trading date.
+- name: Flags
+  type: TINYINT
+  nullable: true
+  description: 'Flags have been discontinued and should not be used. prc.PrcEps: Pricing Earnings Information This table has
+    been discontinued. It is documented for your convenience, but using the data in this table is not recommended. This table
+    contains earnings per share data. Use the information in this table to determine historical earnings per share.'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary reference across all Prc* tables.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date of the price.
+- name: EpsMon
+  type: SMALLINT
+  nullable: true
+  description: EpsMon is the last month in an annual earnings per share period.
+- name: Eps
+  type: FLOAT
+  nullable: true
+  description: Eps is the basic or diluted earnings per share for the most recent twelve months.
+- name: EarnInd
+  type: varchar(1)
+  nullable: true
+  description: EarnInd is described in the EarnInd section on page 16.
+- name: IADModifier
+  type: SMALLINT
+  nullable: true
+  description: 'IADModifier identifies the manner in which the value in the IAD field must be adjusted to arrive at a final
+    value. IADModifier can be: Regular rate/no adjustment (0) LSEG Quantitative Analytics Database Schema for IDC Equity Pricing
+    (North American) 31'
+- name: IAD
+  type: FLOAT
+  nullable: true
+  description: 'IAD is the Indicated Annual Dividend. It is the IDC approximate indicator of dividend performance. prc.PrcExc:
+    Primary Exchange Pricing This table contains pricing for the primary exchange of a given security. All data fields are
+    stored in local currency.'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary reference across all Prc* tables.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date for which the pricing applies.
+- name: Open_
+  type: FLOAT
+  nullable: true
+  description: Open_ is the first price at which a security traded on a given date.
+- name: High
+  type: FLOAT
+  nullable: true
+  description: High is the highest price at which a security traded on a given date.
+- name: Low
+  type: FLOAT
+  nullable: true
+  description: Low is the lowest price at which a security traded on a given date.
+- name: Close_
+  type: FLOAT
+  nullable: true
+  description: Close_ is the price at the close of the market. For stocks that do not trade on a given trading day, Close_
+    is an average of Bid and Ask.
+- name: Bid
+  type: FLOAT
+  nullable: true
+  description: Bid is the most recent bid price.
+- name: Ask
+  type: FLOAT
+  nullable: true
+  description: Ask is the most recent ask price.
+- name: Volume
+  type: FLOAT
+  nullable: true
+  description: Volume is the number of shares traded on the specified date, or within the specified period.
+- name: CCFactor
+  type: FLOAT
+  nullable: true
+  description: CCFactor is the currency conversion factor. If CCFactor is less than or greater than one, the data is denominated
+    in a currency other than USD. The factor represents the spot rate on the trading date.
+- name: Flags
+  type: TINYINT
+  nullable: true
+  description: 'Flags have been discontinued and should not be used. prc.PrcIdx: Pricing Index Closes This table contains
+    pricing data for United States index closes.'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary reference across all Prc* tables. To determine the multiplier (primarily for currencies),
+    cross-reference Code with PrcInfo.Issue where PrcIdx.Code = PrcInfo.Code.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date for which the pricing applies.
+- name: Close_
+  type: FLOAT
+  nullable: true
+  description: 'Close_ is the price at the close of the market. For stocks that do not trade on a given trading day, Close_
+    is an average of Bid and Ask. LSEG Quantitative Analytics Database Schema for IDC Equity Pricing (North American) 32 prc.PrcInd:
+    Pricing Securities Indicators This table returns security indicator information. This table is not maintained and data
+    may be unreliable. Information on this table is provided as a convenience; however, using this table is not recommended.'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary reference across all Prc* tables.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date for which the pricing applies.
+- name: ExpDate
+  type: smalldatetime
+  nullable: true
+  description: ExpDate is the expiration date or ending date for options, futures, and warrants and rights.
+- name: AdjFactor
+  type: FLOAT
+  nullable: true
+  description: AdjFactor is the adjustment factor used to adjust all per share data for stock splits, dividends, and other
+    capitalization changes. The adjustment factors apply to the time periods prior to the capitalization change, so that the
+    data reflect the current share units.
+- name: MarginCode
+  type: varchar(1)
+  nullable: true
+  description: MarginCode is described in the MarginCode section on page 18.
+- name: EvalDate
+  type: smalldatetime
+  nullable: true
+  description: EvalDate is the date based on the exchange-specific pricing for the last day the security traded or quoted
+    on its primary exchange.
+- name: IssueType
+  type: varchar(1)
+  nullable: true
+  description: IssueType is described in the IssueType section on page 18.
+- name: TradeType
+  type: varchar(1)
+  nullable: true
+  description: TradeType is described in the TradeType section on page 18.
+- name: IssueStatus
+  type: varchar(1)
+  nullable: true
+  description: IssueStatus indicates the status of a security, as assigned by IDC. IssueStatus cross-references with dbo.PrcCode2
+    where ascii(IssueStatus) = PrcCode2.Code and PrcCode2.Type_ = 5.
+- name: SPCode
+  type: varchar(1)
+  nullable: true
+  description: 'SPCode is described in the SPCode section on page 19. prc.PrcInfo: United States Security Description Information
+    This table contains key security information, including security type, exchange traded, and ticker. Use the data in this
+    table to describe and define a security.'
+- name: Cusip
+  type: varchar(8)
+  nullable: false
+  description: Cusip is the new or existing CUSIP.
+- name: Issuer
+  type: varchar(30)
+  nullable: true
+  description: Issuer is the name of the company that issued the security.
+- name: Issue
+  type: varchar(20)
+  nullable: true
+  description: Issue is a text description of the security type. The text description is non- uniform and non-standard. Use
+    SecType for classifying the stock as common, preferred, warrant, ADR, etc.
+- name: Ticker
+  type: varchar(12)
+  nullable: true
+  description: Ticker represents BaseTicker + Group_ + Series, concatenated (blank spaces removed). LSEG Quantitative Analytics
+    Database Schema for IDC Equity Pricing (North American) 33
+- name: Sedol
+  type: varchar(6)
+  nullable: true
+  description: Sedol is the Stock Exchange Daily Official List (SEDOL) number assigned to a security. If the table contains
+    SEDOL change data, Sedol is the active SEDOL for the security during the period between the start and end date.
+- name: Country
+  type: varchar(2)
+  nullable: true
+  description: Country returns the two-letter ISO country code for the issuer’s country of incorporation. It cross-references
+    with prc.PrcCur where Country = PrcCur.Country for the country name.
+- name: CurrEx
+  type: varchar(1)
+  nullable: true
+  description: CurrEx is the current trading location or security group. It cross-references with dbo.PrcCode2 where ascii(CurrEx)
+    = PrcCode2.Code and PrcCode2.Type_ = 2.
+- name: HistEx
+  type: varchar(1)
+  nullable: true
+  description: HistEx is the historical location. It cross-references with dbo.PrcCode2 where ascii(HistEx) = PrcCode2.Code
+    and PrcCode2.Type_ = 2.
+- name: SecType
+  type: varchar(1)
+  nullable: true
+  description: SecType is a code representing the security type. It cross-references with dbo.PrcCode2 where ascii(SecType)
+    = PrcCode2.Code and PrcCode2.Type_ = 1.
+- name: Status
+  type: varchar(1)
+  nullable: true
+  description: Status indicates the status of a security, assigned by IDC. It cross-references with dbo.PrcCode2 where ascii(Status)
+    = PrcCode2.Code and PrcCode2.Type_ = 5.
+- name: SIC
+  type: SMALLINT
+  nullable: true
+  description: SIC cross-references with dbo.PrcCode2 where SIC = PrcCode2.Code and PrcCode2.Type_ = 7.
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all Prc* tables.
+- name: PrimaryFlag
+  type: SMALLINT
+  nullable: true
+  description: PrimaryFlag is a flag for dually listed stocks that indicates the order in which a security is listed. A value
+    of 1 indicates the security is listed first, a value of 0 indicates the security is not listed first.
+- name: LastUpdate
+  type: smalldatetime
+  nullable: true
+  description: 'LastUpdate indicates the last time the information was updated. To provide historical stock membership for
+    domestic issues, join prc.PrcInfo to prc.PrcScChg. For example, the following query returns all the common stock issues
+    that were trading on NASDAQ: DECLARE @DATE SMALLDATETIME SET @DATE = ''5/15/2001'''
+join_hints:
+- to: dbo
+  evidence: IssueStatus cross-references with dbo.PrcCode2 where ascii(IssueStatus) = PrcCode2.Code and PrcCode2.Type_ = 5.
+  type: cross_reference
+- to: dbo
+  evidence: IssueStatus cross-references with dbo.PrcCode2 where ascii(IssueStatus) = PrcCode2.Code and PrcCode2.Type_ = 5.
+  type: cross_reference
+- to: dbo
+  evidence: SIC smallint Y SIC cross-references with dbo.PrcCode2 where SIC = PrcCode2.Code and PrcCode2.Type_ = 7.
+  type: cross_reference
+---
+table: qa_idc_na.SELECT
+domain: pricing
+description: This table contains ranking of securities by market capitalization. Use the data in this table to find where
+  a | This table contains change records for security identifiers. Use the data in this table to find non-current identifiers.
+  | a security. If the table contains SEDOL change data, Sedol is the active | This table contains historical SEDOLS assigned
+  to a security. Use the data in this table to find an old SEDOL. | security. If the table contains SEDOL change data, Sedol
+  is the active SEDOL
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all Prc* tables.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the first date for which the rank is valid.
+- name: RankAll
+  type: INTEGER
+  nullable: true
+  description: RankAll is computed once a month and includes ADRs.
+- name: RankStk
+  type: INTEGER
+  nullable: true
+  description: 'RankStk is computed once a month. It is U.S.-based only and does not include ADRs. LSEG Quantitative Analytics
+    Database Schema for IDC Equity Pricing (North American) 34 prc.PrcScChg: Pricing Historical Ticker, CUSIP, and Name Changes
+    This table contains change records for security identifiers. Use the data in this table to find non-current identifiers.'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all Prc* tables.
+- name: StartDate
+  type: smalldatetime
+  nullable: false
+  description: StartDate is the effective date of the change.
+- name: EndDate
+  type: smalldatetime
+  nullable: true
+  description: EndDate is the last date before the change.
+- name: Cusip
+  type: varchar(8)
+  nullable: true
+  description: Cusip is the new or existing CUSIP.
+- name: Ticker
+  type: varchar(12)
+  nullable: true
+  description: Ticker represents BaseTicker + Group_ + Series, concatenated (blank spaces removed).
+- name: Sedol
+  type: varchar(6)
+  nullable: true
+  description: Sedol is the Stock Exchange Daily Official List (SEDOL) number assigned to a security. If the table contains
+    SEDOL change data, Sedol is the active SEDOL for the security during the period between the start and end date.
+- name: Issuer
+  type: varchar(40)
+  nullable: true
+  description: Issuer is the name of the company that issued the security.
+- name: FullTicker
+  type: varchar(6)
+  nullable: true
+  description: FullTicker represents BaseTicker + Group_ + Series. BaseTicker reserves positions 1 through 4, Group_ reserves
+    position 5, and Series reserves position 6.
+- name: BaseTicker
+  type: varchar(4)
+  nullable: true
+  description: BaseTicker is the base ticker without any Group_ or Series appendage.
+- name: Group_
+  type: varchar(1)
+  nullable: true
+  description: Group_ cross-references with dbo.PrcCode2 where ascii(Group_) = PrcCode2.Code and Type_ = 13 (for listed equities)
+    or Type_ = 14 (for non-listed equities).
+- name: Series
+  type: varchar(1)
+  nullable: true
+  description: Series cross-references with dbo.PrcCode2 where ascii(Series) = PrcCode2.Code and Type_ = 15 (for listed equities)
+    or Type_ = 16 (for non-listed equities).
+- name: Exchange
+  type: varchar(1)
+  nullable: true
+  description: 'Exchange is described in the Exchange section on page 22. prc.Prcsdlchg: Pricing Sedol Changes This table
+    contains historical SEDOLS assigned to a security. Use the data in this table to find an old SEDOL.'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all Prc* tables.
+- name: StartDate
+  type: smalldatetime
+  nullable: false
+  description: StartDate is the effective date of the change.
+- name: EndDate
+  type: smalldatetime
+  nullable: true
+  description: EndDate is the last date before the change.
+- name: Sedol
+  type: varchar(6)
+  nullable: true
+  description: 'Sedol is the Stock Exchange Daily Official List (SEDOL) number assigned to a security. If the table contains
+    SEDOL change data, Sedol is the active SEDOL for the security during the period between the start and end date. LSEG Quantitative
+    Analytics Database Schema for IDC Equity Pricing (North American) 35 prc.PrcShr: Pricing Shares Outstanding This table
+    contains shares outstanding data for a security over time. Use the data in this table to find current or historical shares
+    outstanding.'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all Prc* tables.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the date associated with the shares outstanding.
+- name: Shares
+  type: FLOAT
+  nullable: true
+  description: 'Shares are the unadjusted shares outstanding. Note: Shares are stored on a monthly basis up to December 31,
+    2000, unless a split occurred mid-month. After December 31, 2000, shares are stored on a daily basis. For example, on
+    May 27, 1999 IBM has an entry of 1841302016. May 27, 1999 is considered a mid-month split prior to December 31, 2000;
+    therefore, the split factor was applied to the prior month''s shares 920651008 to compute the value for May 27, 1999.
+    dbo.PrcTxtCode: IDC Pricing Text Codes '
+- name: Type_
+  type: varchar(17)
+  nullable: false
+  description: Type_ is the name of the column to which the codes apply
+- name: Code
+  type: varchar(11)
+  nullable: false
+  description: Code is an integer that requires translation. Refer to Type_ for translation.
+- name: Desc_
+  type: varchar(180)
+  nullable: true
+  description: 'Desc_ provides a plain-language description for a Code defined by Type_. prc.Prctkchg: Pricing Historical
+    Ticker Changes This table contains historical ticker symbols and the dates for which the tickers are valid. Use the data
+    in this table to find a security using an old ticker.'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all Prc* tables.
+- name: StartDate
+  type: smalldatetime
+  nullable: false
+  description: StartDate is the effective date of the change.
+- name: EndDate
+  type: smalldatetime
+  nullable: true
+  description: EndDate is the last date before the change. LSEG Quantitative Analytics Database Schema for IDC Equity Pricing
+    (North American) 36
+- name: Ticker
+  type: varchar(12)
+  nullable: true
+  description: 'Ticker represents BaseTicker + Group_ + Series, concatenated (blank spaces removed). prc.PrcVol: Pricing Specialty
+    Series This table contains a breakdown of a given day’s trading volume and related metrics. Data in this table is stored
+    in local currency. Use the data to assess trade action and volume weighted average trade value for a given day.'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all Prc* tables.
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is date associated with the short interest entry.
+- name: Bid
+  type: FLOAT
+  nullable: true
+  description: Bid is the most recent bid price.
+- name: Ask
+  type: FLOAT
+  nullable: true
+  description: Ask is the most recent ask price.
+- name: Vwap
+  type: FLOAT
+  nullable: true
+  description: Vwap is the Volume Weighted Average price. This price is based on regular trading volume as well as pre-market
+    and post-market volume, and it is adjusted for cancels and corrections.
+- name: AvgTrade
+  type: FLOAT
+  nullable: true
+  description: AvgTrade is the average number of shares per NumTrades.
+- name: BlockVol
+  type: FLOAT
+  nullable: true
+  description: BlockVol is the composite block volume.
+- name: NumTrades
+  type: FLOAT
+  nullable: true
+  description: NumTrades is the composite number of trades executed.
+- name: CCFactor
+  type: FLOAT
+  nullable: true
+  description: CCFactor is the currency conversion factor. If CCFactor is less than or greater than one, the data is denominated
+    in a currency other than USD. The factor represents the spot rate on the trading date.
+- name: Flags
+  type: TINYINT
+  nullable: true
+  description: 'Flags have been discontinued and should not be used. prc.splitann: Split Dates and Rates Use this table to
+    retrieve split dates and rates.'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the primary link across all Prc* tables.
+- name: AnnDate
+  type: smalldatetime
+  nullable: false
+  description: AnnDate is the announced date of the dividend, or the date on which the corporation or fund declared a split.
+    LSEG Quantitative Analytics Database Schema for IDC Equity Pricing (North American) 37
+- name: ExDate
+  type: smalldatetime
+  nullable: true
+  description: ExDate is the ex-dividend date. The ex-dividend date is the date on and after which security transactions are
+    generally not eligible for the income payment. If not available, it is nine-filled.
+- name: PayDate
+  type: smalldatetime
+  nullable: true
+  description: PayDate is the date declared by a company on which a payment is to be made to stockholders, or on which a split
+    occurs.
+- name: Ratio
+  type: FLOAT
+  nullable: true
+  description: Ratio is a divisor for shares outstanding. Cross-reference Ratio with prc.PrcShr and apply the ratio to shares
+    outstanding for the specified time period. The Ratio is a cumulative factor. Note that many ADRs have more than one divisor
+    throughout their history. LSEG Quantitative Analytics Database Schema for IDC Equity Pricing (North American) Copyright
+    © 2024 London Stock Exchange Group plc and its group of companies (LSEG) and/or its affiliates. All rights reserved. The
+    LSEG content received th
+join_hints:
+- to: dbo
+  evidence: Group_ varchar(1) Y Group_ cross-references with dbo.PrcCode2 where ascii(Group_) = PrcCode2.Code and Type_ =
+    13 (for listed equities) or Type_ = 14 (for non-listed equities).
+  type: cross_reference
+- to: dbo
+  evidence: Series varchar(1) Y Series cross-references with dbo.PrcCode2 where ascii(Series) = PrcCode2.Code and Type_ =
+    15 (for listed equities) or Type_ = 16 (for non-listed equities).
+  type: cross_reference

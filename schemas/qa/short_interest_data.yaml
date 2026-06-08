@@ -1,0 +1,110 @@
+table: qa_short_int.ShortInt2Code
+domain: short_interest
+description: Numeric Codes | This table contains descriptions of numeric codes.
+update_cadence: Once monthly on approximately the 20th day of each month.
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Type_ is a numeric code for a type of data.
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is a coded value for an element of Type_. When Type_ = 0, Code is the numeric code for each Type_ other
+    than 0 and Desc_ is a description of each Type_.
+- name: Desc_
+  type: varchar(50)
+  nullable: true
+  description: Desc_ is a plain-language description of the element defined by Type_ and Code.
+---
+table: qa_short_int.ShortInt2Data
+domain: short_interest
+description: Monthly Short Interest Data | Use this table to retrieve Short Interest data from the NYSE, NASDAQ, AMEX, ARCA,
+  and/or OTC.
+update_cadence: Twice a month.
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the equity identifier provided by the vendor. ShortInt2Data.Code joins directly to SecMstrX.SecCode.
+- name: Exch
+  type: INTEGER
+  nullable: false
+  description: 'Exch indicates the exchange and may be: NYSE (1), NASDAQ (2), AMEX (3), ARCA (4), or OTC (5).'
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the settlement date.
+- name: Shares
+  type: FLOAT
+  nullable: true
+  description: Shares is the monthly short interest.
+- name: Volume
+  type: FLOAT
+  nullable: true
+  description: Volume is the number of shares traded on the specified date, or within the specified period.
+- name: Ticker
+  type: varchar(9)
+  nullable: true
+  description: Ticker represents BaseTicker + Group_ + Series, concatenated (blank spaces removed).
+- name: LicFlag
+  type: SMALLINT
+  nullable: false
+  description: 'LicFlag is the license flag that identifies to which entitlement package each data row belongs. LicFlag may
+    be: NYSE (1), NASDAQ (2), AMEX (4), ARCA (8), or OTC (16). LSEG Quantitative Analytics Database Schema for Short Interest
+    7'
+---
+table: qa_short_int.ShortInt2Desc
+domain: short_interest
+description: Character Code Descriptions | This table contains descriptions of character codes. | table you use depends on
+  the database version you are using. For LSEG Quantitative Analytics database
+update_cadence: Twice a month.
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Type_ is a numeric code for a type of data.
+- name: Code
+  type: varchar(10)
+  nullable: false
+  description: Code is a coded value for an element of Type_. When Type_ = 0, Code is the numeric code for each Type_ other
+    than 0 and Desc_ is a description of each Type_.
+- name: Desc_
+  type: varchar(128)
+  nullable: true
+  description: 'Desc_ is a plain-language description of the element defined by Type_ and Code. LSEG Quantitative Analytics
+    Database Schema for Short Interest 8 3. Legacy Short Interest Data prc.ShortInt and dbo.ShortInt: Monthly Short Interest
+    (Legacy) NOTE: prc.ShortInt and dbo.ShortInt are legacy short interest tables. These tables will be discontinued in the
+    future on a date yet to be determined. Clients will be notified of the date when it is known. It is recommended that you
+    use the ShortInt2* tables inst'
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: In prc.ShortInt, Code is the primary link across all Prc* tables. In dbo.ShortInt, for LSEG Quantitative Analytics
+    database 5.86 through 6.2, Code is the primary link across the SecMapX and SecMstrX tables. For information about the
+    SecMapX and SecMstrX tables, refer to the Database Schema for LSEG Quantitative Analytics Core Tables document posted
+    on the LSEG Quantitative Analytics product page on MyAccount.
+- name: Exch
+  type: INTEGER
+  nullable: false
+  description: 'Exch indicates the exchange and may be: 1 (NYSE), 2 (NASDAQ), 3 (AMEX), or 4 (Arca).'
+- name: Date_
+  type: smalldatetime
+  nullable: false
+  description: Date_ is the settlement date.
+- name: Shares
+  type: FLOAT
+  nullable: true
+  description: Shares are the monthly short interest.
+- name: Volume
+  type: FLOAT
+  nullable: true
+  description: Volume is the number of shares traded on the specified date, or within the specified period.
+- name: Ticker
+  type: varchar(8)
+  nullable: true
+  description: 'Ticker represents BaseTicker + Group_ + Series, concatenated (blank spaces removed). LSEG Quantitative Analytics
+    Database Schema for Short Interest Copyright © 2024 London Stock Exchange Group plc and its group of companies (LSEG)
+    and/or its affiliates. All rights reserved. The LSEG content received through this service is the intellectual property
+    of LSEG or its third party suppliers. Republicati on or redistribution of content provided by LSEG is expressly prohibited
+    without the prior written '

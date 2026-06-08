@@ -1,0 +1,1432 @@
+table: qa_rdc.RDCCode
+domain: reference
+description: Numeric Codes | This table contains descriptions of Reference Data Convergence (RDC) numeric codes.
+update_cadence: One hour
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Type_ is a numeric code for a type of data.
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is a coded value for an element of Type_. When Type_ = 0, Code is the numeric code for each Type_ other
+    than 0 and Desc_ is a description of each Type_.
+- name: Desc_
+  type: varchar(255)
+  nullable: true
+  description: Desc_ is a plain-language description of the element defined by Type_ and Code.
+---
+table: qa_rdc.RDCDesc
+domain: reference
+description: Character Code Descriptions | This table contains descriptions of Reference Data Convergence (RDC) character
+  codes.
+update_cadence: 'One hour Adjusted: N/A'
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Type_ is a numeric code for a type of data.
+- name: Code
+  type: varchar(50)
+  nullable: false
+  description: Code is a coded value for an element of Type_. When Type_ = 0, Code is the numeric code for each Type_ other
+    than 0 and Desc_ is a description of each Type_.
+- name: Desc_
+  type: varchar(255)
+  nullable: true
+  description: Desc_ is a plain-language description of the element defined by Type_ and Code. Quantitative Analytics Database
+    Schema for RDC 8
+---
+table: qa_rdc.RDCOrgAddr
+domain: reference
+description: Address and Contact Information | This table contains the address and contact information of an organization.
+update_cadence: One hour
+columns:
+- name: OrgId
+  type: INTEGER
+  nullable: false
+  description: OrgId is the permanent identifier of the organization.
+- name: AddrTypeCode
+  type: char(2)
+  nullable: true
+  description: 'AddrTypeCode is the address type of the organization. AddrTypeCode can be: TR = Trading MK = Marketing RG
+    = Registered HQ = Headquarters RDCOrgAddr.AddrTypeCode cross-references with RDCDesc.Code where Type_ = 80948.'
+- name: EmailId
+  type: varchar(255)
+  nullable: true
+  description: EmailId is the e-mail address of the organization.
+- name: FaxNo
+  type: varchar(75)
+  nullable: true
+  description: FaxNo is the fax number.
+- name: IndiEmailId
+  type: varchar(255)
+  nullable: true
+  description: IndiEmailId is the e-mail address of the individual.
+- name: IndiFaxNo
+  type: varchar(75)
+  nullable: true
+  description: IndiFaxNo is the fax number of the individual.
+- name: IndiName
+  type: varchar(110)
+  nullable: true
+  description: IndiName is the contact name of the individual.
+- name: IndiTelNo
+  type: varchar(75)
+  nullable: true
+  description: IndiTelNo is the telephone number of the individual.
+- name: PostalCode
+  type: varchar(10)
+  nullable: true
+  description: PostalCode is the first line of an address, excluding county, zip code, and country.
+- name: StateCntry
+  type: varchar(90)
+  nullable: true
+  description: StateCntry is the state or country in the address.
+- name: StrAddr
+  type: varchar(255)
+  nullable: true
+  description: StrAddr is the first line of an address, excluding county, zip code, and country.
+- name: CityTown
+  type: varchar(90)
+  nullable: true
+  description: CityTown is the city or town of an address.
+- name: TelNo
+  type: varchar(75)
+  nullable: true
+  description: TelNo is the telephone number.
+- name: TollFreeNo
+  type: varchar(75)
+  nullable: true
+  description: TollFreeNo is the toll free number of the organization.
+- name: WebAddr
+  type: varchar(255)
+  nullable: true
+  description: WebAddr is the organization’s Web site.
+join_hints:
+- to: RDCDesc
+  evidence: 'AddrTypeCode can be: TR = Trading MK = Marketing RG = Registered HQ = Headquarters RDCOrgAddr.AddrTypeCode cross-references
+    with RDCDesc.Code where Type_ = 80948.'
+  type: cross_reference
+---
+table: qa_rdc.RDCOrgInfo
+domain: reference
+description: Organization Information | This table contains information for organizations of interest in the capital markets.
+update_cadence: One hour
+columns:
+- name: OrgId
+  type: INTEGER
+  nullable: false
+  description: OrgId is the permanent identifier of the organization.
+- name: ComName
+  type: varchar(110)
+  nullable: true
+  description: ComName is the name of the organization in mixed case, manually limited to 80 characters to meet OptionX requirements.
+    The organization’s legal name is used to populate this field when the legal name does not exceed 80 characters.
+- name: LegalName
+  type: varchar(255)
+  nullable: true
+  description: LegalName is the fully registered legal name of the company, or the official name of the institution.
+- name: ShortName
+  type: varchar(40)
+  nullable: true
+  description: ShortName is the short name of the organization in mixed case (unless it is a recognized acronym entered in
+    uppercase, such as IBM for International Business Machines Corp), manually limited to a maximum of 16 characters.
+- name: OrgStatus
+  type: char(2)
+  nullable: true
+  description: 'OrgStatus is the role-to-issue status of the organization. It can have the following values: AC = Active DC
+    = Inactive Values are to be populated automatically, according to the type of organization. Values are never populated
+    or maintained manually.'
+- name: ContriCode
+  type: varchar(20)
+  nullable: true
+  description: ContriCode is the code used to identify organizations contributing data (usually quotes) to the real-time Integrated
+    Data Network. (IDN). RDCOrgInfo.ContriCode cross-references with RDCDesc.Code where Type_ = 27035.
+- name: ContriTypeCode
+  type: char(3)
+  nullable: true
+  description: ContriTypeCode is the classifier of the contributing organization. ContriTypeCode can be bank or broker. RDCOrgInfo.ContriTypeCode
+    cross-references with RDCDesc.Code where Type_ = 110661.
+- name: ClSiteLocCode
+  type: varchar(20)
+  nullable: true
+  description: ClSiteLocCode uniquely identifies the contributor. The code is comprised of the country code, followed by a
+    generated sequence number of the contributor in that country. RDCOrgInfo.ClSiteLocCode cross-references with RDCDesc.Code
+    where Type_ = 114785.
+- name: CntryHQISOCode
+  type: char(3)
+  nullable: true
+  description: CntryHQISOCode is the geographical headquarters of the organization. RDCOrgInfo.CntryHQISOCode cross-references
+    with RDCDesc.Code where Type_ = 27165.
+- name: CntryOfIncCode
+  type: char(3)
+  nullable: true
+  description: CntryOfIncCode is the country in which the party received its charter, allowing it to operate as a corporation.
+    If the country of incorporation is not disclosed, or if the company is not a corporation, then this would be populated
+    the same as the current country or where the company was formed. RDCOrgInfo.CntryOfIncCode cross-references with RDCDesc.Code
+    where Type_ = 30986.
+- name: ISOCurrCode
+  type: char(3)
+  nullable: true
+  description: ISOCurrCode is the currency of record of the fund entity. RDCOrgInfo.ISOCurrCode cross-references with RDCDesc.Code
+    where Type_ = 80867.
+- name: OrgTypeCode
+  type: varchar(5)
+  nullable: true
+  description: OrgTypeCode is described in the OrgTypeCode section on page 10.
+- name: DFlag
+  type: INTEGER
+  nullable: true
+  description: DFlag stores a bitmasked combination for the IsContributor, IsExch, and IsFundSupCmp data items.
+- name: NDAOrgID
+  type: BIGINT
+  nullable: true
+  description: NDAOrgId is the unique permanent organization identifier provided by LSEG. This is different from OrgID, which
+    is used within RDC only.
+- name: TMTPermID
+  type: varchar(10)
+  nullable: true
+  description: TMTPermId Entity Id for the Thomson Mapping Tool (TMT) Quotation Entity.
+- name: GemPermID
+  type: BIGINT
+  nullable: true
+  description: GEMPermID Entity Id for the Global Entity Master (GEM) Quotation Entity.
+---
+table: qa_rdc.RDCOrgMLInfo
+domain: reference
+description: Multi-Language Organization Information | This table contains multi-language information for organizations of
+  interest in the capital markets.
+update_cadence: One hour
+columns:
+- name: OrgId
+  type: INTEGER
+  nullable: false
+  description: OrgId is the permanent identifier of the organization.
+- name: LangCode
+  type: TINYINT
+  nullable: false
+  description: The code associated with the particular language.
+- name: ComName
+  type: nvarchar(110)
+  nullable: true
+  description: ComName is the name of the organization in mixed case, manually limited to 80 characters to meet OptionX requirements.
+    The organization’s legal name is used to populate this field when the legal name does not exceed 80 characters.
+- name: LegalName
+  type: nvarchar(255)
+  nullable: true
+  description: LegalName is the fully registered legal name of the company, or the official name of the institution.
+- name: ShortName
+  type: nvarchar(40)
+  nullable: true
+  description: ShortName is the short name of the organization in mixed case (unless it is a recognized acronym entered in
+    uppercase, such as IBM for International Business
+---
+table: qa_rdc.Machines
+domain: reference
+columns:
+- name: IndiName
+  type: nvarchar(110)
+  nullable: true
+  description: IndiName is the contact name of the individual.
+---
+table: qa_rdc.RDCTRBCAudit
+domain: reference
+description: TRBC Audit Trail | This data table contains audit trail for any change in TRBC assignments.
+update_cadence: One hour
+columns:
+- name: OrgId
+  type: INTEGER
+  nullable: false
+  description: OrgId is the permanent identifier of the organization entity.
+- name: AuditCode
+  type: INTEGER
+  nullable: false
+  description: 'AuditCode represents the change type for TRBC assignments: – GRO: Internal growth (business) – MAA: M&A (business)
+    – DIV: Divestiture (business) – DIS: Discontinuation (business) – SCH: Change in schema – ERR: Error Correction – REV:
+    Review RDCTRBCAudit.AuditCode cross-references with RDCCode.Code where Type_ = 115371.'
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the date on which the validity of the attribute value begins.
+- name: StartTime
+  type: INTEGER
+  nullable: false
+  description: The time from which the attribute value is valid. Displayed in seconds-from-midnight format in GMT.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the date on which the validity of the attribute value ends.
+- name: EndTime
+  type: INTEGER
+  nullable: true
+  description: The time till which the attribute value is valid. Displayed in seconds-from-midnight format in GMT.
+join_hints:
+- to: RDCCode
+  evidence: 'AuditCode int N AuditCode represents the change type for TRBC assignments: – GRO: Internal growth (business)
+    – MAA: M&A (business) – DIV: Divestiture (business) – DIS: Discontinuation (business) – SCH: Change in schema – ERR: Error
+    Correction – REV: Review RDCTRBCAudit.AuditCode cross-references wit'
+  type: cross_reference
+---
+table: qa_rdc.RDCTRBCData
+domain: reference
+description: TRBC Primary Codes | This table contains the current and historic TRBC primary codes for an organization.
+update_cadence: One hour
+columns:
+- name: OrgId
+  type: INTEGER
+  nullable: false
+  description: OrgId is the permanent identifier of the organization entity.
+- name: TRBCId
+  type: SMALLINT
+  nullable: false
+  description: TRBCId is the current primary Reuters Business Sector
+---
+table: qa_rdc.Schema
+domain: reference
+columns:
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the date on which the validity of the attribute value begins.
+- name: StartTime
+  type: INTEGER
+  nullable: false
+  description: The time from which the attribute value is valid. Displayed in seconds-from-midnight format in GMT.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the date on which the validity of the attribute value ends.
+- name: EndTime
+  type: INTEGER
+  nullable: true
+  description: The time till which the attribute value is valid. Displayed in seconds-from-midnight format in GMT.
+- name: IsPrimary
+  type: TINYINT
+  nullable: true
+  description: IsPrimary indicates if TRBCId is the primary classification.
+---
+table: qa_rdc.RDCTRBCInfo
+domain: reference
+description: TRBC Item Information | This table contains TRBC item information.
+update_cadence: One hour
+columns:
+- name: TRBCId
+  type: SMALLINT
+  nullable: false
+  description: TRBCId identifies each business entity property. This
+- name: TRBCGrpId
+  type: TINYINT
+  nullable: true
+  description: TRBCGrpId is the business entity to which each item belongs.
+- name: HierarchicalId
+  type: INTEGER
+  nullable: true
+  description: HierarchicalId is the numeric code assigned by Reference Data Convergence (RDC).
+- name: Mnemonic
+  type: varchar(5)
+  nullable: true
+  description: Mnemonic is the char code assigned by RDC.
+- name: ShortTitle
+  type: varchar(255)
+  nullable: true
+  description: ShortTitle is the short property name for each item.
+- name: Title
+  type: varchar(255)
+  nullable: true
+  description: Title is the property name for each item.
+- name: ShortDesc
+  type: varchar(350)
+  nullable: true
+  description: ShortDesc is the short description for each item.
+- name: LongDesc
+  type: varchar(960)
+  nullable: true
+  description: LongDesc is the long description for each item.
+---
+table: qa_rdc.RDCTRBCMLItem
+domain: reference
+description: TRBC Multi-Language Item Information | This table contains TRBC multi-language item information.
+update_cadence: One hour
+columns:
+- name: TRBCId
+  type: SMALLINT
+  nullable: false
+  description: TRBCId identifies each business entity property. This
+- name: LangCode
+  type: TINYINT
+  nullable: false
+  description: The code associated with the particular language.
+- name: Title
+  type: nvarchar(255)
+  nullable: true
+  description: Title is the property name for each item.
+- name: ShortDesc
+  type: nvarchar(350)
+  nullable: true
+  description: ShortDesc is the short description for each item.
+---
+table: qa_rdc.RDCTRBCInfoChg
+domain: reference
+description: TRBC Item Change Information | This table contains TRBC item information and captures and maintains the historical
+  associations between
+update_cadence: One hour
+columns:
+- name: TRBCId
+  type: SMALLINT
+  nullable: false
+  description: TRBCId identifies each business entity property. This
+- name: TRBCGrpId
+  type: TINYINT
+  nullable: true
+  description: TRBCGrpId is the business entity to which each item belongs.
+- name: HierarchicalId
+  type: INTEGER
+  nullable: true
+  description: HierarchicalId is the numeric code assigned by Reference Data Convergence (RDC).
+- name: Mnemonic
+  type: varchar(5)
+  nullable: true
+  description: Mnemonic is the char code assigned by RDC.
+- name: ShortTitle
+  type: varchar(255)
+  nullable: true
+  description: ShortTitle is the short property name for each item.
+- name: Title
+  type: varchar(255)
+  nullable: true
+  description: Title is the property name for each item.
+- name: ShortDesc
+  type: varchar(350)
+  nullable: true
+  description: ShortDesc is the short description for each item.
+- name: LongDesc
+  type: varchar(960)
+  nullable: true
+  description: LongDesc is the long description for each item.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date from which the attribute values are valid.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date till which the attribute values are valid.
+---
+table: qa_rdc.RDCTRBCMap
+domain: reference
+description: TRBC Mapping Information | industries, and 837 activity codes. This table captures the association between all
+  levels.
+update_cadence: One hour
+columns:
+- name: ActTRBCId
+  type: SMALLINT
+  nullable: false
+  description: ActTRBCId is the relevant activity code derived from RDCTRBC* tables.
+- name: IndTRBCId
+  type: SMALLINT
+  nullable: false
+  description: IndTRBCId is the relevant industry sector derived from RDCTRBC* tables.
+- name: IndGrpTRBCId
+  type: SMALLINT
+  nullable: false
+  description: IndGrpTRBCId is the relevant industry group derived from RDCTRBC* tables.
+- name: BusTRBCId
+  type: SMALLINT
+  nullable: false
+  description: BusTRBCId is the relevant business sector derived from RDCTRBC* tables.
+- name: EcoTRBCId
+  type: SMALLINT
+  nullable: false
+  description: EcoTRBCId is the relevant economic sector derived from RDCTRBC* tables.
+---
+table: qa_rdc.RDCInstrInfo
+domain: reference
+description: Instrument Level Information | This data table contains financial instruments and indicators with reference and
+  descriptive information provided
+update_cadence: Daily
+columns:
+- name: InstrID
+  type: INTEGER
+  nullable: false
+  description: InstrID is the Permanent Identifier of the instrument.
+- name: InstrStatusCode
+  type: char(2)
+  nullable: true
+  description: For non-debt issues, if an issue asset/instrument has at least one quote that is active (AssetState = 'AC'),
+    then AssetState is Active 'AC'. If all quote assets are deactivated (AssetState = 'DC'), then AssetState is Deactivated
+    'DC'. AssetState is derived for all asset types except debt issues that are maintained by the DBS forward feed. AssetState
+    is 'NA' (Not Applicable) when no quote asset is found against the issue/instrument. In particular, new issues get 'NA'
+    status as soon as they are cr
+- name: ComName
+  type: varchar(110)
+  nullable: true
+  description: In most instances, ComName is not populated, except for equity indices and warrants sourced from DBS.
+- name: InstrCatCode
+  type: char(4)
+  nullable: true
+  description: InstrCatCode cross-references RDCDesc where InstrCatCode= RDCDesc.Code and RDCDesc.Type_ = 59.
+- name: InstrType
+  type: varchar(40)
+  nullable: true
+  description: InstrType is the single-level, broad asset classification scheme, used principally as an internal scheme for
+    time series classification. This field is always mapped to the more granular AssetCategory scheme.
+- name: IssueISOCurrCode
+  type: char(3)
+  nullable: true
+  description: 'IssueISOCurrCode is derived according to logic from the following fields: – Valuation Quote''s Base Currency
+    for Equity Issues – Principal Currency for Fixed Income (Debt) Issues – Quote Asset''s Quotation Currency for Warrant
+    Issues The issue currency data is system-driven. It is a derived attribute that is not able to be updated by applications.
+    It will be updated by changes to the source fields (the currency held in either Valuation Quote Currency or Principal
+    Currency fields). All changes made'
+- name: IsCDSConv
+  type: TINYINT
+  nullable: true
+  description: IsCDSConv is the most liquid contract for doc clause and currency.
+- name: MifidStatusCode
+  type: varchar(8)
+  nullable: true
+  description: 'MifidStatusCode indicates whether the security is subject to MIFID regulation: – MIFID-U: Mifid unconfirmed
+    security – MIFID-E: Mifid eligible security – MIFID-L: Mifid top liquidity security'
+- name: MostReleMrkt
+  type: char(3)
+  nullable: true
+  description: MostReleMrkt references the country where the instrument was first admitted to trading on a regulated market.
+- name: RCSAssetCla
+  type: varchar(10)
+  nullable: true
+  description: RCSAssetCla cross-references RDCDesc where RCSAssetCla= RDCDesc.Code and RDCDesc.Type_ = 60.
+- name: ShortName
+  type: varchar(20)
+  nullable: true
+  description: ShortName is not mandatory for Issue Assets. This field may hold a value for some debt and commodities instruments
+    (sourced from DBS and CMI respectively). No formal standard has been set.
+- name: OrgID
+  type: INTEGER
+  nullable: true
+  description: OrgID is the permanent identifier of the organization.
+- name: PrimTrdQuotePI
+  type: INTEGER
+  nullable: true
+  description: PrimTrdQuotePI is similar to the VQ, but the tradable RIC is used. This is very US-specific where market cap
+    for the issue must be calculated on a consolidated quote that is not a RIC you can trade. Therefore, PrimTrdQuotePI exists
+    to denote the main "primary" quote of a multi-listed share line in the US that can be traded.
+- name: TMTPermId
+  type: varchar(10)
+  nullable: true
+  description: TMTPermId is the permanent Identifier of the Instrument in the TMT/TKO Database.
+- name: GemPermId
+  type: BIGINT
+  nullable: true
+  description: GemPermId is the unique entity ID for the Instrument Entity. This field is currently sourced from GEM. Quantitative
+    Analytics Database Schema for RDC 17
+---
+table: qa_rdc.RDCInstrMLInfo
+domain: reference
+description: Multi-Language Instrument Level Information | This data table contains financial instruments and indicators with
+  multi-language reference and descriptive
+update_cadence: Daily
+columns:
+- name: InstrID
+  type: INTEGER
+  nullable: false
+  description: InstrID is the Permanent Identifier of the instrument.
+- name: LangCode
+  type: TINYINT
+  nullable: false
+  description: The code associated with the particular language.
+- name: ComName
+  type: nvarchar(110)
+  nullable: true
+  description: ComName is the name of the organization in mixed case, manually limited to 80 characters to meet OptionX requirements.
+    The organization’s legal name is used to populate this field when the legal name does not exceed 80 characters.
+- name: ShortName
+  type: nvarchar(20)
+  nullable: true
+  description: ShortName is not mandatory for Issue Assets. This field may hold a value for some debt and commodities instruments
+    (sourced from DBS and CMI respectively). No formal standard has been set.
+---
+table: qa_rdc.RDCSecMapX
+domain: reference
+description: RDC Security Map | This table provides mapping to vendor codes including ranking and time series.
+update_cadence: Daily
+columns:
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode links across the master tables.
+- name: VenType
+  type: SMALLINT
+  nullable: false
+  description: VenType is a unique type code for each vendor. VenType is defined in SecVenType.
+- name: VenCode
+  type: INTEGER
+  nullable: true
+  description: VenCode is the corresponding vendor’s unique code.
+- name: Rank
+  type: SMALLINT
+  nullable: false
+  description: 'Rank is the issue rank for issuers with multiple issues. Note: Ranking is determined upon initial load, and
+    will not necessarily change in response to new issues or volume/status changes.'
+- name: Exchange
+  type: SMALLINT
+  nullable: true
+  description: Exchange identifies whether the security is a United States security (1) or a Canadian security (2). A value
+    of 0 indicates that this field is not applicable.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: StartDate is the first date issuer information is valid.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the last date issuer information is valid.
+---
+table: qa_rdc.RDCRICData
+domain: reference
+description: RDC RIC Information | This table contains information on LSEG Instrument Codes (RIC).
+update_cadence: One hour
+columns:
+- name: QuoteID
+  type: INTEGER
+  nullable: false
+  description: Unique Entity Id for the Quote Entity. This is a numeric, system generated, non-changing identifier for the
+    specific quote.
+- name: SeqNo
+  type: SMALLINT
+  nullable: false
+  description: The sequential number of the quote. Start Date datetime No Identifies the date of the start of validity for
+    the instrument. Start Time int No Identifies the time of the start of validity for the instrument, noted in seconds after
+    midnight (GMT). End Date datetime Yes Identifies the time of the end of validity for the instrument. End Time int Yes
+    Identifies the time of the end of validity for the instrument, noted in seconds after midnight (GMT).
+- name: RIC
+  type: varchar(21)
+  nullable: true
+  description: LSEG Instrument Code, a unique identifier owned by LSEG.
+---
+table: qa_rdc.RDCQuoteInfo
+domain: reference
+description: RDC Quote Information | This table contains information on LSEG Instrument Codes (RIC).
+update_cadence: One hour
+columns:
+- name: QuoteID
+  type: INTEGER
+  nullable: false
+  description: Unique Entity Id for the Quote Entity. This is a numeric, system generated, non-changing identifier for the
+    specific quote, within the NDA Oracle database.
+- name: QuoteStatusCode
+  type: char(2)
+  nullable: true
+  description: The code indicating the status of the instrument.
+- name: QuoteType
+  type: varchar(40)
+  nullable: true
+  description: Classifier (executable or indicative) of the quote.
+- name: QuoteCatCode
+  type: char(4)
+  nullable: true
+  description: QuoteCatCode cross-references RDCDesc where QuoteCatCode= RDCDesc.Code and RDCDesc.Type_ = 59.
+- name: ComName
+  type: varchar(110)
+  nullable: true
+  description: The common name used for the quote, often same as the display name. Quantitative Analytics Database Schema
+    for RDC 19
+- name: IsSuspended
+  type: char(1)
+  nullable: true
+  description: Indicates whether a capitalisation quote is suspended.
+- name: QuoteISOCurrCode
+  type: char(3)
+  nullable: true
+  description: The currency in which the quote asset is quoted.
+- name: QuoteGrpByPsExch
+  type: varchar(3)
+  nullable: true
+  description: Exchange code for the given quote asset - includes both real world and pseudo exchange codes.
+- name: QuoteCla
+  type: char(3)
+  nullable: true
+  description: The Classification the instrument belongs to.
+- name: RateTypeCode
+  type: varchar(6)
+  nullable: true
+  description: Quote, calculated or composite.
+- name: RSCAssetCla
+  type: varchar(10)
+  nullable: true
+  description: RSCAssetCla cross-references RDCDesc where RSCAssetCla= RDCDesc.Code and RDCDesc.Type_ = 60.
+- name: ShortName
+  type: varchar(20)
+  nullable: true
+  description: Shortened name of the quote.
+- name: TagCla
+  type: varchar(255)
+  nullable: true
+  description: Timeseries Asset Group (TAG) that the quote is in.
+- name: InstrID
+  type: INTEGER
+  nullable: true
+  description: Permanent Identifier of the instrument.
+- name: Mic
+  type: varchar(4)
+  nullable: true
+  description: Market Identification Code.
+- name: Opol
+  type: varchar(4)
+  nullable: true
+  description: Official Place of Listing. This is the same as the MIC code and is assigned to the instrument decreed by the
+    LSE to be the Official Place of Listing in a particular country.
+- name: Ticker
+  type: varchar(25)
+  nullable: true
+  description: Tickers or Symbols related to the Quote.
+- name: TMTPermID
+  type: varchar(10)
+  nullable: true
+  description: Entity Id for the Thomson Mapping Tool (TMT) Quotation Entity.
+- name: GEMPermID
+  type: BIGINT
+  nullable: true
+  description: Entity Id for the Global Entity Master (GEM) Quotation Entity.
+---
+table: qa_rdc.RDCQuoteMLInfo
+domain: reference
+description: RDC Multi-Language Quote Information | This table contains multi-language information on LSEG Instrument Codes
+  (RIC).
+update_cadence: One hour
+columns:
+- name: OrgId
+  type: INTEGER
+  nullable: false
+  description: OrgId is the permanent identifier of the organization.
+- name: LangCode
+  type: TINYINT
+  nullable: false
+  description: The code associated with the particular language.
+- name: ComName
+  type: nvarchar(220)
+  nullable: true
+  description: ComName is the name of the organization in mixed case, manually limited to 80 characters to meet OptionX requirements.
+    The organization’s legal name is used to populate this field when the legal name does not exceed 80 characters.
+- name: ShortName
+  type: nvarchar(40)
+  nullable: true
+  description: Shortened name of the quote.
+- name: Ticker
+  type: nvarchar(50)
+  nullable: true
+  description: Tickers or Symbols related to the Quote. Quantitative Analytics Database Schema for RDC 20
+---
+table: qa_rdc.RDCGSecMapX
+domain: reference
+description: Global RDC Security Map | This table provides mapping to all available vendor codes including ranking and time
+  series.
+update_cadence: Daily
+columns:
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode links across the master tables.
+- name: VenType
+  type: SMALLINT
+  nullable: false
+  description: VenType is a unique type code for each vendor. VenType is defined in SecVenType.
+- name: VenCode
+  type: INTEGER
+  nullable: true
+  description: VenCode is the corresponding vendor’s unique code. For RDC, VenType = 55.
+- name: Rank
+  type: SMALLINT
+  nullable: false
+  description: 'Rank is the issue rank for issuers with multiple issues. Note: Ranking is determined upon initial load, and
+    will not necessarily change in response to new issues or volume/status changes.'
+- name: Exchange
+  type: SMALLINT
+  nullable: true
+  description: (Reserved for future development.)
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: StartDate is the first date issuer information is valid.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the last date issuer information is valid.
+---
+table: qa_rdc.RDCCusipData
+domain: reference
+description: RDC Cusip Data | The RDCCusipData table will store all the current and historic Cusip values for an instrument.
+update_cadence: One hour
+columns:
+- name: InstrID
+  type: INTEGER
+  nullable: false
+  description: Primary Identifier of the entity.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Integer unique identifier to uniquely identify each business entity property (attribute).
+- name: SeqNo
+  type: SMALLINT
+  nullable: false
+  description: Sequence Number in case the entity has multiple entries.
+- name: StartDate_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: The date from which validity of the attribute value begins.
+- name: StartTime
+  type: INTEGER
+  nullable: false
+  description: The time from which the attribute value is valid. Displayed in seconds-from-midnight format in GMT.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date when validity of the attribute value ends.
+- name: EndTime
+  type: INTEGER
+  nullable: true
+  description: The time till which the attribute value is valid. Displayed in seconds-from-midnight format in GMT.
+- name: Value_
+  type: Varchar(9)
+  nullable: true
+  description: This will hold cusip/cincusip value with and without the checkdigit.
+---
+table: qa_rdc.RDCDTData
+domain: reference
+description: RDC Date Time Data | The RDCDTData table stores the date and time details for all business entities.
+update_cadence: One hour
+columns:
+- name: EntityID
+  type: INTEGER
+  nullable: false
+  description: Primary Identifier of the entity.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Identifier that uniquely identifies each business entity property (attribute).
+- name: SeqNo
+  type: SMALLINT
+  nullable: false
+  description: Sequential number in cases where the entity has multiple entries.
+- name: DateValue_
+  type: INTEGER
+  nullable: true
+  description: Date associated with each entity attribute.
+- name: TimeValue_
+  type: INTEGER
+  nullable: true
+  description: Time associated with each entity attribute.
+---
+table: qa_rdc.RDCEntityMap
+domain: reference
+description: RDC Entity Map | The RDCEntityMap table maintains the relationship between the various entities.
+update_cadence: One hour
+columns:
+- name: EntityID1
+  type: INTEGER
+  nullable: false
+  description: Primary Identifier of the first entity in the relationship.
+- name: EntityTypeCode1
+  type: INTEGER
+  nullable: false
+  description: Codified value describing the first business entity.
+- name: EntityID2
+  type: INTEGER
+  nullable: false
+  description: Primary Identifier of the second entity in the relationship.
+- name: EntityTypeCode2
+  type: INTEGER
+  nullable: false
+  description: Codified value describing the second business entity.
+---
+table: qa_rdc.RDCFData
+domain: reference
+description: RDC Float Data | The RDCFData table stores all the current FLOAT values for the business entities.
+update_cadence: One hour
+columns:
+- name: EntityID
+  type: INTEGER
+  nullable: false
+  description: Primary Identifier of the entity.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Identifier that uniquely identifies each business entity property (attribute). Quantitative Analytics Database
+    Schema for RDC 22
+- name: SeqNo
+  type: SMALLINT
+  nullable: false
+  description: Sequential number in cases where the entity has multiple entries.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value of each item.
+---
+table: qa_rdc.RDCHistFData
+domain: reference
+description: RDC Historical Float Data | The RDCHistFData table stores all the historical FLOAT values for all business entities.
+update_cadence: One hour
+columns:
+- name: EntityID
+  type: INTEGER
+  nullable: false
+  description: Primary Identifier of the entity.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Identifier that uniquely identifies each business entity property (attribute).
+- name: SeqNo
+  type: SMALLINT
+  nullable: false
+  description: Sequential number in cases where the entity has multiple entries.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: The date from which the attribute value is valid.
+- name: StartTime
+  type: INTEGER
+  nullable: false
+  description: The time from which the attribute value is valid. Displayed in seconds-from-midnight format in GMT.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date till which the attribute value is valid.
+- name: EndTime
+  type: INTEGER
+  nullable: true
+  description: The time till which the attribute value is valid. Displayed in seconds-from-midnight format in GMT.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value of each item.
+---
+table: qa_rdc.RDCHistLNData
+domain: reference
+description: RDC Historical Data | The RDCHistLNData table stores the historical BIG INT values for all business entities.
+update_cadence: One hour
+columns:
+- name: EntityID
+  type: INTEGER
+  nullable: false
+  description: Primary Identifier of the entity.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Identifier that uniquely identifies each business entity property (attribute).
+- name: SeqNo
+  type: SMALLINT
+  nullable: false
+  description: Sequential number in cases where the entity has multiple entries.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: The date from which the attribute value is valid.
+- name: StartTime
+  type: INTEGER
+  nullable: false
+  description: The time from which the attribute value is valid. Displayed in seconds-from-midnight format in GMT. Quantitative
+    Analytics Database Schema for RDC 23
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date till which the attribute value is valid.
+- name: EndTime
+  type: INTEGER
+  nullable: true
+  description: The time till which the attribute value is valid. Displayed in seconds-from-midnight format in GMT.
+- name: Value_
+  type: BIGINT
+  nullable: true
+  description: Value of each item.
+---
+table: qa_rdc.RDCHistLSData
+domain: reference
+description: RDC Historical Data | The RDCHistLSData table stores the historical LARGE VARCHAR (>40 & <=255) values for all
+  business entities.
+update_cadence: One hour
+columns:
+- name: EntityID
+  type: INTEGER
+  nullable: false
+  description: Primary Identifier of the entity.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Identifier that uniquely identifies each business entity property (attribute).
+- name: SeqNo
+  type: SMALLINT
+  nullable: false
+  description: Sequential number in cases where the entity has multiple entries.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: The date from which the attribute value is valid.
+- name: StartTime
+  type: INTEGER
+  nullable: false
+  description: The time from which the attribute value is valid. Displayed in seconds-from-midnight format in GMT.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date till which the attribute value is valid.
+- name: EndTime
+  type: INTEGER
+  nullable: true
+  description: The time till which the attribute value is valid. Displayed in seconds-from-midnight format in GMT.
+- name: Value_
+  type: varchar(255)
+  nullable: true
+  description: Value of each item.
+---
+table: qa_rdc.RDCHistMLData
+domain: reference
+description: RDC Multi-lingual Data | The RDCHistMLData table stores the historical Multi Language values for all business
+  entities.
+update_cadence: One hour
+columns:
+- name: EntityID
+  type: INTEGER
+  nullable: false
+  description: Primary Identifier of the entity.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Identifier that uniquely identifies each business entity property (attribute).
+- name: SeqNo
+  type: SMALLINT
+  nullable: false
+  description: Sequential number in cases where the entity has multiple entries.
+- name: LangCode
+  type: TINYINT
+  nullable: false
+  description: The code associated with the particular language. Quantitative Analytics Database Schema for RDC 24
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: The date from which the attribute value is valid.
+- name: StartTime
+  type: INTEGER
+  nullable: false
+  description: The time from which the attribute value is valid. Displayed in seconds-from-midnight format in GMT.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date till which the attribute value is valid.
+- name: EndTime
+  type: INTEGER
+  nullable: true
+  description: The time till which the attribute value is valid. Displayed in seconds-from-midnight format in GMT.
+- name: Value_
+  type: nvarchar(1000)
+  nullable: true
+  description: Value of each item.
+---
+table: qa_rdc.RDCHistMSData
+domain: reference
+description: RDC Historical Data | The RDCHistMSData table stores all the historical MEDIUM VARCHAR (>12 & <=40) values for
+  all business
+update_cadence: One hour
+columns:
+- name: EntityID
+  type: INTEGER
+  nullable: false
+  description: Primary Identifier of the entity.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Identifier that uniquely identifies each business entity property (attribute).
+- name: SeqNo
+  type: SMALLINT
+  nullable: false
+  description: Sequential number in cases where the entity has multiple entries.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: The date from which the attribute value is valid.
+- name: StartTime
+  type: INTEGER
+  nullable: false
+  description: The time from which the attribute value is valid. Displayed in seconds-from-midnight format in GMT.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date till which the attribute value is valid.
+- name: EndTime
+  type: INTEGER
+  nullable: true
+  description: The time till which the attribute value is valid. Displayed in seconds-from-midnight format in GMT.
+- name: Value_
+  type: varchar(40)
+  nullable: true
+  description: Value of each item.
+---
+table: qa_rdc.RDCHistNData
+domain: reference
+description: RDC Historical Numeric Data | The RDCHistNData table stores the historical NUMERIC values for all business entities.
+update_cadence: One hour
+columns:
+- name: EntityID
+  type: INTEGER
+  nullable: false
+  description: Primary Identifier of the entity.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Identifier that uniquely identifies each business entity property (attribute). Quantitative Analytics Database
+    Schema for RDC 25
+- name: SeqNo
+  type: SMALLINT
+  nullable: false
+  description: Sequential number in cases where the entity has multiple entries.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: The date from which the attribute value is valid.
+- name: StartTime
+  type: INTEGER
+  nullable: false
+  description: The time from which the attribute value is valid. Displayed in seconds-from-midnight format in GMT.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date till which the attribute value is valid.
+- name: EndTime
+  type: INTEGER
+  nullable: true
+  description: The time till which the attribute value is valid. Displayed in seconds-from-midnight format in GMT.
+- name: Value_
+  type: INTEGER
+  nullable: true
+  description: Value of each item.
+---
+table: qa_rdc.RDCHistSSData
+domain: reference
+description: RDC Historical Data | The RDCHistSSData table stores all the historical SMALL VARCHAR(<=12) values for all business
+  entities.
+update_cadence: One hour
+columns:
+- name: EntityID
+  type: INTEGER
+  nullable: false
+  description: Primary Identifier of the entity.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Identifier that uniquely identifies each business entity property (attribute).
+- name: SeqNo
+  type: SMALLINT
+  nullable: false
+  description: Sequential number in cases where the entity has multiple entries.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: The date from which the attribute value is valid.
+- name: StartTime
+  type: INTEGER
+  nullable: false
+  description: The time from which the attribute value is valid. Displayed in seconds-from-midnight format in GMT.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date till which the attribute value is valid.
+- name: EndTime
+  type: INTEGER
+  nullable: true
+  description: The time till which the attribute value is valid. Displayed in seconds-from-midnight format in GMT.
+- name: Value_
+  type: varchar(12)
+  nullable: true
+  description: Value of each item.
+---
+table: qa_rdc.RDCISINData
+domain: reference
+description: RDC ISIN Data | The RDCISINData table will store all the current and historic ISIN values for an instrument.
+update_cadence: One hour
+columns:
+- name: InstrID
+  type: INTEGER
+  nullable: false
+  description: Primary Identifier of the Entity. Quantitative Analytics Database Schema for RDC 26
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Integer unique identifier to uniquely identify each business entity property (attribute).
+- name: SeqNo
+  type: SMALLINT
+  nullable: false
+  description: Sequence Number in case the entity has multiple entries.
+- name: StartDate_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: The date from which validity of the attribute value begins.
+- name: StartTime
+  type: INTEGER
+  nullable: false
+  description: The time from which the attribute value is valid. Displayed in seconds-from-midnight format in GMT.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date when validity of the attribute value ends.
+- name: EndTime
+  type: INTEGER
+  nullable: true
+  description: The time till which the attribute value is valid. Displayed in seconds-from-midnight format in GMT.
+- name: Value_
+  type: varchar(12)
+  nullable: true
+  description: Holds ISIN and AlternateISIN values.
+---
+table: qa_rdc.RDCItem
+domain: reference
+description: RDC Item | The RDCItem is an item table which stores all the attributes of all the business entities for the
+  purpose of storing | TableCode int Y Data table in which the item is contained. | Data table in which the item is contained.
+  Descriptions
+update_cadence: One hour
+columns:
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Identifier that uniquely identifies each business entity property (attribute).
+- name: EntityTypeCode
+  type: INTEGER
+  nullable: true
+  description: The type of the Entity to which the Item belongs.
+- name: Name_
+  type: varchar(20)
+  nullable: true
+  description: Property name for each unique item.
+- name: Desc_
+  type: varchar(200)
+  nullable: true
+  description: Short or long description for each item.
+- name: DataTypeCode
+  type: TINYINT
+  nullable: true
+  description: Not the TSQL data type but rather items like, percentage, money, text, Boolean, numeric, date/time.
+- name: TableCode
+  type: INTEGER
+  nullable: true
+  description: Data table in which the item is contained. RDCItem.TableCode cross-references with RDCCode.Code where Type_
+    = 5. Data table in which the item is contained. Descriptions for TableCode can be found in RDCCode where Type_=5.
+- name: IsHistory
+  type: TINYINT
+  nullable: true
+  description: An indicator to determine whether the entity has history values.
+- name: IsMultiOccur
+  type: TINYINT
+  nullable: true
+  description: An indicator to determine whether multiple occurrences exist.
+- name: IsMultiLang
+  type: TINYINT
+  nullable: true
+  description: An indicator to determine whether the attribute has values provided in multiple languages.
+- name: Time_Flag
+  type: TINYINT
+  nullable: true
+  description: An indicator to determine whether a time value is present along with the date values.
+- name: CodeNumb
+  type: INTEGER
+  nullable: true
+  description: The code number assigned in the code table. Quantitative Analytics Database Schema for RDC 27
+---
+table: qa_rdc.RDCLNData
+domain: reference
+description: RDC Long Numeric Data | The RDCLNData table stores the current BIG INT values for all business entities.
+update_cadence: One hour
+columns:
+- name: EntityID
+  type: INTEGER
+  nullable: false
+  description: Primary Identifier of the entity.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Identifier that uniquely identifies each business entity property (attribute).
+- name: SeqNo
+  type: SMALLINT
+  nullable: false
+  description: Sequential number in cases where the entity has multiple entries.
+- name: Value_
+  type: BIGINT
+  nullable: true
+  description: Value of each item.
+---
+table: qa_rdc.RDCLSData
+domain: reference
+description: RDC Long Description Data | The RDCLSData table stores the current LARGE VARCHAR (>40 & <=255) values for all
+  business entities.
+update_cadence: One hour
+columns:
+- name: EntityID
+  type: INTEGER
+  nullable: false
+  description: Primary Identifier of the entity.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Identifier that uniquely identifies each business entity property (attribute).
+- name: SeqNo
+  type: SMALLINT
+  nullable: false
+  description: Sequential number in cases where the entity has multiple entries.
+- name: Value_
+  type: varchar(255)
+  nullable: true
+  description: Value of each item. Quantitative Analytics Database Schema for RDC 28
+---
+table: qa_rdc.RDCMSData
+domain: reference
+description: RDC Medium Description Data | The RDCMSData table stores the current MEDIUM VARCHAR (>12 & <=40) values for all
+  business entities.
+update_cadence: One hour
+columns:
+- name: EntityID
+  type: INTEGER
+  nullable: false
+  description: Primary Identifier of the entity.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Identifier that uniquely identifies each business entity property (attribute).
+- name: SeqNo
+  type: SMALLINT
+  nullable: false
+  description: Sequential number in cases where the entity has multiple entries.
+- name: Value_
+  type: varchar(40)
+  nullable: true
+  description: Value of each item.
+---
+table: qa_rdc.RDCNData
+domain: reference
+description: RDC Numeric Data | The RDCNData table stores the current NUMERIC values for all business entities.
+update_cadence: One hour
+columns:
+- name: EntityID
+  type: INTEGER
+  nullable: false
+  description: Primary Identifier of the entity.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Identifier that uniquely identifies each business entity property (attribute).
+- name: SeqNo
+  type: SMALLINT
+  nullable: false
+  description: Sequential number in cases where the entity has multiple entries.
+- name: Value_
+  type: INTEGER
+  nullable: true
+  description: Value of each item.
+---
+table: qa_rdc.RDCOIQMap
+domain: reference
+description: RDC Organization Instrument Quote Mapping | The RDCOIQMap table holds the primary keys for the Org, Instrument
+  and Quote tables.
+update_cadence: One hour
+columns:
+- name: OrgId
+  type: INTEGER
+  nullable: false
+  description: Primary Identifier of the organization.
+- name: hInstrID
+  type: INTEGER
+  nullable: false
+  description: Primary Identifier of the instrument.
+- name: QuoteID
+  type: INTEGER
+  nullable: false
+  description: Primary Identifier of the quote. Quantitative Analytics Database Schema for RDC 29
+---
+table: qa_rdc.RDCSedolData
+domain: reference
+description: RDC SEDOL Data | The RDCSedolData table will store all the current and historic SEDOL values for a Quote.
+update_cadence: One hour
+columns:
+- name: QuoteID
+  type: INTEGER
+  nullable: false
+  description: Primary Identifier of the entity.
+- name: SeqNo
+  type: SMALLINT
+  nullable: false
+  description: Sequence Number in case the entity has multiple entries.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: The date from which validity of the attribute value begins.
+- name: StartTime
+  type: INTEGER
+  nullable: false
+  description: The time from which the attribute value is valid. Displayed in seconds-from-midnight format in GMT.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date when validity of the attribute value ends.
+- name: EndTime
+  type: INTEGER
+  nullable: true
+  description: The time till which the attribute value is valid. Displayed in seconds-from-midnight format in GMT.
+- name: Sedol6
+  type: varchar(6)
+  nullable: true
+  description: Market level United Kingdom Code. The London Stock Exchange (LSE) allocates SEDOL (Stock Exchange Daily Official
+    List) codes. The LSE introduced MIC and OPOL codes in 2004 and now attach SEDOL codes to regional quotations. Clients
+    can now identify individual market-level quotes using a combination of SEDOL and MIC and identify the Official Place of
+    Listing by using the OPOL. Note that FI SEDOLS are still stored at issue level (and not in this property). In order to
+    catch the SEDOL for all quotes
+- name: Sedol
+  type: varchar(7)
+  nullable: true
+  description: This stores SEDOL without any truncation.
+---
+table: qa_rdc.RDCSSData
+domain: reference
+description: RDC Small Description Data | The RDCSSData table stores all the current SMALL VARCHAR (<=12) values for all business
+  entities.
+update_cadence: One hour
+columns:
+- name: EntityID
+  type: INTEGER
+  nullable: false
+  description: Primary Identifier of the entity.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Identifier that uniquely identifies each business entity property (attribute).
+- name: SeqNo
+  type: SMALLINT
+  nullable: false
+  description: Sequential number in cases where the entity has multiple entries.
+- name: Value_
+  type: varchar(12)
+  nullable: true
+  description: Value of each item. Quantitative Analytics Database Schema for RDC 30
+---
+table: qa_rdc.RDCXLSData
+domain: reference
+description: RDC Extra Large Description Data | The RDCXLSData table stores the current EXTRA LARGE VARCHAR (>255) values
+  for all business entities.
+update_cadence: One hour
+columns:
+- name: EntityID
+  type: INTEGER
+  nullable: false
+  description: Primary Identifier of the entity.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Identifier that uniquely identifies each business entity property (attribute).
+- name: SeqNo
+  type: SMALLINT
+  nullable: false
+  description: Sequential number in cases where the entity has multiple entries.
+- name: Value_
+  type: varchar(1000)
+  nullable: true
+  description: Value of each item. Copyright © 2023 London Stock Exchange Group plc and its group of companies (LSEG) and/or
+    its affiliates. All rights reserved. The LSEG content received through this service is the intellectual property of LSEG
+    or its third party suppliers. Republication or redistribution of content provided by LSEG is expressly prohibited without
+    the prior written consent of LSEG, except where permitted by the terms of the relevant LSEG service agreement. Neither
+    LSEG nor its third party sup

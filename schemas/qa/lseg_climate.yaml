@@ -1,0 +1,2326 @@
+table: qa_climate.CLMStmtDet
+domain: esg
+description: Financial Period Details | This table contains financial period details.
+update_cadence: Weekly
+columns:
+- name: OrgPermID
+  type: BIGINT
+  nullable: false
+  description: LSEG organization identifier.
+- name: FY
+  type: INTEGER
+  nullable: false
+  description: The particular fiscal year for which the data is defined.
+- name: PerEndDt
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The period end date of the CLM report.
+- name: PerIsIncomplete
+  type: char(1)
+  nullable: true
+  description: 'PerIsIncomplete can take one of the following values: “Y” or “N”. If “Y”, not all information has been collected
+    for the whole financial period.'
+- name: PerTypeCode
+  type: TINYINT
+  nullable: true
+  description: This is the type of the financial period of the CLM value. LSEG climate data is collected annually. Corresponding
+    code description in the CLMCode table. Cross-reference OrgCovCode with CLMCode.Code where Type_ = 9.
+- name: OrgCovCode
+  type: TINYINT
+  nullable: true
+  description: “Limited” indicates a privately owned organization. Scores and indicators will not be calculated for private
+    organizations. Corresponding code description in the CLMCode table. Cross-reference OrgCovCode with CLMCode.Code where
+    Type_ = 10."
+- name: OrgClmCode
+  type: TINYINT
+  nullable: true
+  description: An organization may have one or more of below values. – CD – indicates if the organization has climate data.
+    – CDP – indicates if the organization has CDP (third-party) data. – EstScope – indicates if the organization has scope
+    estimations data like scope 1 estimations, scope 2 estimations or scope 3 estimations. Corresponding code description
+    in the CLMCode table. Cross-reference CLMCode with CLMCode.Code where Type_ = 11."
+---
+table: qa_climate.CLMItem
+domain: esg
+description: Climate Metrics | An itemized table for all the climate metrics. This table stores the meta data of all climate
+  metrics. | TableCode tinyint Yes The data table in which the value pertaining to the item resides.
+update_cadence: Weekly
+columns:
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: An item code to uniquely identify each climate metric that is a part of the feed.
+- name: FeedFieldName
+  type: varchar(100)
+  nullable: true
+  description: Internal LSEG source feed field name.
+- name: Title
+  type: varchar(200)
+  nullable: true
+  description: Description pertaining to the item.
+- name: Description
+  type: varchar(1000)
+  nullable: true
+  description: Detailed description pertaining to the item. LSEG Quantitative Analytics Database Schema for LSEG Climate 8
+- name: DataTypeCode
+  type: TINYINT
+  nullable: true
+  description: Indicates the data type of the climate metric. Corresponding type code in the CLMCode table. Cross-reference
+    DataTypeCode with CLMCode.Code where Type_ = 2.
+- name: TableCode
+  type: TINYINT
+  nullable: true
+  description: The data table in which the value pertaining to the item resides. Corresponding type code in the CLMCode table.
+    Cross-reference TableCode with CLMCode.Code where Type_ = 3.
+- name: HierarchyCode
+  type: TINYINT
+  nullable: true
+  description: 'This code identifies the hierarchy of the climate data metric. Corresponding type code in the CLMCode table.
+    HierarchyCode can take one of the following values: 1: Data Point 2: Indicator 3: Category Score 4: Score. Cross-reference
+    HeirarchyCode with CLMCode.Code where Type_ = 4.'
+- name: Units
+  type: varchar(300)
+  nullable: true
+  description: This indicates the unit of the data metric value.
+- name: Polarity
+  type: varchar(30)
+  nullable: true
+  description: This indicates whether a higher data measure value is positive or negative.
+- name: IncludedInScores
+  type: varchar(50)
+  nullable: true
+  description: This indicates whether the data metric is part of the score calculation.
+- name: PillarItem
+  type: SMALLINT
+  nullable: true
+  description: The code here defines the specific pillar which the datapoint is associated with.
+- name: CatItem
+  type: SMALLINT
+  nullable: true
+  description: The code here defines the specific category which the datapoint is associated with.
+---
+table: qa_climate.CLMDataPoint
+domain: esg
+description: LSEG Climate Data Points | This table contains company data for Climate data points.
+update_cadence: Weekly
+columns:
+- name: OrgPermID
+  type: BIGINT
+  nullable: false
+  description: LSEG organization identifier.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: An item code to uniquely identify each and every data point that is a part of the feed.
+- name: FY
+  type: INTEGER
+  nullable: false
+  description: The particular fiscal year for which the data is defined.
+- name: ValueRecDt
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date when the climate value was entered into the climate data management system.
+- name: UnitPct
+  type: FLOAT
+  nullable: true
+  description: Percentage of the organization coverage relevant to the climate measure.
+- name: UnitPermID
+  type: BIGINT
+  nullable: true
+  description: Permanent identifier of the unit of the physical data measure.
+- name: ISOCurrCode
+  type: char(3)
+  nullable: true
+  description: 3 character ISO currency code for the climate value, where applicable.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Number value of the climate measure being tracked.
+- name: ValueDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: Date value of the climate measure being tracked.
+- name: ValueFlg
+  type: char(1)
+  nullable: true
+  description: Boolean value of the climate measure being tracked. T- TRUE, F-FALSE
+- name: ValueText
+  type: nvarchar(300)
+  nullable: true
+  description: String value of the climate measure being tracked.
+- name: ValuePrcnt
+  type: FLOAT
+  nullable: true
+  description: Percent value of the climate measure being tracked. LSEG Quantitative Analytics Database Schema for LSEG Climate
+    9
+---
+table: qa_climate.CLMIndicator
+domain: esg
+description: LSEG Climate Indicators Data | This table contains company data for climate indicators.
+update_cadence: Weekly
+columns:
+- name: OrgPermID
+  type: BIGINT
+  nullable: false
+  description: LSEG organization identifier.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: An item code to uniquely identify each and every data point that is a part of the feed.
+- name: FY
+  type: INTEGER
+  nullable: false
+  description: The particular fiscal year for which the data is defined.
+- name: ValueCalcDt
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date when the climate analytics was calculated and entered into the source data management system.
+- name: ISOCurrCode
+  type: char(3)
+  nullable: true
+  description: 3-character ISO currency code for climate value, where applicable.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Number value of the climate measure being tracked.
+- name: ValueFlg
+  type: char(1)
+  nullable: true
+  description: Boolean value of the climate measure being tracked. T-TRUE, F-FALSE
+- name: ValuePrcnt
+  type: FLOAT
+  nullable: true
+  description: Percentage value of the climate measure being tracked.
+---
+table: qa_climate.CLMCDPDataPoint
+domain: esg
+description: CDP Data Points Data | This table contains company data for CDP data points.
+update_cadence: Weekly
+columns:
+- name: OrgPermID
+  type: BIGINT
+  nullable: false
+  description: LSEG organization identifier.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: An item code to uniquely identify each and every data point that is a part of the feed.
+- name: FY
+  type: INTEGER
+  nullable: false
+  description: The particular fiscal year for which the data is defined.
+- name: ValueRecDt
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date when the climate value was entered into the source data management system.
+- name: UnitPct
+  type: FLOAT
+  nullable: true
+  description: Percentage of the organization coverage relevant to the climate measure.
+- name: UnitPermID
+  type: BIGINT
+  nullable: true
+  description: Permanent identifier of the unit of the physical data measure.
+- name: ISOCurrCode
+  type: char(3)
+  nullable: true
+  description: 3-character ISO currency code for climate value, where applicable.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Number value of the climate measure being tracked.
+- name: ValueDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: Date value of the climate measure being tracked.
+- name: ValueFlg
+  type: char(1)
+  nullable: true
+  description: Boolean value of the Climate measure being tracked. T- TRUE, F-FALSE
+- name: ValueText
+  type: nvarchar(300)
+  nullable: true
+  description: String value of the climate measure being tracked.
+- name: ValuePrcnt
+  type: FLOAT
+  nullable: true
+  description: Percent value of the climate measure being tracked. LSEG Quantitative Analytics Database Schema for LSEG Climate
+    10
+---
+table: qa_climate.CLMAsRepMap
+domain: esg
+description: 'As Reported Data Links | This table contains the as reported data links to the data measures. | Note: This table
+  is currently not available, to be released soon. | ID maps to the As Reported data in the CLMAsRepData table'
+update_cadence: Weekly
+columns:
+- name: OrgPermID
+  type: BIGINT
+  nullable: false
+  description: LSEG organization identifier.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: An item code to uniquely identify each and every data point that is a part of the feed.
+- name: FY
+  type: INTEGER
+  nullable: false
+  description: The particular fiscal year for which the data is defined.
+- name: ValueId
+  type: BIGINT
+  nullable: false
+  description: A unique Value ID enables identification of each as reported measure. One data measure can map to many as reported
+    measures. This Value ID maps to the As Reported data in the CLMAsRepData table
+---
+table: qa_climate.CLMAsRepData
+domain: esg
+description: 'As Reported Data Measures | This table contains the as reported data for the data measures. | Note: This table
+  is currently not available, to be released soon.'
+update_cadence: Weekly
+columns:
+- name: ValueId
+  type: BIGINT
+  nullable: false
+  description: Value ID is a machine-generated number that uniquely identifies each As Reported Value instance associated
+    with the climate value.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: An item code to uniquely identify each and every data point that is a part of the feed.
+- name: ValueRecDt
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date when the As Reported value was entered into the source data management system.
+- name: ISOCurrCode
+  type: char(3)
+  nullable: true
+  description: The 3-character ISO code for currency measures.
+- name: ScalePermID
+  type: BIGINT
+  nullable: true
+  description: The scale of the as reported data. Corresponding type code is in the CLMCode table. Cross-reference ScaleCode
+    with CLMCode.Code where Type_ = 7.
+- name: UnitPermID
+  type: BIGINT
+  nullable: true
+  description: The units of the as reported data. Corresponding type code is in the CLMCode table.Cross-reference UnitCode
+    with CLMCode.Code where Type_ = 8.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: The value of the as reported data. LSEG Quantitative Analytics Database Schema for LSEG Climate 11
+---
+table: qa_climate.CLMSourceMap
+domain: esg
+description: Source Data Links | This table contains the source data links to the data measures.
+update_cadence: Weekly
+columns:
+- name: OrgPermID
+  type: BIGINT
+  nullable: false
+  description: LSEG organization identifier.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: An item code to uniquely identify each and every data point that is a part of the feed.
+- name: FY
+  type: INTEGER
+  nullable: false
+  description: The particular fiscal year for which the data is defined.
+- name: SourceId
+  type: BIGINT
+  nullable: false
+  description: This is the unique Source ID where the climate value was detected. Source ID links to the sources data. There
+    may be many Source IDs populated for a data measure.
+---
+table: qa_climate.CLMSourceData
+domain: esg
+description: Source Data | This table contains the source data used to build the ESG values.
+update_cadence: Weekly
+columns:
+- name: SourceId
+  type: BIGINT
+  nullable: false
+  description: The unique source identifier.
+- name: Author
+  type: nvarchar(300)
+  nullable: true
+  description: The author of the news article where the climate value was detected.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date of the source where the climate value was detected.
+- name: Page
+  type: nvarchar(25)
+  nullable: true
+  description: The page number or a range of pages in the source where the climate value was detected.
+- name: Publisher
+  type: nvarchar(300)
+  nullable: true
+  description: The publisher of the source where the climate value was detected.
+- name: Scope
+  type: varchar(30)
+  nullable: true
+  description: The coverage scope in the source where the climate value was detected.
+- name: URL
+  type: nvarchar(3000)
+  nullable: true
+  description: The external URL of the source used to collect the climate value.
+- name: TitleLangCode
+  type: varchar(35)
+  nullable: true
+  description: BCP-47 language code used for the climate source title. Corresponding code description is in the CLMDesc table.
+    Cross-reference Lang Code with CLMDesc.Code where Type_ = 4
+- name: CommentLangCode
+  type: varchar(35)
+  nullable: true
+  description: BCP-47 language code used for the climate source comment. Corresponding code description is in the CLMDesc
+    table. Cross- reference Lang Code with CLMDesc.Code where Type_ = 4
+- name: AbstractLangCode
+  type: varchar(35)
+  nullable: true
+  description: BCP-47 language code used for the climate source abstract. Corresponding code description is in the CLMDesc
+    table. Cross- reference Lang Code with CLMDesc.Code where Type_ = 4
+- name: Title
+  type: nvarchar(500)
+  nullable: true
+  description: The source title from which the climate value was collected.
+- name: Comment
+  type: nvarchar(max)
+  nullable: true
+  description: The comment written by the analyst who collected the climate value.
+- name: Abstract
+  type: nvarchar(max)
+  nullable: true
+  description: The abstract from the source where the climate value was detected. LSEG Quantitative Analytics Database Schema
+    for LSEG Climate 12
+---
+table: qa_climate.CLMCode
+domain: esg
+description: Integer Code Descriptions | This table contains descriptions for the integer codes.
+update_cadence: Weekly
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Enlists types of codified data items.
+- name: Code
+  type: BIGINT
+  nullable: false
+  description: Represents the Value_ data item from any climate data.
+- name: Desc_
+  type: varchar(500)
+  nullable: true
+  description: Description of the coded data item.
+---
+table: qa_climate.CLMDesc
+domain: esg
+description: Character Code Descriptions | This table contains descriptions for the character codes.
+update_cadence: Weekly
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Enlists types of codified data items.
+- name: Code
+  type: varchar(50)
+  nullable: false
+  description: Represents the Value_ data item from any climate data.
+- name: Desc_
+  type: varchar(500)
+  nullable: true
+  description: Description of the coded data item.
+---
+table: qa_climate.CLMOrgPerMap
+domain: esg
+description: Organization and Period Mapping | This table contains the organization and period ID mapping.
+update_cadence: Weekly
+columns:
+- name: OrgPermID
+  type: BIGINT
+  nullable: false
+  description: LSEG organization identifier.
+- name: PerId
+  type: INTEGER
+  nullable: false
+  description: Period identifier is required for any data queries submitted to the RDP ESG Bulk feed team. Period identifier
+    will also help with cross content navigation.
+- name: PerEndDt
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The period end date of the climate report. LSEG Quantitative Analytics Database Schema for LSEG Climate 13
+    3. Carbon Reserve Data
+---
+table: qa_climate.CLMCROPMSeg
+domain: esg
+description: Financial Operating Metric Segments | This table contains information about financial operating metric segments
+  for an organization.
+update_cadence: Weekly
+columns:
+- name: OrgPermID
+  type: BIGINT
+  nullable: false
+  description: Unique system generated Permanent Identifier (PermID) for an Organisation, aka Organisation Perm ID. The broad
+    grouping of entities including Companies, Governments and municipalities, Government agencies, Charities etc. Organizations
+    are mastered in Organization Authority.
+- name: OPMSegID
+  type: INTEGER
+  nullable: false
+  description: Operating Metrics Segment ID provides the list of operating segment IDs linked to a particular line item values
+    of a given organization. There can be single or multiple segments attached to a line item.
+- name: ActFlg
+  type: char(1)
+  nullable: true
+  description: 'Active Flag is associated to the various segments created under the column Segment Type for the collection
+    of Carbon Reserves Data. Is Active is used to indicate whether the segments are active or inactive: ''1'' indicates that
+    the segment is active and ''0'' indicates it is inactive.'
+- name: InActReasDesc
+  type: varchar(2000)
+  nullable: true
+  description: Inactive Reason Other Description is a free text column where elaborate details are added when a segment division
+    becomes inactive. When a segment is inactive an appropriate reason is added.
+- name: IndName
+  type: varchar(500)
+  nullable: true
+  description: Indicates to which industry or sector the particular financial concept code relates to. Industry here means
+    either Oil & Gas (OG) or Mining (MN).
+- name: SegName
+  type: varchar(500)
+  nullable: true
+  description: Operating Metrics Segment Name refers to the names created under the various Segment Type for the collection
+    of Carbon Reserves. These Segment Names may be created under Segment Type - operating segment, segment resource type,
+    oil or gas subset, resource type, coal segment, coal subsegment, coal mine and conversion factor.
+- name: SegTypeCode
+  type: char(2)
+  nullable: true
+  description: 'Operating Metrics Segment Type Code is associated to the various Segment Type added to Oil & Gas and Coal
+    sectors for the collection of Carbon Reserves Data. Various Segment Type Code include: – OS (Operating Segment) – OR (Segment
+    Resource Type) – OG (Oil/Gas Subset) – OT (Resource Type) – OC (Conversion Factor) – MS (Coal Segment) – MB (Coal Subsegment)
+    – MM (Coal Mine). LSEG Quantitative Analytics Database Schema for LSEG Climate 14'
+---
+table: qa_climate.CLMCRStmtLineItem
+domain: esg
+description: Individual Line Items Reported | This table contains individual line items reported by an organization.
+update_cadence: Weekly
+columns:
+- name: OrgPermID
+  type: BIGINT
+  nullable: false
+  description: Unique system generated Permanent Identifier (PermID) for an Organisation, aka Organisation Perm ID. The broad
+    grouping of entities including Companies, Governments and municipalities, Government agencies, Charities etc. Organizations
+    are mastered in Organization Authority.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Line Item ID is associated with the financial data items collected for each company, where each data item is
+    assigned with a numerical value in chronological order based on the sequence of the as-reported items. The Line Item ID
+    helps to display the items in the as-reported sequence disclosed by the company.
+- name: CreditFlg
+  type: char(1)
+  nullable: true
+  description: Credit Flag is associated with the sign or polarity of the amount or value collected for the financial information.
+    Credit Flag is ‘1’ if the default polarity of the data item is positive and ‘0’ means it is negative.
+- name: FinCptCode
+  type: varchar(10)
+  nullable: true
+  description: Global As Reported Financial Concept Code is associated with the collection of each financial data item on
+    the product and each code is unique assigned to each accounting concept. Financial Concept codes are charts of accounts
+    with the list of common accounting concepts available in the taxonomy.
+- name: ItemName
+  type: varchar(500)
+  nullable: true
+  description: Line Item Name is associated with the financial data items collected for each company, where each data item
+    is collected with the descriptions as disclosed in the document. Each data item is collected in the sequence presented
+    by the company in the Line Item Name column to display the as-reported pattern
+- name: ItemNameLangID
+  type: INTEGER
+  nullable: true
+  description: Name Language ID is a numerical identifier assigned to each language available globally.
+- name: StmtTypeCode
+  type: SMALLINT
+  nullable: true
+  description: Statement Type Code is associated with the collection of financial information. Financial data is categorized
+    into multiple statements based on the common accounting disclosures.
+- name: UnitID
+  type: INTEGER
+  nullable: true
+  description: Physical Measure ID or Unit ID is associated with the measurement of the data items which are generally part
+    of Key Performance Indicators (KPI) and are expressed in physical measures based on the nature of the items.
+---
+table: qa_climate.CLMCRStmtDet
+domain: esg
+description: Reported Instance Values Reported by
+---
+table: qa_climate.Organization
+domain: esg
+description: This table provides all the values reported by the organization for a reporting instance. Package also provides
+  the
+update_cadence: Weekly
+columns:
+- name: FndID
+  type: BIGINT
+  nullable: false
+  description: Fundamental ID is a permanent identifier (Perm ID) assigned to the sub-group of an organization which is grouped
+    based on the consolidation, parent, and GAAP basis. An organization is further LSEG Quantitative Analytics Database Schema
+    for LSEG Climate 15
+- name: PerID
+  type: BIGINT
+  nullable: false
+  description: Period ID is associated with the period end date used to report the financial data of the business at the end
+    of the financial period for annual and interims. Period end date differs for each company, however most of the financial
+    period is based on the tax period of the country in order easily track corporate tax filing. Interim periods have their
+    statement date with the end date of each quarter and semi-annual with end date half yearly. As Reported Statement Period
+    ID is a unique identifier as
+- name: SrcID
+  type: BIGINT
+  nullable: false
+  description: Source ID is associated with the source or filing document used to collect financial data for a particular
+    period end. Data is collected from multiple source documents such as press, final, amendments for a particular period.
+    Each document is assigned with a Source ID which is a unique chronological numerical value for each company.
+- name: StmtCurrID
+  type: INTEGER
+  nullable: false
+  description: Standard Currency ID is the unique permanent identifier assigned to each currency name of a country. It is
+    a 6-digit numerical value assigned to each currency.
+- name: StmtTypeCode
+  type: SMALLINT
+  nullable: false
+  description: 'Statement Type Code is associated with the collection of financial information. Financial data is categorized
+    into multiple statements based on the common accounting disclosures. Data is collected under the main statements such
+    as: – Income statement (INC) – Balance sheet (BAL) – Cash flow (CAS) and additional statements such as: – Business Segment
+    (BUS) – Geographic Segment (GEO)'
+- name: AutoUpdFlg
+  type: char(1)
+  nullable: true
+  description: Automated Update Flag is associated with the financial data items collected, each data item is ‘1’ if the data
+    is ingested through automation process and manual update is shown as ‘0’.
+- name: ConFlg
+  type: char(1)
+  nullable: true
+  description: Condensed Flag is associated with the level of details disclosed by the company in its financial document and
+    the flag is ‘1’ if the company has limited or condensed data reported.
+- name: DerFlg
+  type: char(1)
+  nullable: true
+  description: Derived Flag is associated with the financial data item collected and reflects ‘1’ if the item is derived by
+    the system.
+- name: DetFlg
+  type: char(1)
+  nullable: true
+  description: Detailed Flag is associated with the level of details disclosed by the company in its financial document and
+    the flag reflects ‘1’ if the company discloses all the information required to reconcile the statements.
+- name: LastModDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: Last Modified Date is associated with the collection methodology followed to collect financial data to help
+    in timeliness management.
+- name: LatOrigUpdFlg
+  type: char(1)
+  nullable: true
+  description: Latest Original Update Flag represents a particular statement is latest original update or not.
+- name: LatRcntUpdFlg
+  type: char(1)
+  nullable: true
+  description: Latest Recent Update Flag represents a particular statement is latest recent update or not.
+- name: NotCompToPrPerFlg
+  type: char(1)
+  nullable: true
+  description: Not Comparable To Prior Period Flag is used to indicate the lack of comparability of data for interims within
+    the fiscal period of a company.
+- name: PrefSrcFlg
+  type: char(1)
+  nullable: true
+  description: Preferred Source Flag indicates that the data has been self-sourced or sourced from third party vendors. It
+    is marked ‘1’ if it has been self-sourced and marked ‘0’ if data is obtained from third party sources.
+- name: PrelimFlg
+  type: char(1)
+  nullable: true
+  description: Preliminary Flag is associated with the collection of the financial data from the press or preliminary document,
+    where each data item LSEG Quantitative Analytics Database Schema for LSEG Climate 16
+- name: PresFmtCode
+  type: char(3)
+  nullable: true
+  description: Presentation Format Code is associated with the presentation of the financial statement of a company in its
+    financial reports. Each company may display the financial statements in different patterns and formats, where the same
+    is broadly classified.
+- name: ProFormaFlg
+  type: char(1)
+  nullable: true
+  description: Pro Forma Flag is associated with the financial information collected from prospectus document. If the financial
+    information is pro forma, then the Pro Forma Flag will be marked ‘1’.
+- name: ScalFctNum
+  type: varchar(100)
+  nullable: true
+  description: Scaling Factor Number is associated with the scaling factor of the currency used to collect the financial data
+    values.
+- name: SysDateTime
+  type: TIMESTAMP(6)
+  nullable: true
+  description: System Date Time reflects the timestamp when a particular statement instance was created. This date is helpful
+    for customers in point in time analysis of financial statements with price movements of respective company’s stock.
+- name: SysDerTypeCode
+  type: TIMESTAMP(6)
+  nullable: true
+  description: 'System Derived Type Code is associated with the financial data items derived by the system. Derived items
+    are indicated with System Derived Type Code. The code types available are provided below: – MR - Missing as-reported,
+    few of the sub-total or totals are derived if not reported by the company. – XB- XBRL, few markets such as US are automated
+    through XBRL ingest. – BI - Balancing item, few cases there are rounding off differences and these are derived as balancing
+    item. – MP - Missing Period,'
+- name: UpdMetCode
+  type: char(2)
+  nullable: true
+  description: 'Update Method Code is associated with the collection of financial information and a code is assigned to each
+    statement to indicate if it is normal, calculated, or special statement. Update Method Code is tagged as follows: – NRM-
+    Normal if the statement is collected from the source document and data is reported in the document. – CLC- Calculated
+    indicates that the statement is derived or calculated based on availability of as-reported data, 6 months interim can
+    be derived by summing up the first'
+- name: UpdTypeCode
+  type: char(3)
+  nullable: true
+  description: Update Type Code is associated with the financial data collection from the source document and the various
+    types of classification of data collection on the product. The examples below provide the various types of Update Type
+    Code classified based the financial information disclosure. Data is collected as Original (ORG) from the initial source
+    document, Reclassification (CLA) and Restatement (RES) are collected from the subsequent filings for the original period;
+    Amendment (AMD) are filed when t
+- name: UpdReasCode
+  type: char(3)
+  nullable: true
+  description: Code assigned to each of the update reasons.
+- name: UpdReasCommLangID
+  type: INTEGER
+  nullable: true
+  description: Comment Language ID represents the language code in which the update reasons comments are captured.
+- name: PFReasCode
+  type: SMALLINT
+  nullable: true
+  description: Code assigned to each of the Proforma reasons. LSEG Quantitative Analytics Database Schema for LSEG Climate
+    17
+- name: PFReasCommLangID
+  type: INTEGER
+  nullable: true
+  description: Comment Language ID represents the language code in which the Proforma reasons comments are captured.
+- name: UpdReasComm
+  type: nvarchar(max)
+  nullable: true
+  description: Comment is associated with the collection of restatements and the reason that is required when the key total
+    value changes for the prior period in the current year report when compared to the prior year document.
+- name: PFReasComm
+  type: nvarchar(max)
+  nullable: true
+  description: Comment is associated with the collection of Proforma numbers.
+- name: FndID
+  type: BIGINT
+  nullable: false
+  description: Fundamental ID is a permanent identifier (Perm ID) assigned to the sub-group of an organization which is grouped
+    based on the consolidation, parent, and GAAP basis. An organization is further grouped based on the set of comparable
+    financial data under an umbrella known as the Fundamental ID.
+- name: PerID
+  type: BIGINT
+  nullable: false
+  description: Period ID is associated with the period end date used to report the financial data of the business at the end
+    of the financial period for annual and interims. Period end date differs for each company, however usually a financial
+    period is based on the tax period of the country in order to easily track corporate tax filing. Interim periods have their
+    statement date with the end date of each quarter and semi-annual with end date half yearly. As Reported Statement Period
+    ID is a unique identifier a
+- name: SrcID
+  type: BIGINT
+  nullable: false
+  description: Source ID is associated with the source or filing document used to collect financial data for a particular
+    period end. Data is collected from multiple source documents such as press, final, amendments for a particular period.
+    Each document is assigned with a Source ID which is a unique chronological numerical value for each company.
+- name: StmtCurrID
+  type: INTEGER
+  nullable: false
+  description: Standard Currency ID is the unique permanent identifier assigned to each currency name of a country. It is
+    a 6-digit numerical value assigned to each currency. –
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Line Item ID is associated with the financial data items collected for each company, where each data item is
+    assigned with a numerical value in chronological order based on the sequence of the as- reported items. The Line Item
+    ID helps to display the items in the as-reported sequence disclosed by the company.
+- name: Value_
+  type: FLOAT
+  nullable: false
+  description: 'Line Item Value is associated with the amount of each financial data item disclosed by the company. Example:
+    Inventories - 150,000, Cash - 250,000. LSEG Quantitative Analytics Database Schema for LSEG Climate 18'
+- name: AnnFlg
+  type: char(1)
+  nullable: true
+  description: 'Annual Flag is associated with the financial periods collected. The flag is marked ‘1’ if the corresponding
+    period is an annual data and is ‘0’ for an interim period. Example: a company with December as its annual period end dated
+    12/31/2000 will be tagged Annual Flag- ‘1’, while its quarter with the period end dated 03/31/2021 is tagged Annual Flag-
+    ‘0’.'
+- name: AuditID
+  type: varchar(500)
+  nullable: true
+  description: Audit ID is associated with the auditability trail of the ratios derived on the products. It helps to arrive
+    at the details of the calculated ratio on the product. The below example illustrates the Audit ID formula stored to help
+    derive the ratio. FundamentalSeriesId- 48433138368, AuditID- 200085_62465_ASR_B8DCA292-E440-4538-9098-444789A2E8FE, FinancialPeriodEndDate-2/31/1997
+    0:00.
+- name: CarbonDataID
+  type: INTEGER
+  nullable: true
+  description: Carbon Data ID contains the information on fuel type, mine ownership, equity affiliates, revenue data source,
+    conversion type, coal production and total P&P reserves.
+- name: CoalProdName
+  type: varchar(500)
+  nullable: true
+  description: Coal Production contains information around the ore used for production. It indicates Run of mine coal production,
+    saleable coal production, 'Various' is used when the company is silent on the coal production type, 'Other' indicates
+    coal production other than run of mine and saleable and 'Not Specified' indicates no production details.
+- name: CombItemFlg
+  type: char(1)
+  nullable: true
+  description: 'Combined Item Flag is associated with the financial data items collected and flag is tagged as ‘1’ when the
+    data item is a combination of two or more items and cannot be separated. Example: if the description of the item is Depreciation,
+    Amortization and impairment expense which indicates a combination of items and does not have further breakdown of the
+    same, then Combined Item Flag is ‘1’. Combined Item Flag is tagged to the financial concept code of the data item collected.'
+- name: Comments
+  type: varchar(1000)
+  nullable: true
+  description: Comments provides information around the source document used and the exact page where the information is collected
+    from. This is captured when data is not linked to source bookmarks, this helps clients to know from where the data is
+    picked from the source document.
+- name: ConvTypeName
+  type: varchar(100)
+  nullable: true
+  description: Conversion Type Name contains information whether the conversion type is reported in the source document (Disclosed)
+    or 'Estimated' which indicates that the conversion type is not available in the company reports and the factor has been
+    estimated.
+- name: DerSysTypeCode
+  type: char(2)
+  nullable: true
+  description: 'Derivation System Type Code is associated with the financial data item collected and indicates if the item
+    is derived by the system and the reason for derivation. Derivation System Type Code is a two-letter code indicating the
+    following reasons for derivation: – BI - Balancing Item, implies the system derived balance value in case of incomplete
+    Parent-Child Relationship or breakdown or rounding off difference. – MP - Missing Period, implies that the derived value
+    is a result of missing period ca'
+- name: DerFlg
+  type: char(1)
+  nullable: true
+  description: Derived Flag is associated with the financial data item collected and reflects ‘1’ if the item is derived by
+    the system. Data can be derived by the system due to various reasons such as, balancing item derived due to incomplete
+    Parent-Child Relationship or breakdown or rounding off difference or value derived because of missing as-reported calculation.
+    LSEG Quantitative Analytics Database Schema for LSEG Climate 19
+- name: EqAfflFlg
+  type: char(1)
+  nullable: true
+  description: Equity Affiliates Flag indicates whether the values collected for revenues, production or reserves are for
+    equity affiliates or not.
+- name: ExclFromStdFlg
+  type: char(1)
+  nullable: true
+  description: Excluded From Standardization Flag is associated with the as- reported data items collected and marked as ‘1’
+    if a data item needs to be ignored for calculation to avoid doubt counting of the value. Generally, company reports subtotals
+    in its presentation, these data items are collected in the reported format and Excluded From Standardization Flag is marked
+    ‘1’ to ignore them in the reconciliation of the statements.
+- name: FinalFlg
+  type: char(1)
+  nullable: true
+  description: 'Final Flag is associated with the collection of the financial data from the final source document, where each
+    data item is marked as ‘1’ if the information is collected from the final document. Companies file both press and final
+    reports for a financial period and Final Flag helps to identify if the value is collected from press or final. Final Flag
+    reflects ‘0’ if the information is collected from a preliminary/press report. When the Final Flag value is ‘1’, it indicates
+    that the value is from '
+- name: FinLineItemSrc
+  type: INTEGER
+  nullable: true
+  description: Financial Line Item Source is associated with the source or filing document used to collect financial data
+    for a particular period end. Data is collected from multiple source documents such as press, final, amendments for a particular
+    period. In the below example, each document is assigned with a source identifier which is a unique chronological numerical
+    value for each company. Each document is assigned a Document Control Number (DCN) and records the filing date and time
+    when the document is fi
+- name: FuelTypeName
+  type: varchar(100)
+  nullable: true
+  description: Fuel type will contain the information about thermal coal, metallurgical coal, pulverized coal, anthracite
+    coal, combination of metallurgical or pulverized coal, combination of thermal or pulverized coal, combination of thermal
+    or metallurgical coal, combination of thermal or metallurgical or pulverized coal of the organization. The value 'Not
+    Disclosed' indicates that the company is silent on the type of coal in the company reports and 'Not Applicable' is used
+    when there are no mine details rep
+- name: InstNum
+  type: varchar(100)
+  nullable: true
+  description: Instance Number is associated with the financial data values derived or calculated by the system using the
+    as-reported content. . Analytical data value may be derived either through summation, deduction, multiplication, or division
+    using the as-reported value to provide meaningful ratios, and each value is assigned an Instance Number. Each analytical
+    value is assigned with a unique identifier known as Instance Number.
+- name: MineOwnCode
+  type: varchar(50)
+  nullable: true
+  description: Mine Ownership Code contains information about the ownership of mine. Mines with ownership greater than or
+    equal to 50% or Mines with ownership less than 50% are captured under this data element.
+- name: ParentLineItem
+  type: INTEGER
+  nullable: true
+  description: Parent Line Item ID is associated with the collection of financial data items and the capability to display
+    the total value and its corresponding components as an indent. Generally, companies disclose the key totals on the face
+    of the statements and its components or breakdowns in the footnotes. The total value is the parent line, and the components
+    are child line items. Parent Line Item ID is a numerical value assigned to each component to which it is the parent line
+    in the Parent-Child Relatio
+- name: RepCurrID
+  type: INTEGER
+  nullable: true
+  description: Reported Currency ID is the unique permanent identifier assigned to each currency name of a country. It is
+    a 6-digit numerical value assigned to each currency.
+- name: RepISOCurrCode
+  type: char(3)
+  nullable: true
+  description: The ISO code for Reported Currency ID.
+- name: RepScalFct
+  type: INTEGER
+  nullable: true
+  description: Reporting Scaling Factor is associated with the scaling factor of the currency used to collect the financial
+    data values.
+- name: RevDataSrcCode
+  type: char(3)
+  nullable: true
+  description: Revenue Data Source contains information about the source of revenue. Revenue may be As Reported (REP), calculated
+    as per FTSE Methodology (FST), Estimated (EST), Not Disclosed (ND) or CST which indicates that revenue data is estimated
+    based on the percentage of revenue.
+- name: SeqNum
+  type: INTEGER
+  nullable: true
+  description: Sequence Number is associated with the financial data items collected for each company, where each data item
+    is assigned with a numerical value in chronological order based on the sequence of the as-reported items. The Sequence
+    Number helps to display the items in the as-reported sequence disclosed by the company on the product.
+- name: StmtSecCode
+  type: char(2)
+  nullable: true
+  description: 'Statement Section Code is associated with the collection of Financial information. Statement Section Name
+    is the name assigned to each Statement Section Code. It is limited to 5 alphabets. Examples: – Statement Section Code-
+    CRA – Statement Type Code- BAL – Statement Section Name- Current Assets – Statement Section Code- REV – Statement Type
+    Code- INC – Statement Section Name- Revenue'
+- name: StmtSecCrFlg
+  type: char(1)
+  nullable: true
+  description: Statement Section Credit Flag is associated with the sign or polarity of the amount or value collected for
+    the financial information. Each statement section has default polarity based on the nature of the data items, generally
+    sections related to income/gain are assigned positive, and expense/loss are assigned negative. Statement Section Credit
+    Flag reflects ‘1’ if the default polarity of the statement section is positive and ‘0’ if it’s negative.
+- name: StmtTypeCode
+  type: SMALLINT
+  nullable: true
+  description: Statement Type Code is associated with the collection of financial information. Financial data is categorized
+    into multiple statements based on the common accounting disclosures. Data is collected under the main statements such
+    as Income statement (INC), Balance sheet (BAL), Cash flow (CAS) and additional statements such as Business Segment (BUS),
+    Geographic Segment (GEO).
+- name: ThPartySrcCode
+  type: varchar(50)
+  nullable: true
+  description: 'Third Party Source Code indicates that the data has been sourced from third party vendors or if it’s self-sourced.
+    For example: SS - Self Sourced.'
+- name: TotProvProbResrName
+  type: varchar(200)
+  nullable: true
+  description: Total Proved and Probable Reserves contains information about the reportable coal reserves, marketable coal
+    reserves. The value 'Other' indicates the reserves other than reportable or marketable, and the value 'Not Specified'
+    indicates that no reserves data has been reported.
+- name: UnitID
+  type: INTEGER
+  nullable: true
+  description: Physical Measure ID or Unit ID is associated with the measurement of the data items which are generally part
+    of Key Performance Indicators (KPI) and are expressed in physical measures based on the nature of the items.
+- name: ValEstMetCode
+  type: char(3)
+  nullable: true
+  description: Value Estimation Method Code is associated with the data sourced from third party vendors and provides additional
+    details about the value sourced. Value Estimation Method Code is the code assigned to the type of data sourced from third
+    party. LSEG Quantitative Analytics Database Schema for LSEG Climate 21
+- name: FndID
+  type: BIGINT
+  nullable: false
+  description: Fundamental ID is a permanent identifier (Perm ID) assigned to the sub- group of an organization which is grouped
+    based on the consolidation, parent, and GAAP basis. An organization is further grouped based on the set of comparable
+    financial data under an umbrella known as the Fundamental ID.
+- name: PerID
+  type: BIGINT
+  nullable: false
+  description: Period ID is associated with the period end date used to report the financial data of the business at the end
+    of the financial period for annual and interims. Period end date differs for each company, however usually the financial
+    period is based on the tax period of the country in order to easily track corporate tax filing. Interim periods have their
+    statement date with the end date of each quarter and semi-annual with end date half yearly. As Reported Statement Period
+    ID is a unique identifier
+- name: SrcID
+  type: BIGINT
+  nullable: false
+  description: Source ID is associated with the source or filing document used to collect financial data for a particular
+    period end. Data is collected from multiple source documents such as press, final, amendments for a particular period.
+    Each document is assigned with a Source ID which is a unique chronological numerical value for each company.
+- name: StmtCurrID
+  type: INTEGER
+  nullable: false
+  description: Standard Currency ID is the unique permanent identifier assigned to each currency name of a country. It is
+    a 6-digit numerical value assigned to each currency.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Line Item ID is associated with the financial data items collected for each company, where each data item is
+    assigned with a numerical value in chronological order based on the sequence of the as-reported items. Line Item ID helps
+    to display the items in the as-reported sequence disclosed by the company.
+- name: OrgPermID
+  type: BIGINT
+  nullable: false
+  description: Unique system generated Permanent Identifier (PermID) for an Organisation, aka Organisation Perm ID. The broad
+    grouping of entities including Companies, Governments and municipalities, Government agencies, Charities etc. Organizations
+    are mastered in Organization Authority.
+- name: OPMSegID
+  type: INTEGER
+  nullable: false
+  description: Operating Metrics Segment ID provides the list of operating segment ids linked to a particular line item values
+    of a given organization. There can be single or multiple segments attached to a line item. LSEG Quantitative Analytics
+    Database Schema for LSEG Climate 22
+---
+table: qa_climate.CLMCRAsRepStmtDet
+domain: esg
+description: Reported Instance Values Reported by
+---
+table: qa_climate.Organization
+domain: esg
+description: This table provides all the values reported by the organization for a reporting instance. Package also provides
+  the
+update_cadence: Weekly
+columns:
+- name: FndID
+  type: BIGINT
+  nullable: false
+  description: Fundamental ID is a permanent identifier (Perm ID) assigned to the sub-group of an organization which is grouped
+    based on the consolidation, parent, and GAAP basis. An organization is further LSEG Quantitative Analytics Database Schema
+    for LSEG Climate 15
+- name: PerID
+  type: BIGINT
+  nullable: false
+  description: Period ID is associated with the period end date used to report the financial data of the business at the end
+    of the financial period for annual and interims. Period end date differs for each company, however most of the financial
+    period is based on the tax period of the country in order easily track corporate tax filing. Interim periods have their
+    statement date with the end date of each quarter and semi-annual with end date half yearly. As Reported Statement Period
+    ID is a unique identifier as
+- name: SrcID
+  type: BIGINT
+  nullable: false
+  description: Source ID is associated with the source or filing document used to collect financial data for a particular
+    period end. Data is collected from multiple source documents such as press, final, amendments for a particular period.
+    Each document is assigned with a Source ID which is a unique chronological numerical value for each company.
+- name: StmtCurrID
+  type: INTEGER
+  nullable: false
+  description: Standard Currency ID is the unique permanent identifier assigned to each currency name of a country. It is
+    a 6-digit numerical value assigned to each currency.
+- name: StmtTypeCode
+  type: SMALLINT
+  nullable: false
+  description: 'Statement Type Code is associated with the collection of financial information. Financial data is categorized
+    into multiple statements based on the common accounting disclosures. Data is collected under the main statements such
+    as: – Income statement (INC) – Balance sheet (BAL) – Cash flow (CAS) and additional statements such as: – Business Segment
+    (BUS) – Geographic Segment (GEO)'
+- name: AutoUpdFlg
+  type: char(1)
+  nullable: true
+  description: Automated Update Flag is associated with the financial data items collected, each data item is ‘1’ if the data
+    is ingested through automation process and manual update is shown as ‘0’.
+- name: ConFlg
+  type: char(1)
+  nullable: true
+  description: Condensed Flag is associated with the level of details disclosed by the company in its financial document and
+    the flag is ‘1’ if the company has limited or condensed data reported.
+- name: DerFlg
+  type: char(1)
+  nullable: true
+  description: Derived Flag is associated with the financial data item collected and reflects ‘1’ if the item is derived by
+    the system.
+- name: DetFlg
+  type: char(1)
+  nullable: true
+  description: Detailed Flag is associated with the level of details disclosed by the company in its financial document and
+    the flag reflects ‘1’ if the company discloses all the information required to reconcile the statements.
+- name: LastModDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: Last Modified Date is associated with the collection methodology followed to collect financial data to help
+    in timeliness management.
+- name: LatOrigUpdFlg
+  type: char(1)
+  nullable: true
+  description: Latest Original Update Flag represents a particular statement is latest original update or not.
+- name: LatRcntUpdFlg
+  type: char(1)
+  nullable: true
+  description: Latest Recent Update Flag represents a particular statement is latest recent update or not.
+- name: NotCompToPrPerFlg
+  type: char(1)
+  nullable: true
+  description: Not Comparable To Prior Period Flag is used to indicate the lack of comparability of data for interims within
+    the fiscal period of a company.
+- name: PrefSrcFlg
+  type: char(1)
+  nullable: true
+  description: Preferred Source Flag indicates that the data has been self-sourced or sourced from third party vendors. It
+    is marked ‘1’ if it has been self-sourced and marked ‘0’ if data is obtained from third party sources.
+- name: PrelimFlg
+  type: char(1)
+  nullable: true
+  description: Preliminary Flag is associated with the collection of the financial data from the press or preliminary document,
+    where each data item LSEG Quantitative Analytics Database Schema for LSEG Climate 16
+- name: PresFmtCode
+  type: char(3)
+  nullable: true
+  description: Presentation Format Code is associated with the presentation of the financial statement of a company in its
+    financial reports. Each company may display the financial statements in different patterns and formats, where the same
+    is broadly classified.
+- name: ProFormaFlg
+  type: char(1)
+  nullable: true
+  description: Pro Forma Flag is associated with the financial information collected from prospectus document. If the financial
+    information is pro forma, then the Pro Forma Flag will be marked ‘1’.
+- name: ScalFctNum
+  type: varchar(100)
+  nullable: true
+  description: Scaling Factor Number is associated with the scaling factor of the currency used to collect the financial data
+    values.
+- name: SysDateTime
+  type: TIMESTAMP(6)
+  nullable: true
+  description: System Date Time reflects the timestamp when a particular statement instance was created. This date is helpful
+    for customers in point in time analysis of financial statements with price movements of respective company’s stock.
+- name: SysDerTypeCode
+  type: TIMESTAMP(6)
+  nullable: true
+  description: 'System Derived Type Code is associated with the financial data items derived by the system. Derived items
+    are indicated with System Derived Type Code. The code types available are provided below: – MR - Missing as-reported,
+    few of the sub-total or totals are derived if not reported by the company. – XB- XBRL, few markets such as US are automated
+    through XBRL ingest. – BI - Balancing item, few cases there are rounding off differences and these are derived as balancing
+    item. – MP - Missing Period,'
+- name: UpdMetCode
+  type: char(2)
+  nullable: true
+  description: 'Update Method Code is associated with the collection of financial information and a code is assigned to each
+    statement to indicate if it is normal, calculated, or special statement. Update Method Code is tagged as follows: – NRM-
+    Normal if the statement is collected from the source document and data is reported in the document. – CLC- Calculated
+    indicates that the statement is derived or calculated based on availability of as-reported data, 6 months interim can
+    be derived by summing up the first'
+- name: UpdTypeCode
+  type: char(3)
+  nullable: true
+  description: Update Type Code is associated with the financial data collection from the source document and the various
+    types of classification of data collection on the product. The examples below provide the various types of Update Type
+    Code classified based the financial information disclosure. Data is collected as Original (ORG) from the initial source
+    document, Reclassification (CLA) and Restatement (RES) are collected from the subsequent filings for the original period;
+    Amendment (AMD) are filed when t
+- name: UpdReasCode
+  type: char(3)
+  nullable: true
+  description: Code assigned to each of the update reasons.
+- name: UpdReasCommLangID
+  type: INTEGER
+  nullable: true
+  description: Comment Language ID represents the language code in which the update reasons comments are captured.
+- name: PFReasCode
+  type: SMALLINT
+  nullable: true
+  description: Code assigned to each of the Proforma reasons. LSEG Quantitative Analytics Database Schema for LSEG Climate
+    17
+- name: PFReasCommLangID
+  type: INTEGER
+  nullable: true
+  description: Comment Language ID represents the language code in which the Proforma reasons comments are captured.
+- name: UpdReasComm
+  type: nvarchar(max)
+  nullable: true
+  description: Comment is associated with the collection of restatements and the reason that is required when the key total
+    value changes for the prior period in the current year report when compared to the prior year document.
+- name: PFReasComm
+  type: nvarchar(max)
+  nullable: true
+  description: Comment is associated with the collection of Proforma numbers.
+- name: FndID
+  type: BIGINT
+  nullable: false
+  description: Fundamental ID is a permanent identifier (Perm ID) assigned to the sub-group of an organization which is grouped
+    based on the consolidation, parent, and GAAP basis. An organization is further grouped based on the set of comparable
+    financial data under an umbrella known as the Fundamental ID.
+- name: PerID
+  type: BIGINT
+  nullable: false
+  description: Period ID is associated with the period end date used to report the financial data of the business at the end
+    of the financial period for annual and interims. Period end date differs for each company, however usually a financial
+    period is based on the tax period of the country in order to easily track corporate tax filing. Interim periods have their
+    statement date with the end date of each quarter and semi-annual with end date half yearly. As Reported Statement Period
+    ID is a unique identifier a
+- name: SrcID
+  type: BIGINT
+  nullable: false
+  description: Source ID is associated with the source or filing document used to collect financial data for a particular
+    period end. Data is collected from multiple source documents such as press, final, amendments for a particular period.
+    Each document is assigned with a Source ID which is a unique chronological numerical value for each company.
+- name: StmtCurrID
+  type: INTEGER
+  nullable: false
+  description: Standard Currency ID is the unique permanent identifier assigned to each currency name of a country. It is
+    a 6-digit numerical value assigned to each currency. –
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Line Item ID is associated with the financial data items collected for each company, where each data item is
+    assigned with a numerical value in chronological order based on the sequence of the as- reported items. The Line Item
+    ID helps to display the items in the as-reported sequence disclosed by the company.
+- name: Value_
+  type: FLOAT
+  nullable: false
+  description: 'Line Item Value is associated with the amount of each financial data item disclosed by the company. Example:
+    Inventories - 150,000, Cash - 250,000. LSEG Quantitative Analytics Database Schema for LSEG Climate 18'
+- name: AnnFlg
+  type: char(1)
+  nullable: true
+  description: 'Annual Flag is associated with the financial periods collected. The flag is marked ‘1’ if the corresponding
+    period is an annual data and is ‘0’ for an interim period. Example: a company with December as its annual period end dated
+    12/31/2000 will be tagged Annual Flag- ‘1’, while its quarter with the period end dated 03/31/2021 is tagged Annual Flag-
+    ‘0’.'
+- name: AuditID
+  type: varchar(500)
+  nullable: true
+  description: Audit ID is associated with the auditability trail of the ratios derived on the products. It helps to arrive
+    at the details of the calculated ratio on the product. The below example illustrates the Audit ID formula stored to help
+    derive the ratio. FundamentalSeriesId- 48433138368, AuditID- 200085_62465_ASR_B8DCA292-E440-4538-9098-444789A2E8FE, FinancialPeriodEndDate-2/31/1997
+    0:00.
+- name: CarbonDataID
+  type: INTEGER
+  nullable: true
+  description: Carbon Data ID contains the information on fuel type, mine ownership, equity affiliates, revenue data source,
+    conversion type, coal production and total P&P reserves.
+- name: CoalProdName
+  type: varchar(500)
+  nullable: true
+  description: Coal Production contains information around the ore used for production. It indicates Run of mine coal production,
+    saleable coal production, 'Various' is used when the company is silent on the coal production type, 'Other' indicates
+    coal production other than run of mine and saleable and 'Not Specified' indicates no production details.
+- name: CombItemFlg
+  type: char(1)
+  nullable: true
+  description: 'Combined Item Flag is associated with the financial data items collected and flag is tagged as ‘1’ when the
+    data item is a combination of two or more items and cannot be separated. Example: if the description of the item is Depreciation,
+    Amortization and impairment expense which indicates a combination of items and does not have further breakdown of the
+    same, then Combined Item Flag is ‘1’. Combined Item Flag is tagged to the financial concept code of the data item collected.'
+- name: Comments
+  type: varchar(1000)
+  nullable: true
+  description: Comments provides information around the source document used and the exact page where the information is collected
+    from. This is captured when data is not linked to source bookmarks, this helps clients to know from where the data is
+    picked from the source document.
+- name: ConvTypeName
+  type: varchar(100)
+  nullable: true
+  description: Conversion Type Name contains information whether the conversion type is reported in the source document (Disclosed)
+    or 'Estimated' which indicates that the conversion type is not available in the company reports and the factor has been
+    estimated.
+- name: DerSysTypeCode
+  type: char(2)
+  nullable: true
+  description: 'Derivation System Type Code is associated with the financial data item collected and indicates if the item
+    is derived by the system and the reason for derivation. Derivation System Type Code is a two-letter code indicating the
+    following reasons for derivation: – BI - Balancing Item, implies the system derived balance value in case of incomplete
+    Parent-Child Relationship or breakdown or rounding off difference. – MP - Missing Period, implies that the derived value
+    is a result of missing period ca'
+- name: DerFlg
+  type: char(1)
+  nullable: true
+  description: Derived Flag is associated with the financial data item collected and reflects ‘1’ if the item is derived by
+    the system. Data can be derived by the system due to various reasons such as, balancing item derived due to incomplete
+    Parent-Child Relationship or breakdown or rounding off difference or value derived because of missing as-reported calculation.
+    LSEG Quantitative Analytics Database Schema for LSEG Climate 19
+- name: EqAfflFlg
+  type: char(1)
+  nullable: true
+  description: Equity Affiliates Flag indicates whether the values collected for revenues, production or reserves are for
+    equity affiliates or not.
+- name: ExclFromStdFlg
+  type: char(1)
+  nullable: true
+  description: Excluded From Standardization Flag is associated with the as- reported data items collected and marked as ‘1’
+    if a data item needs to be ignored for calculation to avoid doubt counting of the value. Generally, company reports subtotals
+    in its presentation, these data items are collected in the reported format and Excluded From Standardization Flag is marked
+    ‘1’ to ignore them in the reconciliation of the statements.
+- name: FinalFlg
+  type: char(1)
+  nullable: true
+  description: 'Final Flag is associated with the collection of the financial data from the final source document, where each
+    data item is marked as ‘1’ if the information is collected from the final document. Companies file both press and final
+    reports for a financial period and Final Flag helps to identify if the value is collected from press or final. Final Flag
+    reflects ‘0’ if the information is collected from a preliminary/press report. When the Final Flag value is ‘1’, it indicates
+    that the value is from '
+- name: FinLineItemSrc
+  type: INTEGER
+  nullable: true
+  description: Financial Line Item Source is associated with the source or filing document used to collect financial data
+    for a particular period end. Data is collected from multiple source documents such as press, final, amendments for a particular
+    period. In the below example, each document is assigned with a source identifier which is a unique chronological numerical
+    value for each company. Each document is assigned a Document Control Number (DCN) and records the filing date and time
+    when the document is fi
+- name: FuelTypeName
+  type: varchar(100)
+  nullable: true
+  description: Fuel type will contain the information about thermal coal, metallurgical coal, pulverized coal, anthracite
+    coal, combination of metallurgical or pulverized coal, combination of thermal or pulverized coal, combination of thermal
+    or metallurgical coal, combination of thermal or metallurgical or pulverized coal of the organization. The value 'Not
+    Disclosed' indicates that the company is silent on the type of coal in the company reports and 'Not Applicable' is used
+    when there are no mine details rep
+- name: InstNum
+  type: varchar(100)
+  nullable: true
+  description: Instance Number is associated with the financial data values derived or calculated by the system using the
+    as-reported content. . Analytical data value may be derived either through summation, deduction, multiplication, or division
+    using the as-reported value to provide meaningful ratios, and each value is assigned an Instance Number. Each analytical
+    value is assigned with a unique identifier known as Instance Number.
+- name: MineOwnCode
+  type: varchar(50)
+  nullable: true
+  description: Mine Ownership Code contains information about the ownership of mine. Mines with ownership greater than or
+    equal to 50% or Mines with ownership less than 50% are captured under this data element.
+- name: ParentLineItem
+  type: INTEGER
+  nullable: true
+  description: Parent Line Item ID is associated with the collection of financial data items and the capability to display
+    the total value and its corresponding components as an indent. Generally, companies disclose the key totals on the face
+    of the statements and its components or breakdowns in the footnotes. The total value is the parent line, and the components
+    are child line items. Parent Line Item ID is a numerical value assigned to each component to which it is the parent line
+    in the Parent-Child Relatio
+- name: RepCurrID
+  type: INTEGER
+  nullable: true
+  description: Reported Currency ID is the unique permanent identifier assigned to each currency name of a country. It is
+    a 6-digit numerical value assigned to each currency.
+- name: RepISOCurrCode
+  type: char(3)
+  nullable: true
+  description: The ISO code for Reported Currency ID.
+- name: RepScalFct
+  type: INTEGER
+  nullable: true
+  description: Reporting Scaling Factor is associated with the scaling factor of the currency used to collect the financial
+    data values.
+- name: RevDataSrcCode
+  type: char(3)
+  nullable: true
+  description: Revenue Data Source contains information about the source of revenue. Revenue may be As Reported (REP), calculated
+    as per FTSE Methodology (FST), Estimated (EST), Not Disclosed (ND) or CST which indicates that revenue data is estimated
+    based on the percentage of revenue.
+- name: SeqNum
+  type: INTEGER
+  nullable: true
+  description: Sequence Number is associated with the financial data items collected for each company, where each data item
+    is assigned with a numerical value in chronological order based on the sequence of the as-reported items. The Sequence
+    Number helps to display the items in the as-reported sequence disclosed by the company on the product.
+- name: StmtSecCode
+  type: char(2)
+  nullable: true
+  description: 'Statement Section Code is associated with the collection of Financial information. Statement Section Name
+    is the name assigned to each Statement Section Code. It is limited to 5 alphabets. Examples: – Statement Section Code-
+    CRA – Statement Type Code- BAL – Statement Section Name- Current Assets – Statement Section Code- REV – Statement Type
+    Code- INC – Statement Section Name- Revenue'
+- name: StmtSecCrFlg
+  type: char(1)
+  nullable: true
+  description: Statement Section Credit Flag is associated with the sign or polarity of the amount or value collected for
+    the financial information. Each statement section has default polarity based on the nature of the data items, generally
+    sections related to income/gain are assigned positive, and expense/loss are assigned negative. Statement Section Credit
+    Flag reflects ‘1’ if the default polarity of the statement section is positive and ‘0’ if it’s negative.
+- name: StmtTypeCode
+  type: SMALLINT
+  nullable: true
+  description: Statement Type Code is associated with the collection of financial information. Financial data is categorized
+    into multiple statements based on the common accounting disclosures. Data is collected under the main statements such
+    as Income statement (INC), Balance sheet (BAL), Cash flow (CAS) and additional statements such as Business Segment (BUS),
+    Geographic Segment (GEO).
+- name: ThPartySrcCode
+  type: varchar(50)
+  nullable: true
+  description: 'Third Party Source Code indicates that the data has been sourced from third party vendors or if it’s self-sourced.
+    For example: SS - Self Sourced.'
+- name: TotProvProbResrName
+  type: varchar(200)
+  nullable: true
+  description: Total Proved and Probable Reserves contains information about the reportable coal reserves, marketable coal
+    reserves. The value 'Other' indicates the reserves other than reportable or marketable, and the value 'Not Specified'
+    indicates that no reserves data has been reported.
+- name: UnitID
+  type: INTEGER
+  nullable: true
+  description: Physical Measure ID or Unit ID is associated with the measurement of the data items which are generally part
+    of Key Performance Indicators (KPI) and are expressed in physical measures based on the nature of the items.
+- name: ValEstMetCode
+  type: char(3)
+  nullable: true
+  description: Value Estimation Method Code is associated with the data sourced from third party vendors and provides additional
+    details about the value sourced. Value Estimation Method Code is the code assigned to the type of data sourced from third
+    party. LSEG Quantitative Analytics Database Schema for LSEG Climate 21
+- name: FndID
+  type: BIGINT
+  nullable: false
+  description: Fundamental ID is a permanent identifier (Perm ID) assigned to the sub- group of an organization which is grouped
+    based on the consolidation, parent, and GAAP basis. An organization is further grouped based on the set of comparable
+    financial data under an umbrella known as the Fundamental ID.
+- name: PerID
+  type: BIGINT
+  nullable: false
+  description: Period ID is associated with the period end date used to report the financial data of the business at the end
+    of the financial period for annual and interims. Period end date differs for each company, however usually the financial
+    period is based on the tax period of the country in order to easily track corporate tax filing. Interim periods have their
+    statement date with the end date of each quarter and semi-annual with end date half yearly. As Reported Statement Period
+    ID is a unique identifier
+- name: SrcID
+  type: BIGINT
+  nullable: false
+  description: Source ID is associated with the source or filing document used to collect financial data for a particular
+    period end. Data is collected from multiple source documents such as press, final, amendments for a particular period.
+    Each document is assigned with a Source ID which is a unique chronological numerical value for each company.
+- name: StmtCurrID
+  type: INTEGER
+  nullable: false
+  description: Standard Currency ID is the unique permanent identifier assigned to each currency name of a country. It is
+    a 6-digit numerical value assigned to each currency.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Line Item ID is associated with the financial data items collected for each company, where each data item is
+    assigned with a numerical value in chronological order based on the sequence of the as-reported items. Line Item ID helps
+    to display the items in the as-reported sequence disclosed by the company.
+- name: OrgPermID
+  type: BIGINT
+  nullable: false
+  description: Unique system generated Permanent Identifier (PermID) for an Organisation, aka Organisation Perm ID. The broad
+    grouping of entities including Companies, Governments and municipalities, Government agencies, Charities etc. Organizations
+    are mastered in Organization Authority.
+- name: OPMSegID
+  type: INTEGER
+  nullable: false
+  description: Operating Metrics Segment ID provides the list of operating segment ids linked to a particular line item values
+    of a given organization. There can be single or multiple segments attached to a line item. LSEG Quantitative Analytics
+    Database Schema for LSEG Climate 22
+---
+table: qa_climate.CLMCRAsRepStmtSeg
+domain: esg
+description: Reported Instance Values Reported by
+---
+table: qa_climate.Organization
+domain: esg
+description: This table provides all the values reported by the organization for a reporting instance. Package also provides
+  the
+update_cadence: Weekly
+columns:
+- name: FndID
+  type: BIGINT
+  nullable: false
+  description: Fundamental ID is a permanent identifier (Perm ID) assigned to the sub-group of an organization which is grouped
+    based on the consolidation, parent, and GAAP basis. An organization is further LSEG Quantitative Analytics Database Schema
+    for LSEG Climate 15
+- name: PerID
+  type: BIGINT
+  nullable: false
+  description: Period ID is associated with the period end date used to report the financial data of the business at the end
+    of the financial period for annual and interims. Period end date differs for each company, however most of the financial
+    period is based on the tax period of the country in order easily track corporate tax filing. Interim periods have their
+    statement date with the end date of each quarter and semi-annual with end date half yearly. As Reported Statement Period
+    ID is a unique identifier as
+- name: SrcID
+  type: BIGINT
+  nullable: false
+  description: Source ID is associated with the source or filing document used to collect financial data for a particular
+    period end. Data is collected from multiple source documents such as press, final, amendments for a particular period.
+    Each document is assigned with a Source ID which is a unique chronological numerical value for each company.
+- name: StmtCurrID
+  type: INTEGER
+  nullable: false
+  description: Standard Currency ID is the unique permanent identifier assigned to each currency name of a country. It is
+    a 6-digit numerical value assigned to each currency.
+- name: StmtTypeCode
+  type: SMALLINT
+  nullable: false
+  description: 'Statement Type Code is associated with the collection of financial information. Financial data is categorized
+    into multiple statements based on the common accounting disclosures. Data is collected under the main statements such
+    as: – Income statement (INC) – Balance sheet (BAL) – Cash flow (CAS) and additional statements such as: – Business Segment
+    (BUS) – Geographic Segment (GEO)'
+- name: AutoUpdFlg
+  type: char(1)
+  nullable: true
+  description: Automated Update Flag is associated with the financial data items collected, each data item is ‘1’ if the data
+    is ingested through automation process and manual update is shown as ‘0’.
+- name: ConFlg
+  type: char(1)
+  nullable: true
+  description: Condensed Flag is associated with the level of details disclosed by the company in its financial document and
+    the flag is ‘1’ if the company has limited or condensed data reported.
+- name: DerFlg
+  type: char(1)
+  nullable: true
+  description: Derived Flag is associated with the financial data item collected and reflects ‘1’ if the item is derived by
+    the system.
+- name: DetFlg
+  type: char(1)
+  nullable: true
+  description: Detailed Flag is associated with the level of details disclosed by the company in its financial document and
+    the flag reflects ‘1’ if the company discloses all the information required to reconcile the statements.
+- name: LastModDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: Last Modified Date is associated with the collection methodology followed to collect financial data to help
+    in timeliness management.
+- name: LatOrigUpdFlg
+  type: char(1)
+  nullable: true
+  description: Latest Original Update Flag represents a particular statement is latest original update or not.
+- name: LatRcntUpdFlg
+  type: char(1)
+  nullable: true
+  description: Latest Recent Update Flag represents a particular statement is latest recent update or not.
+- name: NotCompToPrPerFlg
+  type: char(1)
+  nullable: true
+  description: Not Comparable To Prior Period Flag is used to indicate the lack of comparability of data for interims within
+    the fiscal period of a company.
+- name: PrefSrcFlg
+  type: char(1)
+  nullable: true
+  description: Preferred Source Flag indicates that the data has been self-sourced or sourced from third party vendors. It
+    is marked ‘1’ if it has been self-sourced and marked ‘0’ if data is obtained from third party sources.
+- name: PrelimFlg
+  type: char(1)
+  nullable: true
+  description: Preliminary Flag is associated with the collection of the financial data from the press or preliminary document,
+    where each data item LSEG Quantitative Analytics Database Schema for LSEG Climate 16
+- name: PresFmtCode
+  type: char(3)
+  nullable: true
+  description: Presentation Format Code is associated with the presentation of the financial statement of a company in its
+    financial reports. Each company may display the financial statements in different patterns and formats, where the same
+    is broadly classified.
+- name: ProFormaFlg
+  type: char(1)
+  nullable: true
+  description: Pro Forma Flag is associated with the financial information collected from prospectus document. If the financial
+    information is pro forma, then the Pro Forma Flag will be marked ‘1’.
+- name: ScalFctNum
+  type: varchar(100)
+  nullable: true
+  description: Scaling Factor Number is associated with the scaling factor of the currency used to collect the financial data
+    values.
+- name: SysDateTime
+  type: TIMESTAMP(6)
+  nullable: true
+  description: System Date Time reflects the timestamp when a particular statement instance was created. This date is helpful
+    for customers in point in time analysis of financial statements with price movements of respective company’s stock.
+- name: SysDerTypeCode
+  type: TIMESTAMP(6)
+  nullable: true
+  description: 'System Derived Type Code is associated with the financial data items derived by the system. Derived items
+    are indicated with System Derived Type Code. The code types available are provided below: – MR - Missing as-reported,
+    few of the sub-total or totals are derived if not reported by the company. – XB- XBRL, few markets such as US are automated
+    through XBRL ingest. – BI - Balancing item, few cases there are rounding off differences and these are derived as balancing
+    item. – MP - Missing Period,'
+- name: UpdMetCode
+  type: char(2)
+  nullable: true
+  description: 'Update Method Code is associated with the collection of financial information and a code is assigned to each
+    statement to indicate if it is normal, calculated, or special statement. Update Method Code is tagged as follows: – NRM-
+    Normal if the statement is collected from the source document and data is reported in the document. – CLC- Calculated
+    indicates that the statement is derived or calculated based on availability of as-reported data, 6 months interim can
+    be derived by summing up the first'
+- name: UpdTypeCode
+  type: char(3)
+  nullable: true
+  description: Update Type Code is associated with the financial data collection from the source document and the various
+    types of classification of data collection on the product. The examples below provide the various types of Update Type
+    Code classified based the financial information disclosure. Data is collected as Original (ORG) from the initial source
+    document, Reclassification (CLA) and Restatement (RES) are collected from the subsequent filings for the original period;
+    Amendment (AMD) are filed when t
+- name: UpdReasCode
+  type: char(3)
+  nullable: true
+  description: Code assigned to each of the update reasons.
+- name: UpdReasCommLangID
+  type: INTEGER
+  nullable: true
+  description: Comment Language ID represents the language code in which the update reasons comments are captured.
+- name: PFReasCode
+  type: SMALLINT
+  nullable: true
+  description: Code assigned to each of the Proforma reasons. LSEG Quantitative Analytics Database Schema for LSEG Climate
+    17
+- name: PFReasCommLangID
+  type: INTEGER
+  nullable: true
+  description: Comment Language ID represents the language code in which the Proforma reasons comments are captured.
+- name: UpdReasComm
+  type: nvarchar(max)
+  nullable: true
+  description: Comment is associated with the collection of restatements and the reason that is required when the key total
+    value changes for the prior period in the current year report when compared to the prior year document.
+- name: PFReasComm
+  type: nvarchar(max)
+  nullable: true
+  description: Comment is associated with the collection of Proforma numbers.
+- name: FndID
+  type: BIGINT
+  nullable: false
+  description: Fundamental ID is a permanent identifier (Perm ID) assigned to the sub-group of an organization which is grouped
+    based on the consolidation, parent, and GAAP basis. An organization is further grouped based on the set of comparable
+    financial data under an umbrella known as the Fundamental ID.
+- name: PerID
+  type: BIGINT
+  nullable: false
+  description: Period ID is associated with the period end date used to report the financial data of the business at the end
+    of the financial period for annual and interims. Period end date differs for each company, however usually a financial
+    period is based on the tax period of the country in order to easily track corporate tax filing. Interim periods have their
+    statement date with the end date of each quarter and semi-annual with end date half yearly. As Reported Statement Period
+    ID is a unique identifier a
+- name: SrcID
+  type: BIGINT
+  nullable: false
+  description: Source ID is associated with the source or filing document used to collect financial data for a particular
+    period end. Data is collected from multiple source documents such as press, final, amendments for a particular period.
+    Each document is assigned with a Source ID which is a unique chronological numerical value for each company.
+- name: StmtCurrID
+  type: INTEGER
+  nullable: false
+  description: Standard Currency ID is the unique permanent identifier assigned to each currency name of a country. It is
+    a 6-digit numerical value assigned to each currency. –
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Line Item ID is associated with the financial data items collected for each company, where each data item is
+    assigned with a numerical value in chronological order based on the sequence of the as- reported items. The Line Item
+    ID helps to display the items in the as-reported sequence disclosed by the company.
+- name: Value_
+  type: FLOAT
+  nullable: false
+  description: 'Line Item Value is associated with the amount of each financial data item disclosed by the company. Example:
+    Inventories - 150,000, Cash - 250,000. LSEG Quantitative Analytics Database Schema for LSEG Climate 18'
+- name: AnnFlg
+  type: char(1)
+  nullable: true
+  description: 'Annual Flag is associated with the financial periods collected. The flag is marked ‘1’ if the corresponding
+    period is an annual data and is ‘0’ for an interim period. Example: a company with December as its annual period end dated
+    12/31/2000 will be tagged Annual Flag- ‘1’, while its quarter with the period end dated 03/31/2021 is tagged Annual Flag-
+    ‘0’.'
+- name: AuditID
+  type: varchar(500)
+  nullable: true
+  description: Audit ID is associated with the auditability trail of the ratios derived on the products. It helps to arrive
+    at the details of the calculated ratio on the product. The below example illustrates the Audit ID formula stored to help
+    derive the ratio. FundamentalSeriesId- 48433138368, AuditID- 200085_62465_ASR_B8DCA292-E440-4538-9098-444789A2E8FE, FinancialPeriodEndDate-2/31/1997
+    0:00.
+- name: CarbonDataID
+  type: INTEGER
+  nullable: true
+  description: Carbon Data ID contains the information on fuel type, mine ownership, equity affiliates, revenue data source,
+    conversion type, coal production and total P&P reserves.
+- name: CoalProdName
+  type: varchar(500)
+  nullable: true
+  description: Coal Production contains information around the ore used for production. It indicates Run of mine coal production,
+    saleable coal production, 'Various' is used when the company is silent on the coal production type, 'Other' indicates
+    coal production other than run of mine and saleable and 'Not Specified' indicates no production details.
+- name: CombItemFlg
+  type: char(1)
+  nullable: true
+  description: 'Combined Item Flag is associated with the financial data items collected and flag is tagged as ‘1’ when the
+    data item is a combination of two or more items and cannot be separated. Example: if the description of the item is Depreciation,
+    Amortization and impairment expense which indicates a combination of items and does not have further breakdown of the
+    same, then Combined Item Flag is ‘1’. Combined Item Flag is tagged to the financial concept code of the data item collected.'
+- name: Comments
+  type: varchar(1000)
+  nullable: true
+  description: Comments provides information around the source document used and the exact page where the information is collected
+    from. This is captured when data is not linked to source bookmarks, this helps clients to know from where the data is
+    picked from the source document.
+- name: ConvTypeName
+  type: varchar(100)
+  nullable: true
+  description: Conversion Type Name contains information whether the conversion type is reported in the source document (Disclosed)
+    or 'Estimated' which indicates that the conversion type is not available in the company reports and the factor has been
+    estimated.
+- name: DerSysTypeCode
+  type: char(2)
+  nullable: true
+  description: 'Derivation System Type Code is associated with the financial data item collected and indicates if the item
+    is derived by the system and the reason for derivation. Derivation System Type Code is a two-letter code indicating the
+    following reasons for derivation: – BI - Balancing Item, implies the system derived balance value in case of incomplete
+    Parent-Child Relationship or breakdown or rounding off difference. – MP - Missing Period, implies that the derived value
+    is a result of missing period ca'
+- name: DerFlg
+  type: char(1)
+  nullable: true
+  description: Derived Flag is associated with the financial data item collected and reflects ‘1’ if the item is derived by
+    the system. Data can be derived by the system due to various reasons such as, balancing item derived due to incomplete
+    Parent-Child Relationship or breakdown or rounding off difference or value derived because of missing as-reported calculation.
+    LSEG Quantitative Analytics Database Schema for LSEG Climate 19
+- name: EqAfflFlg
+  type: char(1)
+  nullable: true
+  description: Equity Affiliates Flag indicates whether the values collected for revenues, production or reserves are for
+    equity affiliates or not.
+- name: ExclFromStdFlg
+  type: char(1)
+  nullable: true
+  description: Excluded From Standardization Flag is associated with the as- reported data items collected and marked as ‘1’
+    if a data item needs to be ignored for calculation to avoid doubt counting of the value. Generally, company reports subtotals
+    in its presentation, these data items are collected in the reported format and Excluded From Standardization Flag is marked
+    ‘1’ to ignore them in the reconciliation of the statements.
+- name: FinalFlg
+  type: char(1)
+  nullable: true
+  description: 'Final Flag is associated with the collection of the financial data from the final source document, where each
+    data item is marked as ‘1’ if the information is collected from the final document. Companies file both press and final
+    reports for a financial period and Final Flag helps to identify if the value is collected from press or final. Final Flag
+    reflects ‘0’ if the information is collected from a preliminary/press report. When the Final Flag value is ‘1’, it indicates
+    that the value is from '
+- name: FinLineItemSrc
+  type: INTEGER
+  nullable: true
+  description: Financial Line Item Source is associated with the source or filing document used to collect financial data
+    for a particular period end. Data is collected from multiple source documents such as press, final, amendments for a particular
+    period. In the below example, each document is assigned with a source identifier which is a unique chronological numerical
+    value for each company. Each document is assigned a Document Control Number (DCN) and records the filing date and time
+    when the document is fi
+- name: FuelTypeName
+  type: varchar(100)
+  nullable: true
+  description: Fuel type will contain the information about thermal coal, metallurgical coal, pulverized coal, anthracite
+    coal, combination of metallurgical or pulverized coal, combination of thermal or pulverized coal, combination of thermal
+    or metallurgical coal, combination of thermal or metallurgical or pulverized coal of the organization. The value 'Not
+    Disclosed' indicates that the company is silent on the type of coal in the company reports and 'Not Applicable' is used
+    when there are no mine details rep
+- name: InstNum
+  type: varchar(100)
+  nullable: true
+  description: Instance Number is associated with the financial data values derived or calculated by the system using the
+    as-reported content. . Analytical data value may be derived either through summation, deduction, multiplication, or division
+    using the as-reported value to provide meaningful ratios, and each value is assigned an Instance Number. Each analytical
+    value is assigned with a unique identifier known as Instance Number.
+- name: MineOwnCode
+  type: varchar(50)
+  nullable: true
+  description: Mine Ownership Code contains information about the ownership of mine. Mines with ownership greater than or
+    equal to 50% or Mines with ownership less than 50% are captured under this data element.
+- name: ParentLineItem
+  type: INTEGER
+  nullable: true
+  description: Parent Line Item ID is associated with the collection of financial data items and the capability to display
+    the total value and its corresponding components as an indent. Generally, companies disclose the key totals on the face
+    of the statements and its components or breakdowns in the footnotes. The total value is the parent line, and the components
+    are child line items. Parent Line Item ID is a numerical value assigned to each component to which it is the parent line
+    in the Parent-Child Relatio
+- name: RepCurrID
+  type: INTEGER
+  nullable: true
+  description: Reported Currency ID is the unique permanent identifier assigned to each currency name of a country. It is
+    a 6-digit numerical value assigned to each currency.
+- name: RepISOCurrCode
+  type: char(3)
+  nullable: true
+  description: The ISO code for Reported Currency ID.
+- name: RepScalFct
+  type: INTEGER
+  nullable: true
+  description: Reporting Scaling Factor is associated with the scaling factor of the currency used to collect the financial
+    data values.
+- name: RevDataSrcCode
+  type: char(3)
+  nullable: true
+  description: Revenue Data Source contains information about the source of revenue. Revenue may be As Reported (REP), calculated
+    as per FTSE Methodology (FST), Estimated (EST), Not Disclosed (ND) or CST which indicates that revenue data is estimated
+    based on the percentage of revenue.
+- name: SeqNum
+  type: INTEGER
+  nullable: true
+  description: Sequence Number is associated with the financial data items collected for each company, where each data item
+    is assigned with a numerical value in chronological order based on the sequence of the as-reported items. The Sequence
+    Number helps to display the items in the as-reported sequence disclosed by the company on the product.
+- name: StmtSecCode
+  type: char(2)
+  nullable: true
+  description: 'Statement Section Code is associated with the collection of Financial information. Statement Section Name
+    is the name assigned to each Statement Section Code. It is limited to 5 alphabets. Examples: – Statement Section Code-
+    CRA – Statement Type Code- BAL – Statement Section Name- Current Assets – Statement Section Code- REV – Statement Type
+    Code- INC – Statement Section Name- Revenue'
+- name: StmtSecCrFlg
+  type: char(1)
+  nullable: true
+  description: Statement Section Credit Flag is associated with the sign or polarity of the amount or value collected for
+    the financial information. Each statement section has default polarity based on the nature of the data items, generally
+    sections related to income/gain are assigned positive, and expense/loss are assigned negative. Statement Section Credit
+    Flag reflects ‘1’ if the default polarity of the statement section is positive and ‘0’ if it’s negative.
+- name: StmtTypeCode
+  type: SMALLINT
+  nullable: true
+  description: Statement Type Code is associated with the collection of financial information. Financial data is categorized
+    into multiple statements based on the common accounting disclosures. Data is collected under the main statements such
+    as Income statement (INC), Balance sheet (BAL), Cash flow (CAS) and additional statements such as Business Segment (BUS),
+    Geographic Segment (GEO).
+- name: ThPartySrcCode
+  type: varchar(50)
+  nullable: true
+  description: 'Third Party Source Code indicates that the data has been sourced from third party vendors or if it’s self-sourced.
+    For example: SS - Self Sourced.'
+- name: TotProvProbResrName
+  type: varchar(200)
+  nullable: true
+  description: Total Proved and Probable Reserves contains information about the reportable coal reserves, marketable coal
+    reserves. The value 'Other' indicates the reserves other than reportable or marketable, and the value 'Not Specified'
+    indicates that no reserves data has been reported.
+- name: UnitID
+  type: INTEGER
+  nullable: true
+  description: Physical Measure ID or Unit ID is associated with the measurement of the data items which are generally part
+    of Key Performance Indicators (KPI) and are expressed in physical measures based on the nature of the items.
+- name: ValEstMetCode
+  type: char(3)
+  nullable: true
+  description: Value Estimation Method Code is associated with the data sourced from third party vendors and provides additional
+    details about the value sourced. Value Estimation Method Code is the code assigned to the type of data sourced from third
+    party. LSEG Quantitative Analytics Database Schema for LSEG Climate 21
+- name: FndID
+  type: BIGINT
+  nullable: false
+  description: Fundamental ID is a permanent identifier (Perm ID) assigned to the sub- group of an organization which is grouped
+    based on the consolidation, parent, and GAAP basis. An organization is further grouped based on the set of comparable
+    financial data under an umbrella known as the Fundamental ID.
+- name: PerID
+  type: BIGINT
+  nullable: false
+  description: Period ID is associated with the period end date used to report the financial data of the business at the end
+    of the financial period for annual and interims. Period end date differs for each company, however usually the financial
+    period is based on the tax period of the country in order to easily track corporate tax filing. Interim periods have their
+    statement date with the end date of each quarter and semi-annual with end date half yearly. As Reported Statement Period
+    ID is a unique identifier
+- name: SrcID
+  type: BIGINT
+  nullable: false
+  description: Source ID is associated with the source or filing document used to collect financial data for a particular
+    period end. Data is collected from multiple source documents such as press, final, amendments for a particular period.
+    Each document is assigned with a Source ID which is a unique chronological numerical value for each company.
+- name: StmtCurrID
+  type: INTEGER
+  nullable: false
+  description: Standard Currency ID is the unique permanent identifier assigned to each currency name of a country. It is
+    a 6-digit numerical value assigned to each currency.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Line Item ID is associated with the financial data items collected for each company, where each data item is
+    assigned with a numerical value in chronological order based on the sequence of the as-reported items. Line Item ID helps
+    to display the items in the as-reported sequence disclosed by the company.
+- name: OrgPermID
+  type: BIGINT
+  nullable: false
+  description: Unique system generated Permanent Identifier (PermID) for an Organisation, aka Organisation Perm ID. The broad
+    grouping of entities including Companies, Governments and municipalities, Government agencies, Charities etc. Organizations
+    are mastered in Organization Authority.
+- name: OPMSegID
+  type: INTEGER
+  nullable: false
+  description: Operating Metrics Segment ID provides the list of operating segment ids linked to a particular line item values
+    of a given organization. There can be single or multiple segments attached to a line item. LSEG Quantitative Analytics
+    Database Schema for LSEG Climate 22
+---
+table: qa_climate.CLMCRFinPer
+domain: esg
+description: Reported Instance Values Reported by Organization | This table provides all the values reported by the organization
+  for a reporting instance. Package also provides the
+update_cadence: Weekly
+columns:
+- name: OrgPermID
+  type: BIGINT
+  nullable: false
+  description: Unique system generated Permanent Identifier (PermID) for an Organisation, aka Organisation Perm ID. The broad
+    grouping of entities including Companies, Governments and municipalities, Government agencies, Charities etc. Organizations
+    are mastered in Organization Authority.
+- name: FndID
+  type: BIGINT
+  nullable: false
+  description: Fundamental ID is a permanent identifier (Perm ID) assigned to the sub- group of an organization which is grouped
+    based on the consolidation, parent, and GAAP basis. An organization is further grouped based on the set of comparable
+    financial data under an umbrella known as the Fundamental ID.
+- name: PerID
+  type: BIGINT
+  nullable: false
+  description: Period ID is associated with the period end date used to report the financial data of the business at the end
+    of the financial period for annual and interims. Period end date differs for each company, however usually the financial
+    period is based on the tax period of the country in order easily track corporate tax filing. Interim periods have their
+    statement date with the end date of each quarter and semi-annual with end date half yearly. As Reported Statement Period
+    ID is a unique identifier as
+- name: SrcID
+  type: BIGINT
+  nullable: false
+  description: Source ID is associated with the source or filing document used to collect financial data for a particular
+    period end. Data is collected from multiple source documents such as press, final, amendments for a particular period.
+    Each document is assigned with a Source ID which is a unique chronological numerical value for each company.
+- name: StmtCurrID
+  type: INTEGER
+  nullable: false
+  description: Standard Currency ID is the unique permanent identifier assigned to each currency name of a country. It is
+    a 6-digit numerical value assigned to each currency
+- name: StmtTypeCode
+  type: SMALLINT
+  nullable: false
+  description: Statement Type Code is associated with the collection of financial information. Financial data is categorized
+    into multiple statements based on the common accounting disclosures. Data is collected under the main statements such
+    as Income statement (INC), Balance sheet (BAL), Cash flow (CAS) and additional statements such as Business Segment (BUS),
+    Geographic Segment (GEO).
+- name: AnnRepFlg
+  type: char(1)
+  nullable: true
+  description: Annual Reported Flag is associated with the financial periods collected and reflects ‘1’ if the annual period
+    for the corresponding fiscal year is collected. All the interim and annual period where the financial cycle is completed
+    will reflect Annual Reported Flag as ‘1’.
+- name: FiscalEndMnth
+  type: INTEGER
+  nullable: true
+  description: Fiscal End Month is associated with the period end date used to report the financial data of the business at
+    the end of the financial period for annual. Period end date differs for each company, however usually the financial period
+    is based on the tax period of the country in order easily track corporate tax filing. Fiscal End Month is denoted with
+    the number assigned to each calendar month in a series 1 for January; 2 for February; 12 for December.
+- name: FY
+  type: INTEGER
+  nullable: true
+  description: Fiscal Year is associated with the financial year based on the annual period end of the company. LSEG Quantitative
+    Analytics Database Schema for LSEG Climate 23
+- name: PerDuration
+  type: varchar(10)
+  nullable: true
+  description: Period Duration is associated with the financial data collected for a particular period and indicates if the
+    period length is in months or weeks. The common frequency of interim data disclosure is quarterly or semi- annually, and
+    the unit is Month. For a quarterly report 3 months data and for semi-annual 6 months data is marked as D- Discrete type.
+    Discrete type is applicable for income statement and cash flow statements. Interim reports also disclose both quarterly
+    and year-to-date (YTD) inform
+- name: PerEndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: Period End Date is the end date of the financial period that a company selects to close the financial accounts
+    of its business. The statement date differs for each company, however usually the financial period is based on the tax
+    period of the country in order to easily track corporate tax filing. Period End Date is applicable to both annual and
+    interim reports.
+- name: PerStartDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: Period Start Date is associated with the financial period for annual and interims and is the start date of
+    the associated financial period. Period Start Date is associated with the period end date and the duration is the fiscal
+    length of the period. The Start Date and the End Date of the period is equal to the period duration.
+- name: PerTypeCode
+  type: varchar(20)
+  nullable: true
+  description: Period Type is associated with the financial data collected for a particular period and is assigned based on
+    the frequency of data collected. Period Type -A, Periodicity Description - Annual, similarly, M - Monthly, Q- Quarterly,
+    S- Semi-Annual and T- Triannual.
+- name: TransFlg
+  type: char(1)
+  nullable: true
+  description: Transitional Flag reflects ‘1’ for the fiscal periods affected when the company decides to change the ending
+    date of its fiscal year. In between two regular fiscal years (e.g. lasting 12 months or 52/53 weeks) it reports a transitional
+    fiscal year of special length, which is either exceptionally short or exceptionally extended.
+---
+table: qa_climate.CLMCRFinSrc
+domain: esg
+description: Reported Instance Values Reported by Organization | This table provides all the values reported by the organization
+  for a reporting instance. Package also provides the
+update_cadence: Weekly
+columns:
+- name: OrgPermID
+  type: BIGINT
+  nullable: false
+  description: Unique system generated Permanent Identifier (PermID) for an Organisation, aka Organisation Perm ID. The broad
+    grouping of entities including Companies, Governments and municipalities, Government agencies, Charities etc. Organizations
+    are mastered in Organization Authority.
+- name: FndID
+  type: BIGINT
+  nullable: false
+  description: Fundamental ID is a permanent identifier (Perm ID) assigned to the sub-group of an organization which is grouped
+    based on the consolidation, parent, and GAAP basis. An organization is further grouped based on the set of comparable
+    financial data under an umbrella known as the Fundamental ID.
+- name: PerID
+  type: BIGINT
+  nullable: false
+  description: Period ID is associated with the period end date used to report the financial data of the business at the end
+    of the financial period for annual and interims. Period end date differs for each company, however usually the financial
+    period is based on the tax period of the country in order to easily track LSEG Quantitative Analytics Database Schema
+    for LSEG Climate 24
+- name: SrcID
+  type: BIGINT
+  nullable: false
+  description: Source ID is associated with the source or filing document used to collect financial data for a particular
+    period end. Data is collected from multiple source documents such as press, final, amendments for a particular period.
+    Each document is assigned with a Source ID which is a unique chronological numerical value for each company.
+- name: StmtCurrID
+  type: INTEGER
+  nullable: false
+  description: Standard Currency ID is the unique permanent identifier assigned to each currency name of a country. It is
+    a 6-digit numerical value assigned to each currency
+- name: StmtTypeCode
+  type: SMALLINT
+  nullable: false
+  description: Statement Type Code is associated with the collection of financial information. Financial data is categorized
+    into multiple statements based on the common accounting disclosures. Data is collected under the main statements such
+    as Income statement (INC), Balance sheet (BAL), Cash flow (CAS) and additional statements such as Business Segment (BUS),
+    Geographic Segment (GEO).
+- name: ConResFlg
+  type: char(1)
+  nullable: true
+  description: Contains Restatement Flag is associated with the financial data collection for the current and the prior period,
+    where the flag reflects as ‘1’ if the current source document is used to restate the prior period data.
+- name: DocFormat
+  type: varchar(50)
+  nullable: true
+  description: 'Document Format is associated with the source document used to collect the financial information and indicates
+    the type of document used for a particular period. There are various document format types filed by the company such as
+    HTML, XBRL or PDF. Document Format indicates the format of the source document such as: ASFILED - implies HTML or XBRL
+    document type.'
+- name: DocID
+  type: INTEGER
+  nullable: true
+  description: Document ID is associated with the source document used to collect the financial information and is a unique
+    identifier assigned to the document used for a particular period. Each source document for a particular period is assigned
+    a unique identifier known as the Document ID, it also has a Document Control Number (DCN) assigned.
+- name: DocNum
+  type: varchar(50)
+  nullable: true
+  description: Document Number or Document Control Number (DCN) is associated with the source document used to collect the
+    financial information and is a unique identifier assigned to the document used for a particular period. Each source document
+    for a particular period is assigned a unique identifier known as the Document Control Number (DCN), it also has a Document
+    ID assigned.
+- name: DocPermID
+  type: BIGINT
+  nullable: true
+  description: Document Perm ID is the permanent identifier (PermID) for filing content set. Each document is assigned a unique
+    Document Perm ID.
+- name: EstFilingDateFlg
+  type: char(1)
+  nullable: true
+  description: Estimated Filing Date Flag is associated with the announcement or filing date of the source documents and generally
+    is the date of the press announcement with the initial financial details published by the company for a particular period.
+- name: FilingDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: 'Filing Date is the announcement date and time of the source documents and generally is the press document
+    announcement date with the initial financial details published by the company for a particular period. Filing Date is
+    mandatory and if the company does not provide clear details, efforts should be made to collect the date when the document
+    was made public. Filing Date is updated in MM/DD/YYYY format. Time is updated in HH:MM: SS, if the exact time is not available
+    it is defaulted to 00:00:00'
+- name: FilingDateTimeOFS
+  type: INTEGER
+  nullable: true
+  description: Filing Date Time Utc Offset is associated with the filing date and time of the source documents and provides
+    the Coordinated Universal Time (UTC) offset value of time from the local filing time. LSEG Quantitative Analytics Database
+    Schema for LSEG Climate 25
+- name: PrelimFlg
+  type: char(1)
+  nullable: true
+  description: Preliminary Flag is associated with the collection of the financial data from the press or preliminary document,
+    where each data item is marked as ‘1’ if information is collected from a preliminary document. Companies file both press
+    and final reports for financial period and Preliminary Flag helps to identify if the value is collected from press or
+    final. Preliminary Flag is marked ‘1’ if collected from press and reflects ‘0’ is collected from the final reports.
+- name: SrcTypeCode
+  type: varchar(20)
+  nullable: true
+  description: Source Type Code is associated with the source or filing document used to collect financial data for a particular
+    period end. Data is collected from multiple source documents such as press, final, amendments for a particular period.
+    Companies listed on the stock exchange file their reports as per the regulatory guidelines of the Government. These source
+    documents are assigned with specific Source Type Code with a maximum limit of 10 characters to indicate the country and
+    the filing type. Example
+- name: StmtDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: Statement Date is the period end date used to report the financial data of the business at the end of the financial
+    period for annuals and interims. The statement date differs for each company, however usually the financial period is
+    based on the tax period of the country in order to easily track corporate tax filing. Interim periods have their statement
+    date with the end date of each quarter and semi-annual with end date half yearly. Each statement date is recorded with
+    the respective source do
+- name: ThPartySrcCode
+  type: varchar(10)
+  nullable: true
+  description: 'Third Party Source Code indicates that the data has been sourced from third party vendors or if it’s self-sourced.
+    For example: SS - Self Sourced.'
+- name: ThPartySrcPr
+  type: TINYINT
+  nullable: true
+  description: Third Party Source Priority is the priority list or ranking assigned to the third-party source information
+    to be mapped to the products on preference.
+---
+table: qa_climate.CLMCROrgRef
+domain: esg
+description: Fundamental Identifiers Mapping | This table contains mapping between the Fundamental specific identifiers i.e.,
+  Fundamentals Series ID and
+update_cadence: Weekly
+columns:
+- name: OrgPermID
+  type: BIGINT
+  nullable: false
+  description: Unique system generated Permanent Identifier (PermID) for an Organisation, aka Organisation Perm ID. The broad
+    grouping of entities including Companies, Governments and municipalities, Government agencies, Charities etc. Organizations
+    are mastered in Organization Authority.
+- name: InstrPermID
+  type: BIGINT
+  nullable: false
+  description: Unique system generated Permanent Identifier (PermID) for an Instrument/asset, aka Instrument Perm ID. LSEG
+    Quantitative Analytics Database Schema for LSEG Climate 26
+- name: ListStatusCode
+  type: char(3)
+  nullable: true
+  description: 'Code indicating the instrument’s listing status: – UNL - Unlisted – IPO - Unlisted pre-initial public offering
+    – SPO - unlisted pre-secondary public offering and – LIS - Listed – DEL- Public Delisted (Stop Trading on exchange – Retire
+    Date) – WDN- Offering Withdrawn – UNC- Cancelled-Unlisted'
+---
+table: qa_climate.CLMCRFndSeriesDet
+domain: esg
+description: Fundamental Identifiers Mapping | This table contains mapping between the Fundamental specific identifiers i.e.,
+  Fundamentals Series ID and
+update_cadence: Weekly
+columns:
+- name: OrgPermID
+  type: BIGINT
+  nullable: false
+  description: Unique system generated Permanent Identifier (PermID) for an Organisation, aka Organisation Perm ID. The broad
+    grouping of entities including Companies, Governments and municipalities, Government agencies, Charities etc. Organizations
+    are mastered in Organization Authority.
+- name: InstrPermID
+  type: BIGINT
+  nullable: false
+  description: Unique system generated Permanent Identifier (PermID) for an Instrument/asset, aka Instrument Perm ID.
+- name: FndSeriesPermID
+  type: BIGINT
+  nullable: false
+  description: Unique system generated Permanent Identifier (PermID) for Fundamental records called Fundamental Series Perm
+    ID. Fundamental Series ID (FSID) = this ID is allotted at the value-add layer where it combines the history of a company
+    when their GAAP change data is collected in multiple different Fundamentals ID.
+- name: ConsBasisName
+  type: varchar(50)
+  nullable: true
+  description: Consolidation Basis Name is associated with the financial statements disclosed by the company if the data is
+    on consolidated or standalone/parent basis. According to the GAAP requirement, a company must disclose consolidated financial
+    statements which combines the holding and its subsidiary data and can also disclose the parent or holding company data.
+    Few companies disclose both.
+- name: StdCurrID
+  type: INTEGER
+  nullable: true
+  description: 'Standardized Currency ID is the currency used for standardization of financials on product views. In most
+    cases the standardized replicates the as-reported currency disclosed by the company, but there are few rare cases where
+    they differ as described in the scenarios below: where the local currency relates to a country with a hyperinflationary
+    economy and historical values rapidly become meaningless. In this case the standardized currency would be set as the global
+    substitute currency used withi'
+- name: StdISOCurrCode
+  type: char(3)
+  nullable: true
+  description: ISO currency code for Standardized Currency ID.
+- name: ViewType
+  type: varchar(50)
+  nullable: true
+  description: View Type is associated with the display of comparative ratios based on different flavours of financial data
+    collected. There are two flavours of comparative ratios calculations, original-to- original data is compared between the
+    original disclosed information, whereas recent-to-recent compares data with the latest information i.e., recent original
+    data compared to the restated or reclassified data. LSEG Quantitative Analytics Database Schema for LSEG Climate 27
+---
+table: qa_climate.CLMCRFndDet
+domain: esg
+description: Fundamental Identifiers Mapping | This table contains mapping between the Fundamental specific identifiers i.e.,
+  Fundamentals Series ID and
+update_cadence: Weekly
+columns:
+- name: OrgPermID
+  type: BIGINT
+  nullable: false
+  description: Unique system generated Permanent Identifier (PermID) for an Organisation, aka Organisation Perm ID. The broad
+    grouping of entities including Companies, Governments and municipalities, Government agencies, Charities etc. Organizations
+    are mastered in Organization Authority.
+- name: InstrPermID
+  type: BIGINT
+  nullable: false
+  description: Unique system generated Permanent Identifier (PermID) for an Instrument/asset, aka Instrument Perm ID.
+- name: FndSeriesPermID
+  type: BIGINT
+  nullable: false
+  description: Unique system generated Permanent Identifier (PermID) for Fundamental records called Fundamental Series Perm
+    ID. Fundamental Series ID (FSID) = This ID is allotted at the value-add layer where it combines the history of a company
+    when their GAAP change data is collected in multiple different Fundamentals ID.
+- name: FndSeriesFndID
+  type: BIGINT
+  nullable: false
+  description: Fundamental Series Perm ID maps the different Fundamental ID associated to an organisation, hence resulting
+    in associated relevant FID is tagged to FSIDs resulting in FSID is the parent to a FID.
+- name: ConsBasisName
+  type: varchar(50)
+  nullable: true
+  description: Consolidation Basis Name is associated with the financial statements disclosed by the company if the data is
+    on consolidated or standalone/parent basis. According to the GAAP requirement, a company must disclose consolidated financial
+    statements which combines the holding and its subsidiary data and can also disclose the parent or holding company data.
+    Few companies disclose both.
+- name: FilingFlg
+  type: char(1)
+  nullable: true
+  description: Filing Flag is associated with the financial information collected and has provision to group comparable data
+    under an umbrella known as the Fundamental ID. Filing Flag is marked as ‘0’ if the company stops filing documents for
+    the specific Fundamental ID.
+- name: GAAPCode
+  type: char(3)
+  nullable: true
+  description: Gaap Code is associated with the accounting standards adopted by a company based on the government regulatory
+    requirements. A company can adopt multiple GAAP based on the country of listing, and they can switch from one GAAP to
+    another.
+- name: LocLangID
+  type: INTEGER
+  nullable: true
+  description: Local Language ID is a numerical identifier assigned to each language available globally. Local Language ID
+    helps to identify the language used in the collection of as-reported descriptions or any free text. The list includes
+    English and local languages.
+- name: NonFilingDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: Non Filing Date is associated with the financial information collected and provisioned to a group of comparable
+    data under an umbrella known as the Fundamental ID. LSEG Quantitative Analytics Database Schema for LSEG Climate 28
+---
+table: qa_climate.CLMCRFndDetInd
+domain: esg
+description: Fundamental Identifiers Mapping | This table contains mapping between the Fundamental specific identifiers i.e.,
+  Fundamentals Series ID and
+update_cadence: Weekly
+columns:
+- name: OrgPermID
+  type: BIGINT
+  nullable: false
+  description: Unique system generated Permanent Identifier (PermID) for an Organisation, aka Organisation Perm ID. The broad
+    grouping of entities including Companies, Governments and municipalities, Government agencies, Charities etc. Organizations
+    are mastered in Organization Authority.
+- name: InstrPermID
+  type: BIGINT
+  nullable: false
+  description: Unique system generated Permanent Identifier (PermID) for an Instrument/asset, aka Instrument Perm ID.
+- name: FndSeriesPermID
+  type: BIGINT
+  nullable: false
+  description: Unique system generated Permanent Identifier (PermID) for Fundamental records called Fundamental Series Perm
+    ID. Fundamental Series ID (FSID) = This ID is allotted at the value-add layer where it combines the history of a company
+    when their GAAP change data is collected in multiple different Fundamentals ID.
+- name: FndSeriesFndID
+  type: BIGINT
+  nullable: false
+  description: Fundamental Series Perm ID maps the different Fundamental ID associated to an organisation, hence resulting
+    in associated relevant FID is tagged to FSIDs resulting in FSID is the parent to a FID.
+- name: IndGrpTaxCode
+  type: SMALLINT
+  nullable: false
+  description: 'Industry Group Taxonomy Code is associated with the industrial classification assigned to each company based
+    on their primary operations. There are six industrial classifications for the global markets: – Industrial – Insurance
+    – Bank – Property – Investment Trust – Other financials'
+- name: TemplCode
+  type: SMALLINT
+  nullable: false
+  description: 'Template Code is associated with the industrial classification assigned to each company based on their primary
+    operations. There are six industrial classifications for the global markets: – Industrial – Insurance – Bank – Property
+    – Investment Trust – Other financials'
+- name: ValidFromDt
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Valid From Date is associated to industry group assigned to an Organization ID. Each industry group is recorded
+    with a create date and an end date. Valid From Date represents the create date or the date when the industry group is
+    activated.
+- name: IndGrpName
+  type: varchar(100)
+  nullable: true
+  description: 'Industry Group Name is associated with the industrial classification assigned to each company based on their
+    primary operations. There are six industrial classifications for the global markets: – Industrial – Insurance LSEG Quantitative
+    Analytics Database Schema for LSEG Climate 29'
+- name: NameLangID
+  type: INTEGER
+  nullable: true
+  description: Name Language ID is a numerical value assigned to each language available globally. Name Language ID helps
+    to identify the language used in the collection of as-reported descriptions or any free text. The list includes English
+    and local languages.
+- name: ValidToDt
+  type: TIMESTAMP(6)
+  nullable: true
+  description: Valid To Date is associated to industry group assigned to an Organization ID. Each industry group is recorded
+    with a create date and an end date. Valid To Date represents the end date or the date when the industry group is deactivated.
+---
+table: qa_climate.CLMCRFndDetTxn
+domain: esg
+description: Fundamental Identifiers Mapping | This table contains mapping between the Fundamental specific identifiers i.e.,
+  Fundamentals Series ID and
+update_cadence: Weekly
+columns:
+- name: OrgPermID
+  type: BIGINT
+  nullable: false
+  description: Unique system generated Permanent Identifier (PermID) for an Organisation, aka Organisation Perm ID. The broad
+    grouping of entities including Companies, Governments and municipalities, Government agencies, Charities etc. Organizations
+    are mastered in Organization Authority.
+- name: InstrPermID
+  type: BIGINT
+  nullable: false
+  description: Unique system generated Permanent Identifier (PermID) for an Instrument/asset, aka Instrument Perm ID.
+- name: FndSeriesPermID
+  type: BIGINT
+  nullable: false
+  description: Unique system generated Permanent Identifier (PermID) for Fundamental records called Fundamental Series Perm
+    ID. Fundamental Series ID (FSID) = This ID is allotted at the value-add layer where it combines the history of a company
+    when their GAAP change data is collected in multiple different Fundamentals ID.
+- name: FndSeriesFndID
+  type: BIGINT
+  nullable: false
+  description: Fundamental Series Perm ID maps the different Fundamental ID associated to an organisation, hence resulting
+    in associated relevant FID is tagged to FSIDs resulting in FSID is the parent to a FID.
+- name: TaxCode
+  type: SMALLINT
+  nullable: false
+  description: Taxonomy Code is associated with the taxonomy categories classified in fundamentals. Taxonomy is classified
+    into two categories; one is Global and another Japanese Local. The Taxonomy Code is ‘1’ for Global and ‘2’ for Japan.
+    LSEG Quantitative Analytics Database Schema for LSEG Climate 30
+---
+table: qa_climate.CLMCRQuoteCtry
+domain: esg
+description: Fundamental Identifiers Mapping | This table contains mapping between the Fundamental specific identifiers i.e.,
+  Fundamentals Series ID and
+update_cadence: Weekly
+columns:
+- name: OrgPermID
+  type: BIGINT
+  nullable: false
+  description: Unique system generated Permanent Identifier (PermID) for an Organisation, aka Organisation Perm ID. The broad
+    grouping of entities including Companies, Governments and municipalities, Government agencies, Charities etc. Organizations
+    are mastered in Organization Authority.
+- name: InstrPermID
+  type: BIGINT
+  nullable: false
+  description: Unique system generated Permanent Identifier (PermID) for an Instrument/asset, aka Instrument Perm ID.
+- name: QuotePermID
+  type: BIGINT
+  nullable: false
+  description: Unique LSEG system generated Permanent Identifier (PermID) for the quote-level instrument, aka Quote Perm ID.
+- name: QuoteCtryID
+  type: INTEGER
+  nullable: true
+  description: Country ID where the quote is trading; based on the market identifier code (MIC) which is used to identify
+    stock markets and other trading exchanges.
+---
+table: qa_climate.CLMCRQuoteRel
+domain: esg
+description: Fundamental Identifiers Mapping | This table contains mapping between the Fundamental specific identifiers i.e.,
+  Fundamentals Series ID and
+update_cadence: Weekly
+columns:
+- name: OrgPermID
+  type: BIGINT
+  nullable: false
+  description: Unique system generated Permanent Identifier (PermID) for an Organisation, aka Organisation Perm ID. The broad
+    grouping of entities including Companies, Governments and municipalities, Government agencies, Charities etc. Organizations
+    are mastered in Organization Authority.
+- name: InstrPermID
+  type: BIGINT
+  nullable: false
+  description: Unique system generated Permanent Identifier (PermID) for an Instrument/asset, aka Instrument Perm ID.
+- name: QuotePermID
+  type: BIGINT
+  nullable: false
+  description: Unique LSEG system generated Permanent Identifier (PermID) for the quote-level instrument, aka Quote Perm ID.
+- name: FndSeriesPermID
+  type: BIGINT
+  nullable: false
+  description: Unique system generated Permanent Identifier (PermID) for Fundamental records called Fundamental Series Perm
+    ID. Fundamental Series ID (FSID) = This ID is allotted at the value-add layer where it combines the history of a company
+    when their GAAP change data is collected in multiple different Fundamentals ID. LSEG Quantitative Analytics Database Schema
+    for LSEG Climate Copyright © 2025 London Stock Exchange Group plc and its group of companies (LSEG) and/or its affiliates.
+    All rights reserved. Th

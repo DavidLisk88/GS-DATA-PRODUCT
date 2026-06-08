@@ -1,0 +1,522 @@
+table: qa_lseg_idx.IdxTRChg
+domain: indices
+description: Index Change History | This table contains the history related to changes in static values for a particular index.
+update_cadence: Daily
+columns:
+- name: IdxCode
+  type: INTEGER
+  nullable: false
+  description: IdxCode is a unique integer code that identifies an index. This code is defined in the Quantitative Data Warehouse
+    (QDW) and is not received from the vendor. This code is generated based on the index RIC.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the date an index changes.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is one day prior to the StartDate of an index change.
+- name: RIC
+  type: varchar(64)
+  nullable: true
+  description: RIC is the LSEG identifier for an index.
+- name: BrdgSym
+  type: varchar(15)
+  nullable: true
+  description: BrdgSym is the bridge identifier.
+- name: IdxName
+  type: varchar(255)
+  nullable: true
+  description: IdxName is the short name for an index.
+- name: CtryRegCode
+  type: INTEGER
+  nullable: true
+  description: CtryRegCode is the country or region name for an index. IdxTRChg.CtryRegCode cross-references with IdxTRCode.Code
+    where Type_ = 2. The two-letter country code descriptions cross-reference with IdxTRDesc.Code where Type_ = 1.
+- name: RetTypeCode
+  type: char(1)
+  nullable: true
+  description: 'RetTypeCode can be the following: – P = Price only – T = Total return IdxTRChg.RetTypeCode cross-references
+    with IdxTRDesc.Code where Type_ = 2.'
+- name: TRBCSectCode
+  type: INTEGER
+  nullable: true
+  description: TRBCSectCode is the The Reference Business Classification (TRBC) sector group code.
+- name: TRBCSectName
+  type: varchar(255)
+  nullable: true
+  description: TRBCSectName is the The Reference Business Classification (TRBC) sector name.
+- name: CapCode
+  type: char(2)
+  nullable: true
+  description: 'CapCode is the capitalization group code for the index: – L = Large Cap – M = Mid Cap – S = Small Cap IdxTRChg.CapCode
+    cross-references with IdxTRDesc.Code where Type_ = 4.'
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is the license flag that helps identify the entitlement requirements for permissioning LSEG Indices
+    data. IdxTRChg.LicFlag cross-references with IdxTRCode.Code where Type_ = 3. LSEG Quantitative Analytics LSEG Indices
+    7
+join_hints:
+- to: IdxTRDesc
+  evidence: 'RetTypeCode char(1) Y RetTypeCode can be the following: – P = Price only – T = Total return IdxTRChg.RetTypeCode
+    cross-references with IdxTRDesc.Code where Type_ = 2.'
+  type: cross_reference
+- to: IdxTRDesc
+  evidence: 'CapCode char(2) Y CapCode is the capitalization group code for the index: – L = Large Cap – M = Mid Cap – S =
+    Small Cap IdxTRChg.CapCode cross-references with IdxTRDesc.Code where Type_ = 4.'
+  type: cross_reference
+---
+table: qa_lseg_idx.IdxTRCode
+domain: indices
+description: Numeric Codes | This table contains descriptions of numeric codes.
+update_cadence: Daily
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Type_ is a numeric code for a type of data.
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is a coded value for an element of Type_. When Type_ = 0, Code is the numeric code for each Type_ other
+    than 0 and Desc_ is a description of each Type_.
+- name: Desc_
+  type: varchar(150)
+  nullable: true
+  description: Desc_ is a plain-language description of the element defined by Type_ and Code.
+---
+table: qa_lseg_idx.IdxTRConst
+domain: indices
+description: Index Compositions and Constituents | This table contains information about index compositions and constituents.
+update_cadence: Daily
+columns:
+- name: IdxCode
+  type: INTEGER
+  nullable: false
+  description: IdxCode is a unique integer code that identifies an index. This code is defined in the Quantitative Data Warehouse
+    (QDW) and is not received from the vendor. This code is generated based on the index RIC.
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode is a unique integer code that identifies an index. This code is defined in the Quantitative Data Warehouse
+    (QDW) and is not received from the vendor. This code is generated based on the combination of Security RIC, ISIN, SEDOL,
+    and Ticker.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the market date on which the security became part of a particular index.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is one day prior to the StartDate of a security change.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is the license flag that helps identify the entitlement requirements for permissioning LSEG Indices
+    data. IdxTRConst.LicFlag cross-references with IdxTRCode.Code where Type_ = 3.
+---
+table: qa_lseg_idx.IdxTRDesc
+domain: indices
+description: Character Code Descriptions | This table contains descriptions of character codes.
+update_cadence: Daily
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Type_ is a numeric code for a type of data.
+- name: Code
+  type: varchar(20)
+  nullable: false
+  description: Code is a coded value for an element of Type_. When Type_ = 0, Code is the numeric code for each Type_ other
+    than 0 and Desc_ is a description of each Type_.
+- name: Desc_
+  type: varchar(150)
+  nullable: true
+  description: Desc_ is a plain-language description of the element defined by Type_ and Code. LSEG Quantitative Analytics
+    LSEG Indices 8
+---
+table: qa_lseg_idx.IdxTRFxRate
+domain: indices
+description: Index Forex Rate | This table contains information about the foreign exchange rate (security currency rate in
+  index currency).
+update_cadence: Daily
+columns:
+- name: CrossRate
+  type: INTEGER
+  nullable: false
+  description: CrossRate is the foreign exchange cross rate based on the Cur and IX_Cur fields from the ICW file. IdxTRFxRate.CrossRate
+    cross-references with IdxTRCode.Code where Type_ = 1.
+- name: CtryRegCode
+  type: INTEGER
+  nullable: false
+  description: CtryRegCode is the country or region name for an index only. IdxTRFxRate.CtryRegCode cross-references with
+    IdxTRCode.Code where Type_ = 2. The two-letter country code descriptions cross-reference with IdxTRDesc.Code where Type_
+    = 1.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the market date for which the data in the file is valid.
+- name: FxRate
+  type: FLOAT
+  nullable: true
+  description: FxRate is the security currency rate in index currency.
+---
+table: qa_lseg_idx.IdxTRInfo
+domain: indices
+description: Index Static Values | This table contains information about static values for a particular index.
+update_cadence: Daily
+columns:
+- name: IdxCode
+  type: INTEGER
+  nullable: false
+  description: IdxCode is a unique integer code that identifies an index. This code is defined in the Quantitative Data Warehouse
+    (QDW) and is not received from the vendor. This code is generated based on the index RIC.
+- name: RIC
+  type: varchar(64)
+  nullable: true
+  description: RIC is the LSEG identifier for an index.
+- name: BrdgSym
+  type: varchar(15)
+  nullable: true
+  description: BrdgSym is the bridge identifier.
+- name: IdxName
+  type: varchar(255)
+  nullable: true
+  description: IdxName is the short name for an index.
+- name: CtryRegCode
+  type: INTEGER
+  nullable: true
+  description: CtryRegCode is the country or region name for an index. IdxTRInfo.CtryRegCode cross-references with IdxTRCode.Code
+    where Type_ = 2. The two-letter country code descriptions cross-reference with IdxTRDesc.Code where Type_ = 1.
+- name: RetTypeCode
+  type: char(1)
+  nullable: true
+  description: 'RetTypeCode can be the following: – P = Price only – T = Total return IdxTRInfo.RetTypeCode cross-references
+    with IdxTRDesc.Code where Type_ = 2.'
+- name: TRBCSectCode
+  type: INTEGER
+  nullable: true
+  description: TRBCSectCode is the The Reference Business Classification (TRBC) sector group code.
+- name: TRBCSectName
+  type: varchar(255)
+  nullable: true
+  description: TRBCSectName is the The Reference Business Classification (TRBC) sector name.
+- name: CapCode
+  type: char(2)
+  nullable: true
+  description: CapCode is the capitalization group code for the index. LSEG Quantitative Analytics LSEG Indices 9
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is the license flag that helps identify the entitlement requirements for permissioning LSEG Indices
+    data. IdxTRInfo.LicFlag cross-references with IdxTRCode.Code where Type_ = 3.
+join_hints:
+- to: IdxTRDesc
+  evidence: 'RetTypeCode char(1) Y RetTypeCode can be the following: – P = Price only – T = Total return IdxTRInfo.RetTypeCode
+    cross-references with IdxTRDesc.Code where Type_ = 2.'
+  type: cross_reference
+---
+table: qa_lseg_idx.IdxTRItem
+domain: indices
+description: Data Item Descriptions | This table contains descriptive information about data items. These data items are coded
+  to an integer that is | TableName varchar(20) Y TableName contains the data table item.
+update_cadence: Daily
+columns:
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is the integer equivalent for each LSEG Indices mnemonic. This field is cross-referenced from other tables.
+- name: Mnemonic
+  type: varchar(10)
+  nullable: true
+  description: Mnemonic is the single-word, alphanumeric coded name.
+- name: Desc_
+  type: varchar(150)
+  nullable: true
+  description: Desc_ is the short description for the mnemonic.
+- name: DataType
+  type: char(1)
+  nullable: true
+  description: DataType is the data type for the item. For example, percentage, money, text, boolean, numeral, date/time (not
+    the SQL datatype).
+- name: TableName
+  type: varchar(20)
+  nullable: true
+  description: TableName contains the data table item.
+---
+table: qa_lseg_idx.IdxTRSecChg
+domain: indices
+description: Security Static Value Change History | This table contains the history related to changes in static values (for
+  example, identifiers) for a security that is
+update_cadence: Daily
+columns:
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode is a unique integer code that identifies an index. This code is defined in the Quantitative Data Warehouse
+    (QDW) and is not received from the vendor. This code is generated based on the combination of Security RIC, ISIN, SEDOL,
+    and Ticker.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the date a security changes.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is one day prior to the StartDate of a security change.
+- name: Ticker
+  type: varchar(20)
+  nullable: true
+  description: Ticker is the ticker.
+- name: SecName
+  type: varchar(80)
+  nullable: true
+  description: SecName is the short name of the security being held.
+- name: ExchCode
+  type: varchar(15)
+  nullable: true
+  description: ExchCode is the exchange code. IdxTRSecChg.ExchCode cross-references with IdxTRDesc.Code where Type_ = 6.
+- name: CtryCode
+  type: INTEGER
+  nullable: true
+  description: CtryCode is the country of headquarters. IdxTRSecChg.CtryCode cross-references with IdxTRCode.Code where Type_
+    = 2. The two-letter country code descriptions cross-reference with IdxTRDesc.Code where Type_ = 1.
+- name: CapCode
+  type: char(2)
+  nullable: true
+  description: CapCode is the capitalization code for the stock of the security. LSEG Quantitative Analytics LSEG Indices
+    10
+---
+table: qa_lseg_idx.IdxTRSecCls
+domain: indices
+description: Security Classification | This table contains TRBC classification information for a security that is part of
+  the LSEG Index group.
+update_cadence: Daily
+columns:
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode is a unique integer code that identifies an index. This code is defined in the Quantitative Data Warehouse
+    (QDW) and is not received from the vendor. This code is generated based on the combination of Security RIC, ISIN, SEDOL,
+    and Ticker.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the date a security changes.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is one day prior to the StartDate of a security change.
+- name: TRBCSectCode
+  type: INTEGER
+  nullable: true
+  description: TRBCSectCode is the TRBC sector code for the stock as of last rebalance.
+- name: TRBCSectCodeLev1
+  type: INTEGER
+  nullable: true
+  description: TRBCSectCodeLev1 is the code of Economic Sector (when an index is created as of last rebalance).
+- name: TRBCSectCodeLev2
+  type: INTEGER
+  nullable: true
+  description: TRBCSectCodeLev2 is the code of Business Sector (when an index is created as of last rebalance).
+- name: TRBCSectCodeLev3
+  type: INTEGER
+  nullable: true
+  description: TRBCSectCodeLev3 is the code of Industry Groups (when an index is created as of last rebalance).
+- name: TRBCSectCodeLev4
+  type: INTEGER
+  nullable: true
+  description: TRBCSectCodeLev4 is the code of Industry (when an index is created as of last rebalance).
+---
+table: qa_lseg_idx.IdxTRSecInfo
+domain: indices
+description: Security Static Value Information | This table describes the static values (for example, identifiers) for a security
+  that is part of the LSEG Index group.
+update_cadence: Daily
+columns:
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode is a unique integer code that identifies an index. This code is defined in the Quantitative Data Warehouse
+    (QDW) and is not received from the vendor. This code is generated based on the combination of Security RIC, ISIN, SEDOL,
+    and Ticker.
+- name: Ticker
+  type: varchar(20)
+  nullable: true
+  description: Ticker is the ticker.
+- name: SecName
+  type: varchar(80)
+  nullable: true
+  description: SecName is the short name of the security being held.
+- name: ExchCode
+  type: varchar(15)
+  nullable: true
+  description: ExchCode is the exchange code. IdxTRSecInfo.ExchCode cross-references with IdxTRDesc.Code where Type_ = 6.
+- name: CtryCode
+  type: INTEGER
+  nullable: true
+  description: CtryCode is the country of headquarters. LSEG Quantitative Analytics LSEG Indices 11
+- name: CapCode
+  type: char(2)
+  nullable: true
+  description: CapCode is the capitalization code for the stock of the security. IdxTRSecInfo.CapCode cross-references with
+    IdxTRDesc.Code where Type_ = 4.
+---
+table: qa_lseg_idx.IdxTRSecMktID
+domain: indices
+description: Security Identifier Information | This table describes the values of various identifiers for a security that
+  is part of the LSEG Index group. | Refer to the item field in the IdxTRItem table for a complete list of codes.
+update_cadence: Daily
+columns:
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode is a unique integer code that identifies an index. This code is defined in the Quantitative Data Warehouse
+    (QDW) and is not received from the vendor. This code is generated based on the combination of Security RIC, ISIN, SEDOL,
+    and Ticker.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is the code representing the respective identifier (RIC, ISIN, and SEDOL). Refer to the item field in
+    the IdxTRItem table for a complete list of codes.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the date a security changes.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is one day prior to the StartDate of a security change.
+- name: Value_
+  type: varchar(64)
+  nullable: true
+  description: Value_ is the value for the respective item.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is the license flag that helps identify the entitlement requirements for permissioning LSEG Indices
+    data. IdxTRSecMktID.LicFlag cross-references with IdxTRCode.Code where Type_ = 3.
+---
+table: qa_lseg_idx.IdxTRSecShares
+domain: indices
+description: Security Shares Information | This table contains shares information for securities.
+update_cadence: Daily
+columns:
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode is a unique integer code that identifies an index. This code is defined in the Quantitative Data Warehouse
+    (QDW) and is not received from the vendor. This code is generated based on the combination of Security RIC, ISIN, SEDOL,
+    and Ticker.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the date a security changes. The default StartDate is the first date the security is received
+    from the ICW (constituent data) file.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is one day prior to the StartDate of a security change.
+- name: SharesClose
+  type: FLOAT
+  nullable: true
+  description: SharesClose is the shares held in the index at market close.
+- name: FFFactor
+  type: FLOAT
+  nullable: true
+  description: FFFactor is the free float factor. LSEG Quantitative Analytics LSEG Indices 12
+---
+table: qa_lseg_idx.IdxTRSecSharesOpen
+domain: indices
+description: Security SharesOpen Information | This table contains shares information for securities, as of the start of the
+  following day.
+update_cadence: Daily
+columns:
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode is a unique integer code that identifies an index. This code is defined in the Quantitative Data Warehouse
+    (QDW) and is not received from the vendor. This code is generated based on the combination of Security RIC, ISIN, SEDOL,
+    and Ticker.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the date a security changes. The default StartDate is the first date the security is received
+    from the ICW (constituent data) file.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is one day prior to the StartDate of a security change.
+- name: SharesOpen
+  type: FLOAT
+  nullable: true
+  description: SharesOpen is the shares held in the index, as of the start of the following day.
+---
+table: qa_lseg_idx.IdxTRSecVal
+domain: indices
+description: Security Value Information | This table contains information about the value of a security (for example, price).
+update_cadence: Daily
+columns:
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode is a unique integer code that identifies an index. This code is defined in the Quantitative Data Warehouse
+    (QDW) and is not received from the vendor. This code is generated based on the combination of Security RIC, ISIN, SEDOL,
+    and Ticker.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the market date on which the data in the file is valid.
+- name: Close_
+  type: FLOAT
+  nullable: true
+  description: Close_ is the closing price of the security, as of the recent market close.
+- name: ISOCurCode
+  type: char(3)
+  nullable: true
+  description: ISOCurCode is the currency of the last price. IdxTRSecVal.ISOCurCode cross- references with IdxTRDesc.Code
+    where Type_ = 3.
+---
+table: qa_lseg_idx.IdxTRVal
+domain: indices
+description: Index Value and Market Cap Data | This table contains the index value and the market cap data for an index.
+update_cadence: Daily
+columns:
+- name: IdxCode
+  type: INTEGER
+  nullable: false
+  description: IdxCode is a unique integer code that identifies an index. This code is defined in the Quantitative Data Warehouse
+    (QDW) and is not received from the vendor. This code is generated based on the index RIC.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the market date on which the data in the file is valid.
+- name: ISOCurCode
+  type: char(3)
+  nullable: true
+  description: ISOCurCode is the country currency. LSEG Quantitative Analytics LSEG Indices 13
+- name: IdxVal
+  type: FLOAT
+  nullable: true
+  description: IdxVal is the closing index value, as of the recent market close.
+- name: MktCap
+  type: FLOAT
+  nullable: true
+  description: MktCap is the total market cap for the index, as of the recent market close.
+- name: Divisor
+  type: FLOAT
+  nullable: true
+  description: Divisor is the index divisor, as of the recent market close.
+- name: NumConst
+  type: INTEGER
+  nullable: true
+  description: NumConst is the total number of securities held in the index at market close.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: 'LicFlag is the license flag that helps identify the entitlement requirements for permissioning LSEG Indices
+    data. IdxTRVal.LicFlag cross-references with IdxTRCode.Code where Type_ = 3. LSEG Quantitative Analytics LSEG Indices
+    Copyright © 2024 London Stock Exchange Group plc and its group of companies (LSEG) and/or its affiliates. All rights reserved.
+    The LSEG content received through this service is the intellectual property of LSEG or its third party suppliers. Republicati
+    on or redistribution '

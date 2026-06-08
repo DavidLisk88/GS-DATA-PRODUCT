@@ -1,0 +1,2398 @@
+table: qa_msci.MS2IdxConstDly
+domain: risk_models
+description: Daily MSCI Index Constituents | This table contains daily MSCI index constituents data. | Unless you are licensed
+  for MSCI Deep History, the data in this table is purged on a 13-month rolling basis.
+update_cadence: Daily
+columns:
+- name: MSCICode
+  type: INTEGER
+  nullable: false
+  description: MSCICode is the MSCI index identifier. It is the primary link across all MS2Idx* tables. MSCICode is defined
+    in MS2IdxInfo.
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: SecID is the security ID.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: 'If you are licensed for MSCI Deep History content: – StartDate is the date the security became part of the
+    index. If you are not licensed for MSCI Deep History content: – If StartDate is more recent than 13 months ago from today
+    (the beginning of the daily data rolling window), StartDate is the date the security became part of the index. In this
+    scenario, the security joined the index within the current 13-month rolling window. – A StartDate that is older than 13
+    months ago from today indicates '
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: When applicable, EndDate is the date the security was removed from the index.
+- name: TotIncFactor
+  type: FLOAT
+  nullable: true
+  description: TotIncFactor is the total inclusion factor. This is a derived field created by LSEG Quantitative Analytics.
+- name: NextTotIncFactor
+  type: FLOAT
+  nullable: true
+  description: NextTotIncFactor is the next day total inclusion factor.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table.
+---
+table: qa_msci.MS2IdxConstMth
+domain: risk_models
+description: Monthly MSCI Index Constituents | This table contains monthly MSCI index constituents data. | Unless you are
+  licensed for MSCI Deep History, the data in this table is purged on a 7-year rolling basis.
+update_cadence: Monthly
+columns:
+- name: MSCICode
+  type: INTEGER
+  nullable: false
+  description: MSCICode is the MSCI index identifier. It is the primary link across all MS2Idx* tables. MSCICode is defined
+    in MS2IdxInfo.
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: SecID is the security ID. LSEG Quantitative Analytics Database Schema for MSCI 10
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: 'This date reflects the last calendar day of the month, and not the last business day. If you are licensed
+    for MSCI Deep History content: – StartDate is the date the security became part of the index. If you are not licensed
+    for MSCI Deep History content: – If StartDate is more recent than 7 years ago from today (the beginning of the monthly
+    data rolling window), StartDate is the date the security became part of the index. In this scenario, the security joined
+    the index within the current 7-year '
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: When applicable, EndDate is the date the security was removed from the index. This date reflects the last calendar
+    day of the month, and not the last business day.
+- name: TotIncFactor
+  type: FLOAT
+  nullable: true
+  description: TotIncFactor is the total inclusion factor.
+- name: NextTotIncFactor
+  type: FLOAT
+  nullable: true
+  description: NextTotIncFactor is the next day total inclusion factor.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table.
+---
+table: qa_msci.MS2IdxD
+domain: risk_models
+description: MSCI Index Date Data | This table contains daily MSCI index date data that changes infrequently. | Unless you
+  are licensed for MSCI Deep History, the data in this table is purged on a 13-month rolling basis.
+update_cadence: Daily
+columns:
+- name: MSCICode
+  type: INTEGER
+  nullable: false
+  description: MSCICode is the MSCI index identifier. It is the primary link across all MS2Idx* tables. MSCICode is defined
+    in MS2IdxInfo.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is an integer code that represents a data item. Item cross-references with MS2Item and indicates what
+    datapoint the record represents.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the date the period begins.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the date the period ends.
+- name: Value_
+  type: TIMESTAMP(6)
+  nullable: true
+  description: Value_ is the date information associated with given constraints.
+- name: NextValue
+  type: TIMESTAMP(6)
+  nullable: true
+  description: NextValue is the next day value. NULL = Next Day Value not provided. If the value is not changing from one
+    day to next, the same value is populated in both the Value_ and NextValue fields.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table. LSEG Quantitative Analytics Database Schema
+    for MSCI 11
+join_hints:
+- to: MS2Item
+  evidence: Item cross-references with MS2Item and indicates what datapoint the record represents.
+  type: cross_reference
+---
+table: qa_msci.MS2IdxDDly
+domain: risk_models
+description: Daily MSCI Index Date Data | This table is reserved for future use. See Empty Tables on page 6 for details. |
+  This table contains daily MSCI index date data. | Unless you are licensed for MSCI Deep History, the data in this table
+  is purged on a 13-month rolling basis.
+update_cadence: Daily
+columns:
+- name: MSCICode
+  type: INTEGER
+  nullable: false
+  description: MSCICode is the MSCI index identifier. It is the primary link across all MS2Idx* tables. MSCICode is defined
+    in MS2IdxInfo.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is an integer code that represents a data item. Item cross-references with MS2Item and indicates what
+    datapoint the record represents.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the date on which the data was calculated.
+- name: Value_
+  type: TIMESTAMP(6)
+  nullable: true
+  description: Value_ is the date information associated with given constraints.
+- name: NextValue
+  type: TIMESTAMP(6)
+  nullable: true
+  description: NextValue is the next day value. NULL = Next Day Value not provided. If the value is not changing from one
+    day to next, the same value is populated in both the Value_ and NextValue fields.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table.
+---
+table: qa_msci.MS2IdxDMth
+domain: risk_models
+description: Monthly MSCI Index Date Data | This table contains monthly MSCI index date data. | Unless you are licensed for
+  MSCI Deep History, the data in this table is purged on a 7-year rolling basis.
+update_cadence: Monthly
+columns:
+- name: MSCICode
+  type: INTEGER
+  nullable: false
+  description: MSCICode is the MSCI index identifier. It is the primary link across all MS2Idx* tables. MSCICode is defined
+    in MS2IdxInfo.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is an integer code that represents a data item. Item cross-references with MS2Item and indicates what
+    datapoint the record represents.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the date on which the data was calculated.
+- name: Value_
+  type: TIMESTAMP(6)
+  nullable: true
+  description: Value_ is the date information associated with given constraints.
+- name: NextValue
+  type: TIMESTAMP(6)
+  nullable: true
+  description: NextValue is the next day value. NULL = Next Day Value not provided. If the value is not changing from one
+    day to next, the same value is populated in both the Value_ and NextValue fields.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table. LSEG Quantitative Analytics Database Schema
+    for MSCI 12
+join_hints:
+- to: MS2Item
+  evidence: Item cross-references with MS2Item and indicates what datapoint the record represents.
+  type: cross_reference
+- to: MS2Item
+  evidence: Item cross-references with MS2Item and indicates what datapoint the record represents.
+  type: cross_reference
+---
+table: qa_msci.MS2IdxF
+domain: risk_models
+description: MSCI Index Float Data | This table contains daily MSCI index float data that changes infrequently. | Unless you
+  are licensed for MSCI Deep History, the data in this table is purged on a 13-month rolling basis.
+update_cadence: Daily
+columns:
+- name: MSCICode
+  type: INTEGER
+  nullable: false
+  description: MSCICode is the MSCI index identifier. It is the primary link across all MS2Idx* tables. MSCICode is defined
+    in MS2IdxInfo.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is an integer code that represents a data item. Item cross-references with MS2Item and indicates what
+    datapoint the record represents.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the date the period begins.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the date the period ends.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the numeric information associated with given constraints.
+- name: NextValue
+  type: FLOAT
+  nullable: true
+  description: NextValue is the next day value. NULL = Next Day Value not provided. If the value is not changing from one
+    day to next, the same value is populated in both the Value_ and NextValue fields.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table.
+---
+table: qa_msci.MS2IdxFDly
+domain: risk_models
+description: Daily MSCI Index Float Data | This table contains daily MSCI index float data. | Unless you are licensed for
+  MSCI Deep History, the data in this table is purged on a 13-month rolling basis.
+update_cadence: Daily
+columns:
+- name: MSCICode
+  type: INTEGER
+  nullable: false
+  description: MSCICode is the MSCI index identifier. It is the primary link across all MS2Idx* tables. MSCICode is defined
+    in MS2IdxInfo.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is an integer code that represents a data item. Item cross-references with MS2Item and indicates what
+    datapoint the record represents.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the date on which the data was calculated.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the numeric information associated with given constraints.
+- name: NextValue
+  type: FLOAT
+  nullable: true
+  description: NextValue is the next day value. NULL = Next Day Value not provided. If the value is not changing from one
+    day to next, the same value is populated in both the Value_ and NextValue fields.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table. LSEG Quantitative Analytics Database Schema
+    for MSCI 13
+join_hints:
+- to: MS2Item
+  evidence: Item cross-references with MS2Item and indicates what datapoint the record represents.
+  type: cross_reference
+- to: MS2Item
+  evidence: Item cross-references with MS2Item and indicates what datapoint the record represents.
+  type: cross_reference
+---
+table: qa_msci.MS2IdxFMth
+domain: risk_models
+description: Monthly MSCI Index Float Data | This table contains monthly MSCI index float data. | Unless you are licensed
+  for MSCI Deep History, the data in this table is purged on a 7-year rolling basis.
+update_cadence: Monthly
+columns:
+- name: MSCICode
+  type: INTEGER
+  nullable: false
+  description: MSCICode is the MSCI index identifier. It is the primary link across all MS2Idx* tables. MSCICode is defined
+    in MS2IdxInfo.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is an integer code that represents a data item. Item cross-references with MS2Item and indicates what
+    datapoint the record represents.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the date on which the data was calculated.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the numeric information associated with given constraints.
+- name: NextValue
+  type: FLOAT
+  nullable: true
+  description: NextValue is the next day value. NULL = Next Day Value not provided. If the value is not changing from one
+    day to next, the same value is populated in both the Value_ and NextValue fields.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table.
+---
+table: qa_msci.MS2IdxI
+domain: risk_models
+description: MSCI Index Integer Data | This table contains daily MSCI index integer data that changes infrequently. | Unless
+  you are licensed for MSCI Deep History, the data in this table is purged on a 13-month rolling basis.
+update_cadence: Daily
+columns:
+- name: MSCICode
+  type: INTEGER
+  nullable: false
+  description: MSCICode is the MSCI index identifier. It is the primary link across all MS2Idx* tables. MSCICode is defined
+    in MS2IdxInfo.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is an integer code that represents a data item. Item cross-references with MS2Item and indicates what
+    datapoint the record represents.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the date the period begins.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the date the period ends.
+- name: Value_
+  type: INTEGER
+  nullable: true
+  description: Value_ is the numeric information associated with given constraints.
+- name: NextValue
+  type: INTEGER
+  nullable: true
+  description: NextValue is the next day value. NULL = Next Day Value not provided. If the value is not changing from one
+    day to next, the same value is populated in both the Value_ and NextValue fields.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table. LSEG Quantitative Analytics Database Schema
+    for MSCI 14
+join_hints:
+- to: MS2Item
+  evidence: Item cross-references with MS2Item and indicates what datapoint the record represents.
+  type: cross_reference
+- to: MS2Item
+  evidence: Item cross-references with MS2Item and indicates what datapoint the record represents.
+  type: cross_reference
+---
+table: qa_msci.MS2IdxIDly
+domain: risk_models
+description: Daily MSCI Index Integer Data | This table is reserved for future use. See Empty Tables on page 6 for details.
+  | This table contains daily MSCI index integer data. | Unless you are licensed for MSCI Deep History, the data in this table
+  is purged on a 13-month rolling basis.
+update_cadence: Daily
+columns:
+- name: MSCICode
+  type: INTEGER
+  nullable: false
+  description: MSCICode is the MSCI index identifier. It is the primary link across all MS2Idx* tables. MSCICode is defined
+    in MS2IdxInfo.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is an integer code that represents a data item. Item cross-references with MS2Item and indicates what
+    datapoint the record represents.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the date on which the data was calculated.
+- name: Value_
+  type: INTEGER
+  nullable: true
+  description: Value_ is the numeric information associated with given constraints.
+- name: NextValue
+  type: INTEGER
+  nullable: true
+  description: NextValue is the next day value. NULL = Next Day Value not provided. If the value is not changing from one
+    day to next, the same value is populated in both the Value_ and NextValue fields.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table.
+---
+table: qa_msci.MS2IdxIMth
+domain: risk_models
+description: Monthly MSCI Index Integer Data | This table contains monthly MSCI index integer data. | Unless you are licensed
+  for MSCI Deep History, the data in this table is purged on a 7-year rolling basis.
+update_cadence: Monthly
+columns:
+- name: MSCICode
+  type: INTEGER
+  nullable: false
+  description: MSCICode is the MSCI index identifier. It is the primary link across all MS2Idx* tables. MSCICode is defined
+    in MS2IdxInfo.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is an integer code that represents a data item. Item cross-references with MS2Item and indicates what
+    datapoint the record represents.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the date on which the data was calculated.
+- name: Value_
+  type: INTEGER
+  nullable: true
+  description: Value_ is the numeric information associated with given constraints.
+- name: NextValue
+  type: INTEGER
+  nullable: true
+  description: NextValue is the next day value. NULL = Next Day Value not provided. If the value is not changing from one
+    day to next, the same value is populated in both the Value_ and NextValue fields.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table. LSEG Quantitative Analytics Database Schema
+    for MSCI 15
+join_hints:
+- to: MS2Item
+  evidence: Item cross-references with MS2Item and indicates what datapoint the record represents.
+  type: cross_reference
+- to: MS2Item
+  evidence: Item cross-references with MS2Item and indicates what datapoint the record represents.
+  type: cross_reference
+---
+table: qa_msci.MS2IdxInfo
+domain: risk_models
+description: Current MSCI Index Information | This table contains MSCI index information. | Unless you are licensed for MSCI
+  Deep History, the data in this table is purged on a 13-month rolling basis.
+update_cadence: Daily
+columns:
+- name: MSCICode
+  type: INTEGER
+  nullable: false
+  description: MSCICode is the MSCI index identifier. It is the primary link across all MS2Idx* tables.
+- name: Name_
+  type: varchar(40)
+  nullable: true
+  description: Name_ is the index name.
+- name: ISOCtryCode
+  type: char(2)
+  nullable: true
+  description: ISOCtryCode is the ISO country code. It is a two-digit alphabetic code for country classification. MS2IdxInfo.ISOCtryCode
+    joins with MS2Desc.Code where Type_ = 1.
+- name: RegCode
+  type: char(4)
+  nullable: true
+  description: RegCode is the region code for regional indexes. MS2IdxInfo.RegCode joins with MS2Desc.Code where Type_ = 3.
+- name: RIC
+  type: varchar(20)
+  nullable: true
+  description: RIC is the LSEG Identification Code.
+- name: RTTicker
+  type: varchar(20)
+  nullable: true
+  description: RTTicker is the real time ticker.
+- name: IdxFam
+  type: TINYINT
+  nullable: true
+  description: IdxFam is the index family. This field cross-references with MS2Code.Code where Type_ = 12.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the date the period ends. This is the date on which an index becomes inactive.
+- name: ModDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: ModDate is the date the index information was last modified.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table.
+---
+table: qa_msci.MS2IdxInfoChg
+domain: risk_models
+description: Historical MSCI Index Information | This table contains a timeseries of current and historical MSCI index information.
+  | Unless you are licensed for MSCI Deep History, the data in this table is purged on a 13-month rolling basis.
+update_cadence: Daily
+columns:
+- name: MSCICode
+  type: INTEGER
+  nullable: false
+  description: MSCICode is the MSCI index identifier. It is the primary link across all MS2Idx* tables.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the date the period begins.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the date the period ends. This is the date on which an index becomes inactive.
+- name: Name_
+  type: varchar(40)
+  nullable: true
+  description: Name_ is the index name.
+- name: ISOCtryCode
+  type: varchar(2)
+  nullable: true
+  description: ISOCtryCode is the ISO country code. It is a two-digit alphabetic code for country classification. MS2IdxInfoChg.ISOCtryCode
+    joins with MS2Desc.Code where Type_ = 1.
+- name: RegCode
+  type: varchar(4)
+  nullable: true
+  description: RegCode is the region code for regional indexes. MS2IdxInfoChg.RegCode joins with MS2Desc.Code where Type_
+    = 3. LSEG Quantitative Analytics Database Schema for MSCI 16
+- name: RIC
+  type: varchar(20)
+  nullable: true
+  description: RIC is the LSEG Identification Code.
+- name: RTTicker
+  type: varchar(20)
+  nullable: true
+  description: RTTicker is the real time ticker.
+- name: IdxFam
+  type: TINYINT
+  nullable: true
+  description: IdxFam is the index family. This field cross-references with MS2Code.Code where Type_ = 12.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table.
+---
+table: qa_msci.MS2IdxS
+domain: risk_models
+description: MSCI Index Varchar Data | This table contains daily MSCI index varchar data that changes infrequently. | Unless
+  you are licensed for MSCI Deep History, the data in this table is purged on a 13-month rolling basis.
+update_cadence: Daily
+columns:
+- name: MSCICode
+  type: INTEGER
+  nullable: false
+  description: MSCICode is the MSCI index identifier. It is the primary link across all MS2Idx* tables. MSCICode is defined
+    in MS2IdxInfo.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is an integer code that represents a data item. Item cross-references with MS2Item and indicates what
+    datapoint the record represents.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the date the period begins.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the date the period ends.
+- name: Value_
+  type: varchar(75)
+  nullable: true
+  description: Value_ is the alphanumeric information associated with given constraints.
+- name: NextValue
+  type: varchar(75)
+  nullable: true
+  description: NextValue is the next day value. NULL = Next Day Value not provided. If the value is not changing from one
+    day to next, the same value is populated in both the Value_ and NextValue fields.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table.
+---
+table: qa_msci.MS2IdxSDly
+domain: risk_models
+description: Daily MSCI Index Varchar Data | This table is reserved for future use. See Empty Tables on page 6 for details.
+  | This table contains daily MSCI index varchar data.
+update_cadence: Daily
+columns:
+- name: MSCICode
+  type: INTEGER
+  nullable: false
+  description: MSCICode is the MSCI index identifier. It is the primary link across all MS2Idx* tables. MSCICode is defined
+    in MS2IdxInfo.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is an integer code that represents a data item. Item cross-references with MS2Item and indicates what
+    datapoint the record represents.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the date on which the data was calculated.
+- name: Value_
+  type: varchar(75)
+  nullable: true
+  description: Value_ is the alphanumeric information associated with given constraints. LSEG Quantitative Analytics Database
+    Schema for MSCI 17
+- name: NextValue
+  type: varchar(75)
+  nullable: true
+  description: NextValue is the next day value. NULL = Next Day Value not provided. If the value is not changing from one
+    day to next, the same value is populated in both the Value_ and NextValue fields.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table.
+join_hints:
+- to: MS2Item
+  evidence: Item cross-references with MS2Item and indicates what datapoint the record represents.
+  type: cross_reference
+- to: MS2Item
+  evidence: Item cross-references with MS2Item and indicates what datapoint the record represents.
+  type: cross_reference
+---
+table: qa_msci.MS2IdxSMth
+domain: risk_models
+description: Monthly MSCI Index Varchar Data | This table contains monthly MSCI index varchar data. | Unless you are licensed
+  for MSCI Deep History, the data in this table is purged on a 7-year rolling basis.
+update_cadence: Monthly
+columns:
+- name: MSCICode
+  type: INTEGER
+  nullable: false
+  description: MSCICode is the MSCI index identifier. It is the primary link across all MS2Idx* tables. MSCICode is defined
+    in MS2IdxInfo.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is an integer code that represents a data item. Item cross-references with MS2Item and indicates what
+    datapoint the record represents.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the date on which the data was calculated.
+- name: Value_
+  type: varchar(75)
+  nullable: true
+  description: Value_ is the alphanumeric information associated with given constraints.
+- name: NextValue
+  type: varchar(75)
+  nullable: true
+  description: NextValue is the next day value. NULL = Next Day Value not provided. If the value is not changing from one
+    day to next, the same value is populated in both the Value_ and NextValue fields.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table. LSEG Quantitative Analytics Database Schema
+    for MSCI 18 MSCI V2 Security Level Tables Security Info Tables SecID INTEGER TsCode INTEGER IssCode INTEGER SecCode INTEGER
+    Name_ VARCHAR(40) ISOCtryCode CHAR(2) NextISOCtryCode CHAR(2) MIC CHAR(4) NextMIC CHAR(4) BloomTkr VARCHAR(25) NextBloomTkr
+    VARCHAR(25) ShareClassCode TINYINT ShareTypeCode TINYINT AltListingCode TINYINT BarraID CHAR(8) EndDate INTEGER ModDate
+    INTEGER LicFlag INTEG
+join_hints:
+- to: MS2Item
+  evidence: Item cross-references with MS2Item and indicates what datapoint the record represents.
+  type: cross_reference
+---
+table: qa_msci.MS2SecAdvDiv
+domain: risk_models
+description: MSCI Advance Dividends | This table contains MSCI advance dividends data. | This table is populated going forward
+  from 2011. | Unless you are licensed for MSCI Deep History, the data in this table is purged on a 13-month rolling basis.
+update_cadence: Daily
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: SecID is the security ID.
+- name: IdxFam
+  type: TINYINT
+  nullable: false
+  description: IdxFam is the index family. This field cross-references with MS2Code.Code where Type_ = 12.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the date on which the data was calculated.
+- name: DivCode
+  type: INTEGER
+  nullable: false
+  description: DivCode is the MSCI dividend code, a unique identifier allocated by MSCI to a dividend event.
+- name: DivDesc
+  type: TINYINT
+  nullable: true
+  description: 'DivDesc is the MSCI dividend description: – 0 = Annual LSEG Quantitative Analytics Database Schema for MSCI
+    21'
+- name: XDDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: XDDate is the dividend ex-date.
+- name: ReinvDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: ReinvDate is the date as of which the dividend is reinvested in the index.
+- name: Div
+  type: FLOAT
+  nullable: true
+  description: Div is the declared dividend amount.
+- name: AdjGRSDiv
+  type: FLOAT
+  nullable: true
+  description: AdjGRSDiv is the gross dividend amount of withholding taxes to be reinvested in MSCI Daily Gross Total Return
+    Indices.
+- name: AdjNETDiv
+  type: FLOAT
+  nullable: true
+  description: AdjNETDiv is the net dividend amount of withholding taxes to be reinvested in MSCI Daily Net Total Return Indices
+    for MSCI international indices.
+- name: ISOCurrCode
+  type: char(3)
+  nullable: true
+  description: ISOCurrCode is the dividend ISO currency symbol. This field cross-references with MS2Desc.Code where Type_
+    = 2.
+- name: DivSubUnit
+  type: FLOAT
+  nullable: true
+  description: DivSubUnit is the dividend sub-unit. It indicates whether the dividend amount is expressed for one share (1.000)
+    or in lot (0.001); some securities in Brazil are provided in lot of 1000.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table.
+---
+table: qa_msci.MS2SecCu
+domain: risk_models
+description: MSCI Security CUSIP Information | This table contains MSCI security CUSIP information. | Unless you are licensed
+  for MSCI Deep History, the data in this table is purged on a 13-month rolling basis.
+update_cadence: Daily
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: SecID is the security ID.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the date the period begins.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the date the period ends.
+- name: CUSIP
+  type: char(8)
+  nullable: true
+  description: CUSIP is the CUSIP identifier.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table. LSEG Quantitative Analytics Database Schema
+    for MSCI 22
+---
+table: qa_msci.MS2SecD
+domain: risk_models
+description: MSCI Security Date Data | This table is reserved for future use. See Empty Tables on page 6 for details. | This
+  table contains daily MSCI security date data that changes infrequently.
+update_cadence: Daily
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: SecID is the security ID.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is an integer code that represents a data item. Item cross-references with MS2Item and indicates what
+    datapoint the record represents.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the date the period begins.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the date the period ends.
+- name: Value_
+  type: TIMESTAMP(6)
+  nullable: true
+  description: Value_ is the date information associated with given constraints.
+- name: NextValue
+  type: TIMESTAMP(6)
+  nullable: true
+  description: NextValue is the next day value. NULL = Next Day Value not provided. If the value is not changing from one
+    day to next, the same value is populated in both the Value_ and NextValue fields.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table.
+---
+table: qa_msci.MS2SecDACE
+domain: risk_models
+description: MSCI Security Advanced Corporate Event Date Data | This table contains daily MSCI security advanced corporate
+  event date data that changes infrequently. | This table is reserved for future use. See Empty Tables on page 6 for details.
+update_cadence: Daily
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: SecID is the security ID.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is an integer code that represents a data item. Item cross-references with MS2Item and indicates what
+    datapoint the record represents.
+- name: EventId
+  type: INTEGER
+  nullable: false
+  description: EventId is the event ID.
+- name: Seq
+  type: TINYINT
+  nullable: false
+  description: Seq is the sequence number.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: true
+  description: Date_ is the date on which the data was calculated.
+- name: StatusCode
+  type: TINYINT
+  nullable: true
+  description: StatusCode is the status code. MS2SecDACE.StatusCode joins with MS2Code.Code where Type_ = 6.
+- name: EventCode
+  type: TINYINT
+  nullable: true
+  description: EventCode is the event code. MS2SecDACE.EventCode joins with MS2Code.Code where Type_ = 7.
+- name: Value_
+  type: TIMESTAMP(6)
+  nullable: true
+  description: Value_ is the date information associated with given constraints.
+- name: NextValue
+  type: TIMESTAMP(6)
+  nullable: true
+  description: NextValue is the next day value. NULL = Next Day Value not provided. If the value is not changing from one
+    day to next, the same value is populated in both the Value_ and NextValue fields.
+- name: AddDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: AddDate is the add date.
+- name: ModDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: ModDate is the date the security information was last modified.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table. LSEG Quantitative Analytics Database Schema
+    for MSCI 23
+join_hints:
+- to: MS2Item
+  evidence: Item cross-references with MS2Item and indicates what datapoint the record represents.
+  type: cross_reference
+- to: MS2Item
+  evidence: Item cross-references with MS2Item and indicates what datapoint the record represents.
+  type: cross_reference
+---
+table: qa_msci.MS2SecDDly
+domain: risk_models
+description: Daily MSCI Security Date Data | This table is reserved for future use. See Empty Tables on page 6 for details.
+  | This table contains daily MSCI security date data.
+update_cadence: Daily
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: SecID is the security ID.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is an integer code that represents a data item. Item cross-references with MS2Item and indicates what
+    datapoint the record represents.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the date on which the data was calculated.
+- name: Value_
+  type: TIMESTAMP(6)
+  nullable: true
+  description: Value_ is the date information associated with given constraints.
+- name: NextValue
+  type: TIMESTAMP(6)
+  nullable: true
+  description: NextValue is the next day value. NULL = Next Day Value not provided. If the value is not changing from one
+    day to next, the same value is populated in both the Value_ and NextValue fields.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table.
+---
+table: qa_msci.MS2SecDMth
+domain: risk_models
+description: Monthly MSCI Security Date Data | This table contains monthly MSCI security date data. | Unless you are licensed
+  for MSCI Deep History, the data in this table is purged on a 7-year rolling basis.
+update_cadence: Monthly
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: SecID is the security ID.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is an integer code that represents a data item. Item cross-references with MS2Item and indicates what
+    datapoint the record represents.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the date on which the data was calculated.
+- name: Value_
+  type: TIMESTAMP(6)
+  nullable: true
+  description: Value_ is the date information associated with given constraints.
+- name: NextValue
+  type: TIMESTAMP(6)
+  nullable: true
+  description: NextValue is the next day value. NULL = Next Day Value not provided. If the value is not changing from one
+    day to next, the same value is populated in both the Value_ and NextValue fields.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table. LSEG Quantitative Analytics Database Schema
+    for MSCI 24
+join_hints:
+- to: MS2Item
+  evidence: Item cross-references with MS2Item and indicates what datapoint the record represents.
+  type: cross_reference
+- to: MS2Item
+  evidence: Item cross-references with MS2Item and indicates what datapoint the record represents.
+  type: cross_reference
+---
+table: qa_msci.MS2SecDivDly
+domain: risk_models
+description: Daily MSCI Security Dividends Data | This table contains daily MSCI security dividends data. | Unless you are
+  licensed for MSCI Deep History, the data in this table is purged on a 13-month rolling basis.
+update_cadence: Daily
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: SecID is the security ID.
+- name: IdxFam
+  type: TINYINT
+  nullable: false
+  description: IdxFam is the index family. This field cross-references with MS2Code.Code where Type_ = 12.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the date on which the data was calculated.
+- name: DivCode
+  type: INTEGER
+  nullable: false
+  description: DivCode is the MSCI dividend code, a unique identifier allocated by MSCI to a dividend event.
+- name: DivDesc
+  type: TINYINT
+  nullable: true
+  description: 'DivDesc is the MSCI dividend description: – 0 = Annual – 1 = Final – 2 = Interim – 3 = Quarterly – 4 = Extra
+    – 5 = Monthly – 6 = Regular – 7 = Commemorative This field cross-references with MS2Code.Code where Type_ = 5.'
+- name: XDDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: XDDate is the dividend ex-date.
+- name: CorrectionFlag
+  type: TINYINT
+  nullable: true
+  description: CorrectionFlag indicates that the dividend amount is a correction of an already reinvested dividend. The difference
+    between the correct and incorrect amount will show in the gross dividend amount, net dividend amount international, and
+    net dividend amount domestic.
+- name: ReinvDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: ReinvDate is the date as of which the dividend is reinvested in the index.
+- name: Div
+  type: FLOAT
+  nullable: true
+  description: Div is the declared dividend amount.
+- name: AdjGRSDiv
+  type: FLOAT
+  nullable: true
+  description: AdjGRSDiv is the gross dividend amount of withholding taxes to be reinvested in MSCI Daily Gross Total Return
+    Indices.
+- name: AdjNETDiv
+  type: FLOAT
+  nullable: true
+  description: AdjNETDiv is the net dividend amount of withholding taxes to be reinvested in MSCI Daily Net Total Return Indices
+    for MSCI international indices.
+- name: ISOCurrCode
+  type: char(3)
+  nullable: true
+  description: ISOCurrCode is the dividend ISO currency symbol. This field cross- references with MS2Desc.Code where Type_
+    = 2.
+- name: DivSubUnit
+  type: FLOAT
+  nullable: true
+  description: DivSubUnit is the dividend sub-unit. It indicates whether the dividend amount is expressed for one share (1.000)
+    or in lot (0.001); some securities in Brazil are provided in lot of 1000.
+- name: DivAdjFactor
+  type: FLOAT
+  nullable: true
+  description: DivAdjFactor is the dividend adjustment factor. It reflects the impact of corporate events on the declared
+    dividend amount.
+- name: DTRNumShares
+  type: FLOAT
+  nullable: true
+  description: DTRNumShares is the number of shares used in the calculation of the MSCI DTR Indices, as of the dividend ex
+    date, minus one.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table. LSEG Quantitative Analytics Database Schema
+    for MSCI 25
+join_hints:
+- to: MS2Code
+  evidence: 'DivDesc tinyint Y DivDesc is the MSCI dividend description: – 0 = Annual – 1 = Final – 2 = Interim – 3 = Quarterly
+    – 4 = Extra – 5 = Monthly – 6 = Regular – 7 = Commemorative This field cross-references with MS2Code.Code where Type_
+    = 5.'
+  type: cross_reference
+---
+table: qa_msci.MS2SecDivMth
+domain: risk_models
+description: Monthly MSCI Security Dividends | This table is reserved for future use. See Empty Tables on page 6 for details.
+  | This table contains monthly MSCI security dividends data.
+update_cadence: Monthly
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: SecID is the security ID.
+- name: IdxFam
+  type: TINYINT
+  nullable: false
+  description: IdxFam is the index family. This field cross-references with MS2Code.Code where Type_ = 12.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the date on which the data was calculated.
+- name: DivCode
+  type: INTEGER
+  nullable: false
+  description: DivCode is the MSCI dividend code, a unique identifier allocated by MSCI to a dividend event.
+- name: DivDesc
+  type: TINYINT
+  nullable: true
+  description: 'DivDesc is the MSCI dividend description: – 0 = Annual – 1 = Final – 2 = Interim – 3 = Quarterly – 4 = Extra
+    – 5 = Monthly – 6 = Regular – 7 = Commemorative This field cross-references with MS2Code.Code where Type_ = 5.'
+- name: XDDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: XDDate is the dividend ex-date.
+- name: CorrectionFlag
+  type: TINYINT
+  nullable: true
+  description: CorrectionFlag indicates that the dividend amount is a correction of an already reinvested dividend. The difference
+    between the correct and incorrect amount will show in the gross dividend amount, net dividend amount international, and
+    net dividend amount domestic.
+- name: ReinvDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: ReinvDate is the date as of which the dividend is reinvested in the index.
+- name: Div
+  type: FLOAT
+  nullable: true
+  description: Div is the declared dividend amount.
+- name: AdjGRSDiv
+  type: FLOAT
+  nullable: true
+  description: AdjGRSDiv is the gross dividend amount of withholding taxes to be reinvested in MSCI Daily Gross Total Return
+    Indices.
+- name: AdjNETDiv
+  type: FLOAT
+  nullable: true
+  description: AdjNETDiv is the net dividend amount of withholding taxes to be reinvested in MSCI Daily Net Total Return Indices
+    for MSCI international indices.
+- name: ISOCurrCode
+  type: char(3)
+  nullable: true
+  description: ISOCurrCode is the dividend ISO currency symbol. This field cross- references with MS2Desc.Code where Type_
+    = 2.
+- name: DivSubUnit
+  type: FLOAT
+  nullable: true
+  description: DivSubUnit is the dividend sub-unit. It indicates whether the dividend amount is expressed for one share (1.000)
+    or in lot (0.001); some securities in Brazil are provided in lot of 1000.
+- name: DivAdjFactor
+  type: FLOAT
+  nullable: true
+  description: DivAdjFactor is the dividend adjustment factor. It reflects the impact of corporate events on the declared
+    dividend amount.
+- name: DTRNumShares
+  type: FLOAT
+  nullable: true
+  description: DTRNumShares is the number of shares used in the calculation of the MSCI DTR Indices, as of the dividend ex
+    date, minus one.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table. LSEG Quantitative Analytics Database Schema
+    for MSCI 26
+join_hints:
+- to: MS2Code
+  evidence: 'DivDesc tinyint Y DivDesc is the MSCI dividend description: – 0 = Annual – 1 = Final – 2 = Interim – 3 = Quarterly
+    – 4 = Extra – 5 = Monthly – 6 = Regular – 7 = Commemorative This field cross-references with MS2Code.Code where Type_
+    = 5.'
+  type: cross_reference
+---
+table: qa_msci.MS2SecF
+domain: risk_models
+description: MSCI Security Float Data | This table contains daily MSCI security float data that changes infrequently. | Unless
+  you are licensed for MSCI Deep History, the data in this table is purged on a 13-month rolling basis.
+update_cadence: Daily
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: SecID is the security ID.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is an integer code that represents a data item. Item cross-references with MS2Item and indicates what
+    datapoint the record represents.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the date the period begins.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the date the period ends.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the numeric information associated with given constraints.
+- name: NextValue
+  type: FLOAT
+  nullable: true
+  description: NextValue is the next day value. NULL = Next Day Value not provided. If the value is not changing from one
+    day to next, the same value is populated in both the Value_ and NextValue fields.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table.
+---
+table: qa_msci.MS2SecFACE
+domain: risk_models
+description: MSCI Security Advanced Corporate Event Float Data | This table contains daily MSCI security advanced corporate
+  event float data that changes infrequently. | This table is populated going forward from 2011. | Unless you are licensed
+  for MSCI Deep History, the data in this table is purged on a 13-month rolling basis.
+update_cadence: Daily
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: SecID is the security ID.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is an integer code that represents a data item. Item cross-references with MS2Item and indicates what
+    datapoint the record represents.
+- name: EventId
+  type: INTEGER
+  nullable: false
+  description: EventId is the event ID.
+- name: Seq
+  type: TINYINT
+  nullable: false
+  description: Seq is the sequence number.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: true
+  description: Date_ is the date on which the data was calculated.
+- name: StatusCode
+  type: TINYINT
+  nullable: true
+  description: StatusCode is the status code. MS2SecFACE.StatusCode joins with MS2Code.Code where Type_ = 6.
+- name: EventCode
+  type: TINYINT
+  nullable: true
+  description: EventCode is the event code. MS2SecFACE.EventCode joins with MS2Code.Code where Type_ = 7.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the numeric information associated with given constraints.
+- name: NextValue
+  type: FLOAT
+  nullable: true
+  description: NextValue is the next day value. NULL = Next Day Value not provided. If the value is not changing from one
+    day to next, the same value is populated in both the Value_ and NextValue fields. LSEG Quantitative Analytics Database
+    Schema for MSCI 27
+- name: AddDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: AddDate is the add date.
+- name: ModDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: ModDate is the date the security information was last modified.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table.
+join_hints:
+- to: MS2Item
+  evidence: Item cross-references with MS2Item and indicates what datapoint the record represents.
+  type: cross_reference
+- to: MS2Item
+  evidence: Item cross-references with MS2Item and indicates what datapoint the record represents.
+  type: cross_reference
+---
+table: qa_msci.MS2SecFDly
+domain: risk_models
+description: Daily MSCI Security Float Data | This table contains daily MSCI security float data. | Unless you are licensed
+  for MSCI Deep History, the data in this table is purged on a 13-month rolling basis.
+update_cadence: 'Daily Adjusted: N/A'
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: SecID is the security ID.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is an integer code that represents a data item. Item cross-references with MS2Item and indicates what
+    datapoint the record represents.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the date on which the data was calculated.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the numeric information associated with given constraints.
+- name: NextValue
+  type: FLOAT
+  nullable: true
+  description: NextValue is the next day value. NULL = Next Day Value not provided. If the value is not changing from one
+    day to next, the same value is populated in both the Value_ and NextValue fields.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table.
+---
+table: qa_msci.MS2SecFMth
+domain: risk_models
+description: Monthly MSCI Security Float Data | This table contains monthly MSCI security float data. | Unless you are licensed
+  for MSCI Deep History, the data in this table is purged on a 7-year rolling basis.
+update_cadence: Monthly
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: SecID is the security ID.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is an integer code that represents a data item. Item cross-references with MS2Item and indicates what
+    datapoint the record represents.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the date on which the data was calculated.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the numeric information associated with given constraints.
+- name: NextValue
+  type: FLOAT
+  nullable: true
+  description: NextValue is the next day value. NULL = Next Day Value not provided. If the value is not changing from one
+    day to next, the same value is populated in both the Value_ and NextValue fields.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table. LSEG Quantitative Analytics Database Schema
+    for MSCI 28
+join_hints:
+- to: MS2Item
+  evidence: Item cross-references with MS2Item and indicates what datapoint the record represents.
+  type: cross_reference
+- to: MS2Item
+  evidence: Item cross-references with MS2Item and indicates what datapoint the record represents.
+  type: cross_reference
+---
+table: qa_msci.MS2SecI
+domain: risk_models
+description: MSCI Security Integer Data | This table contains daily MSCI security integer data that changes infrequently.
+  | Unless you are licensed for MSCI Deep History, the data in this table is purged on a 13-month rolling basis.
+update_cadence: Daily
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: SecID is the security ID.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is an integer code that represents a data item. Item cross-references with MS2Item and indicates what
+    datapoint the record represents.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the date the period begins.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the date the period ends.
+- name: Value_
+  type: INTEGER
+  nullable: true
+  description: Value_ is the numeric information associated with given constraints.
+- name: NextValue
+  type: INTEGER
+  nullable: true
+  description: NextValue is the next day value. NULL = Next Day Value not provided. If the value is not changing from one
+    day to next, the same value is populated in both the Value_ and NextValue fields.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table.
+---
+table: qa_msci.MS2SecIACE
+domain: risk_models
+description: MSCI Security Advanced Corporate Event Integer Data | This table contains daily MSCI security advanced corporate
+  event integer data that changes infrequently. | This table is populated going forward from 2011. | Unless you are licensed
+  for MSCI Deep History, the data in this table is purged on a 13-month rolling basis.
+update_cadence: Daily
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: SecID is the security ID.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is an integer code that represents a data item. Item cross-references with MS2Item and indicates what
+    datapoint the record represents.
+- name: EventId
+  type: INTEGER
+  nullable: false
+  description: EventId is the event ID.
+- name: Seq
+  type: TINYINT
+  nullable: false
+  description: Seq is the sequence number.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: true
+  description: Date_ is the date on which the data was calculated.
+- name: StatusCode
+  type: TINYINT
+  nullable: true
+  description: StatusCode is the status code. MS2SecIACE.StatusCode joins with MS2Code.Code where Type_ = 6.
+- name: EventCode
+  type: TINYINT
+  nullable: true
+  description: EventCode is the event code. MS2SecIACE.EventCode joins with MS2Code.Code where Type_ = 7.
+- name: Value_
+  type: INTEGER
+  nullable: true
+  description: Value_ is the numeric information associated with given constraints.
+- name: NextValue
+  type: INTEGER
+  nullable: true
+  description: NextValue is the next day value. NULL = Next Day Value not provided. If the value is not changing from one
+    day to next, the same value is populated in both the Value_ and NextValue fields. LSEG Quantitative Analytics Database
+    Schema for MSCI 29
+- name: AddDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: AddDate is the add date.
+- name: ModDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: ModDate is the date the security information was last modified.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table.
+join_hints:
+- to: MS2Item
+  evidence: Item cross-references with MS2Item and indicates what datapoint the record represents.
+  type: cross_reference
+- to: MS2Item
+  evidence: Item cross-references with MS2Item and indicates what datapoint the record represents.
+  type: cross_reference
+---
+table: qa_msci.MS2SecIDly
+domain: risk_models
+description: Daily MSCI Security Integer Data | This table is reserved for future use. See Empty Tables on page 6 for details.
+  | This table contains daily MSCI security integer data.
+update_cadence: Daily
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: SecID is the security ID.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is an integer code that represents a data item. Item cross-references with MS2Item and indicates what
+    datapoint the record represents.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the date on which the data was calculated.
+- name: Value_
+  type: INTEGER
+  nullable: true
+  description: Value_ is the numeric information associated with given constraints.
+- name: NextValue
+  type: INTEGER
+  nullable: true
+  description: NextValue is the next day value. NULL = Next Day Value not provided. If the value is not changing from one
+    day to next, the same value is populated in both the Value_ and NextValue fields.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table.
+---
+table: qa_msci.MS2SecIMth
+domain: risk_models
+description: Monthly MSCI Security Integer Data | This table contains monthly MSCI security integer data. | Unless you are
+  licensed for MSCI Deep History, the data in this table is purged on a 7-year rolling basis.
+update_cadence: Monthly
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: SecID is the security ID.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is an integer code that represents a data item. Item cross-references with MS2Item and indicates what
+    datapoint the record represents.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the date on which the data was calculated.
+- name: Value_
+  type: INTEGER
+  nullable: true
+  description: Value_ is the numeric information associated with given constraints.
+- name: NextValue
+  type: INTEGER
+  nullable: true
+  description: NextValue is the next day value. NULL = Next Day Value not provided. If the value is not changing from one
+    day to next, the same value is populated in both the Value_ and NextValue fields.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table. LSEG Quantitative Analytics Database Schema
+    for MSCI 30
+join_hints:
+- to: MS2Item
+  evidence: Item cross-references with MS2Item and indicates what datapoint the record represents.
+  type: cross_reference
+- to: MS2Item
+  evidence: Item cross-references with MS2Item and indicates what datapoint the record represents.
+  type: cross_reference
+---
+table: qa_msci.MS2SecInfo
+domain: risk_models
+description: MSCI Security Information | This table contains MSCI security information. | Unless you are licensed for MSCI
+  Deep History, the data in this table is purged on a 13-month rolling basis.
+update_cadence: Daily
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: SecID is the security ID.
+- name: TsCode
+  type: INTEGER
+  nullable: true
+  description: TsCode is the MSCI time series code and unique security identifier.
+- name: IssCode
+  type: INTEGER
+  nullable: true
+  description: IssCode is the MSCI issuer code. Not all issuers have an IssCode.
+- name: SecCode
+  type: INTEGER
+  nullable: true
+  description: SecCode is the MSCI security code.
+- name: Name_
+  type: varchar(40)
+  nullable: true
+  description: Name_ is the name of the security.
+- name: ISOCtryCode
+  type: char(2)
+  nullable: true
+  description: ISOCtryCode is the ISO country code. It is a two-digit alphabetic code for country classification. MS2SecInfo.ISOCtryCode
+    joins with MS2Desc.Code where Type_ = 1.
+- name: NextISOCtryCode
+  type: char(2)
+  nullable: true
+  description: NextISOCtryCode Is the next day ISO country code.
+- name: MIC
+  type: char(4)
+  nullable: true
+  description: MIC is the market identifier code. It specifies a universal method of identifying exchanges and trading platforms
+    and regulated or non- regulated markets as sources of prices and related information in order to facilitate automated
+    processing.
+- name: NextMIC
+  type: char(4)
+  nullable: true
+  description: NextMIC is the next day market identifier code.
+- name: BloomTkr
+  type: varchar(25)
+  nullable: true
+  description: BloomTkr is the Bloomberg ticker.
+- name: NextBloomTkr
+  type: varchar(25)
+  nullable: true
+  description: NextBloomTkr is the next day Bloomberg ticker.
+- name: ShareClassCode
+  type: TINYINT
+  nullable: true
+  description: ShareClassCode is the share class code. It provides information on the main category of the security (for example,
+    COMMON, PREFERRED, and UNIT). MS2SecInfo.ShareClassCode joins with MS2Code.Code where Type_ = 8.
+- name: ShareTypeCode
+  type: TINYINT
+  nullable: true
+  description: ShareTypeCode is the share type code. It provides information on the sub-category of the security (for example,
+    A, B, and H). MS2SecInfo.ShareTypeCode joins with MS2Code.Code where Type_ = 9.
+- name: AltListingCode
+  type: TINYINT
+  nullable: true
+  description: AltListingCode is the alternate listing code. It provides information on the listing of the security (for example,
+    ADR and GDR). MS2SecInfo.AltListingCode joins with MS2Code.Code where Type_ = 10.
+- name: BarraID
+  type: char(8)
+  nullable: true
+  description: BarraID is the Barra security identifier.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the date the period ends.
+- name: ModDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: ModDate is the date the security information was last modified.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table. LSEG Quantitative Analytics Database Schema
+    for MSCI 31
+---
+table: qa_msci.MS2SecInfoChg
+domain: risk_models
+description: MSCI Security Information Change History | This table contains MSCI security information change history. | Unless
+  you are licensed for MSCI Deep History, the data in this table is purged on a 13-month rolling basis.
+update_cadence: Daily
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: SecID is the security ID.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the date the period begins.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the date the period ends.
+- name: TsCode
+  type: INTEGER
+  nullable: true
+  description: TsCode is the MSCI time series code and unique security identifier.
+- name: IssCode
+  type: INTEGER
+  nullable: true
+  description: IssCode is the MSCI issuer code. Not all issuers have an IssCode.
+- name: SecCode
+  type: INTEGER
+  nullable: true
+  description: SecCode is the MSCI security code.
+- name: Name_
+  type: varchar(40)
+  nullable: true
+  description: Name_ is the name of the security.
+- name: ISOCtryCode
+  type: char(2)
+  nullable: true
+  description: ISOCtryCode is the ISO country code. It is a two-digit alphabetic code for country classification. MS2SecInfoChg.ISOCtryCode
+    joins with MS2Desc.Code where Type_ = 1.
+- name: MIC
+  type: char(4)
+  nullable: true
+  description: MIC is the market identifier code. It specifies a universal method of identifying exchanges and trading platforms
+    and regulated or non- regulated markets as sources of prices and related information in order to facilitate automated
+    processing.
+- name: BloomTkr
+  type: varchar(25)
+  nullable: true
+  description: BloomTkr is the Bloomberg ticker.
+- name: ShareClassCode
+  type: TINYINT
+  nullable: true
+  description: ShareClassCode is the share class code. It provides information on the main category of the security (for example,
+    COMMON, PREFERRED, and UNIT). MS2SecInfoChg.ShareClassCode joins with MS2Code.Code where Type_ = 8.
+- name: ShareTypeCode
+  type: TINYINT
+  nullable: true
+  description: ShareTypeCode is the share type code. It provides information on the sub-category of the security (for example,
+    A, B, and H). MS2SecInfoChg.ShareTypeCode joins with MS2Code.Code where Type_ = 9.
+- name: AltListingCode
+  type: TINYINT
+  nullable: true
+  description: AltListingCode is the alternate listing code. It provides information on the listing of the security (for example,
+    ADR and GDR). MS2SecInfoChg.AltListingCode joins with MS2Code.Code where Type_ = 10.
+- name: BarraID
+  type: char(8)
+  nullable: true
+  description: BarraID is the Barra security identifier.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table.
+---
+table: qa_msci.MS2SecISIN
+domain: risk_models
+description: MSCI Security ISIN Information | This table contains MSCI security ISIN information. | Unless you are licensed
+  for MSCI Deep History, the data in this table is purged on a 13-month rolling basis.
+update_cadence: Daily
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: SecID is the security ID.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the date the period begins.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the date the period ends.
+- name: ISIN
+  type: char(12)
+  nullable: true
+  description: ISIN is the ISIN of the security.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table.
+---
+table: qa_msci.MS2SecPrcDly
+domain: risk_models
+description: MSCI Daily Security Pricing Information | This table contains daily MSCI security pricing information. | Unless
+  you are licensed for MSCI Deep History, the data in this table is purged on a 13-month rolling basis.
+update_cadence: Daily
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: SecID is the security ID.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the date on which the data was calculated.
+- name: Shares
+  type: FLOAT
+  nullable: true
+  description: Shares is the number of shares.
+- name: NextShares
+  type: FLOAT
+  nullable: true
+  description: NextShares is the number of next day shares.
+- name: Price
+  type: FLOAT
+  nullable: true
+  description: Price is the price.
+- name: PrcAdjFactor
+  type: FLOAT
+  nullable: true
+  description: PrcAdjFactor is the price adjustment factor.
+- name: IsoCurCode
+  type: char(3)
+  nullable: true
+  description: IsoCurCode is the dividend ISO currency symbol. This field cross- references MS2Desc.Code where Type_ = 2.
+- name: QuoteValue
+  type: FLOAT
+  nullable: true
+  description: QuoteValue is the value of the quote (used for lot-priced securities).
+- name: NextQuoteValue
+  type: FLOAT
+  nullable: true
+  description: NextQuoteValue is the next day value of the quote.
+- name: Licflag
+  type: INTEGER
+  nullable: true
+  description: Licflag is a bit value that represents the license for this table.
+---
+table: qa_msci.MS2SecPrcMth
+domain: risk_models
+description: MSCI Monthly Security Pricing Information | This table contains monthly MSCI security pricing information. |
+  Unless you are licensed for MSCI Deep History, the data in this table is purged on a 7-year rolling basis.
+update_cadence: Monthly
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: SecID is the security ID.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the date on which the data was calculated.
+- name: Shares
+  type: FLOAT
+  nullable: true
+  description: Shares is the number of shares.
+- name: NextShares
+  type: FLOAT
+  nullable: true
+  description: NextShares is the number of next day shares. LSEG Quantitative Analytics Database Schema for MSCI 33
+- name: Price
+  type: FLOAT
+  nullable: true
+  description: Price is the price.
+- name: PrcAdjFactor
+  type: FLOAT
+  nullable: true
+  description: PrcAdjFactor is the price adjustment factor.
+- name: IsoCurCode
+  type: char(3)
+  nullable: true
+  description: IsoCurCode is the dividend ISO currency symbol. This field cross- references with MS2Desc.Code where Type_
+    = 2.
+- name: QuoteValue
+  type: FLOAT
+  nullable: true
+  description: QuoteValue is the value of the quote (used for lot-priced securities).
+- name: NextQuoteValue
+  type: FLOAT
+  nullable: true
+  description: NextQuoteValue is the next day value of the quote.
+- name: Licflag
+  type: INTEGER
+  nullable: true
+  description: Licflag is a bit value that represents the license for this table.
+---
+table: qa_msci.MS2SecS
+domain: risk_models
+description: MSCI Security Varchar Data | This table contains daily MSCI security varchar data that changes infrequently.
+  | Unless you are licensed for MSCI Deep History, the data in this table is purged on a 13-month rolling basis.
+update_cadence: Daily
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: SecID is the security ID.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is an integer code that represents a data item. Item cross-references with MS2Item and indicates what
+    datapoint the record represents.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the date the period begins.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the date the period ends.
+- name: Value_
+  type: varchar(75)
+  nullable: true
+  description: Value_ is the alphanumeric information associated with given constraints.
+- name: NextValue
+  type: varchar(75)
+  nullable: true
+  description: NextValue is the next day value. NULL = Next Day Value not provided. If the value is not changing from one
+    day to next, the same value is populated in both the Value_ and NextValue fields.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table.
+---
+table: qa_msci.MS2SecSACE
+domain: risk_models
+description: MSCI Security Advanced Corporate Event Varchar Data | This table contains daily MSCI security advanced corporate
+  event integer data that changes infrequently. | This table is populated going forward from 2011. | Unless you are licensed
+  for MSCI Deep History, the data in this table is purged on a 13-month rolling basis.
+update_cadence: Daily
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: SecID is the security ID.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is an integer code that represents a data item. Item cross- references with MS2Item and indicates what
+    datapoint the record represents. LSEG Quantitative Analytics Database Schema for MSCI 34
+- name: EventId
+  type: INTEGER
+  nullable: false
+  description: EventId is the event ID.
+- name: Seq
+  type: TINYINT
+  nullable: false
+  description: Seq is the sequence number.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: true
+  description: Date_ is the date on which the data was calculated.
+- name: StatusCode
+  type: TINYINT
+  nullable: true
+  description: StatusCode is the status code. MS2SecSACE.StatusCode joins with MS2Code.Code where Type_ = 6.
+- name: EventCode
+  type: TINYINT
+  nullable: true
+  description: EventCode is the event code. MS2SecSACE.EventCode joins with MS2Code.Code where Type_ = 7.
+- name: Value_
+  type: varchar(250)
+  nullable: true
+  description: Value_ is the alphanumeric information associated with given constraints.
+- name: NextValue
+  type: varchar(250)
+  nullable: true
+  description: NextValue is the next day value. NULL = Next Day Value not provided. If the value is not changing from one
+    day to next, the same value is populated in both the Value_ and NextValue fields.
+- name: AddDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: AddDate is the add date.
+- name: ModDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: ModDate is the date the security information was last modified.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table.
+join_hints:
+- to: MS2Item
+  evidence: Item cross-references with MS2Item and indicates what datapoint the record represents.
+  type: cross_reference
+---
+table: qa_msci.MS2SecSDly
+domain: risk_models
+description: Daily MSCI Security Varchar Data | This table is reserved for future use. See Empty Tables on page 6 for details.
+  | This table contains daily MSCI security varchar data.
+update_cadence: Daily
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: SecID is the security ID.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is an integer code that represents a data item. Item cross-references with MS2Item and indicates what
+    datapoint the record represents.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the date on which the data was calculated.
+- name: Value_
+  type: varchar(75)
+  nullable: true
+  description: Value_ is the alphanumeric information associated with given constraints.
+- name: NextValue
+  type: varchar(75)
+  nullable: true
+  description: NextValue is the next day value. NULL = Next Day Value not provided. If the value is not changing from one
+    day to next, the same value is populated in both the Value_ and NextValue fields.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table.
+join_hints:
+- to: MS2Item
+  evidence: Item cross-references with MS2Item and indicates what datapoint the record represents.
+  type: cross_reference
+---
+table: qa_msci.MS2SecSMth
+domain: risk_models
+description: Monthly MSCI Security Varchar Data | This table contains monthly MSCI security varchar data. | Unless you are
+  licensed for MSCI Deep History, the data in this table is purged on a 7-year rolling basis.
+update_cadence: Monthly
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: SecID is the security ID.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is an integer code that represents a data item. Item cross-references with MS2Item and indicates what
+    datapoint the record represents.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the date on which the data was calculated.
+- name: Value_
+  type: varchar(75)
+  nullable: true
+  description: Value_ is the alphanumeric information associated with given constraints.
+- name: NextValue
+  type: varchar(75)
+  nullable: true
+  description: NextValue is the next day value. NULL = Next Day Value not provided. If the value is not changing from one
+    day to next, the same value is populated in both the Value_ and NextValue fields.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table.
+---
+table: qa_msci.MS2SecSMaxACE
+domain: risk_models
+description: MSCI Security Advanced Corporate Event Large Varchar | This table contains daily MSCI advanced corporate event
+  information for large varchar data items that changes | This table is populated going forward from 2011. | Unless you are
+  licensed for MSCI Deep History, the data in this table is purged on a 13-month rolling basis.
+update_cadence: Daily
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: SecID is the security ID.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is an integer code that represents a data item. Item cross-references with MS2Item and indicates what
+    datapoint the record represents.
+- name: EventId
+  type: INTEGER
+  nullable: false
+  description: EventId is the event ID.
+- name: Seq
+  type: TINYINT
+  nullable: false
+  description: Seq is the sequence number.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: true
+  description: Date_ is the date on which the data was calculated.
+- name: StatusCode
+  type: TINYINT
+  nullable: true
+  description: StatusCode is the status code. MS2SecSMaxACE.StatusCode joins with MS2Code.Code where Type_ = 6.
+- name: EventCode
+  type: TINYINT
+  nullable: true
+  description: EventCode is the event code. MS2SecSMaxACE.EventCode joins with MS2Code.Code where Type_ = 7.
+- name: AddDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: AddDate is the add date.
+- name: ModDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: ModDate is the date the security information was last modified.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table.
+- name: Value_
+  type: varchar(max)
+  nullable: true
+  description: Value_ is the alphanumeric information associated with given constraints. LSEG Quantitative Analytics Database
+    Schema for MSCI 36
+join_hints:
+- to: MS2Item
+  evidence: Item cross-references with MS2Item and indicates what datapoint the record represents.
+  type: cross_reference
+- to: MS2Item
+  evidence: Item cross-references with MS2Item and indicates what datapoint the record represents.
+  type: cross_reference
+---
+table: qa_msci.MS2SecSMaxDly
+domain: risk_models
+description: Daily MSCI Security Advanced Corporate Event Large | This table contains daily MSCI advanced corporate event
+  information for large varchar data items. | Unless you are licensed for MSCI Deep History, the data in this table is purged
+  on a 13-month rolling basis.
+update_cadence: Daily
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: SecID is the security ID.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is an integer code that represents a data item. Item cross-references with MS2Item and indicates what
+    datapoint the record represents.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the date on which the data was calculated.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table.
+- name: Value_
+  type: varchar(max)
+  nullable: true
+  description: Value_ is the alphanumeric information associated with given constraints.
+---
+table: qa_msci.MS2SecSMaxMth
+domain: risk_models
+description: Monthly MSCI Security Advanced Corporate Event Large | This table contains monthly MSCI advanced corporate event
+  information for large varchar data items. | Unless you are licensed for MSCI Deep History, the data in this table is purged
+  on a 7-year rolling basis.
+update_cadence: Monthly
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: SecID is the security ID.
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is an integer code that represents a data item. Item cross-references with MS2Item and indicates what
+    datapoint the record represents.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the date on which the data was calculated.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table.
+- name: Value_
+  type: varchar(max)
+  nullable: true
+  description: Value_ is the alphanumeric information associated with given constraints.
+join_hints:
+- to: MS2Item
+  evidence: Item cross-references with MS2Item and indicates what datapoint the record represents.
+  type: cross_reference
+- to: MS2Item
+  evidence: Item cross-references with MS2Item and indicates what datapoint the record represents.
+  type: cross_reference
+---
+table: qa_msci.MS2SecSed
+domain: risk_models
+description: MSCI Security SEDOL Information | This table contains MSCI security SEDOL information. | Unless you are licensed
+  for MSCI Deep History, the data in this table is purged on a 13-month rolling basis.
+update_cadence: 'Daily Adjusted: N/A'
+columns:
+- name: SecID
+  type: INTEGER
+  nullable: false
+  description: SecID is the security ID.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the date the period begins.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the date the period ends.
+- name: SEDOL
+  type: char(6)
+  nullable: true
+  description: SEDOL is the SEDOL identifier.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table. MSCI V2 Miscellaneous Tables Item/Code Tables
+    Type_ int Code int Desc_ varchar(75) Type_ int Code varchar(10) Desc_ varchar(75) Item INTEGER Mnemonic VARCHAR(50) Desc_
+    VARCHAR(75) AdjCode TINYINT FrqFlg TINYINT DlyFlg TINYINT MthFlg TINYINT ParentItem INTEGER CorrMnem VARCHAR(15) DataTypeCode
+    TINYINT DecimalNum TINYINT ACEFlg TINYINT SecFlg TINYINT IdxFlg TINYINT DSFlg TINYINT BasicFlg TINYINT EnhFlg TINYINT
+    LegacyMnem VARCHAR(30
+---
+table: qa_msci.MS2Code
+domain: risk_models
+description: MSCI Numeric Codes | This table contains information about MSCI numeric codes. | Unless you are licensed for
+  MSCI Deep History, the data in this table is purged on a 13-month rolling basis.
+update_cadence: Daily
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Type_ is a numeric code for a type of data.
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is a coded value for an element of Type_. When Type_ = 0, Code is the numeric code for each Type_ other
+    than 0 and Desc_ is a description of each Type_.
+- name: Desc_
+  type: varchar(75)
+  nullable: true
+  description: Desc_ is a plain-language description of the element defined by Type_ and Code.
+---
+table: qa_msci.MS2CtyWgtDly
+domain: risk_models
+description: Daily MSCI Country Weights | This table contains daily MSCI country weights data. | This table is populated going
+  forward from 2011. | Unless you are licensed for MSCI Deep History, the data in this table is purged on a 13-month rolling
+  basis.
+update_cadence: Daily
+columns:
+- name: MSCICode
+  type: INTEGER
+  nullable: false
+  description: MSCICode is the MSCI index identifier. MSCICode is defined in MS2IdxInfo.
+- name: ISOCtryCode
+  type: char(2)
+  nullable: false
+  description: ISOCtryCode is the ISO country code. It is a two-digit alphabetic code for country classification. MS2CtyWgtDly.ISOCtryCode
+    joins with MS2Desc.Code where Type_ = 1.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the date on which the data was calculated.
+- name: Weight
+  type: FLOAT
+  nullable: true
+  description: Weight is the initial weight of the country in the index
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table.
+---
+table: qa_msci.MS2CtyWgtMth
+domain: risk_models
+description: Monthly MSCI Country Weights | This table contains monthly MSCI country weights data. | This table is populated
+  going forward starting in 2011. | Unless you are licensed for MSCI Deep History, the data in this table is purged on a 7-year
+  rolling basis.
+update_cadence: Monthly
+columns:
+- name: MSCICode
+  type: INTEGER
+  nullable: false
+  description: MSCICode is the MSCI index identifier. MSCICode is defined in MS2IdxInfo.
+- name: ISOCtryCode
+  type: char(2)
+  nullable: false
+  description: ISOCtryCode is the ISO country code. It is a two-digit alphabetic code for country classification. MS2CtyWgtMth.ISOCtryCode
+    joins with MS2Desc.Code where Type_ = 1.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the date on which the data was calculated.
+- name: Weight
+  type: FLOAT
+  nullable: true
+  description: Weight is the initial weight of the country in the index
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table.
+---
+table: qa_msci.MS2Desc
+domain: risk_models
+description: MSCI Text Codes | This table contains information about MSCI text codes. | Unless you are licensed for MSCI Deep
+  History, the data in this table is purged on a 13-month rolling basis.
+update_cadence: Daily
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Type_ is a numeric code for a type of data.
+- name: Code
+  type: varchar(10)
+  nullable: false
+  description: Code is a coded value for an element of Type_. When Type_ = 0, Code is the numeric code for each Type_ other
+    than 0 and Desc_ is a description of each Type_.
+- name: Desc_
+  type: varchar(75)
+  nullable: true
+  description: Desc_ is a plain-language description of the element defined by Type_ and Code.
+---
+table: qa_msci.MS2FxRateDly
+domain: risk_models
+description: Daily MSCI Exchange Rates | This table contains daily MSCI exchange rates data. | Unless you are licensed for
+  MSCI Deep History, the data in this table is purged on a 13-month rolling basis.
+update_cadence: Daily
+columns:
+- name: ISOCurCode
+  type: char(3)
+  nullable: false
+  description: ISOCurCode is the dividend ISO currency symbol. MS2FxRateDly.ISOCurCode joins with MS2Desc.Code where Type_
+    = 2.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the date on which the data was calculated.
+- name: Rate
+  type: FLOAT
+  nullable: true
+  description: Rate is the 4:00 P.M. London time snapshot from WM/LSEG.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table. LSEG Quantitative Analytics Database Schema
+    for MSCI 40
+---
+table: qa_msci.MS2FxRateMth
+domain: risk_models
+description: Monthly MSCI Exchange Rates | This table contains monthly MSCI exchange rates data. | Unless you are licensed
+  for MSCI Deep History, the data in this table is purged on a 7-year rolling basis.
+update_cadence: Monthly
+columns:
+- name: ISOCurCode
+  type: char(3)
+  nullable: false
+  description: ISOCurCode is the dividend ISO currency symbol. MS2FxRateMth.ISOCurCode joins with MS2Desc.Code where Type_
+    = 2.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the date on which the data was calculated.
+- name: Rate
+  type: FLOAT
+  nullable: true
+  description: Rate is the 4:00 P.M. London time snapshot from WM/LSEG.
+- name: Rate1MthFwd
+  type: FLOAT
+  nullable: true
+  description: Rate1MthFwd is the 4:00 P.M. London time snapshot from WM/LSEG as of calculation date.
+- name: CoveringCost
+  type: FLOAT
+  nullable: true
+  description: CoveringCost is the cost of hedging an index against foreign currencies.
+- name: LicFlag
+  type: INTEGER
+  nullable: true
+  description: LicFlag is a bit value that represents the license for this table.
+---
+table: qa_msci.MS2Item
+domain: risk_models
+description: MSCI Data Item Descriptions | This table contains the MSCI data items. | Unless you are licensed for MSCI Deep
+  History, the data in this table is purged on a 13-month rolling basis. | MS2ItemMap table to indicate the data table. If
+  an item has DlyFlg = 1
+update_cadence: Daily
+columns:
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is an integer code that represents a data item. Item indicates what datapoint the record represents.
+- name: Mnemonic
+  type: varchar(50)
+  nullable: true
+  description: Mnemonic is the item mnemonic.
+- name: Desc_
+  type: varchar(75)
+  nullable: true
+  description: Desc_ is a plain-language description of the mnemonic.
+- name: AdjCode
+  type: TINYINT
+  nullable: true
+  description: AdjCode is the adjustment code (Multiplied, Divided, or Unaffected). MS2Item.AjdCode joins with MS2Code.Code
+    where Type_ = 2.
+- name: FrqFlg
+  type: TINYINT
+  nullable: true
+  description: FrqFlg is a frequency flag and can be – 0 = daily – 1 = periodic This field only applies to items with DlyFlg
+    = 1. FrqFlg is used with the MS2ItemMap table to indicate the data table. If an item has DlyFlg = 1 and FrqFlg = 0, it
+    is a daily license item that changes daily. If an item has DlyFlg = 1 and FrqFlg = 1, it is a daily license item that
+    only changes periodically.
+- name: DlyFlg
+  type: TINYINT
+  nullable: true
+  description: DlyFlg is the daily data flag. If DlyFlg = 1, the item is available to clients with a daily license. LSEG Quantitative
+    Analytics Database Schema for MSCI 41
+- name: MthFlg
+  type: TINYINT
+  nullable: true
+  description: MthFlg is the monthly data flag. If MthFlg = 1, the item is available to clients with a daily or monthly license.
+- name: ParentItem
+  type: INTEGER
+  nullable: true
+  description: ParentItem is the parent item populated for next day items.
+- name: CorrMnem
+  type: varchar(15)
+  nullable: true
+  description: CorrMnem is the correction mnemonic.
+- name: DataTypeCode
+  type: TINYINT
+  nullable: true
+  description: DataTypeCode is the data type code. MS2Item.DataTypeCode joins with MS2Code.Code where Type_ = 3.
+- name: DecimalNum
+  type: TINYINT
+  nullable: true
+  description: DecimalNum is the number of decimals for float data.
+- name: BoxFlg
+  type: TINYINT
+  nullable: true
+  description: BoxFlg is the boxes/fundamentals data flag.
+- name: ACEFlg
+  type: TINYINT
+  nullable: true
+  description: ACEFlg is the ACE (Advance Corporate Event) flag.
+- name: SecFlg
+  type: TINYINT
+  nullable: true
+  description: SecFlg is the security-level data flag.
+- name: IdxFlg
+  type: TINYINT
+  nullable: true
+  description: IdxFlg is the index-level data flag.
+- name: DSFlg
+  type: TINYINT
+  nullable: true
+  description: DSFlg is the Data Set flag and is for LSEG Quantitative Analytics internal use only.
+- name: BasicFlg
+  type: TINYINT
+  nullable: true
+  description: BasicFlg is the basic flag.
+- name: EnhFlg
+  type: TINYINT
+  nullable: true
+  description: EnhFlg is the enhanced license flag.
+- name: LegacyMnem
+  type: varchar(30)
+  nullable: true
+  description: LegacyMnem is the legacy MSCI mnemonic.
+---
+table: qa_msci.MS2ItemChg
+domain: risk_models
+description: Historical MSCI Data Item Descriptions | This table contains a history of MSCI data item mnemonics and their
+  descriptions. | Unless you are licensed for MSCI Deep History, the data in this table is purged on a 13-month rolling basis.
+update_cadence: Daily
+columns:
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: Item is an integer code that represents a data item. Item cross-references with MS2Item and indicates what
+    datapoint the record represents.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the date the period begins.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the date the period ends.
+- name: Mnemonic
+  type: varchar(50)
+  nullable: true
+  description: Mnemonic is the item mnemonic.
+- name: Desc_
+  type: varchar(75)
+  nullable: true
+  description: Desc_ is a plain-language description of the element.
+- name: CorrMnem
+  type: varchar(15)
+  nullable: true
+  description: CorrMnem is the correction mnemonic.
+- name: LegacyMnem
+  type: varchar(30)
+  nullable: true
+  description: LegacyMnem is the legacy MSCI mnemonic.
+join_hints:
+- to: MS2Item
+  evidence: Item cross-references with MS2Item and indicates what datapoint the record represents.
+  type: cross_reference
+---
+table: qa_msci.MS2ItemMap
+domain: risk_models
+description: MSCI Item and Table Mapping Information | This table contains MSCI item and table mapping information. It specifies
+  the data table(s) associated with a | Unless you are licensed for MSCI Deep History, the data in this table is purged on
+  a 13-month rolling basis.
+update_cadence: Daily
+---
+table: qa_msci.ACEFlg
+domain: risk_models
+description: MS2ItemMap table to indicate the data table. If an item has DlyFlg = 1 | TableName varchar(50) Y TableName is
+  the name of the table where the data item is stored. | Use MS2ItemMap to determine the table in which a particular data
+  item from MS2Item is stored. Each MSCI | The names of the MSCI version 2 data tables reflect the the type of data items
+  they contain. The table name | format is MS2[Idx|Sec][Datatype][Frq][ACE]. For details about this table name format, see
+  Table Name Format | DAILY. IF
+columns:
+- name: DataTypeCode
+  type: TINYINT
+  nullable: false
+  description: DataTypeCode is the data type code. MS2ItemMap.DataTypeCode joins with MS2Code.Code where Type_ = 3.
+- name: SecFlg
+  type: TINYINT
+  nullable: false
+  description: SecFlg is the security-level data flag.
+- name: IdxFlg
+  type: TINYINT
+  nullable: false
+  description: IdxFlg is the index-level data flag.
+- name: FrqFlg
+  type: TINYINT
+  nullable: false
+  description: FrqFlg is a frequency flag and can be – 0 = daily – 1 = periodic This field only applies to items with DlyFlg
+    = 1. FrqFlg is used with the MS2ItemMap table to indicate the data table. If an item has DlyFlg = 1 and FrqFlg = 0, it
+    is a daily license item that changes daily. If an item has DlyFlg = 1 and FrqFlg = 1, it is a daily license item that
+    only changes periodically.
+- name: DlyFlg
+  type: TINYINT
+  nullable: false
+  description: DlyFlg is the daily data flag.
+- name: MthFlg
+  type: TINYINT
+  nullable: false
+  description: MthFlg is the monthly data flag.
+- name: ACEFlg
+  type: TINYINT
+  nullable: false
+  description: ACEFlg is the ACE (Advance Corporate Event) flag.
+- name: TableName
+  type: varchar(50)
+  nullable: true
+  description: TableName is the name of the table where the data item is stored. Relationship Between MS2Item and MS2ItemMap
+    Use MS2ItemMap to determine the table in which a particular data item from MS2Item is stored. Each MSCI version 2 data
+    item is stored in one or more tables. The location of a specific data item depends on whether it is index- or security-level,
+    the data type, how often it is updated (daily or monthly), and whether it is Advanced Corporate Event (ACE) data. The
+    names of the MSCI version 2

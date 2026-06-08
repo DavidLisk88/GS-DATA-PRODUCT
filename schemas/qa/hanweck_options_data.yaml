@@ -1,0 +1,884 @@
+table: qa_hanweck.OVSBasketInfo
+domain: derivatives
+description: Non-Standard Deliverable Items | This table contains non-standard deliverable items for option series with multiple
+  deliverables. If the deliverables
+update_cadence: Daily
+columns:
+- name: BasketCode
+  type: INTEGER
+  nullable: false
+  description: BasketCode is basket identifier provided by the vendor.
+- name: DelivTypeCode
+  type: TINYINT
+  nullable: false
+  description: 'DelivTypeCode can be one of the following deliverable types: – 1 = Stock – 2 = Cash – 3 = Rights – 4 = Warrants
+    OVSBasketInfo.DelivTypeCode cross-references with OVSCode.Code where Type_ = 7.'
+- name: DelivCode
+  type: INTEGER
+  nullable: false
+  description: DelivCode is the equity identifier of deliverable stock. If the deliverable is not stock, it is null in the
+    feed. In such cases, a value of -1 is inserted into the table.
+- name: OpraRootCode
+  type: INTEGER
+  nullable: false
+  description: OpraRootCode is the root ticker symbol. OVSBasketInfo.OpraRootCode cross-references with OVSCode.Code where
+    Type_ = 6.
+- name: Units
+  type: FLOAT
+  nullable: true
+  description: Units is the deliverable units.
+- name: Ticker
+  type: varchar(10)
+  nullable: true
+  description: Ticker is the ticker of deliverable stock (as of basket creation).
+- name: ISOCurrCode
+  type: char(3)
+  nullable: true
+  description: ISOCurrCode is the ISO currency code of deliverable cash. It is null when DelivTypeCode is Cash.
+join_hints:
+- to: OVSCode
+  evidence: 'DelivTypeCode tinyint N DelivTypeCode can be one of the following deliverable types: – 1 = Stock – 2 = Cash –
+    3 = Rights – 4 = Warrants OVSBasketInfo.DelivTypeCode cross-references with OVSCode.Code where Type_ = 7.'
+  type: cross_reference
+---
+table: qa_hanweck.OVSCode
+domain: derivatives
+description: Numeric Codes | This table contains descriptions of numeric codes.
+update_cadence: Daily
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Type_ is a numeric code for a type of data. LSEG Quantitative Analytics Database Schema for Hanweck Options
+    7
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is a coded value for an element of Type_. When Type_ = 0, Code is the numeric code for each Type_ other
+    than 0 and Desc_ is a description of each Type_.
+- name: Desc_
+  type: varchar(150)
+  nullable: true
+  description: Desc_ is a plain-language description of the element defined by Type_ and Code.
+---
+table: qa_hanweck.OVSCusipChg
+domain: derivatives
+description: CUSIP Changes | This table contains the changes in the CUSIP value for securities in the OVSSecInfo table. This
+  table is only
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the equity identifier provided by the vendor.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the start date for the item (January 1, 1998 or later).
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the end date for the item. The value 12/31/2078 (2078-12-31 00:00:00) in the feed is stored as Null
+    in the LSEG database. A null indicates current data.
+- name: Cusip
+  type: varchar(8)
+  nullable: true
+  description: Cusip is the CUSIP provided by the data feed.
+---
+table: qa_hanweck.OVSDesc
+domain: derivatives
+description: Character Code Descriptions | This table contains descriptions of character codes.
+update_cadence: Daily
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Type_ is a numeric code for a type of data.
+- name: Code
+  type: varchar(120)
+  nullable: false
+  description: Code is a coded value for an element of Type_. When Type_ = 0, Code is the numeric code for each Type_ other
+    than 0 and Desc_ is a description of each Type_.
+- name: Desc_
+  type: varchar(150)
+  nullable: true
+  description: Desc_ is a plain-language description of the element defined by Type_ and Code.
+---
+table: qa_hanweck.OVSImpBorrowRate
+domain: derivatives
+description: Daily Implied Borrow Rates | This table contains daily implied borrow rates for each underlying equity.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the equity identifier provided by the vendor.
+- name: TermDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: TermDate is the maturity date of the rate.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the valuation date.
+- name: Rate
+  type: FLOAT
+  nullable: true
+  description: Rate is the rate value. LSEG Quantitative Analytics Database Schema for Hanweck Options 8
+---
+table: qa_hanweck.OVSImpDivMap
+domain: derivatives
+description: Implied Dividend Mapping Information | This table contains daily mapping information of implied dividends for
+  each underlying equity.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the equity identifier provided by the vendor.
+- name: ExDivDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: ExDivDate is the ex-dividend date.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the valuation date.
+- name: DivAmt
+  type: FLOAT
+  nullable: true
+  description: DivAmt is the implied dividend amount.
+---
+table: qa_hanweck.OVSImpVol
+domain: derivatives
+description: Daily Implied Volatilities | This table contains daily implied volatilities for each option contract.
+update_cadence: Daily
+columns:
+- name: OptCode
+  type: INTEGER
+  nullable: false
+  description: OptCode is the option contract identifier provided by the vendor.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the valuation date.
+- name: IVBid
+  type: FLOAT
+  nullable: true
+  description: IVBid is the implied volatility of the bid price.
+- name: IVAsk
+  type: FLOAT
+  nullable: true
+  description: IVAsk is the implied volatility of the ask price.
+- name: IVMid
+  type: FLOAT
+  nullable: true
+  description: IVMid is the implied volatility of the mid price.
+- name: Delta
+  type: FLOAT
+  nullable: true
+  description: Delta is the delta at mid price.
+- name: Gamma
+  type: FLOAT
+  nullable: true
+  description: Gamma is the gamma at mid price.
+- name: Theta
+  type: FLOAT
+  nullable: true
+  description: Theta is the theta at mid price.
+- name: Vega
+  type: FLOAT
+  nullable: true
+  description: Vega is the vega at mid price.
+- name: Rho
+  type: FLOAT
+  nullable: true
+  description: Rho is the rho at mid price.
+- name: Confidence
+  type: FLOAT
+  nullable: true
+  description: Confidence is the confidence index for mid data, expressed as a decimal between 0 and 1.
+- name: Filterbits
+  type: INTEGER
+  nullable: true
+  description: Filterbits is the bit mask that reflects the results of various data filters.
+---
+table: qa_hanweck.OVSImpVolCMDR
+domain: derivatives
+description: CMDR Implied Volatility | This table contains Constant Maturity Delta-Relative (CMDR) interpolated surface for
+  each underlying equity.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the equity identifier provided by the vendor.
+- name: MnthToExp
+  type: TINYINT
+  nullable: false
+  description: MnthToExp is the constant maturity expiration, in months.
+- name: Delta
+  type: SMALLINT
+  nullable: false
+  description: Delta is the delta, expressed as a percentage.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the valuation date. LSEG Quantitative Analytics Database Schema for Hanweck Options 9
+- name: IVBid
+  type: FLOAT
+  nullable: true
+  description: IVBid is the implied volatility of the bid price.
+- name: IVAsk
+  type: FLOAT
+  nullable: true
+  description: IVAsk is the implied volatility of the ask price.
+- name: IVMid
+  type: FLOAT
+  nullable: true
+  description: IVMid is the implied volatility of the mid price.
+- name: Strike
+  type: FLOAT
+  nullable: true
+  description: Strike is the relative strike corresponding to the delta, expressed as a percentage of the underlying price.
+- name: Confidence
+  type: FLOAT
+  nullable: true
+  description: Confidence is the confidence index for mid data, expressed as a decimal between 0 and 1.
+---
+table: qa_hanweck.OVSImpVolCMPR
+domain: derivatives
+description: CMPR Implied Volatility | This table contains Constant Maturity Price-Relative (CMPR) interpolated surface for
+  each underlying equity.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the equity identifier provided by the vendor.
+- name: MnthToExp
+  type: TINYINT
+  nullable: false
+  description: MnthToExp is the constant maturity expiration, in months.
+- name: Strike
+  type: SMALLINT
+  nullable: false
+  description: Strike is the relative strike, expressed as a percentage of the underlying price.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the valuation date.
+- name: IVBid
+  type: FLOAT
+  nullable: true
+  description: IVBid is the implied volatility of the bid price.
+- name: IVAsk
+  type: FLOAT
+  nullable: true
+  description: IVAsk is the implied volatility of the ask price.
+- name: IVMid
+  type: FLOAT
+  nullable: true
+  description: IVMid is the implied volatility of the mid price.
+- name: Delta
+  type: FLOAT
+  nullable: true
+  description: Delta is the delta corresponding to the strike, in call-equivalent terms.
+- name: Confidence
+  type: FLOAT
+  nullable: true
+  description: Confidence is the confidence index for mid data, expressed as a decimal between 0 and 1.
+---
+table: qa_hanweck.OVSImpVolEXDR
+domain: derivatives
+description: EXDR Implied Volatility | This table contains Expiration Date Delta-Relative (EXDR) interpolated surface for
+  each underlying equity.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the equity identifier provided by the vendor.
+- name: Delta
+  type: SMALLINT
+  nullable: false
+  description: Delta is the delta, expressed as a percentage in call-equivalent terms.
+- name: ExpiryDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: ExpiryDate is the listed expiration date.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the valuation date.
+- name: IVBid
+  type: FLOAT
+  nullable: true
+  description: IVBid is the implied volatility of the bid price.
+- name: IVAsk
+  type: FLOAT
+  nullable: true
+  description: IVAsk is the implied volatility of the ask price.
+- name: IVMid
+  type: FLOAT
+  nullable: true
+  description: IVMid is the implied volatility of the mid price.
+- name: Strike
+  type: FLOAT
+  nullable: true
+  description: Strike is the relative strike corresponding to the delta, expressed as a percentage of the underlying price.
+- name: Confidence
+  type: FLOAT
+  nullable: true
+  description: Confidence is the confidence index for mid data, expressed as a decimal between 0 and 1. LSEG Quantitative
+    Analytics Database Schema for Hanweck Options 10
+---
+table: qa_hanweck.OVSImpVolEXPR
+domain: derivatives
+description: EXPR Implied Volatility | This table contains daily Expiration Date Price-Relative (EXPR) interpolated surface
+  for each underlying equity.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the equity identifier provided by the vendor.
+- name: Strike
+  type: SMALLINT
+  nullable: false
+  description: Strike is the relative strike, expressed as a percentage of the underlying price.
+- name: ExpiryDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: ExpiryDate is the listed expiration date.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the valuation date.
+- name: IVBid
+  type: FLOAT
+  nullable: true
+  description: IVBid is the implied volatility of the bid price.
+- name: IVAsk
+  type: FLOAT
+  nullable: true
+  description: IVAsk is the implied volatility of the ask price.
+- name: IVMid
+  type: FLOAT
+  nullable: true
+  description: IVMid is the implied volatility of the mid price.
+- name: Delta
+  type: FLOAT
+  nullable: true
+  description: Delta is the delta corresponding to the strike, in call-equivalent terms.
+- name: Confidence
+  type: FLOAT
+  nullable: true
+  description: Confidence is the confidence index for mid data, expressed as a decimal between 0 and 1.
+---
+table: qa_hanweck.OVSOptChg
+domain: derivatives
+description: Option Contract Information | This table contains identification information and option terms for each option
+  contract. This table also tracks
+update_cadence: Daily
+columns:
+- name: OptCode
+  type: INTEGER
+  nullable: false
+  description: OptCode is the option contract identifier provided by the vendor.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the start date for the data set (January 1, 1998 or later).
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the end date for the data set. The value 12/31/2078 (2078-12-31 00:00:00) in the feed is stored
+    as Null in the LSEG database. A null indicates current data.
+- name: PutCallCode
+  type: char(1)
+  nullable: false
+  description: 'PutCallCode is the put or call indicator, which can be: – P = Put – C = Call OVSOptChg.PutCallCode cross-references
+    with OVSDesc.Code where Type_ = 3.'
+- name: StrikePrice
+  type: FLOAT
+  nullable: false
+  description: StrikePrice is the strike price.
+- name: ExpDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: ExpDate is the expiration date, or the original expiration date in the case of an accelerated expiration.
+- name: Code
+  type: INTEGER
+  nullable: true
+  description: Code is the equity identifier.
+- name: OpraTicker
+  type: varchar(6)
+  nullable: false
+  description: 'OpraTicker is the ticker symbol formerly used by OPRA. Note: This field is obsolete as of February 12, 2010
+    due to a change in option symbology.'
+- name: OSITicker
+  type: varchar(21)
+  nullable: true
+  description: OSITicker is the concatenated OSI series key.
+- name: OpraRoot
+  type: varchar(6)
+  nullable: false
+  description: OpraRoot is the root ticker symbol.
+- name: OptTypeCode
+  type: varchar(4)
+  nullable: true
+  description: 'OptTypeCode is the option type, which can be: – STAN = Standard LSEG Quantitative Analytics Database Schema
+    for Hanweck Options 11'
+- name: ExerciseCode
+  type: char(1)
+  nullable: false
+  description: 'ExerciseCode is the exercise style code, which can be: – A = American – E = European OVSOptChg.ExerciseCode
+    cross-references with OVSDesc.Code where Type_ = 4.'
+- name: UdlTypeCode
+  type: char(1)
+  nullable: true
+  description: 'UdlTypeCode is the underlying security type, which can be: – E = Equity – I = Index OVSOptChg.UdlTypeCode
+    cross-references with OVSDesc.Code where Type_ = 5.'
+- name: Multiplier
+  type: FLOAT
+  nullable: true
+  description: Multiplier is the premium or strike multiplier.
+- name: Units
+  type: FLOAT
+  nullable: true
+  description: Units is the deliverable units. It is NULL if the basket identifier is populated.
+- name: Cash
+  type: FLOAT
+  nullable: true
+  description: Cash is the deliverable cash. It is NULL if the basket identifier is populated.
+- name: BasketCode
+  type: INTEGER
+  nullable: true
+  description: BasketCode is the non-standard deliverable basket identifier. It is populated only when the option delivers
+    more than one stock, a stock other than the equity identifier, or other non-standard deliverables.
+- name: CorpActDesc
+  type: varchar(40)
+  nullable: true
+  description: CorpActDesc is a textual reference describing what caused the option to change.
+- name: AcclExpDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: AcclExpDate is the accelerated expiration date.
+join_hints:
+- to: OVSDesc
+  evidence: 'PutCallCode char(1) N PutCallCode is the put or call indicator, which can be: – P = Put – C = Call OVSOptChg.PutCallCode
+    cross-references with OVSDesc.Code where Type_ = 3.'
+  type: cross_reference
+- to: OVSDesc
+  evidence: 'ExerciseCode char(1) N ExerciseCode is the exercise style code, which can be: – A = American – E = European OVSOptChg.ExerciseCode
+    cross-references with OVSDesc.Code where Type_ = 4.'
+  type: cross_reference
+- to: OVSDesc
+  evidence: 'UdlTypeCode char(1) Y UdlTypeCode is the underlying security type, which can be: – E = Equity – I = Index OVSOptChg.UdlTypeCode
+    cross-references with OVSDesc.Code where Type_ = 5.'
+  type: cross_reference
+---
+table: qa_hanweck.OVSOptInfo
+domain: derivatives
+description: Option Contract Identification and Option Terms | This table contains the latest identification information and
+  option terms for each option contract. This table stores | records from the OVSOptChg table where the EndDate is null for
+  active contracts. For expired contracts without | any record in the OVSOptChg table where the EndDate is null, the record
+  with the latest EndDate is stored.
+update_cadence: Daily
+columns:
+- name: OptCode
+  type: INTEGER
+  nullable: false
+  description: OptCode is the option contract identifier provided by the vendor.
+- name: PutCallCode
+  type: char(1)
+  nullable: false
+  description: 'PutCallCode is the put or call indicator, which can be: – P = Put – C = Call OVSOptInfo.PutCallCode cross-references
+    with OVSDesc.Code where Type_ = 3.'
+- name: StrikePrice
+  type: FLOAT
+  nullable: false
+  description: StrikePrice is the strike price.
+- name: ExpDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: ExpDate is the expiration date, or the original expiration date in the case of an accelerated expiration.
+- name: Code
+  type: INTEGER
+  nullable: true
+  description: Code is the equity identifier.
+- name: OpraTicker
+  type: varchar(6)
+  nullable: false
+  description: 'OpraTicker is the ticker symbol formerly used by OPRA. Note: This field is obsolete as of February 12, 2010
+    due to a change in option symbology.'
+- name: OSITicker
+  type: varchar(21)
+  nullable: true
+  description: OSITicker is the concatenated OSI series key.
+- name: OpraRoot
+  type: varchar(6)
+  nullable: false
+  description: OpraRoot is the root ticker symbol. LSEG Quantitative Analytics Database Schema for Hanweck Options 12
+- name: OptTypeCode
+  type: varchar(4)
+  nullable: true
+  description: 'OptTypeCode is the option type, which can be: – STAN = Standard – BINY = Binary – CEBO = Credit Event Binary
+    Options – SDO = Special Dated Option OVSOptInfo.OptTypeCode cross-references with OVSDesc.Code where Type_ = 2.'
+- name: ExerciseCode
+  type: char(1)
+  nullable: false
+  description: 'ExerciseCode is the exercise style code, which can be: – A = American – E = European OVSOptInfo.ExerciseCode
+    cross-references with OVSDesc.Code where Type_ = 4.'
+- name: UdlTypeCode
+  type: char(1)
+  nullable: true
+  description: 'UdlTypeCode is the underlying security type, which can be: – E = Equity – I = Index OVSOptInfo.UdlTypeCode
+    cross-references with OVSDesc.Code where Type_ = 5.'
+- name: Multiplier
+  type: FLOAT
+  nullable: true
+  description: Multiplier is the premium or strike multiplier.
+- name: Units
+  type: FLOAT
+  nullable: true
+  description: Units is the deliverable units. It is NULL if the basket identifier is populated.
+- name: Cash
+  type: FLOAT
+  nullable: true
+  description: Cash is the deliverable cash. It is NULL if the basket identifier is populated.
+- name: BasketCode
+  type: INTEGER
+  nullable: true
+  description: BasketCode is the non-standard deliverable basket identifier. It is populated only when the option delivers
+    more than one stock, a stock other than the equity identifier, or other non-standard deliverables.
+- name: CorpActDesc
+  type: varchar(40)
+  nullable: true
+  description: CorpActDesc is a textual reference describing what caused the option to change.
+- name: AcclExpDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: AcclExpDate is the accelerated expiration date.
+join_hints:
+- to: OVSDesc
+  evidence: 'PutCallCode char(1) N PutCallCode is the put or call indicator, which can be: – P = Put – C = Call OVSOptInfo.PutCallCode
+    cross-references with OVSDesc.Code where Type_ = 3.'
+  type: cross_reference
+- to: OVSDesc
+  evidence: 'ExerciseCode char(1) N ExerciseCode is the exercise style code, which can be: – A = American – E = European OVSOptInfo.ExerciseCode
+    cross-references with OVSDesc.Code where Type_ = 4.'
+  type: cross_reference
+- to: OVSDesc
+  evidence: 'UdlTypeCode char(1) Y UdlTypeCode is the underlying security type, which can be: – E = Equity – I = Index OVSOptInfo.UdlTypeCode
+    cross-references with OVSDesc.Code where Type_ = 5.'
+  type: cross_reference
+---
+table: qa_hanweck.OVSOptPrc
+domain: derivatives
+description: Option Contract Pricing Data | This table contains daily, end-of-day composite price data for each option contract.
+update_cadence: Daily
+columns:
+- name: OptCode
+  type: INTEGER
+  nullable: false
+  description: OptCode is the option contract identifier provided by the vendor.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the price date.
+- name: ExchCode
+  type: TINYINT
+  nullable: false
+  description: 'ExchCode is the exchange code, which can be: – 32 = NBBO – 99 = Composite BBO calculated from exchange level
+    history Only one exchange code is provided per option ID and price date. OVSOptPrc.ExchCode cross-references with OVSCode.Code
+    where Type_ = 9.'
+- name: Close_
+  type: FLOAT
+  nullable: true
+  description: Close_ is the closing price.
+- name: High
+  type: FLOAT
+  nullable: true
+  description: High is the high price.
+- name: Low
+  type: FLOAT
+  nullable: true
+  description: Low is the low price.
+- name: Open_
+  type: FLOAT
+  nullable: true
+  description: Open_ is the open price.
+- name: Volume
+  type: INTEGER
+  nullable: true
+  description: Volume is the volume of the price.
+- name: Bid
+  type: FLOAT
+  nullable: true
+  description: Bid is the bid price. LSEG Quantitative Analytics Database Schema for Hanweck Options 13
+- name: Ask
+  type: FLOAT
+  nullable: true
+  description: Ask is the ask price.
+- name: OpenInt
+  type: INTEGER
+  nullable: true
+  description: OpenInt is the open interest, as reported on the price date for the previous business day. Open interest is
+    reported one day in arrears by the option exchanges.
+---
+table: qa_hanweck.OVSRate
+domain: derivatives
+description: Interest Rate Term Structures | This table contains daily LIBOR-based (London Interbank Offered Rate) interest
+  rate term structures for
+update_cadence: Daily
+columns:
+- name: RateCode
+  type: SMALLINT
+  nullable: false
+  description: RateCode is the rate identifier provided by the vendor. OVSRate.RateCode cross-references with OVSCode.Code
+    where Type_ = 4.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the valuation date.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the interest rate.
+---
+table: qa_hanweck.OVSSecAdj
+domain: derivatives
+description: Adjustment Factor Information | This table contains adjustment factors that can be applied to OVSSecPrc data
+  to restate values relative to a
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the equity identifier provided by the vendor.
+- name: AdjTypeCode
+  type: TINYINT
+  nullable: false
+  description: AdjTypeCode is the adjustment type. OVSSecAdj.AdjTypeCode cross-references with OVSCode.Code where Type_ =
+    5.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the starting effective date for the adjustment (January 1, 1998 or later).
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the ending effective date for the adjustment. The value 12/31/2078 (2078-12-31 00:00:00) in the
+    feed is stored as Null in the LSEG database. A null indicates current data.
+- name: Rate
+  type: FLOAT
+  nullable: false
+  description: Rate is the rate of the adjustment for the day.
+- name: Factor
+  type: FLOAT
+  nullable: false
+  description: Factor is the cumulative adjustment factor updated for all relevant adjustment rates. The first factor is 1.
+    LSEG Quantitative Analytics Database Schema for Hanweck Options 14
+---
+table: qa_hanweck.OVSSecChg
+domain: derivatives
+description: Security Attributes and Changes | This table is the master history table for all securities included in the OVS
+  database. This table stores the latest
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the equity identifier provided by the vendor.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the starting effective date for the adjustment (January 1, 1998 or later).
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the ending effective date for the adjustment. The value 12/31/2078 (2078-12-31 00:00:00) in the
+    feed is stored as Null in the LSEG database. A null indicates current data.
+- name: Issuer
+  type: varchar(30)
+  nullable: true
+  description: Issuer is the issuer description.
+- name: Issue
+  type: varchar(20)
+  nullable: true
+  description: Issue is the issue description.
+- name: Ticker
+  type: varchar(12)
+  nullable: true
+  description: Ticker is the ticker. For all exchanges, tickers are represented using a dot delimiter between the root symbol
+    and the suffixes. Multiple dot delimiters are used if multiple suffixes apply (for example, ABC.PR.A, ABCD.X).
+---
+table: qa_hanweck.OVSSecCorpAct
+domain: derivatives
+description: Pricing-related Corporate Actions | This table contains information for pricing-related corporate actions, including
+  cash and stock dividends, and
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the equity identifier provided by the vendor.
+- name: AnnSeq
+  type: INTEGER
+  nullable: false
+  description: AnnSeq is the announcement sequence that uniquely identifies each announcement made by the company in question.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the starting effective date for the adjustment (January 1, 1998 or later).
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: EndDate is the ending effective date for the adjustment. The value 12/31/2078 (2078-12-31 00:00:00) in the
+    feed is stored as Null in the LSEG database. A null indicates current data.
+- name: ExDivDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: ExDivDate is the ex-dividend date.
+- name: RecDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: RecDate is the record date.
+- name: PayDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: PayDate is the payment date.
+- name: Rate
+  type: FLOAT
+  nullable: false
+  description: Rate is the rate.
+- name: EventTypeCode
+  type: TINYINT
+  nullable: false
+  description: EventTypeCode describes the nature of the event. OVSSecCorpAct.EventTypeCode cross-references with OVSCode.Code
+    where Type_ = 2.
+- name: SuplPymtTypeCode
+  type: TINYINT
+  nullable: false
+  description: SuplPymtTypeCode describes the nature of the payment. OVSSecCorpAct.SuplPymtTypeCode cross-references with
+    OVSCode.Code where Type_ = 3.
+- name: DivFreqCode
+  type: char(3)
+  nullable: true
+  description: DivFreqCode is the indicated dividend frequency. OVSSecCorpAct.DivFreqCode cross-references with OVSDesc.Code
+    where Type_ = 6. LSEG Quantitative Analytics Database Schema for Hanweck Options 15
+- name: IAD
+  type: FLOAT
+  nullable: true
+  description: IAD is the indicated annual dividend amount.
+- name: IADMethodCode
+  type: char(1)
+  nullable: true
+  description: IADMethodCode identifies the methodology that was used to calculate the indicated annual dividend (IAD). OVSSecCorpAct.IADMethodCode
+    cross-references with OVSDesc.Code where Type_ = 1.
+- name: Desc_
+  type: varchar(80)
+  nullable: true
+  description: Desc_ provides additional details for the corporate action.
+---
+table: qa_hanweck.OVSSecHVol
+domain: derivatives
+description: Close-to-close Realized Volatility | This table contains close-to-close realized volatility. The VolType field
+  shows how the historical volatility is
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the equity identifier provided by the vendor.
+- name: VolTypeCode
+  type: TINYINT
+  nullable: false
+  description: VolTypeCode describes how the volatility is calculated. OVSSecHVol.VolTypeCode cross-references with OVSCode.Code
+    where Type_ = 1.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the pricing date.
+- name: Volatility
+  type: FLOAT
+  nullable: true
+  description: Volatility is the realized volatility.
+---
+table: qa_hanweck.OVSSecInfo
+domain: derivatives
+description: Security Information | This table is the master table for all securities included in the OVS database. This table
+  stores the latest values of | attributes, like the issue name and issuer name, for each security. This table also stores
+  records from the | OVSSecChg table where the EndDate is null, the record is stored with the latest EndDate.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the equity identifier provided by the vendor.
+- name: Issuer
+  type: varchar(30)
+  nullable: true
+  description: Issuer is the issuer description.
+- name: Issue
+  type: varchar(20)
+  nullable: true
+  description: Issue is the issue description.
+- name: Ticker
+  type: varchar(12)
+  nullable: true
+  description: Ticker is the ticker. For all exchanges, tickers are represented using a dot delimiter between the root symbol
+    and the suffixes. Multiple dot delimiters are used if multiple suffixes apply (for example, ABC.PR.A, ABCD.X).
+---
+table: qa_hanweck.OVSSecPrc
+domain: derivatives
+description: Security Pricing Data | This table contains daily, end-of-day composite price data for each underlying security
+  or index.
+update_cadence: Daily
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the equity identifier provided by the vendor.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Date_ is the pricing date.
+- name: Close_
+  type: FLOAT
+  nullable: true
+  description: Close_ is the closing price.
+- name: High
+  type: FLOAT
+  nullable: true
+  description: High is the high price.
+- name: Low
+  type: FLOAT
+  nullable: true
+  description: Low is the low price.
+- name: Open_
+  type: FLOAT
+  nullable: true
+  description: Open_ is the open price.
+- name: Volume
+  type: BIGINT
+  nullable: true
+  description: Volume is the volume of the price.
+- name: Bid
+  type: FLOAT
+  nullable: true
+  description: Bid is the bid price.
+- name: Ask
+  type: FLOAT
+  nullable: true
+  description: Ask is the ask price.
+- name: TotRtn
+  type: FLOAT
+  nullable: true
+  description: TotRtn is the total return index for the issuer. LSEG Quantitative Analytics Database Schema for Hanweck Options
+    Copyright © 2024 London Stock Exchange Group plc and its group of companies (LSEG) and/or its affiliates. All rights reserved.
+    The LSEG content received through this service is the intellectual property of LSEG or its third party suppliers. Republicati
+    on or redistribution of content provided by LSEG is expressly prohibited without the prior written consent of LSEG, except
+    where permi

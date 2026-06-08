@@ -1,0 +1,816 @@
+table: qa_ibes_pit.IBESPITAct
+domain: estimates
+description: This table contains actuals data.
+update_cadence: Weekly
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the security code and is the primary link across I/B/E/S Point-In-Time.
+- name: ActType
+  type: TINYINT
+  nullable: false
+  description: ActType identifies if an actuals is Reported or Restated. Cross- reference IBESPITCode where CodeType = 5.
+- name: Measure
+  type: SMALLINT
+  nullable: false
+  description: The attribute or the financial statement item that the value is for. Cross-reference IBESPITCode where CodeType
+    = 2.
+- name: PerType
+  type: TINYINT
+  nullable: false
+  description: PerType is the code for the Periodicity. Cross-reference IBESPITCode where CodeType = 1.
+- name: PerEndDate
+  type: date
+  nullable: false
+  description: PerEndDate is the day the period ends.
+- name: ActivationDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: ActivationDate is the time the record was added to the I/B/E/S database of record.
+- name: PointDate
+  type: date
+  nullable: false
+  description: PointDate is the point in time date of the record.
+- name: Value
+  type: FLOAT
+  nullable: true
+  description: Value is the amount.
+- name: Currency
+  type: varchar(3)
+  nullable: true
+  description: Currency is the currency the broker submitted the value in.
+- name: AnnounceDate
+  type: date
+  nullable: true
+  description: AnnounceDate is the date the record was announced by the source.
+- name: AnnounceTime
+  type: time
+  nullable: true
+  description: AnnounceTime is the time the record was announced by the source on the AnnounceDate.
+- name: LicFlag
+  type: TINYINT
+  nullable: false
+  description: LicFlag is the license flag.
+---
+table: qa_ibes_pit.IBESPITAncl
+domain: estimates
+description: This table contains ancillary company data.
+update_cadence: Weekly
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the security code and is the primary link across I/B/E/S Point-In-Time.
+- name: PointDate
+  type: date
+  nullable: false
+  description: PointDate is the point in time date of the record.
+- name: Shares
+  type: FLOAT
+  nullable: true
+  description: Shares are the shares outstanding for the ticker.
+- name: ActEPS4QTR
+  type: FLOAT
+  nullable: true
+  description: ACTEPS4QTR is the sum of the last 4 quarterly EPS actual values.
+- name: Stability
+  type: FLOAT
+  nullable: true
+  description: Five-year earnings per share stability measures the consistency of earnings per share growth over the past
+    five years. The lower the number, the more uniform growth has been. Combined with earnings growth data, the stability
+    figure provides a multi- dimensional view of earnings growth over the past five years. Earnings stability is calculated
+    as the mean absolute percentage LSEG Quantitative Analytics I/B/E/S PIT 7
+- name: Growth
+  type: FLOAT
+  nullable: true
+  description: The average annualized earnings per share growth for a company over the past five years. The average annualized
+    growth in EPS for the past five years is calculated by measuring the slope of a least squares curve fit to the logarithm
+    of the reported earnings (a log- linear curve) and is expressed as a percent. If quarterly data are available, the line
+    is fit to the last 21 observations (minimum of 11 observations) of rolling four quarter EPS. The resultant slope is multiplied
+    by four and exponent
+- name: Dividend
+  type: FLOAT
+  nullable: true
+  description: Dividend is the indicated annual dividend.
+- name: DivExDt
+  type: date
+  nullable: true
+  description: DivExDt is the Dividend ExDate for the last period included in the Dividend.
+- name: CumSplitFactor
+  type: FLOAT
+  nullable: true
+  description: CumSplitFactor is the cumulative split factor.
+- name: LicFlag
+  type: TINYINT
+  nullable: false
+  description: LicFlag is the license flag.
+---
+table: qa_ibes_pit.IBESPITBrokerMap
+domain: estimates
+description: This table contains broker mapping data.
+update_cadence: Weekly
+columns:
+- name: BrokerCode
+  type: INTEGER
+  nullable: false
+  description: BrokerCode is the code that identifies the broker.
+- name: BrokerID
+  type: varchar(8)
+  nullable: false
+  description: BrokerID is the I/B/E/S outorg_id.
+- name: BrokerName
+  type: varchar(40)
+  nullable: true
+  description: BrokerName is the name of the broker.
+- name: LicFlag
+  type: TINYINT
+  nullable: false
+  description: LicFlag is the license flag.
+---
+table: qa_ibes_pit.IBESPITBroker
+domain: estimates
+description: This table contains broker detail data.
+update_cadence: Weekly
+columns:
+- name: BrokerCode
+  type: INTEGER
+  nullable: false
+  description: BrokerCode is the code that identifies the broker.
+- name: PointDate
+  type: date
+  nullable: false
+  description: PointDate is the point in time date of the record.
+- name: EntryDate
+  type: date
+  nullable: true
+  description: EntryDate is the date the record was added to the database of record.
+- name: EntryTime
+  type: time
+  nullable: true
+  description: EntryTime is the time the record was added to the database of record on the EntryDate. LSEG Quantitative Analytics
+    I/B/E/S PIT 8
+- name: Name
+  type: varchar(40)
+  nullable: true
+  description: Name is the name of the broker.
+- name: Status
+  type: varchar(3)
+  nullable: true
+  description: Status is the status flag. Cross-reference IBESPITDesc where CodeType = 9.
+- name: LicFlag
+  type: TINYINT
+  nullable: false
+  description: LicFlag is the license flag.
+---
+table: qa_ibes_pit.IBESPITCode
+domain: estimates
+description: This table contains code mapping data.
+update_cadence: As needed
+columns:
+- name: CodeType
+  type: TINYINT
+  nullable: false
+  description: The type of code (e.g., Measure, Period), full list available under CodeType = 0.
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the security code and is the primary link across I/B/E/S Point-In-Time.
+- name: Description
+  type: varchar(65)
+  nullable: true
+  description: Description is the textual description of the Code.
+---
+table: qa_ibes_pit.IBESPITDesc
+domain: estimates
+description: This table contains descriptor data.
+update_cadence: As needed
+columns:
+- name: CodeType
+  type: TINYINT
+  nullable: false
+  description: The type of code (e.g., Measure, Period), full list available under CodeType = 0.
+- name: Code
+  type: varchar(21)
+  nullable: false
+  description: Code is the security code and is the primary link across I/B/E/S Point-In-Time.
+- name: Description
+  type: varchar(65)
+  nullable: true
+  description: Description is the textual description of the Code.
+---
+table: qa_ibes_pit.IBESPITDetEst
+domain: estimates
+description: This table contains detail estimates data.
+update_cadence: Weekly
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the security code and is the primary link across I/B/E/S Point-In-Time.
+- name: BrokerCode
+  type: INTEGER
+  nullable: false
+  description: BrokerCode is the code that identifies the broker.
+- name: Measure
+  type: SMALLINT
+  nullable: false
+  description: The attribute or the financial statement item that the value is for. Cross-reference IBESPITCode where CodeType
+    = 2.
+- name: PerType
+  type: TINYINT
+  nullable: false
+  description: PerType is the code for the Periodicity. Cross-reference IBESPITCode where CodeType = 1. LSEG Quantitative
+    Analytics I/B/E/S PIT 9
+- name: PerEndDate
+  type: date
+  nullable: false
+  description: PerEndDate is the day the period ends.
+- name: ForecastPer
+  type: TINYINT
+  nullable: false
+  description: ForecastPer is the forecast period of the estimate. Cross-reference IBESPITCode where CodeType = 7.
+- name: ActivationDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: ActivationDate is the time the record was added to the I/B/E/S database of record.
+- name: PointDate
+  type: date
+  nullable: false
+  description: PointDate is the point in time date of the record.
+- name: AnalystName
+  type: varchar(50)
+  nullable: true
+  description: AnalystName is the name of the covering analyst.
+- name: AnalystStartDate
+  type: date
+  nullable: true
+  description: AnalystStartDate is the date the analyst started covering the ticker.
+- name: AnalystStartTime
+  type: time
+  nullable: true
+  description: AnalystStartTime is the time the analyst started covering the ticker on the AnalystStartDate.
+- name: Value
+  type: FLOAT
+  nullable: true
+  description: Value is the amount.
+- name: Currency
+  type: varchar(3)
+  nullable: true
+  description: Currency is the currency the broker submitted the value in.
+- name: CompanyCurrency
+  type: varchar(3)
+  nullable: true
+  description: CompanyCurrency is the default currency of the ticker.
+- name: AnnounceDate
+  type: date
+  nullable: true
+  description: AnnounceDate is the date the record was announced by the source.
+- name: AnnounceTime
+  type: time
+  nullable: true
+  description: AnnounceTime is the time the record was announced by the source on the AnnounceDate.
+- name: ReviewDate
+  type: date
+  nullable: true
+  description: ReviewDate is the date the estimate was confirmed by the broker.
+- name: ReviewTime
+  type: time
+  nullable: true
+  description: ReviewTime is the time the estimate was confirmed by the broker on the ReviewDate.
+- name: Excluded
+  type: BOOLEAN
+  nullable: true
+  description: Excluded identifies if a detail estimate is excluded from the summary calculations.
+- name: Consolidated
+  type: varchar(1)
+  nullable: true
+  description: Consolidated identifies if the esitmates are on a consolidated basis.
+- name: Status
+  type: varchar(1)
+  nullable: true
+  description: Status is the status flag. Cross-reference IBESPITDesc where CodeType = 5.
+- name: ActionFlag
+  type: TINYINT
+  nullable: true
+  description: ActionFlag identifies records that are a Stop, Deleted or a DeleteStop. Cross-reference IBESPITCode where CodeType
+    = 6.
+- name: LicFlag
+  type: TINYINT
+  nullable: false
+  description: LicFlag is the license flag.
+---
+table: qa_ibes_pit.IBESPITDetPtg
+domain: estimates
+description: This table contains detail price target data.
+update_cadence: Weekly
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the security code and is the primary link across I/B/E/S Point-In-Time.
+- name: BrokerCode
+  type: INTEGER
+  nullable: false
+  description: BrokerCode is the code that identifies the broker.
+- name: ActivationDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: ActivationDate is the time the record was added to the I/B/E/S database of record.
+- name: PointDate
+  type: date
+  nullable: false
+  description: PointDate is the point in time date of the record.
+- name: AnalystName
+  type: varchar(50)
+  nullable: true
+  description: AnalystName is the name of the covering analyst.
+- name: Value
+  type: FLOAT
+  nullable: true
+  description: Value is the amount.
+- name: Horizon
+  type: TINYINT
+  nullable: true
+  description: Horizon is the length of time the estimate has been made for.
+- name: Currency
+  type: varchar(3)
+  nullable: true
+  description: Currency is the currency the broker submitted the value in.
+- name: CompanyCurrency
+  type: varchar(3)
+  nullable: true
+  description: CompanyCurrency is the default currency of the ticker.
+- name: AnnounceDate
+  type: date
+  nullable: true
+  description: AnnounceDate is the date the record was announced by the source.
+- name: AnnounceTime
+  type: time
+  nullable: true
+  description: AnnounceTime is the time the record was announced by the source on the AnnounceDate. LSEG Quantitative Analytics
+    I/B/E/S PIT 10
+- name: Status
+  type: varchar(1)
+  nullable: true
+  description: Status is the status flag. Cross-reference IBESPITDesc where CodeType = 5.
+- name: ActionFlag
+  type: TINYINT
+  nullable: true
+  description: ActionFlag identifies records that are a Stop, Deleted or a DeleteStop. Cross-reference IBESPITCode where CodeType
+    = 6.
+- name: LicFlag
+  type: TINYINT
+  nullable: false
+  description: LicFlag is the license flag.
+---
+table: qa_ibes_pit.IBESPITDetRec
+domain: estimates
+description: This table contains detail broker recommendation data.
+update_cadence: Weekly
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the security code and is the primary link across I/B/E/S Point-In-Time.
+- name: BrokerCode
+  type: INTEGER
+  nullable: false
+  description: BrokerCode is the code that identifies the broker.
+- name: ActivationDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: ActivationDate is the time the record was added to the I/B/E/S database of record.
+- name: PointDate
+  type: date
+  nullable: false
+  description: PointDate is the point in time date of the record.
+- name: AnalystName
+  type: varchar(50)
+  nullable: true
+  description: AnalystName is the name of the covering analyst.
+- name: AnalystStartDate
+  type: date
+  nullable: true
+  description: AnalystStartDate is the date the analyst started covering the ticker.
+- name: AnalystStartTime
+  type: time
+  nullable: true
+  description: AnalystStartTime is the time the analyst started covering the ticker on the AnalystStartDate.
+- name: BrokerValue
+  type: varchar(6)
+  nullable: true
+  description: BrokerValue is the numeric recommendation from the broker.
+- name: BrokerText
+  type: varchar(21)
+  nullable: true
+  description: BrokerText is the textual recommendation from the broker.
+- name: IBESCode
+  type: TINYINT
+  nullable: true
+  description: IBESCode is the I/B/E/S standardized numeric for the recommendation.
+- name: IBESText
+  type: varchar(21)
+  nullable: true
+  description: IBESText is the I/B/E/S textual recommendation.
+- name: AnnounceDate
+  type: date
+  nullable: true
+  description: AnnounceDate is the date the record was announced by the source.
+- name: AnnounceTime
+  type: time
+  nullable: true
+  description: AnnounceTime is the time the record was announced by the source on the AnnounceDate.
+- name: ReviewDate
+  type: date
+  nullable: true
+  description: ReviewDate is the date the estimate was confirmed by the broker.
+- name: ReviewTime
+  type: time
+  nullable: true
+  description: ReviewTime is the time the estimate was confirmed by the broker on the ReviewDate.
+- name: Status
+  type: varchar(1)
+  nullable: true
+  description: Status is the status flag. Cross-reference IBESPITDesc where CodeType = 5.
+- name: ActionFlag
+  type: TINYINT
+  nullable: true
+  description: ActionFlag identifies records that are a Stop, Deleted or a DeleteStop. Cross-reference IBESPITCode where CodeType
+    = 6.
+- name: LicFlag
+  type: TINYINT
+  nullable: false
+  description: LicFlag is the license flag. LSEG Quantitative Analytics I/B/E/S PIT 11
+---
+table: qa_ibes_pit.IBESPITExpRptDate
+domain: estimates
+description: This table contains expected report dates data.
+update_cadence: Weekly
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the security code and is the primary link across I/B/E/S Point-In-Time.
+- name: PerType
+  type: TINYINT
+  nullable: false
+  description: PerType is the code for the Periodicity. Cross-reference IBESPITCode where CodeType = 1.
+- name: PerEndDate
+  type: date
+  nullable: false
+  description: PerEndDate is the day the period ends.
+- name: PointDate
+  type: date
+  nullable: false
+  description: PointDate is the point in time date of the record.
+- name: ExpRptDate
+  type: date
+  nullable: true
+  description: ExpRptDate is the date the company is expected to report.
+- name: ExpRptTime
+  type: time
+  nullable: true
+  description: ExpRptTime is the time the company is expected to report on the ExpRptDate.
+- name: LicFlag
+  type: TINYINT
+  nullable: false
+  description: LicFlag is the license flag.
+---
+table: qa_ibes_pit.IBESPITInfo
+domain: estimates
+description: This table contains company info data.
+update_cadence: Weekly
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the security code and is the primary link across I/B/E/S Point-In-Time.
+- name: IBESTicker
+  type: varchar(6)
+  nullable: false
+  description: IBESTicker is the I/B/E/S ticker.
+- name: EstPermID
+  type: BIGINT
+  nullable: false
+  description: EstPermID is the PermID of the unique entity being forecasted or reported on.
+- name: LicFlag
+  type: TINYINT
+  nullable: false
+  description: LicFlag is the license flag.
+---
+table: qa_ibes_pit.IBESPITIssue
+domain: estimates
+description: This table contains issue data.
+update_cadence: Weekly
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the security code and is the primary link across I/B/E/S Point-In-Time.
+- name: PointDate
+  type: date
+  nullable: false
+  description: PointDate is the point in time date of the record.
+- name: CompanyName
+  type: varchar(16)
+  nullable: true
+  description: CompanyName is the name of the company.
+- name: Ticker
+  type: varchar(6)
+  nullable: true
+  description: Ticker is the official exchange ticker symbol.
+- name: HomeMktCode
+  type: varchar(8)
+  nullable: true
+  description: HomeMktCode is the home market code for the instrument.
+- name: Cusip_Sedol
+  type: varchar(8)
+  nullable: true
+  description: Cusip_Sedol is the Cusip or Sedol for the instrument. North American instruments have an 8 character Cusip,
+    and International LSEG Quantitative Analytics I/B/E/S PIT 12
+- name: InstrumentType
+  type: varchar(1)
+  nullable: true
+  description: InstrumentType is the instrument type. Cross-reference IBESPITDesc where CodeType = 6.
+- name: CountryID
+  type: varchar(2)
+  nullable: true
+  description: CountryID is the I/B/E/S home country id. Cross-reference IBESPITDesc where CodeType = 7.
+- name: CountryName
+  type: varchar(16)
+  nullable: true
+  description: CountryName is the name of the home country.
+- name: ExchCode
+  type: varchar(1)
+  nullable: true
+  description: ExchCode is the I/B/E/S exchange code. Cross-reference IBESPITDesc where CodeType = 8.
+- name: ExchangeName
+  type: varchar(32)
+  nullable: true
+  description: ExchangeName is the name of the exchange the instrument trades on.
+- name: TRBC
+  type: BIGINT
+  nullable: true
+  description: TRBC is The Reference Business Classification code.
+- name: SIG_Code
+  type: varchar(6)
+  nullable: true
+  description: SIG_Code in the I/B/E/S Sector/Industry/Group code.
+- name: SectNumber
+  type: TINYINT
+  nullable: true
+  description: SectNumber is the sector number.
+- name: SectName
+  type: varchar(24)
+  nullable: true
+  description: SectName is the sector name.
+- name: IndNumber
+  type: TINYINT
+  nullable: true
+  description: IndNumber is the industry number.
+- name: IndName
+  type: varchar(24)
+  nullable: true
+  description: IndName is the industry name.
+- name: GrpNumber
+  type: TINYINT
+  nullable: true
+  description: GrpNumber is the group number.
+- name: GrpName
+  type: varchar(24)
+  nullable: true
+  description: GrpName is the group name.
+- name: Sp500_Flag
+  type: BOOLEAN
+  nullable: true
+  description: Sp500_Flag identifies companies that are included in the S&P 500 Index.
+- name: LicFlag
+  type: TINYINT
+  nullable: false
+  description: LicFlag is the license flag.
+---
+table: qa_ibes_pit.IBESPITPrice
+domain: estimates
+description: This table contains pricing data.
+update_cadence: Weekly
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the security code and is the primary link across I/B/E/S Point-In-Time.
+- name: PointDate
+  type: date
+  nullable: false
+  description: PointDate is the point in time date of the record.
+- name: Price
+  type: FLOAT
+  nullable: true
+  description: Price is the closing price.
+- name: PriceDate
+  type: date
+  nullable: true
+  description: PriceDate is the date of the price value.
+- name: TotRet1Day
+  type: FLOAT
+  nullable: true
+  description: TotRet1Day is the total return for a one day period.
+- name: Beta
+  type: FLOAT
+  nullable: true
+  description: Beta is a value that measures how the price of the ticker correlates to the market.
+- name: LicFlag
+  type: TINYINT
+  nullable: false
+  description: LicFlag is the license flag. LSEG Quantitative Analytics I/B/E/S PIT 13
+---
+table: qa_ibes_pit.IBESPITSumEst
+domain: estimates
+description: This table contains summary estimates data.
+update_cadence: Weekly
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the security code and is the primary link across I/B/E/S Point-In-Time.
+- name: Measure
+  type: SMALLINT
+  nullable: false
+  description: The attribute or the financial statement item that the value is for. Cross-reference IBESPITCode where CodeType
+    = 2.
+- name: PerType
+  type: TINYINT
+  nullable: false
+  description: PerType is the code for the Periodicity. Cross-reference IBESPITCode where CodeType = 1.
+- name: PerEndDate
+  type: date
+  nullable: false
+  description: PerEndDate is the day the period ends.
+- name: PointDate
+  type: date
+  nullable: false
+  description: PointDate is the point in time date of the record.
+- name: Mean
+  type: FLOAT
+  nullable: true
+  description: Mean is the average of the values.
+- name: EstCount
+  type: TINYINT
+  nullable: true
+  description: EstCount is the number of brokers included in the mean calculation.
+- name: Median
+  type: FLOAT
+  nullable: true
+  description: Median is the median of the values.
+- name: StdDev
+  type: FLOAT
+  nullable: true
+  description: StdDev is the standard deviation.
+- name: High
+  type: FLOAT
+  nullable: true
+  description: High is the largest value when the mean was calculated.
+- name: Low
+  type: FLOAT
+  nullable: true
+  description: Low is the smallest value at the time the mean was calculated.
+- name: Up1Wk
+  type: TINYINT
+  nullable: true
+  description: Up1Wk is the number of brokers who have raised their estimate in the last week.
+- name: Down1Wk
+  type: TINYINT
+  nullable: true
+  description: Down1Wk is the number of brokers who have lowered their estimate in the last week.
+- name: Up4Wk
+  type: TINYINT
+  nullable: true
+  description: Up4Wk is the number of brokers who have raised their estimate in the last 4 weeks.
+- name: Down4Wk
+  type: TINYINT
+  nullable: true
+  description: Down4Wk is the number of brokers who have lowered their estimate in the last 4 weeks.
+- name: Up1Mon
+  type: TINYINT
+  nullable: true
+  description: Up1Mon is the number of brokers who have raised their estimate in the last month.
+- name: Down1Mon
+  type: TINYINT
+  nullable: true
+  description: Down1Mon is the number of brokers who have lowered their estimate in the last month.
+- name: FlashMean
+  type: FLOAT
+  nullable: true
+  description: FlashMean is the mean of the estimates updated in the last 28 days.
+- name: FlashCount
+  type: TINYINT
+  nullable: true
+  description: FlashCount is the count of the estimates updated in the last 28 days.
+- name: FlashStdDev
+  type: FLOAT
+  nullable: true
+  description: FlashStdDev is the standard deviation of the estimates updated in the last 28 days.
+- name: ForecastPer
+  type: varchar(1)
+  nullable: true
+  description: ForecastPer is the forecast period of the estimate. Cross-reference IBESPITCode where CodeType = 7.
+- name: CompanyCurrency
+  type: varchar(3)
+  nullable: true
+  description: CompanyCurrency is the default currency of the ticker.
+- name: LicFlag
+  type: TINYINT
+  nullable: true
+  description: LicFlag is the license flag. LSEG Quantitative Analytics I/B/E/S PIT 14
+---
+table: qa_ibes_pit.IBESPITSumPtg
+domain: estimates
+description: This table contains summary price target data.
+update_cadence: Weekly
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the security code and is the primary link across I/B/E/S Point-In-Time.
+- name: PointDate
+  type: date
+  nullable: false
+  description: PointDate is the point in time date of the record.
+- name: Mean
+  type: FLOAT
+  nullable: true
+  description: Mean is the average of the values.
+- name: PtgCount
+  type: TINYINT
+  nullable: true
+  description: PtgCount is the number of ptg estimates included in the mean.
+- name: Median
+  type: FLOAT
+  nullable: true
+  description: Median is the median of the values.
+- name: StdDev
+  type: FLOAT
+  nullable: true
+  description: StdDev is the standard deviation.
+- name: High
+  type: FLOAT
+  nullable: true
+  description: High is the largest value when the mean was calculated.
+- name: Low
+  type: FLOAT
+  nullable: true
+  description: Low is the smallest value at the time the mean was calculated.
+- name: Up4Wk
+  type: TINYINT
+  nullable: true
+  description: Up4Wk is the number of brokers who have raised their estimate in the last 4 weeks.
+- name: Down4Wk
+  type: TINYINT
+  nullable: true
+  description: Down4Wk is the number of brokers who have lowered their estimate in the last 4 weeks.
+- name: CompanyCurrency
+  type: varchar(3)
+  nullable: true
+  description: CompanyCurrency is the default currency of the ticker.
+- name: LicFlag
+  type: TINYINT
+  nullable: false
+  description: LicFlag is the license flag.
+---
+table: qa_ibes_pit.IBESPITSumRec
+domain: estimates
+description: This table contains summary recommendations data.
+update_cadence: Weekly
+columns:
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is the security code and is the primary link across I/B/E/S Point-In-Time.
+- name: PointDate
+  type: date
+  nullable: false
+  description: PointDate is the point in time date of the record.
+- name: Mean
+  type: FLOAT
+  nullable: true
+  description: Mean is the average of the values.
+- name: RecCount
+  type: TINYINT
+  nullable: true
+  description: RecCount is the number of rec estimates included in the mean.
+- name: Up4Wk
+  type: TINYINT
+  nullable: true
+  description: Up4Wk is the number of brokers who have raised their estimate in the last 4 weeks.
+- name: Down4Wk
+  type: TINYINT
+  nullable: true
+  description: Down4Wk is the number of brokers who have lowered their estimate in the last 4 weeks.
+- name: LicFlag
+  type: TINYINT
+  nullable: false
+  description: LicFlag is the license flag. LSEG Quantitative Analytics I/B/E/S PIT Copyright © 2025 London Stock Exchange
+    Group plc and its group of companies (LSEG) and/or its affiliates. All rights reserved. The LSEG content received through
+    this service is the intellectual property of LSEG or its third party suppliers. Republicati on or redistribution of content
+    provided by LSEG is expressly prohibited without the prior written consent of LSEG, except where permitted by the terms
+    of the relevant LSEG servi

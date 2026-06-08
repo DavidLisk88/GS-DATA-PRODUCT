@@ -1,0 +1,2420 @@
+table: qa_compustat_global.CsgCad
+domain: fundamentals
+description: Compustat Global Annual Period Description | Use this table to retrieve period description data on an annual
+  basis. This data includes adjustment factors,
+columns:
+- name: GVKEY
+  type: INTEGER
+  nullable: false
+  description: 'GVKEY is the Global Company Key. It is a primary key for all companies in all Csg* tables. Use GVKEY with
+    CsgCmp to obtain company-level information, or CsgSec to obtain security-level information. For example, for security
+    mapping, to link to GSecMapX: GSecMapX.vencode = CsgCmp.gvkey where GSecMapX.ventype = 3'
+- name: DATADATE
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DATADATE is the company’s fiscal period end date, or for security-level data it is the trade date for high,
+    low, or close prices. This item is a key field.
+- name: INDFMT
+  type: TINYINT
+  nullable: false
+  description: 'INDFMT denotes whether a company reports in a Financial Services or Industrial format. INDFMT cross-references
+    with CSKEYCODE. INDFMT integer values are: – 5 (INDL Industrial, including manufacturing, retail, construction and other
+    commercial non-financial services.) – 9 (FS Financial Services, including banks, insurance companies, broker or dealers,
+    real estate, and other financial services.) – 16 (ISSUE Issue-level fundamentals.) This item is a key field.'
+- name: DATAFMT
+  type: TINYINT
+  nullable: false
+  description: 'DATAFMT describes the method of data reporting and collection. DATAFMT values for Compustat Global are: –
+    13 (HIST_STD Standardized data collected from the company''s original filing.) – 15 (RST_STD Standardized restated data
+    collected from the company''s subsequent filings.) This item is a key field.'
+- name: CONSOL
+  type: TINYINT
+  nullable: false
+  description: 'CONSOL describes the level of consolidation in the company’s financial statements. Levels of consolidation
+    are: – 6 (C Consolidated – parent and subsidiary combined) – 7 (P Pre-FASB) – 8 (R Pro-forma) – 10 (D Pre-divestiture)
+    LSEG Quantitative Analytics Database Schema for Compustat Global Data 8'
+- name: ACCTSTD
+  type: varchar(9)
+  nullable: true
+  description: ACCTSTD is the accounting standard. ACCTSTD cross-references with CsgRef where CsgCad.acctstd = CsgRef.refcd1
+    and CsgRef.reftype = 2.
+- name: ACQMETH
+  type: varchar(3)
+  nullable: true
+  description: ACQMETH is the acquisition method. It cross-references with CsgRef where CsgCad.acqmeth = CsgRef.refcd1 and
+    CsgRef.reftype = 3.
+- name: ADRR
+  type: FLOAT
+  nullable: true
+  description: ADRR is the company reported unweighted average of total demand deposits for the year, restated up to five
+    years. If no average is reported, then this is the actual figure.
+- name: AJEX
+  type: FLOAT
+  nullable: true
+  description: AJEX is the annual company adjustment factor; it is cumulative by ex-date.
+- name: AJP
+  type: FLOAT
+  nullable: true
+  description: AJP is the annual company adjustment factor, as applied to the dividends per share by payable date; it is cumulative
+    by payable date.
+- name: APDEDATE
+  type: TIMESTAMP(6)
+  nullable: true
+  description: APDEDATE is the actual date the company closes accounting for the period.
+- name: BSPR
+  type: varchar(8)
+  nullable: true
+  description: BSPR is the balance sheet presentation. BSPR cross-references with CsgRef where CsgCad.bspr = CsgRef.refcd1
+    and CsgRef.reftype = 5.
+- name: COMPST
+  type: varchar(8)
+  nullable: true
+  description: COMPST is the comparability status. It cross-references with CsgRef where CsgCad.compst = CsgRef.refcd1 and
+    CsgRef.reftype = 7.
+- name: CURCD
+  type: varchar(4)
+  nullable: true
+  description: CURCD is company ISO currency code. Cross-reference CURCD with CsgRef where CsgCad.compst = CsgRef.refcd1 and
+    CsgRef.reftype = 36.
+- name: CURNCD
+  type: varchar(4)
+  nullable: true
+  description: CURNCD is the native currency in which the company reports its financial data.
+- name: CURRTR
+  type: FLOAT
+  nullable: true
+  description: CURRTR is the exchange rate used to translate non-U.S. currency amounts into U.S. Dollars. The conversion rate
+    is the rate as of the date of the company's balance sheet. When an international company reports in U.S. Dollars, the
+    translation rate is 1.000.
+- name: CURUSCN
+  type: FLOAT
+  nullable: true
+  description: CURUSCN is the exchange rate used to translate Canadian currency into U.S. Dollars, as published in the Federal
+    Reserve period rates. This item is available only when a company reports in both U.S. and Canadian accounting standards.
+- name: FDATE
+  type: TIMESTAMP(6)
+  nullable: true
+  description: FDATE is the date the data is finalized for the year.
+- name: FINAL
+  type: varchar(3)
+  nullable: true
+  description: FINAL indicates that all annual fundamental items are available and have been delivered.
+- name: FYEAR
+  type: SMALLINT
+  nullable: true
+  description: FYEAR is the fiscal year of the current fiscal year-end month. If the current fiscal year-end month falls in
+    January through May, this item is the current calendar year minus 1 year. If the current fiscal year-end month falls in
+    June through December, this item is the current calendar year.
+- name: FYR
+  type: TINYINT
+  nullable: true
+  description: FYR is the fiscal year-end month. This item is a key field.
+- name: ISMOD
+  type: SMALLINT
+  nullable: true
+  description: ISMOD is the income statement model number. It cross-references with CsgRef where CsgCad.compst = CsgRef.refcd1
+    and CsgRef.reftype = 17.
+- name: OGM
+  type: varchar(9)
+  nullable: true
+  description: OGM is the Oil and Gas Method. OGM refers to the method of revenue reporting used by the oil and gas company.
+- name: PDATE
+  type: TIMESTAMP(6)
+  nullable: true
+  description: PDATE is the preliminary date the data for the company is updated for that year.
+- name: PDDUR
+  type: TINYINT
+  nullable: true
+  description: PDDUR is the period duration (number of months) covered by the company’s annual report income statement. This
+    figure may not be available for all companies.
+- name: SCF
+  type: SMALLINT
+  nullable: true
+  description: SCF is the cash flow format. Cross-reference with CsgRef where CsgCad.scf = CsgRef.refcd1 and CsgRef = 6.
+- name: SRC
+  type: SMALLINT
+  nullable: true
+  description: SRC is the source document. Cross-reference SRC with CsgRef where CsgCad.compst = CsgRef.refcd1 and CsgRef.reftype
+    = 10.
+- name: STALT
+  type: varchar(3)
+  nullable: true
+  description: STALT is the status alert. Cross-reference with CsgRef where CsgCad.compst = CsgRef.refcd1 and CsgRef.reftype
+    = 30.
+- name: UDPL
+  type: varchar(9)
+  nullable: true
+  description: UDPL is the liberalized depreciation code used by a utility company. This item identifies the method used to
+    account for liberalized depreciation. If 51% of its liberalized depreciation is deferred, it is categorized as Normal.
+    If 51% of its liberalized depreciation is flowed through, it is categorized as Flowed Through. LSEG Quantitative Analytics
+    Database Schema for Compustat Global Data 9
+- name: UPD
+  type: SMALLINT
+  nullable: true
+  description: UPD is the update code. Cross-reference with CsgRef where CsgCad.compst = CsgRef.refcd1 and CsgRef.reftype
+    = 33.
+join_hints:
+- to: CSKEYCODE
+  evidence: INDFMT cross-references with CSKEYCODE.
+  type: cross_reference
+- to: CsgRef
+  evidence: ACCTSTD cross-references with CsgRef where CsgCad.acctstd = CsgRef.refcd1 and CsgRef.reftype = 2.
+  type: cross_reference
+- to: CsgRef
+  evidence: BSPR cross-references with CsgRef where CsgCad.bspr = CsgRef.refcd1 and CsgRef.reftype = 5.
+  type: cross_reference
+---
+table: qa_compustat_global.CSGCAF1
+domain: fundamentals
+description: Compustat Global Company Annual Fundamentals 1 | Use CSGCAF1 in conjunction with CsgCad to retrieve annual fundamental
+  company data. This table includes
+columns:
+- name: GVKEY
+  type: INTEGER
+  nullable: false
+  description: 'GVKEY is the Global Company Key. It is a primary key for all companies in all Csg* tables. Use GVKEY with
+    CsgCmp to obtain company-level information, or CsgSec to obtain security-level information. For example, for security
+    mapping, to link to GSecMapX: GSecMapX.vencode = CsgCmp.gvkey where GSecMapX.ventype = 3'
+- name: DATADATE
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DATADATE is the company’s fiscal period end date. For security-level data, it is the trade date for high, low,
+    or close prices. This item is a key field.
+- name: INDFMT
+  type: TINYINT
+  nullable: false
+  description: 'INDFMT denotes whether a company reports in a Financial Services or Industrial format. INDFMT cross-references
+    with CSKEYCODE. INDFMT integer values are: – 5 (INDL Industrial, including manufacturing, retail, construction and other
+    commercial non-financial services.) – 9 (FS Financial Services, including banks, insurance companies, broker or dealers,
+    real estate, and other financial services.) – 16 (ISSUE Issue-level fundamentals.) This item is a key field.'
+- name: DATAFMT
+  type: TINYINT
+  nullable: false
+  description: 'DATAFMT describes the method of data reporting and collection. DATAFMT values for Compustat Global are: –
+    13 (HIST_STD Standardized data collected from the company''s original filing.) – 15 (RST_STD Standardized restated data
+    collected from the company''s subsequent filings.) This item is a key field.'
+- name: CONSOL
+  type: TINYINT
+  nullable: false
+  description: 'CONSOL describes the level of consolidation in the company’s financial statements. Levels of consolidation
+    are: – 6 (C Consolidated – parent and subsidiary combined) – 7 (P Pre-FASB) – 8 (R Pro-forma) – 10 (D Pre-divestiture)
+    – 14 (N Non-consolidated) This item is a key field. CONSOL cross-references with CSKEYCODE where CONSOL = CSKEYCODE.Code.'
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item identifies standardized fundamental data with related analyst notes or transparency. Cross reference Item
+    with CsgItm. Item is a key field.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the raw value provided by Compustat.
+- name: DATACODE
+  type: SMALLINT
+  nullable: true
+  description: 'DATACODE indicates non-normal values. DATACODE values are: – 0 (Normal) – 1 (Not available) – 2 (Semi-annual
+    figure) – 3 (Annual figure) – 4 (Combined figure) LSEG Quantitative Analytics Database Schema for Compustat Global Data
+    10'
+join_hints:
+- to: CSKEYCODE
+  evidence: INDFMT cross-references with CSKEYCODE.
+  type: cross_reference
+- to: CSKEYCODE
+  evidence: CONSOL cross-references with CSKEYCODE where CONSOL = CSKEYCODE.Code.
+  type: cross_reference
+---
+table: qa_compustat_global.CSGCAF2
+domain: fundamentals
+description: Compustat Global Company Annual Fundamentals 2 | Use CSGCAF2 in conjunction with CsgCad to retrieve annual fundamental
+  company data. This table includes
+columns:
+- name: GVKEY
+  type: INTEGER
+  nullable: false
+  description: 'GVKEY is the Global Company Key. It is a primary key for all companies in all Csg* tables. Use GVKEY with
+    CsgCmp to obtain company-level information, or CsgSec to obtain security-level information. For example, for security
+    mapping, to link to GSecMapX: GSecMapX.vencode = CsgCmp.gvkey where GSecMapX.ventype = 3'
+- name: DATADATE
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DATADATE is the company’s fiscal period end date. For security-level data, it is the trade date for high, low,
+    or close prices. This item is a key field.
+- name: INDFMT
+  type: TINYINT
+  nullable: false
+  description: 'INDFMT denotes whether a company reports in a Financial Services or Industrial format. INDFMT cross-references
+    with CSKEYCODE. INDFMT integer values are: – 5 (INDL Industrial, including manufacturing, retail, construction and other
+    commercial non-financial services.) – 9 (FS Financial Services, including banks, insurance companies, broker or dealers,
+    real estate, and other financial services.) – 16 (ISSUE Issue-level fundamentals.) This item is a key field.'
+- name: DATAFMT
+  type: TINYINT
+  nullable: false
+  description: 'DATAFMT describes the method of data reporting and collection. DATAFMT values for Compustat Global are: –
+    13 (HIST_STD Standardized data collected from the company''s original filing.) – 15 (RST_STD Standardized restated data
+    collected from the company''s subsequent filings.) This item is a key field.'
+- name: CONSOL
+  type: TINYINT
+  nullable: false
+  description: 'CONSOL describes the level of consolidation in the company’s financial statements. Levels of consolidation
+    are: – 6 (C Consolidated – parent and subsidiary combined) – 7 (P Pre-FASB) – 8 (R Pro-forma) – 10 (D Pre-divestiture)
+    – 14 (N Non-consolidated) This item is a key field. CONSOL cross-references with CSKEYCODE where CONSOL = CSKEYCODE.Code.'
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item identifies standardized fundamental data with related analyst notes or transparency. Cross reference Item
+    with CsgItm. Item is a key field.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the raw value provided by Compustat.
+- name: DATACODE
+  type: SMALLINT
+  nullable: true
+  description: 'DATACODE indicates non-normal values. DATACODE values are: – 0 (Normal) – 1 (Not available) LSEG Quantitative
+    Analytics Database Schema for Compustat Global Data 11'
+join_hints:
+- to: CSKEYCODE
+  evidence: INDFMT cross-references with CSKEYCODE.
+  type: cross_reference
+- to: CSKEYCODE
+  evidence: CONSOL cross-references with CSKEYCODE where CONSOL = CSKEYCODE.Code.
+  type: cross_reference
+---
+table: qa_compustat_global.CSGCAFNT
+domain: fundamentals
+description: Compustat Global Company Annual Fundamentals
+---
+table: qa_compustat_global.Footnotes
+domain: fundamentals
+description: Use this table to retrieve footnotes for a value.
+columns:
+- name: GVKEY
+  type: INTEGER
+  nullable: false
+  description: 'GVKEY is the Global Company Key. It is a primary key for all companies in all Csg* tables. Use GVKEY with
+    CsgCmp to obtain company-level information, or CsgSec to obtain security-level information. For example, for security
+    mapping, to link to GSecMapX: GSecMapX.vencode = CsgCmp.gvkey where GSecMapX.ventype = 3'
+- name: DATADATE
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DATADATE is the company’s fiscal period end date. For security-level data, it is the trade date for high, low,
+    or close prices. This item is a key field.
+- name: INDFMT
+  type: TINYINT
+  nullable: false
+  description: 'INDFMT denotes whether a company reports in a Financial Services or Industrial format. INDFMT cross-references
+    with CSKEYCODE. INDFMT integer values are: – 5 (INDL Industrial, including manufacturing, retail, construction and other
+    commercial non-financial services.) – 9 (FS Financial Services, including banks, insurance companies, broker or dealers,
+    real estate, and other financial services.) – 16 (ISSUE Issue-level fundamentals.) This item is a key field.'
+- name: DATAFMT
+  type: TINYINT
+  nullable: false
+  description: 'DATAFMT describes the method of data reporting and collection. DATAFMT values for Compustat Global are: –
+    13 (HIST_STD Standardized data collected from the company''s original filing.) – 15 (RST_STD Standardized restated data
+    collected from the company''s subsequent filings.) This item is a key field.'
+- name: CONSOL
+  type: TINYINT
+  nullable: false
+  description: 'CONSOL describes the level of consolidation in the company’s financial statements. Levels of consolidation
+    are: – 6 (C Consolidated – parent and subsidiary combined) – 7 (P Pre-FASB) – 8 (R Pro-forma) – 10 (D Pre-divestiture)
+    – 14 (N Non-consolidated) This item is a key field. CONSOL cross-references with CSKEYCODE where CONSOL = CSKEYCODE.Code.'
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item identifies standardized fundamental data with related analyst notes or transparency. Cross reference Item
+    with CsgItm. Item is a key field.
+- name: VALUE_
+  type: varchar(9)
+  nullable: true
+  description: VALUE_ is the raw value provided by Compustat. LSEG Quantitative Analytics Database Schema for Compustat Global
+    Data 12
+join_hints:
+- to: CSKEYCODE
+  evidence: INDFMT cross-references with CSKEYCODE.
+  type: cross_reference
+- to: CSKEYCODE
+  evidence: CONSOL cross-references with CSKEYCODE where CONSOL = CSKEYCODE.Code.
+  type: cross_reference
+---
+table: qa_compustat_global.CsgCau
+domain: fundamentals
+description: Compustat Global Company Auditor Record | Use this table to retrieve annual company statement auditor information,
+  including auditor opinion.
+columns:
+- name: GVKEY
+  type: INTEGER
+  nullable: false
+  description: 'GVKEY is the Global Company Key. It is a primary key for all companies in all Csg* tables. Use GVKEY with
+    CsgCmp to obtain company-level information, or CsgSec to obtain security-level information. For example, for security
+    mapping, to link to GSecMapX: GSecMapX.vencode = CsgCmp.gvkey where GSecMapX.ventype = 3'
+- name: DATADATE
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DATADATE is the company’s fiscal period end date. For security-level data, it is the trade date for high, low,
+    or close prices. This item is a key field.
+- name: INDFMT
+  type: TINYINT
+  nullable: false
+  description: 'INDFMT denotes whether a company reports in a Financial Services or Industrial format. INDFMT cross-references
+    with CSKEYCODE. INDFMT integer values are: – 5 (INDL Industrial, including manufacturing, retail, construction and other
+    commercial non-financial services.) – 9 (FS Financial Services, including banks, insurance companies, broker or dealers,
+    real estate, and other financial services.) – 16 (ISSUE Issue-level fundamentals.) This item is a key field.'
+- name: DATAFMT
+  type: TINYINT
+  nullable: false
+  description: 'DATAFMT describes the method of data reporting and collection. DATAFMT values for Compustat Global are: –
+    13 (HIST_STD Standardized data collected from the company''s original filing.) – 15 (RST_STD Standardized restated data
+    collected from the company''s subsequent filings.) This item is a key field.'
+- name: CONSOL
+  type: TINYINT
+  nullable: false
+  description: 'CONSOL describes the level of consolidation in the company’s financial statements. Levels of consolidation
+    are: – 6 (C Consolidated – parent and subsidiary combined) – 7 (P Pre-FASB) – 8 (R Pro-forma) – 10 (D Pre-divestiture)
+    – 14 (N Non-consolidated) This item is a key field. CONSOL cross-references with CSKEYCODE where CONSOL = CSKEYCODE.Code.'
+- name: RANK
+  type: INTEGER
+  nullable: false
+  description: RANK identifies hierarchy of auditors or of inventory valuation methods. For companies with more than one auditor,
+    auditor hierarchy is ranked from 1 to 6, where 1 indicates the primary auditor. For companies using more than one inventory
+    valuation method, 1 indicates the valuation method used most often.
+- name: AU
+  type: SMALLINT
+  nullable: true
+  description: AU is the auditor. Cross-reference AU with CsgRef where CsgCau.au = CsgRef.refcd1 and CsgRef.reftype = 4.
+- name: AUOP
+  type: SMALLINT
+  nullable: true
+  description: AUOP is the auditor opinion. It cross-references with CsgRef where CsgCau.auop = CsgRef.refcd1 and CsgRef.reftype
+    = 22.
+- name: AUOPIC
+  type: char(1)
+  nullable: true
+  description: AUOPIC is the auditor’s opinion regarding whether the company's internal control over financial reporting is
+    effective. Section 404 of the Sarbanes-Oxley Act of 2002 requires companies to report this opinion beginning with fiscal
+    years ending after November 15, 2004.
+- name: CEOSO
+  type: char(1)
+  nullable: true
+  description: CEOSO is the chief executive officer SOX certification. CEOSO indicates whether the company has filed documents
+    certifying the CEO has reviewed the relevant LSEG Quantitative Analytics Database Schema for Compustat Global Data 13
+- name: CFOSO
+  type: char(1)
+  nullable: true
+  description: CFOSO is the chief financial officer SOX certification. CFOSO indicates whether the company has filed documents
+    certifying the CFO has reviewed the relevant report and that the information is reported fairly, as required by Section
+    302 of the Sarbanes-Oxley Act of 2002.
+join_hints:
+- to: CSKEYCODE
+  evidence: INDFMT cross-references with CSKEYCODE.
+  type: cross_reference
+- to: CSKEYCODE
+  evidence: CONSOL cross-references with CSKEYCODE where CONSOL = CSKEYCODE.Code.
+  type: cross_reference
+---
+table: qa_compustat_global.CsgCbd
+domain: fundamentals
+description: Compustat Global Company Business Descriptions | Use this table to retrieve generalized company descriptions.
+columns:
+- name: GVKEY
+  type: INTEGER
+  nullable: false
+  description: 'GVKEY is the Global Company Key. It is a primary key for all companies in all Csg* tables. Use GVKEY with
+    CsgCmp to obtain company-level information, or CsgSec to obtain security-level information. For example, for security
+    mapping, to link to GSecMapX: GSecMapX.vencode = CsgCmp.gvkey where GSecMapX.ventype = 3'
+- name: SEQNO
+  type: SMALLINT
+  nullable: false
+  description: SEQNO is the sequence number.
+- name: BUSDESC
+  type: varchar(101)
+  nullable: true
+  description: BUSDESC is a textual description of the business.
+---
+table: qa_compustat_global.CsgCin
+domain: fundamentals
+description: Compustat Global Company Other Information | This table includes the company’s current global classification
+  and status. This table does not contain historical
+columns:
+- name: GVKEY
+  type: INTEGER
+  nullable: false
+  description: 'GVKEY is the Global Company Key. It is a primary key for all companies in all Csg* tables. Use GVKEY with
+    CsgCmp to obtain company-level information, or CsgSec to obtain security-level information. For example, for security
+    mapping, to link to GSecMapX: GSecMapX.vencode = CsgCmp.gvkey where GSecMapX.ventype = 3'
+- name: ADD1
+  type: varchar(66)
+  nullable: true
+  description: ADD1 contains the company headquarters mailing address
+- name: ADD2
+  type: varchar(66)
+  nullable: true
+  description: ADD2 contains the company headquarters mailing address
+- name: ADD3
+  type: varchar(66)
+  nullable: true
+  description: ADD3 contain the company headquarters mailing address
+- name: ADD4
+  type: varchar(66)
+  nullable: true
+  description: ADD4 contains the company headquarters mailing address
+- name: ADDZIP
+  type: varchar(21)
+  nullable: true
+  description: ADDZIP contains the company zip or postal code.
+- name: CIK
+  type: varchar(11)
+  nullable: true
+  description: CIK is the Central Index Key; it is used by the SEC to identify who has filed disclosures with the SEC.
+- name: CITY
+  type: varchar(101)
+  nullable: true
+  description: CITY is the city of the company’s headquarters.
+- name: CONML
+  type: varchar(101)
+  nullable: true
+  description: CONML is the official company name, as filed in the company’s EDGAR SEC filing.
+- name: COSTAT
+  type: char(1)
+  nullable: true
+  description: COSTAT is the status marker. COSTAT can be A (Active) or I (Inactive).
+- name: COUNTY
+  type: varchar(101)
+  nullable: true
+  description: COUNTY is the county of the company’s headquarters.
+- name: DLDTE
+  type: TIMESTAMP(6)
+  nullable: true
+  description: DLDTE is the date a research company was deleted.
+- name: DLRSN
+  type: varchar(9)
+  nullable: true
+  description: DLRSN is the reason a research company was deleted. Cross-reference DLRSN with CsgRef where CsgCin.dlrsn =
+    CsgRef.refcd1 and CsgRef.reftype = 16.
+- name: EIN
+  type: varchar(11)
+  nullable: true
+  description: EIN is the Employer Identification Number issued by the IRS.
+- name: FAX
+  type: varchar(21)
+  nullable: true
+  description: FAX is the fax number.
+- name: FIC
+  type: varchar(4)
+  nullable: true
+  description: FIC is the ISO3 code of the country of incorporation. Cross-reference with CsgRef where CsgCin.fic = CsgRef.refcd1
+    and CsgRef.reftype = 8. LSEG Quantitative Analytics Database Schema for Compustat Global Data 14
+- name: FYRC
+  type: TINYINT
+  nullable: true
+  description: FYRC is the fiscal year end month.
+- name: GGROUP
+  type: INTEGER
+  nullable: true
+  description: GGROUP is the GICS group code. Cross-reference GGROUP with – CsgRef where CsgCin.ggroup = CsgRef.refcd2, and
+    CsgRef.reftype = 34, and CsgRef.refcd1 = ‘GGROUP’, or – CsgRef where CsgCin.ggroup = CsgRef.refcd1, and CsgRef.reftype
+    = 15
+- name: GIND
+  type: INTEGER
+  nullable: true
+  description: GIND is the GICS industry code. Cross-reference it with either – CsgRef where CsgCin.gind = CsgRef.refcd2,
+    and CsgRef.reftype = 34, and CsgRef.refcd1 = ‘GIND’, or – CsgRef where CsgCin.gind = CsgRef.refcd1, and CsgRef.reftype
+    = 15
+- name: GSECTOR
+  type: INTEGER
+  nullable: true
+  description: GSECTOR is the GICS sector code. Cross-reference GSECTOR with – CsgRef where CsgCin.gind = CsgRef.refcd2, and
+    CsgRef.reftype = 34, and CsgRef.refcd1 = ‘GSECTOR’, or – CsgRef where CsgCin.gsectir = CsgRef.refcd1, and CsgRef.reftype
+    = 15
+- name: GSUBIND
+  type: INTEGER
+  nullable: true
+  description: GSUBIND is the GICS subindustry code. Cross-reference GSUBLND with either – CsgRef where CsgCin.gsubind = CsgRef.refcd2,
+    and CsgRef.reftype = 34, and CsgRef.refcd1 = ‘GSUBIND’, or – CsgRef where CsgCin.gsubind = CsgRef.refcd1, and CsgRef.reftype
+    = 15
+- name: IDBFLAG
+  type: char(1)
+  nullable: true
+  description: IDBFLAG indicates whether the company is international (I), domestic (D), or both (B).
+- name: INCORP
+  type: varchar(9)
+  nullable: true
+  description: INCORP is the state or province of incorporation. Cross-reference INCORP with CsgRef where CsgCin.incorp =
+    CsgRef.refcd1 and CsgRef.reftype = 31.
+- name: IPODATE
+  type: TIMESTAMP(6)
+  nullable: true
+  description: IPODATE is the date of the company’s initial public stock offering. This date is available for some global
+    companies, including companies from Japan (JPN), Hong-Kong (HKG), Malaysia (MYS), India (IDN), Philippines (PHL), China
+    (CHN), and Singapore (SGP).
+- name: LOC
+  type: varchar(4)
+  nullable: true
+  description: LOC is the ISO3 country code of the headquarters. It cross-references with CsgRef where CsgCin.loc = CsgRef.refcd1
+    and CsgRef.reftype = 8.
+- name: NAICS
+  type: INTEGER
+  nullable: true
+  description: NAICS is the NAICS code. Cross-reference with CsgRef where CsgCin.naics = CsgRef.refcd1 and CsgRef.reftype
+    = 21.
+- name: PHONE
+  type: varchar(20)
+  nullable: true
+  description: PHONE is the phone number.
+- name: PRICAN
+  type: varchar(9)
+  nullable: true
+  description: PRICAN is the primary issue tag for Canadian companies. LSEG Quantitative Analytics Database Schema for Compustat
+    Global Data 15
+- name: PRIROW
+  type: varchar(9)
+  nullable: true
+  description: PRIROW identifies the primary issue for companies that trade outside of the United States and Canada.
+- name: PRIUSA
+  type: varchar(9)
+  nullable: true
+  description: PRIUSA is the primary issue tag for U.S. companies.
+- name: SIC
+  type: SMALLINT
+  nullable: true
+  description: SIC is the SIC code (Standard Industrial Classification Code). Cross- reference with CsgRef where CsgCin.sic
+    = CsgRef.refcd1 and CsgRef.reftype = 27.
+- name: SPCINDCD
+  type: SMALLINT
+  nullable: true
+  description: SPCINDCD is the S&P Industry Sector Code. Cross-reference with CsgRef where CsgCin.spcindcd = CsgRef.refcd1
+    and CsgRef.reftype = 18.
+- name: SPCSECCD
+  type: SMALLINT
+  nullable: true
+  description: SPCSECCD is the S&P Economic Sector Code. Cross-reference with CsgRef where CsgCin.spcseccd = CsgRef.refcd1
+    and CsgRef.reftype = 26.
+- name: SPCSRC
+  type: varchar(4)
+  nullable: true
+  description: SPCSRC is the Standard & Poors appraisal of a stock’s past performance including the stock's earnings and dividends,
+    and the stock's standing as of a company's current fiscal year-end.
+- name: STATE
+  type: varchar(9)
+  nullable: true
+  description: STATE is the state or province. Cross-reference with CsgRef where CsgCin.state = CsgRef.refcd1 and CsgRef.reftype
+    = 31.
+- name: STKO
+  type: TINYINT
+  nullable: true
+  description: STKO indicates the company compensation in the form of company stock on a pre-tax basis, including stock bonuses,
+    deferred compensation, amortization of deferred compensation, non-cash compensation expenses, and stock-based compensation
+    to employees and non-employees.
+- name: WEBURL
+  type: varchar(61)
+  nullable: true
+  description: WEBURL is the company’s home page Internet address.
+---
+table: qa_compustat_global.CsgCiv
+domain: fundamentals
+description: Compustat Global Inventory Valuation Data | This table describes the company’s inventory valuation method.
+columns:
+- name: GVKEY
+  type: INTEGER
+  nullable: false
+  description: 'GVKEY is the Global Company Key. It is a primary key for all companies in all Csg* tables. Use GVKEY with
+    CsgCmp to obtain company-level information, or CsgSec to obtain security-level information. For example, for security
+    mapping, to link to GSecMapX: GSecMapX.vencode = CsgCmp.gvkey where GSecMapX.ventype = 3'
+- name: DATADATE
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DATADATE is the company’s fiscal period end date. For security-level data, it is the trade date for high, low,
+    or close prices. This item is a key field.
+- name: INDFMT
+  type: TINYINT
+  nullable: false
+  description: 'INDFMT denotes whether a company reports in a Financial Services or Industrial format. INDFMT cross-references
+    with CSKEYCODE. INDFMT integer values are: – 5 (INDL Industrial, including manufacturing, retail, construction and other
+    commercial non-financial services.) – 9 (FS Financial Services, including banks, insurance companies, broker or dealers,
+    real estate, and other financial services.) – 16 (ISSUE Issue-level fundamentals.) This item is a key field.'
+- name: DATAFMT
+  type: TINYINT
+  nullable: false
+  description: 'DATAFMT describes the method of data reporting and collection. DATAFMT values for Compustat Global are: –
+    13 (HIST_STD Standardized data collected from the company''s original filing.) – 15 (RST_STD Standardized restated data
+    collected from the company''s subsequent filings.) This item is a key field. LSEG Quantitative Analytics Database Schema
+    for Compustat Global Data 16'
+- name: CONSOL
+  type: TINYINT
+  nullable: false
+  description: 'CONSOL describes the level of consolidation in the company’s financial statements. Levels of consolidation
+    are: – 6 (C Consolidated – parent and subsidiary combined) – 7 (P Pre-FASB) – 8 (R Pro-forma) – 10 (D Pre-divestiture)
+    – 14 (N Non-consolidated) This item is a key field. CONSOL cross-references with CSKEYCODE where CONSOL = CSKEYCODE.Code.'
+- name: RANK
+  type: INTEGER
+  nullable: false
+  description: RANK identifies hierarchy of auditors or of inventory valuation methods. For companies with more than one auditor,
+    auditor hierarchy is ranked from 1 to 6, where 1 indicates the primary auditor. For companies using more than one inventory
+    valuation method, 1 indicates the valuation method used most often.
+- name: INVVAL
+  type: INTEGER
+  nullable: true
+  description: 'INVVAL is the inventory valuation method. Values may include: – 0 (No inventory) – 1 (FIFO) – 2 (LIFO) – 3
+    (Specific identification – 4 (Average cost) – 5 (Retail method) – 6 (Standard cost) – 7 (Current or replacement cost)
+    Cross-reference INVVAL with CsgRef where CsgCiv.invval = CsgRef.refcd1 and CsgRef.reftype = 19.'
+join_hints:
+- to: CSKEYCODE
+  evidence: INDFMT cross-references with CSKEYCODE.
+  type: cross_reference
+- to: CSKEYCODE
+  evidence: CONSOL cross-references with CSKEYCODE where CONSOL = CSKEYCODE.Code.
+  type: cross_reference
+---
+table: qa_compustat_global.CsgCmp
+domain: fundamentals
+description: Compustat Global Company Identification Information | This table is the primary company-level data table.
+columns:
+- name: GVKEY
+  type: INTEGER
+  nullable: false
+  description: 'GVKEY is the Global Company Key. It is a primary key for all companies in all Csg* tables. Use GVKEY with
+    CsgCmp to obtain company-level information, or CsgSec to obtain security-level information. For example, for security
+    mapping, to link to GSecMapX: GSecMapX.vencode = CsgCmp.gvkey where GSecMapX.ventype = 3'
+- name: SEDOL
+  type: varchar(7)
+  nullable: true
+  description: SEDOL is the Stock Exchange Daily Official List security ID, as determined by the International Stock Exchange
+    in London.
+- name: ISIN
+  type: varchar(13)
+  nullable: true
+  description: ISIN is the unique security identification number, as determined by the National Numbering Agency within a
+    particular country is responsible for allocating ISIN codes.
+- name: CONM
+  type: varchar(250)
+  nullable: true
+  description: CONM is the company name.
+- name: PRIMIID
+  type: varchar(4)
+  nullable: true
+  description: PRIMIID identifies the primary issue id of the GVKEY, where 1 is the primary issue.
+- name: SECSTAT
+  type: varchar(2)
+  nullable: true
+  description: SECSTAT is the security status marker. SECSTAT can be A (Active) or I (Inactive). LSEG Quantitative Analytics
+    Database Schema for Compustat Global Data 17
+---
+table: qa_compustat_global.CsgCof
+domain: fundamentals
+description: Compustat Global Company Officers | This table contains information on company officers.
+columns:
+- name: GVKEY
+  type: INTEGER
+  nullable: false
+  description: 'GVKEY is the Global Company Key. It is a primary key for all companies in all Csg* tables. Use GVKEY with
+    CsgCmp to obtain company-level information, or CsgSec to obtain security-level information. For example, for security
+    mapping, to link to GSecMapX: GSecMapX.vencode = CsgCmp.gvkey where GSecMapX.ventype = 3'
+- name: OFCD
+  type: varchar(9)
+  nullable: false
+  description: OFCD is the officer title. OFCD cross-references with CsgRef where CsgCof.ofcd = CsgRef.refcd1 and CsgRef.reftype
+    = 32.
+- name: OFID
+  type: INTEGER
+  nullable: false
+  description: OFID is the officer ID.
+- name: OFNM
+  type: varchar(40)
+  nullable: true
+  description: OFNM is the officer name.
+join_hints:
+- to: CsgRef
+  evidence: OFCD cross-references with CsgRef where CsgCof.ofcd = CsgRef.refcd1 and CsgRef.reftype = 32.
+  type: cross_reference
+---
+table: qa_compustat_global.CsgCoHGIC
+domain: fundamentals
+description: Global GICS History | This table contains global GICS history information.
+columns:
+- name: GVKEY
+  type: INTEGER
+  nullable: false
+  description: 'GVKEY is a unique company key and is the primary link for all Csg* tables. Use GVKEY with CsgCmp to obtain
+    company-level information, or CsgSec to obtain security-level information. For example, for security mapping, to link
+    to GSecMapX: GSecMapX.vencode = CsgCmp.gvkey where GSecMapX.ventype = 3'
+- name: INDTYPE
+  type: varchar(9)
+  nullable: false
+  description: INDTYPE is the type of industry classification. GICS = Standard & Poor's Global Industry Classification System.
+- name: INDFROM
+  type: TIMESTAMP(6)
+  nullable: false
+  description: INDFROM is the date from which the GICS code was effective.
+- name: GGROUP
+  type: varchar(5)
+  nullable: true
+  description: GGROUP is the GICS group code, the second level in the hierarchy of the Global Industry Classification Standard
+    (GICS). The industry group is represented by the leftmost four digits of the total GICS code. Cross-reference GGROUP with
+    either – CsgRef where CsgCoHGIC.GGROUP = CsgRef.refcd2, and CsgRef.reftype = 34, and CsgRef.refcd1 = ‘GGROUP’, or – CsgRef
+    where CsgCoHGIC.GGROUP = CsgRef.refcd1, and CsgRef.reftype = 15
+- name: GIND
+  type: varchar(7)
+  nullable: true
+  description: GIND is the GICS industry code, the third level in the hierarchy of the Global Industry Classification Standard
+    (GICS). The industry is represented by the leftmost six digits of the total GICS code. Cross-reference GIND with either
+    – CsgRef where CsgCoHGIC.gind = CsgRef.refcd2, and CsgRef.reftype = 34, and CsgRef.refcd1 = ‘GIND’, or – CsgRef where
+    CsgCoHGIC.gind = CsgRef.refcd1, and CsgRef.reftype = 15 LSEG Quantitative Analytics Database Schema for Compustat Global
+    Data 18
+- name: GSECTOR
+  type: varchar(3)
+  nullable: true
+  description: GSECTOR is the GICS sector code, the first level in the hierarchy of the Global Industry Classification Standard
+    (GICS). The sector is represented by the leftmost two digits of the total GICS code. Cross-reference GSECTOR with either
+    – CsgRef where CsgCoHGIC.gind = CsgRef.refcd2, and CsgRef.reftype = 34, and CsgRef.refcd1 = ‘GSECTOR’, or – CsgRef where
+    CsgCoHGIC.gsectir = CsgRef.refcd1, and CsgRef.reftype = 15
+- name: GSUBIND
+  type: varchar(9)
+  nullable: true
+  description: GSUBIND is the GICS sub-industry code, the fourth level in the hierarchy of the Global Industry Classification
+    Standard (GICS). The sub-industry is represented by all eight digits of the total GICS code. Cross-reference GSUBLND with
+    either – CsgRef where CsgCoHGIC.gsubind = CsgRef.refcd2, and CsgRef.reftype = 34, and CsgRef.refcd1 = ‘GSUBIND’, or –
+    CsgRef where CsgCoHGIC.gsubind = CsgRef.refcd1, and CsgRef.reftype = 15
+- name: INDTHRU
+  type: TIMESTAMP(6)
+  nullable: true
+  description: INDTHRU is the date through which the GICS code was effective, if it is no longer effective.
+---
+table: qa_compustat_global.CSGCOIND
+domain: fundamentals
+description: Compustat Global Company Industry Classification | This table contains a company’s historical SIC classification
+  data.
+columns:
+- name: GVKEY
+  type: INTEGER
+  nullable: false
+  description: 'GVKEY is the Global Company Key. It is a primary key for all companies in all Csg* tables. Use GVKEY with
+    CsgCmp to obtain company-level information, or CsgSec to obtain security-level information. For example, for security
+    mapping, to link to GSecMapX: GSecMapX.vencode = CsgCmp.gvkey where GSecMapX.ventype = 3'
+- name: DATADATE
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DATADATE is the company’s fiscal period end date. For security-level data, it is the trade date for high, low,
+    or close prices. This item is a key field.
+- name: CONSOL
+  type: TINYINT
+  nullable: false
+  description: 'CONSOL describes the level of consolidation in the company’s financial statements. Levels of consolidation
+    are: – 6 (C Consolidated – parent and subsidiary combined) – 7 (P Pre-FASB) – 8 (R Pro-forma) – 10 (D Pre-divestiture)
+    – 14 (N Non-consolidated) This item is a key field. CONSOL cross-references with CSKEYCODE where CONSOL = CSKEYCODE.Code.'
+- name: FYR
+  type: TINYINT
+  nullable: true
+  description: FYR is the fiscal year-end month. This item is a key field.
+- name: NAICSH
+  type: INTEGER
+  nullable: true
+  description: NAICSH is the historical NAICS code assigned to a company.
+- name: SICH
+  type: INTEGER
+  nullable: true
+  description: SICH is the historical SIC code.
+- name: YEAR_
+  type: SMALLINT
+  nullable: true
+  description: YEAR indicates the year of the data. LSEG Quantitative Analytics Database Schema for Compustat Global Data
+    19
+join_hints:
+- to: CSKEYCODE
+  evidence: CONSOL cross-references with CSKEYCODE where CONSOL = CSKEYCODE.Code.
+  type: cross_reference
+---
+table: qa_compustat_global.CSGCOINDPRES
+domain: fundamentals
+description: 'Compustat Global Company Industry | This table contains information on the company presentation format. This
+  table cross-references with CsgRef:'
+columns:
+- name: GVKEY
+  type: INTEGER
+  nullable: false
+  description: 'GVKEY is the Global Company Key. It is a primary key for all companies in all Csg* tables. Use GVKEY with
+    CsgCmp to obtain company-level information, or CsgSec to obtain security-level information. For example, for security
+    mapping, to link to GSecMapX: GSecMapX.vencode = CsgCmp.gvkey where GSecMapX.ventype = 3'
+- name: DATADATE
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DATADATE is the company’s fiscal period end date. For security-level data, it is the trade date for high, low,
+    or close prices. This item is a key field.
+- name: CONSOL
+  type: TINYINT
+  nullable: false
+  description: 'CONSOL describes the level of consolidation in the company’s financial statements. Levels of consolidation
+    are: – 6 (C Consolidated – parent and subsidiary combined) – 7 (P Pre-FASB) – 8 (R Pro-forma) – 10 (D Pre-divestiture)
+    – 14 (N Non-consolidated) This item is a key field. CONSOL cross-references with CSKEYCODE where CONSOL = CSKEYCODE.Code.'
+- name: IPCD
+  type: char(1)
+  nullable: false
+  description: 'IPCD is the financial services company presentation format. Values are: – C (Combination of industry types)
+    – B (Bank) – I (Insurance) – D (Broker/Dealer) – R (Real Estate) – O (Other)'
+join_hints:
+- to: CSKEYCODE
+  evidence: CONSOL cross-references with CSKEYCODE where CONSOL = CSKEYCODE.Code.
+  type: cross_reference
+---
+table: qa_compustat_global.CsgCur
+domain: fundamentals
+description: 'Compustat Global Currency | Use this table to retrieve global currency data. For rate information, cross-reference
+  this table with CsgXrd:'
+columns:
+- name: ISOCURCD
+  type: varchar(4)
+  nullable: false
+  description: ISOCURCD is the ISO currency code. ISOCURCD cross-references with CsgRef where CsgCur.isocurcd = CsgRef.refcd1
+    and CsgRef.reftype = 36.
+- name: ISOCURBD
+  type: TIMESTAMP(6)
+  nullable: true
+  description: ISOCURBD is the ISO currency birth date.
+- name: ISOCURDD
+  type: TIMESTAMP(6)
+  nullable: true
+  description: ISOCURDD is the ISO currency death date.
+- name: ISOCURLNK
+  type: SMALLINT
+  nullable: true
+  description: ISOCURLNK is the ISO currency link code. Different currencies used in the same country at different times share
+    the same link code.
+- name: ISOCURNM
+  type: varchar(41)
+  nullable: true
+  description: ISOCURNM is the ISO currency description. LSEG Quantitative Analytics Database Schema for Compustat Global
+    Data 20
+- name: ISOCURTR
+  type: SMALLINT
+  nullable: true
+  description: ISOCURTR is the ISO currency tier number. Tier number can be either 1 or 2. Tier 1 indicates the currency is
+    translated directly into other currencies. Tier 2 indicates the currency is translated into one of four primary currencies,
+    then translated from the primary currency into a target currency. The four primary currencies are U.S. Dollar, British
+    Pound Sterling, Japanese Yen, and Swiss Francs.
+join_hints:
+- to: CsgRef
+  evidence: ISOCURCD cross-references with CsgRef where CsgCur.isocurcd = CsgRef.refcd1 and CsgRef.reftype = 36.
+  type: cross_reference
+---
+table: qa_compustat_global.CSGIdx
+domain: fundamentals
+description: Compustat Global Index | This table is the general information table for Compustat indexes.
+columns:
+- name: GVKEYX
+  type: INTEGER
+  nullable: false
+  description: GVKEYX is the index GVKEY. It is a primary key for all indexes across all CsgI* tables.
+- name: CONM
+  type: varchar(250)
+  nullable: true
+  description: CONM is the index name.
+- name: IDX13KEY
+  type: varchar(14)
+  nullable: true
+  description: IDX13KEY is the 13 character key.
+- name: IDXCSTFLG
+  type: varchar(2)
+  nullable: true
+  description: IDXCSTFLG is the index constituent flag. This indicates that there are constituent markings available.
+- name: INDEXCAT
+  type: varchar(11)
+  nullable: true
+  description: INDEXCAT is the index category code.
+- name: INDEXGEO
+  type: varchar(11)
+  nullable: true
+  description: INDEXGEO is the index geographical area.
+- name: INDEXID
+  type: varchar(11)
+  nullable: true
+  description: INDEXID is the S&P major index ID. Cross-reference INDEXID with CsgRef where CsgIdx.indexid = CsgRef.refcd1
+    and CsgIdx.indexcat = CsgRef.refcd2 and CsgRef.reftype = 35.
+- name: INDEXTYPE
+  type: varchar(11)
+  nullable: true
+  description: INDEXTYPE is the index type.
+- name: INDEXVAL
+  type: varchar(11)
+  nullable: true
+  description: INDEXVAL is the index value code. Cross-reference INDEXVAL with CsgRef where CsgIdx.indexval = CsgRef.refcd2,
+    and CsgIdx.indextype = CsgRef.refcd1, and CsgRef.reftype = 34.
+- name: TIC
+  type: varchar(9)
+  nullable: true
+  description: TIC is the ticker/trading symbol.
+- name: TICI
+  type: varchar(9)
+  nullable: true
+  description: TICI is the issue trading ticker.
+- name: IDXSTAT
+  type: char(1)
+  nullable: true
+  description: IDXSTAT is the status of the index (active or inactive).
+---
+table: qa_compustat_global.CSGIDXCSTHIS
+domain: fundamentals
+description: Compustat Global Index Constituent History | This table contains a history of components for every GVKEYX. |
+  As of July 22, 2020, S&P DJI historical constituent data is no longer available in this table where IndexCat in
+columns:
+- name: GVKEY
+  type: INTEGER
+  nullable: false
+  description: 'GVKEY is the Global Company Key. It is a primary key for all companies in all Csg* tables. Use GVKEY with
+    CsgCmp to obtain company-level information, or CsgSec to obtain security-level information. For example, for security
+    mapping, to link to GSecMapX: GSecMapX.vencode = CsgCmp.gvkey where GSecMapX.ventype = 3'
+- name: IID
+  type: varchar(4)
+  nullable: false
+  description: IID is the global issue ID. The IID is an alphanumeric character code. IID consists of a security-identifying
+    numeric component and a population-identifying alpha LSEG Quantitative Analytics Database Schema for Compustat Global
+    Data 21
+- name: GVKEYX
+  type: INTEGER
+  nullable: false
+  description: GVKEYX is the index GVKEY. It is a primary key for all indexes across all CsgI* tables.
+- name: FROM_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: FROM_ indicates the date from which the index mapping is effective.
+- name: THRU
+  type: TIMESTAMP(6)
+  nullable: true
+  description: THRU indicates the date through which the index mapping is effective.
+---
+table: qa_compustat_global.CSGIdxCstHisSnP
+domain: fundamentals
+description: SPDJI Index Constituent History | This table contains S&P Dow Jones Index constituent history information.
+update_cadence: Daily
+columns:
+- name: GVKEY
+  type: INTEGER
+  nullable: false
+  description: GVKEY is a unique company key and is the primary link for all CS* tables.
+- name: IID
+  type: varchar(4)
+  nullable: false
+  description: IID is the issue identifier. It uniquely identifies each issue of a company. The combination of GVKEY and IID
+    represents the index constituent.
+- name: GVKEYX
+  type: INTEGER
+  nullable: false
+  description: GVKEYX is a unique identifier and primary key for each index.
+- name: FROM_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: FROM_ represents the dates that the security was part of the index.
+- name: THRU
+  type: TIMESTAMP(6)
+  nullable: true
+  description: THRU represents the dates that the security was part of the index.
+- name: LICFLAG
+  type: TINYINT
+  nullable: false
+  description: LICFLAG represents the license flag value for the various Index constituents. The LICFLAG may be 8 = SPDJ Global
+    Constituent History
+---
+table: qa_compustat_global.CsgItm
+domain: fundamentals
+description: Compustat Global Data Items | This table contains information for Compustat Global mnemonics
+columns:
+- name: GROUP_
+  type: SMALLINT
+  nullable: false
+  description: The combination of GROUP_ and NUMBER creates the key for linking Csg* data items to VALUE_. GROUP_ is defined
+    by GNAME.
+- name: GNAME
+  type: varchar(50)
+  nullable: true
+  description: GNAME defines GROUP_.
+- name: NUMBER
+  type: SMALLINT
+  nullable: false
+  description: The combination of GROUP_ and NUMBER creates the key for linking Csg* data items to VALUE_.
+- name: MNEMONIC
+  type: varchar(20)
+  nullable: true
+  description: MNEMONIC is the item mnemonic.
+- name: ANNSYN
+  type: varchar(7)
+  nullable: true
+  description: ANNSYN is the annual synonym.
+- name: GBLSYN
+  type: varchar(7)
+  nullable: true
+  description: GBLSYN is the global synonym.
+- name: DESC_
+  type: varchar(150)
+  nullable: true
+  description: DESC_ is the item description. LSEG Quantitative Analytics Database Schema for Compustat Global Data 22
+- name: IDBFLAG
+  type: varchar(2)
+  nullable: true
+  description: IDBFLAG indicates if the company is international (I), domestic (D), or both (B).
+- name: ADJUST
+  type: TINYINT
+  nullable: true
+  description: 'ADJUST is the item adjustment method. ADJUST can be: – 0 (No adjustment) – 2 (Multiply) – 3 (Divide)'
+- name: FREQ
+  type: TINYINT
+  nullable: true
+  description: FREQ is the item frequency. FREQ can be one either 1 (Annual) or 2 (Quarterly).
+- name: STMT
+  type: TINYINT
+  nullable: true
+  description: 'STMT is the item source statement. STMT can be one of the following: – 0 = None – 1 = Balance sheet – 2 =
+    Income statement – 3 = Cash flow statement'
+- name: UNITS
+  type: TINYINT
+  nullable: true
+  description: 'UNITS is the item units type. UNITS can be one of the following: – 1 = Currency – 2 = Units – 3 = Ratio'
+- name: DATATYPE
+  type: TINYINT
+  nullable: true
+  description: DATATYPE is currently unused.
+- name: REFTYPE
+  type: TINYINT
+  nullable: true
+  description: REFTYPE is currently unused.
+---
+table: qa_compustat_global.CsgIxd
+domain: fundamentals
+description: Compustat Global Index Daily Data | This table contains pricing and dividend information for daily indices.
+columns:
+- name: GVKEYX
+  type: INTEGER
+  nullable: false
+  description: GVKEYX is the index GVKEY. It is a primary key for all indexes across all CsgI* tables.
+- name: DATADATE
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DATADATE is the company’s fiscal period end date. For security-level data, it is the trade date for high, low,
+    or close prices. This item is a key field.
+- name: DVPSXD
+  type: FLOAT
+  nullable: true
+  description: DVPSXD is the daily cash (or cash equivalent), dividend payment amount. This item includes special dividends
+    and spin-offs.
+- name: NEWNUM
+  type: INTEGER
+  nullable: true
+  description: NEWNUM is the new index number.
+- name: OLDNUM
+  type: INTEGER
+  nullable: true
+  description: OLDNUM is the old index number.
+- name: PRCCD
+  type: FLOAT
+  nullable: true
+  description: PRCCD is the daily close index price.
+- name: PRCCDDIV
+  type: FLOAT
+  nullable: true
+  description: PRCCDDIV is the daily close price for the index’s rate of return.
+- name: PRCHD
+  type: FLOAT
+  nullable: true
+  description: PRCHD is the daily high index price.
+- name: PRCLD
+  type: FLOAT
+  nullable: true
+  description: PRCLD is the daily low index price.
+---
+table: qa_compustat_global.CsgIxm
+domain: fundamentals
+description: Compustat Global Index Monthly Data | This table contains pricing and dividend information for monthly indices.
+columns:
+- name: GVKEYX
+  type: INTEGER
+  nullable: false
+  description: GVKEYX is the index GVKEY. It is a primary key for all indexes across all CsgI* tables.
+- name: DATADATE
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DATADATE is the company’s fiscal period end date. For security-level data, it is the trade date for high, low,
+    or close prices. This item is a key field. LSEG Quantitative Analytics Database Schema for Compustat Global Data 23
+- name: DVPSXM
+  type: FLOAT
+  nullable: true
+  description: DVPSXM is the monthly cash (or cash equivalent), dividend payment amount. This item includes special dividends
+    and spin-offs.
+- name: PRCCM
+  type: FLOAT
+  nullable: true
+  description: PRCCM is the monthly close index price.
+- name: PRCHM
+  type: FLOAT
+  nullable: true
+  description: PRCHM is the monthly high index price.
+- name: PRCLM
+  type: FLOAT
+  nullable: true
+  description: PRCLM is the monthly low index price.
+---
+table: qa_compustat_global.CSGNTRMCOAU
+domain: fundamentals
+description: Compustat Global Interim Auditor Data | Use this table to retrieve quarterly company statement auditor information,
+  including auditor opinion.
+columns:
+- name: GVKEY
+  type: INTEGER
+  nullable: false
+  description: 'GVKEY is the Global Company Key. It is a primary key for all companies in all Csg* tables. Use GVKEY with
+    CsgCmp to obtain company-level information, or CsgSec to obtain security-level information. For example, for security
+    mapping, to link to GSecMapX: GSecMapX.vencode = CsgCmp.gvkey where GSecMapX.ventype = 3'
+- name: DATADATE
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DATADATE is the company’s fiscal period end date. For security-level data, it is the trade date for high, low,
+    or close prices. This item is a key field.
+- name: INDFMT
+  type: TINYINT
+  nullable: false
+  description: 'INDFMT denotes whether a company reports in a Financial Services or Industrial format. INDFMT cross-references
+    with CSKEYCODE. INDFMT integer values are: – 5 (INDL Industrial, including manufacturing, retail, construction and other
+    commercial non-financial services.) – 9 (FS Financial Services, including banks, insurance companies, broker or dealers,
+    real estate, and other financial services.) – 16 (ISSUE Issue-level fundamentals.) This item is a key field.'
+- name: DATAFMT
+  type: TINYINT
+  nullable: false
+  description: 'DATAFMT describes the method of data reporting and collection. DATAFMT values for Compustat Global are: –
+    13 (HIST_STD Standardized data collected from the company''s original filing.) – 15 (RST_STD Standardized restated data
+    collected from the company''s subsequent filings.) This item is a key field.'
+- name: CONSOL
+  type: TINYINT
+  nullable: false
+  description: 'CONSOL describes the level of consolidation in the company’s financial statements. Levels of consolidation
+    are: – 6 (C Consolidated – parent and subsidiary combined) – 7 (P Pre-FASB) – 8 (R Pro-forma) – 10 (D Pre-divestiture)
+    – 14 (N Non-consolidated) This item is a key field. CONSOL cross-references with CSKEYCODE where CONSOL = CSKEYCODE.Code.'
+- name: RANK
+  type: INTEGER
+  nullable: false
+  description: RANK identifies hierarchy of auditors or of inventory valuation methods. For companies with more than one auditor,
+    auditor hierarchy is ranked from 1 to 6, where 1 indicates the primary auditor. For companies using more than one inventory
+    valuation method, 1 indicates the valuation method used most often.
+- name: CEOSOQ
+  type: char(1)
+  nullable: true
+  description: CEOSOQ is the chief executive officer SOX certification. CEOSOQ indicates whether the company has filed documents
+    certifying the CEO has reviewed the relevant report and that the information is reported fairly, as required by Section
+    302 of the Sarbanes-Oxley Act of 2002.
+- name: CFOSOQ
+  type: char(1)
+  nullable: true
+  description: CFOSOQ is the chief financial officer SOX certification. CFOSOQ indicates whether the company has filed documents
+    certifying the CFO has reviewed the relevant LSEG Quantitative Analytics Database Schema for Compustat Global Data 24
+join_hints:
+- to: CSKEYCODE
+  evidence: INDFMT cross-references with CSKEYCODE.
+  type: cross_reference
+- to: CSKEYCODE
+  evidence: CONSOL cross-references with CSKEYCODE where CONSOL = CSKEYCODE.Code.
+  type: cross_reference
+---
+table: qa_compustat_global.CsgNtrmCoFntQ
+domain: fundamentals
+description: Compustat Global Company Quarterly | Use this table to retrieve quarterly fundamental footnotes.
+columns:
+- name: GVKEY
+  type: INTEGER
+  nullable: false
+  description: 'GVKEY is the Global Company Key. It is a primary key for all companies in all Csg* tables. Use GVKEY with
+    CsgCmp to obtain company-level information, or CsgSec to obtain security-level information. For example, for security
+    mapping, to link to GSecMapX: GSecMapX.vencode = CsgCmp.gvkey where GSecMapX.ventype = 3'
+- name: DATADATE
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DATADATE is the company’s fiscal period end date. For security-level data, it is the trade date for high, low,
+    or close prices. This item is a key field.
+- name: INDFMT
+  type: TINYINT
+  nullable: false
+  description: 'INDFMT denotes whether a company reports in a Financial Services or Industrial format. INDFMT cross-references
+    with CSKEYCODE. INDFMT integer values are: – 5 (INDL Industrial, including manufacturing, retail, construction and other
+    commercial non-financial services.) – 9 (FS Financial Services, including banks, insurance companies, broker or dealers,
+    real estate, and other financial services.) – 16 (ISSUE Issue-level fundamentals.) This item is a key field.'
+- name: CONSOL
+  type: TINYINT
+  nullable: false
+  description: 'CONSOL describes the level of consolidation in the company’s financial statements. Levels of consolidation
+    are: – 6 (C Consolidated – parent and subsidiary combined) – 7 (P Pre-FASB) – 8 (R Pro-forma) – 10 (D Pre-divestiture)
+    – 14 (N Non-consolidated) This item is a key field. CONSOL cross-references with CSKEYCODE where CONSOL = CSKEYCODE.Code.'
+- name: FYR
+  type: TINYINT
+  nullable: false
+  description: FYR is the fiscal year-end month. This item is a key field.
+- name: DATAFMT
+  type: TINYINT
+  nullable: false
+  description: 'DATAFMT describes the method of data reporting and collection. DATAFMT values for Compustat Global are: –
+    13 (HIST_STD Standardized data collected from the company''s original filing.) – 15 (RST_STD Standardized restated data
+    collected from the company''s subsequent filings.) This item is a key field.'
+- name: ITEM
+  type: SMALLINT
+  nullable: false
+  description: ITEM identifies standardized fundamental data with related analyst notes or transparency. Cross reference ITEM
+    with CsgItm. ITEM is a key field. Cross- reference ITEM with CsgItm where CsgNtrmCoFntQ.item = CsgItm.number and CsgItm.group_
+    = 1
+- name: VALUE_
+  type: varchar(9)
+  nullable: true
+  description: VALUE_ is the raw value provided by Compustat. LSEG Quantitative Analytics Database Schema for Compustat Global
+    Data 25
+join_hints:
+- to: CSKEYCODE
+  evidence: INDFMT cross-references with CSKEYCODE.
+  type: cross_reference
+- to: CSKEYCODE
+  evidence: CONSOL cross-references with CSKEYCODE where CONSOL = CSKEYCODE.Code.
+  type: cross_reference
+---
+table: qa_compustat_global.CsgNtrmCoFntSa
+domain: fundamentals
+description: Compustat Global Company Semi-Annual | Use this table to retrieve semi-annual fundamental footnotes.
+columns:
+- name: GVKEY
+  type: INTEGER
+  nullable: false
+  description: 'GVKEY is the Global Company Key. It is a primary key for all companies in all Csg* tables. Use GVKEY with
+    CsgCmp to obtain company-level information, or CsgSec to obtain security-level information. For example, for security
+    mapping, to link to GSecMapX: GSecMapX.vencode = CsgCmp.gvkey where GSecMapX.ventype = 3'
+- name: DATADATE
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DATADATE is the company’s fiscal period end date. For security-level data, it is the trade date for high, low,
+    or close prices. This item is a key field.
+- name: INDFMT
+  type: TINYINT
+  nullable: false
+  description: 'INDFMT denotes whether a company reports in a Financial Services or Industrial format. INDFMT cross-references
+    with CSKEYCODE. INDFMT integer values are: – 5 (INDL Industrial, including manufacturing, retail, construction and other
+    commercial non-financial services.) – 9 (FS Financial Services, including banks, insurance companies, broker or dealers,
+    real estate, and other financial services.) – 16 (ISSUE Issue-level fundamentals.) This item is a key field.'
+- name: CONSOL
+  type: TINYINT
+  nullable: false
+  description: 'CONSOL describes the level of consolidation in the company’s financial statements. Levels of consolidation
+    are: – 6 (C Consolidated – parent and subsidiary combined) – 7 (P Pre-FASB) – 8 (R Pro-forma) – 10 (D Pre-divestiture)
+    – 14 (N Non-consolidated) This item is a key field. CONSOL cross-references with CSKEYCODE where CONSOL = CSKEYCODE.Code.'
+- name: FYR
+  type: TINYINT
+  nullable: false
+  description: FYR is the fiscal year-end month. This item is a key field.
+- name: DATAFMT
+  type: TINYINT
+  nullable: false
+  description: 'DATAFMT describes the method of data reporting and collection. DATAFMT values for Compustat Global are: –
+    13 (HIST_STD Standardized data collected from the company''s original filing.) – 15 (RST_STD Standardized restated data
+    collected from the company''s subsequent filings.) This item is a key field.'
+- name: ITEM
+  type: SMALLINT
+  nullable: false
+  description: ITEM identifies standardized fundamental data with related analyst notes or transparency. Cross reference Item
+    with CsgItm. ITEM is a key field. Cross- reference ITEM with CsgItm where CsgNtrmCoFntSa.item = CsgItm.number and CsgItm.group_
+    = 1
+- name: VALUE_
+  type: varchar(9)
+  nullable: true
+  description: VALUE_ is the raw value provided by Compustat. LSEG Quantitative Analytics Database Schema for Compustat Global
+    Data 26
+join_hints:
+- to: CSKEYCODE
+  evidence: INDFMT cross-references with CSKEYCODE.
+  type: cross_reference
+- to: CSKEYCODE
+  evidence: CONSOL cross-references with CSKEYCODE where CONSOL = CSKEYCODE.Code.
+  type: cross_reference
+---
+table: qa_compustat_global.CsgNtrmCoFntYtd
+domain: fundamentals
+description: Compustat Global Company Year-to-Date | Use this table to retrieve year-to-date fundamental footnotes.
+columns:
+- name: GVKEY
+  type: INTEGER
+  nullable: false
+  description: 'GVKEY is the Global Company Key. It is a primary key for all companies in all Csg* tables. Use GVKEY with
+    CsgCmp to obtain company-level information, or CsgSec to obtain security-level information. For example, for security
+    mapping, to link to GSecMapX: GSecMapX.vencode = CsgCmp.gvkey where GSecMapX.ventype = 3'
+- name: DATADATE
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DATADATE is the company’s fiscal period end date. For security-level data, it is the trade date for high, low,
+    or close prices. This item is a key field.
+- name: INDFMT
+  type: TINYINT
+  nullable: false
+  description: 'INDFMT denotes whether a company reports in a Financial Services or Industrial format. INDFMT cross-references
+    with CSKEYCODE. INDFMT integer values are: – 5 (INDL Industrial, including manufacturing, retail, construction and other
+    commercial non-financial services.) – 9 (FS Financial Services, including banks, insurance companies, broker or dealers,
+    real estate, and other financial services.) – 16 (ISSUE Issue-level fundamentals.) This item is a key field.'
+- name: CONSOL
+  type: TINYINT
+  nullable: false
+  description: 'CONSOL describes the level of consolidation in the company’s financial statements. Levels of consolidation
+    are: – 6 (C Consolidated – parent and subsidiary combined) – 7 (P Pre-FASB) – 8 (R Pro-forma) – 10 (D Pre-divestiture)
+    – 14 (N Non-consolidated) This item is a key field. CONSOL cross-references with CSKEYCODE where CONSOL = CSKEYCODE.Code.'
+- name: FYR
+  type: TINYINT
+  nullable: false
+  description: FYR is the fiscal year-end month. This item is a key field.
+- name: DATAFMT
+  type: TINYINT
+  nullable: false
+  description: 'DATAFMT describes the method of data reporting and collection. DATAFMT values for Compustat Global are: –
+    13 (HIST_STD Standardized data collected from the company''s original filing.) – 15 (RST_STD Standardized restated data
+    collected from the company''s subsequent filings.) This item is a key field.'
+- name: ITEM
+  type: SMALLINT
+  nullable: false
+  description: ITEM identifies standardized fundamental data with related analyst notes or transparency. Cross reference Item
+    with CsgItm. ITEM is a key field. Cross- reference ITEM with CsgItm where CsgNtrmCoFntYtd.item = CsgItm.number and CsgItm.group_
+    = 1
+- name: VALUE_
+  type: varchar(9)
+  nullable: true
+  description: VALUE_ is the raw value provided by Compustat. LSEG Quantitative Analytics Database Schema for Compustat Global
+    Data 27
+join_hints:
+- to: CSKEYCODE
+  evidence: INDFMT cross-references with CSKEYCODE.
+  type: cross_reference
+- to: CSKEYCODE
+  evidence: CONSOL cross-references with CSKEYCODE where CONSOL = CSKEYCODE.Code.
+  type: cross_reference
+---
+table: qa_compustat_global.CsgNtrmCoIDesc
+domain: fundamentals
+description: Compustat Global Interim Company Description | Use this table to retrieve period description data on a quarterly
+  basis. This data includes adjustment factors,
+columns:
+- name: GVKEY
+  type: INTEGER
+  nullable: false
+  description: 'GVKEY is the Global Company Key. It is a primary key for all companies in all Csg* tables. Use GVKEY with
+    CsgCmp to obtain company-level information, or CsgSec to obtain security-level information. For example, for security
+    mapping, to link to GSecMapX: GSecMapX.vencode = CsgCmp.gvkey where GSecMapX.ventype = 3'
+- name: DATADATE
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DATADATE is the company’s fiscal period end date. For security-level data, it is the trade date for high, low,
+    or close prices. This item is a key field.
+- name: INDFMT
+  type: TINYINT
+  nullable: false
+  description: 'INDFMT denotes whether a company reports in a Financial Services or Industrial format. INDFMT cross-references
+    with CSKEYCODE. INDFMT integer values are: – 5 (INDL Industrial, including manufacturing, retail, construction and other
+    commercial non-financial services.) – 9 (FS Financial Services, including banks, insurance companies, broker or dealers,
+    real estate, and other financial services.) – 16 (ISSUE Issue-level fundamentals.) This item is a key field.'
+- name: CONSOL
+  type: TINYINT
+  nullable: false
+  description: 'CONSOL describes the level of consolidation in the company’s financial statements. Levels of consolidation
+    are: – 6 (C Consolidated – parent and subsidiary combined) – 7 (P Pre-FASB) – 8 (R Pro-forma) – 10 (D Pre-divestiture)
+    – 14 (N Non-consolidated) This item is a key field. CONSOL cross-references with CSKEYCODE where CONSOL = CSKEYCODE.Code.'
+- name: FYR
+  type: TINYINT
+  nullable: false
+  description: FYR is the fiscal year-end month. This item is a key field.
+- name: DATAFMT
+  type: TINYINT
+  nullable: false
+  description: 'DATAFMT describes the method of data reporting and collection. DATAFMT values for Compustat Global are: –
+    13 (HIST_STD Standardized data collected from the company''s original filing.) – 15 (RST_STD Standardized restated data
+    collected from the company''s subsequent filings.) This item is a key field.'
+- name: ACCTSTDQ
+  type: varchar(9)
+  nullable: true
+  description: ACCTSTDQ is the accounting standard for the quarter. ACCTSTD cross- references with CsgRef where CsgNtrmCoIDesc.acctstd
+    = CsgRef.refcd1 and CsgRef.reftype = 2.
+- name: ADRRQ
+  type: FLOAT
+  nullable: true
+  description: ADRRQ is the company reported unweighted average of total demand deposits for the quarter. If no average is
+    reported, then this is the actual figure.
+- name: AJEXQ
+  type: FLOAT
+  nullable: true
+  description: AJEXQ is the quarterly company adjustment factor; it is cumulative by ex- date.
+- name: AJPQ
+  type: FLOAT
+  nullable: true
+  description: AJPQ is the quarterly company adjustment factor, as applied to the dividends per share by payable date; it
+    is cumulative by payable date. LSEG Quantitative Analytics Database Schema for Compustat Global Data 28
+- name: APDEDATEQ
+  type: TIMESTAMP(6)
+  nullable: true
+  description: APDEDATEQ is the actual date the company closes accounting for the period.
+- name: BSPRQ
+  type: varchar(9)
+  nullable: true
+  description: BSPRQ is the balance sheet presentation. BSPR cross-references with CsgRef where CsgNtrmCoIDesc.bspr = CsgRef.refcd1
+    and CsgRef.reftype = 5.
+- name: COMPSTQ
+  type: varchar(9)
+  nullable: true
+  description: COMPSTQ is the comparability status. It cross-references with CsgRef where CsgNtrmCoIDesc.compst = CsgRef.refcd1
+    and CsgRef.reftype = 7.
+- name: CURCDQ
+  type: varchar(4)
+  nullable: true
+  description: CURCDQ is company ISO currency code. Cross-reference CURCDQ with CsgRef where CsgNtrmCoIDesc.compst = CsgRef.refcd1
+    and CsgRef.reftype = 36.
+- name: CURNCDQ
+  type: varchar(4)
+  nullable: true
+  description: CURNCDQ is the native currency in which the company reports its financial data.
+- name: CURRTRQ
+  type: FLOAT
+  nullable: true
+  description: CURRTRQ is the exchange rate used to translate non-U.S. currency amounts into U.S. Dollars. The conversion
+    rate is the rate as of the date of the company's balance sheet. When an international company reports in U.S. Dollars,
+    the translation rate is 1.000.
+- name: CURUSCNQ
+  type: FLOAT
+  nullable: true
+  description: CURUSCNQ is the exchange rate used to translate Canadian currency into U.S. Dollars, as published in the Federal
+    Reserve period rates. This item is available only when a company reports in both U.S. and Canadian accounting standards.
+- name: DATACQTR
+  type: varchar(7)
+  nullable: true
+  description: 'DATACQTR shows the calendar year and quarter as YYYYQQ, with the four calendar quarters defined as: – Q1 (February
+    – April) – Q2 (May – July) – Q3 (August – October) – Q4 (November – January)'
+- name: DATAFQTR
+  type: varchar(7)
+  nullable: true
+  description: DATAFQTR shows the fiscal year and quarter as YYYYQQ, where 2007Q1 would represent the fiscal quarter July-September
+    2006 for a company whose fiscal year ends in June 2007.
+- name: FDATEQ
+  type: TIMESTAMP(6)
+  nullable: true
+  description: FDATEQ is the date the data is finalized for the quarter.
+- name: FINALQ
+  type: varchar(3)
+  nullable: true
+  description: FINALQ indicates that all quarterly fundamental items are available and have been delivered.
+- name: FQTR
+  type: TINYINT
+  nullable: true
+  description: FQTR is the fiscal quarter of the company, depending upon the quartile of the fiscal year in which the data
+    falls.
+- name: FYEARQ
+  type: SMALLINT
+  nullable: true
+  description: FYEARQ is the fiscal year of the current fiscal end-of-quarter month.
+- name: OGMQ
+  type: varchar(9)
+  nullable: true
+  description: OGMQ is the Quarterly Oil and Gas Method. OGM refers to the method of revenue reporting used by the oil and
+    gas company.
+- name: PDATEQ
+  type: TIMESTAMP(6)
+  nullable: true
+  description: PDATEQ is the preliminary date the data for the company is updated for that quarter.
+- name: PDQ
+  type: TINYINT
+  nullable: true
+  description: PDQ indicates the number of months in the quarter for the reporting period.
+- name: PDSA
+  type: TINYINT
+  nullable: true
+  description: PDSA indicates the number of months in the semi-annual reporting period.
+- name: PDYTD
+  type: TINYINT
+  nullable: true
+  description: PDYTD indicates the number of months in the year-to-date reporting period.
+- name: RDQ
+  type: TIMESTAMP(6)
+  nullable: true
+  description: RDQ is the first public reporting date of the quarterly earnings per share.
+- name: RP
+  type: varchar(3)
+  nullable: true
+  description: RP is the interim reporting periodicity of a company for a specific year. The reporting period will be either
+    Q (quarterly) or (SA) semiannual.
+- name: SCFQ
+  type: INTEGER
+  nullable: true
+  description: SCFQ is the cash flow format for the quarter.
+- name: SRCQ
+  type: INTEGER
+  nullable: true
+  description: SRCQ is the source document for the quarter.
+- name: STALTQ
+  type: varchar(3)
+  nullable: true
+  description: STALTQ is the status alert.
+- name: UPDQ
+  type: SMALLINT
+  nullable: true
+  description: UPDQ is the update code. LSEG Quantitative Analytics Database Schema for Compustat Global Data 29
+join_hints:
+- to: CSKEYCODE
+  evidence: INDFMT cross-references with CSKEYCODE.
+  type: cross_reference
+- to: CSKEYCODE
+  evidence: CONSOL cross-references with CSKEYCODE where CONSOL = CSKEYCODE.Code.
+  type: cross_reference
+---
+table: qa_compustat_global.CsgNtrmCoQ
+domain: fundamentals
+description: Compustat Global Company Quarterly Fundamental | This table contains quarterly company fundamental data.
+columns:
+- name: GVKEY
+  type: INTEGER
+  nullable: false
+  description: 'GVKEY is the Global Company Key. It is a primary key for all companies in all Csg* tables. Use GVKEY with
+    CsgCmp to obtain company-level information, or CsgSec to obtain security-level information. For example, for security
+    mapping, to link to GSecMapX: GSecMapX.vencode = CsgCmp.gvkey where GSecMapX.ventype = 3'
+- name: DATADATE
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DATADATE is the company’s fiscal period end date. For security-level data, it is the trade date for high, low,
+    or close prices. This item is a key field.
+- name: INDFMT
+  type: TINYINT
+  nullable: false
+  description: 'INDFMT denotes whether a company reports in a Financial Services or Industrial format. INDFMT cross-references
+    with CSKEYCODE. INDFMT integer values are: – 5 (INDL Industrial, including manufacturing, retail, construction and other
+    commercial non-financial services.) – 9 (FS Financial Services, including banks, insurance companies, broker or dealers,
+    real estate, and other financial services.) – 16 (ISSUE Issue-level fundamentals.) This item is a key field.'
+- name: CONSOL
+  type: TINYINT
+  nullable: false
+  description: 'CONSOL describes the level of consolidation in the company’s financial statements. Levels of consolidation
+    are: – 6 (C Consolidated – parent and subsidiary combined) – 7 (P Pre-FASB) – 8 (R Pro-forma) – 10 (D Pre-divestiture)
+    – 14 (N Non-consolidated) This item is a key field. CONSOL cross-references with CSKEYCODE where CONSOL = CSKEYCODE.Code.'
+- name: FYR
+  type: TINYINT
+  nullable: false
+  description: FYR is the fiscal year-end month. This item is a key field.
+- name: DATAFMT
+  type: TINYINT
+  nullable: false
+  description: 'DATAFMT describes the method of data reporting and collection. DATAFMT values for Compustat Global are: –
+    13 (HIST_STD Standardized data collected from the company''s original filing.) – 15 (RST_STD Standardized restated data
+    collected from the company''s subsequent filings.) This item is a key field.'
+- name: ITEM
+  type: SMALLINT
+  nullable: false
+  description: ITEM identifies standardized fundamental data with related analyst notes or transparency. Cross reference ITEM
+    with CsgItm. ITEM is a key field.
+- name: VALUE_
+  type: FLOAT
+  nullable: true
+  description: VALUE_ is the raw value provided by Compustat.
+- name: DATACODE
+  type: TINYINT
+  nullable: true
+  description: 'DATACODE indicates non-normal values. DATACODE values are: – 0 (Normal) – 1 (Not available) LSEG Quantitative
+    Analytics Database Schema for Compustat Global Data 30'
+join_hints:
+- to: CSKEYCODE
+  evidence: INDFMT cross-references with CSKEYCODE.
+  type: cross_reference
+- to: CSKEYCODE
+  evidence: CONSOL cross-references with CSKEYCODE where CONSOL = CSKEYCODE.Code.
+  type: cross_reference
+---
+table: qa_compustat_global.CsgNtrmCoSa
+domain: fundamentals
+description: Compustat Global Semi-Annual Fundamentals | This table contains semi-annual company fundamental data.
+columns:
+- name: GVKEY
+  type: INTEGER
+  nullable: false
+  description: 'GVKEY is the Global Company Key. It is a primary key for all companies in all Csg* tables. Use GVKEY with
+    CsgCmp to obtain company-level information, or CsgSec to obtain security-level information. For example, for security
+    mapping, to link to GSecMapX: GSecMapX.vencode = CsgCmp.gvkey where GSecMapX.ventype = 3'
+- name: DATADATE
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DATADATE is the company’s fiscal period end date. For security-level data, it is the trade date for high, low,
+    or close prices. This item is a key field.
+- name: INDFMT
+  type: TINYINT
+  nullable: false
+  description: 'INDFMT denotes whether a company reports in a Financial Services or Industrial format. INDFMT cross-references
+    with CSKEYCODE. INDFMT integer values are: – 5 (INDL Industrial, including manufacturing, retail, construction and other
+    commercial non-financial services.) – 9 (FS Financial Services, including banks, insurance companies, broker or dealers,
+    real estate, and other financial services.) – 16 (ISSUE Issue-level fundamentals.) This item is a key field.'
+- name: CONSOL
+  type: TINYINT
+  nullable: false
+  description: 'CONSOL describes the level of consolidation in the company’s financial statements. Levels of consolidation
+    are: – 6 (C Consolidated – parent and subsidiary combined) – 7 (P Pre-FASB) – 8 (R Pro-forma) – 10 (D Pre-divestiture)
+    – 14 (N Non-consolidated) This item is a key field. CONSOL cross-references with CSKEYCODE where CONSOL = CSKEYCODE.Code.'
+- name: FYR
+  type: TINYINT
+  nullable: false
+  description: FYR is the fiscal year-end month. This item is a key field.
+- name: DATAFMT
+  type: SMALLINT
+  nullable: false
+  description: 'DATAFMT describes the method of data reporting and collection. DATAFMT values for Compustat Global are: –
+    13 (HIST_STD Standardized data collected from the company''s original filing.) – 15 (RST_STD Standardized restated data
+    collected from the company''s subsequent filings.) This item is a key field. LSEG Quantitative Analytics Database Schema
+    for Compustat Global Data 31'
+- name: ITEM
+  type: SMALLINT
+  nullable: false
+  description: ITEM identifies standardized fundamental data with related analyst notes or transparency. Cross reference ITEM
+    with CsgItm. ITEM is a key field.
+- name: VALUE_
+  type: FLOAT
+  nullable: true
+  description: VALUE_ is the raw value provided by Compustat.
+- name: DATACODE
+  type: TINYINT
+  nullable: true
+  description: 'DATACODE indicates non-normal values. DATACODE values are: – 0 (Normal) – 1 (Not available) – 2 (Semi-annual
+    figure) – 3 (Annual figure) – 4 (Combined figure) – 8 (Insignificant figure)'
+join_hints:
+- to: CSKEYCODE
+  evidence: INDFMT cross-references with CSKEYCODE.
+  type: cross_reference
+- to: CSKEYCODE
+  evidence: CONSOL cross-references with CSKEYCODE where CONSOL = CSKEYCODE.Code.
+  type: cross_reference
+---
+table: qa_compustat_global.CsgNtrmCoYtd
+domain: fundamentals
+description: Compustat Global Company Year-to-Date | This table contains company year-to-date fundamental data.
+columns:
+- name: GVKEY
+  type: INTEGER
+  nullable: false
+  description: 'GVKEY is the Global Company Key. It is a primary key for all companies in all Csg* tables. Use GVKEY with
+    CsgCmp to obtain company-level information, or CsgSec to obtain security-level information. For example, for security
+    mapping, to link to GSecMapX: GSecMapX.vencode = CsgCmp.gvkey where GSecMapX.ventype = 3'
+- name: DATADATE
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DATADATE is the company’s fiscal period end date. For security-level data, it is the trade date for high, low,
+    or close prices. This item is a key field.
+- name: INDFMT
+  type: TINYINT
+  nullable: false
+  description: 'INDFMT denotes whether a company reports in a Financial Services or Industrial format. INDFMT cross-references
+    with CSKEYCODE. INDFMT integer values are: – 5 (INDL Industrial, including manufacturing, retail, construction and other
+    commercial non-financial services.) – 9 (FS Financial Services, including banks, insurance companies, broker or dealers,
+    real estate, and other financial services.) – 16 (ISSUE Issue-level fundamentals.) This item is a key field.'
+- name: CONSOL
+  type: TINYINT
+  nullable: false
+  description: 'CONSOL describes the level of consolidation in the company’s financial statements. Levels of consolidation
+    are: – 6 (C Consolidated – parent and subsidiary combined) – 7 (P Pre-FASB) – 8 (R Pro-forma) – 10 (D Pre-divestiture)
+    – 14 (N Non-consolidated) This item is a key field. CONSOL cross-references with CSKEYCODE where CONSOL = CSKEYCODE.Code.'
+- name: FYR
+  type: TINYINT
+  nullable: false
+  description: FYR is the fiscal year-end month. This item is a key field. LSEG Quantitative Analytics Database Schema for
+    Compustat Global Data 32
+- name: DATAFMT
+  type: TINYINT
+  nullable: false
+  description: 'DATAFMT describes the method of data reporting and collection. DATAFMT values for Compustat Global are: –
+    13 (HIST_STD Standardized data collected from the company''s original filing.) – 15 (RST_STD Standardized restated data
+    collected from the company''s subsequent filings.) This item is a key field.'
+- name: ITEM
+  type: SMALLINT
+  nullable: false
+  description: ITEM identifies standardized fundamental data with related analyst notes or transparency. Cross reference ITEM
+    with CsgItm. ITEM is a key field.
+- name: VALUE_
+  type: FLOAT
+  nullable: true
+  description: VALUE_ is the raw value provided by Compustat.
+- name: DATACODE
+  type: TINYINT
+  nullable: true
+  description: 'DATACODE indicates non-normal values. DATACODE values are: – 0 (Normal) – 1 (Not available) – 2 (Semi-annual
+    figure) – 3 (Annual figure) – 4 (Combined figure) – 8 (Insignificant figure)'
+join_hints:
+- to: CSKEYCODE
+  evidence: INDFMT cross-references with CSKEYCODE.
+  type: cross_reference
+- to: CSKEYCODE
+  evidence: CONSOL cross-references with CSKEYCODE where CONSOL = CSKEYCODE.Code.
+  type: cross_reference
+---
+table: qa_compustat_global.CsgNtrmSec
+domain: fundamentals
+description: Compustat Global Issue Fundamentals | This table contains security-level fundamental data.
+columns:
+- name: GVKEY
+  type: INTEGER
+  nullable: false
+  description: 'GVKEY is the Global Company Key. It is a primary key for all companies in all Csg* tables. Use GVKEY with
+    CsgCmp to obtain company-level information, or CsgSec to obtain security-level information. For example, for security
+    mapping, to link to GSecMapX: GSecMapX.vencode = CsgCmp.gvkey where GSecMapX.ventype = 3'
+- name: IID
+  type: varchar(4)
+  nullable: false
+  description: IID is the global issue ID. The IID is an alphanumeric character code. IID consists of a security-identifying
+    numeric component and a population- identifying alpha component. The numeric component distinguishes a security from other
+    securities issued by a company. The alpha component W indicates that the security is traded on a non-Canadian, non-U.S.
+    exchange; C indicates the issue is traded on a Canadian exchange; and no alpha character indicates the security is traded
+    in the United States. Thi
+- name: DATADATE
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DATADATE is the company’s fiscal period end date. For security-level data, it is the trade date for high, low,
+    or close prices. This item is a key field.
+- name: INDFMT
+  type: TINYINT
+  nullable: false
+  description: 'INDFMT denotes whether a company reports in a Financial Services or Industrial format. INDFMT cross-references
+    with CSKEYCODE. INDFMT integer values are: – 5 (INDL Industrial, including manufacturing, retail, construction and other
+    commercial non-financial services.) – 9 (FS Financial Services, including banks, insurance companies, broker or dealers,
+    real estate, and other financial services.) – 16 (ISSUE Issue-level fundamentals.) This item is a key field.'
+- name: CONSOL
+  type: TINYINT
+  nullable: false
+  description: 'CONSOL describes the level of consolidation in the company’s financial statements. Levels of consolidation
+    are: – 6 (C Consolidated – parent and subsidiary combined) LSEG Quantitative Analytics Database Schema for Compustat Global
+    Data 33'
+- name: FYR
+  type: TINYINT
+  nullable: false
+  description: FYR is the fiscal year-end month. This item is a key field.
+- name: DATAFMT
+  type: TINYINT
+  nullable: false
+  description: 'DATAFMT describes the method of data reporting and collection. DATAFMT values for Compustat Global are: –
+    13 (HIST_STD Standardized data collected from the company''s original filing.) – 15 (RST_STD Standardized restated data
+    collected from the company''s subsequent filings.) This item is a key field.'
+- name: ITEM
+  type: SMALLINT
+  nullable: false
+  description: ITEM identifies standardized fundamental data with related analyst notes or transparency. Cross reference ITEM
+    with CsgItm. ITEM is a key field.
+- name: VALUE_
+  type: FLOAT
+  nullable: true
+  description: VALUE_ is the raw value provided by Compustat.
+- name: DATACODE
+  type: TINYINT
+  nullable: true
+  description: 'DATACODE indicates non-normal values. DATACODE values are: – 0 (Normal) – 1 (Not available) – 2 (Semi-annual
+    figure) – 3 (Annual figure) – 4 (Combined figure) – 8 (Insignificant figure)'
+join_hints:
+- to: CSKEYCODE
+  evidence: INDFMT cross-references with CSKEYCODE.
+  type: cross_reference
+---
+table: qa_compustat_global.CsgNtrmSecFnt
+domain: fundamentals
+description: Compustat Global Issue Fundamental Footnotes | This table contains footnotes for the security-level fundamental
+  data.
+columns:
+- name: GVKEY
+  type: INTEGER
+  nullable: false
+  description: 'GVKEY is the Global Company Key. It is a primary key for all companies in all Csg* tables. Use GVKEY with
+    CsgCmp to obtain company-level information, or CsgSec to obtain security-level information. For example, for security
+    mapping, to link to GSecMapX: GSecMapX.vencode = CsgCmp.gvkey where GSecMapX.ventype = 3'
+- name: IID
+  type: varchar(4)
+  nullable: false
+  description: IID is the global issue ID. The IID is an alphanumeric character code. IID consists of a security-identifying
+    numeric component and a population- identifying alpha component. The numeric component distinguishes a security from other
+    securities issued by a company. The alpha component W indicates that the security is traded on a non-Canadian, non-U.S.
+    exchange; C indicates the issue is traded on a Canadian exchange; and no alpha character indicates the security is traded
+    in the United States. Thi
+- name: DATADATE
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DATADATE is the company’s fiscal period end date. For security-level data, it is the trade date for high, low,
+    or close prices. This item is a key field.
+- name: INDFMT
+  type: TINYINT
+  nullable: false
+  description: 'INDFMT denotes whether a company reports in a Financial Services or Industrial format. INDFMT cross-references
+    with CSKEYCODE. INDFMT integer values are: – 5 (INDL Industrial, including manufacturing, retail, construction and other
+    commercial non-financial services.) LSEG Quantitative Analytics Database Schema for Compustat Global Data 34'
+- name: CONSOL
+  type: TINYINT
+  nullable: false
+  description: 'CONSOL describes the level of consolidation in the company’s financial statements. Levels of consolidation
+    are: – 6 (C Consolidated – parent and subsidiary combined) – 7 (P Pre-FASB) – 8 (R Pro-forma) – 10 (D Pre-divestiture)
+    – 14 (N Non-consolidated) This item is a key field. CONSOL cross-references with CSKEYCODE where CONSOL = CSKEYCODE.Code.'
+- name: FYR
+  type: TINYINT
+  nullable: false
+  description: FYR is the fiscal year-end month. This item is a key field.
+- name: DATAFMT
+  type: TINYINT
+  nullable: false
+  description: 'DATAFMT describes the method of data reporting and collection. DATAFMT values for Compustat Global are: –
+    13 (HIST_STD Standardized data collected from the company''s original filing.) – 15 (RST_STD Standardized restated data
+    collected from the company''s subsequent filings.) This item is a key field.'
+- name: ITEM
+  type: SMALLINT
+  nullable: false
+  description: ITEM identifies standardized fundamental data with related analyst notes or transparency. Cross reference ITEM
+    with CsgItm. ITEM is a key field.
+- name: VALUE_
+  type: varchar(9)
+  nullable: true
+  description: VALUE_ is the raw value provided by Compustat.
+join_hints:
+- to: CSKEYCODE
+  evidence: INDFMT cross-references with CSKEYCODE.
+  type: cross_reference
+- to: CSKEYCODE
+  evidence: CONSOL cross-references with CSKEYCODE where CONSOL = CSKEYCODE.Code.
+  type: cross_reference
+---
+table: qa_compustat_global.CsgNtrmSecIDesc
+domain: fundamentals
+description: Compustat Global Issue Description | Use this table to retrieve quarterly security description data including
+  the adjustment factor and currency.
+columns:
+- name: GVKEY
+  type: INTEGER
+  nullable: false
+  description: 'GVKEY is the Global Company Key. It is a primary key for all companies in all Csg* tables. Use GVKEY with
+    CsgCmp to obtain company-level information, or CsgSec to obtain security-level information. For example, for security
+    mapping, to link to GSecMapX: GSecMapX.vencode = CsgCmp.gvkey where GSecMapX.ventype = 3'
+- name: IID
+  type: varchar(4)
+  nullable: false
+  description: IID is the global issue ID. The IID is an alphanumeric character code. IID consists of a security-identifying
+    numeric component and a population- identifying alpha component. The numeric component distinguishes a security from other
+    securities issued by a company. The alpha component W indicates that the security is traded on a non-Canadian, non-U.S.
+    exchange; C indicates the issue is traded on a Canadian exchange; and no alpha character indicates the security is traded
+    in the United States. Thi
+- name: DATADATE
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DATADATE is the company’s fiscal period end date. For security-level data, it is the trade date for high, low,
+    or close prices. This item is a key field.
+- name: INDFMT
+  type: TINYINT
+  nullable: false
+  description: 'INDFMT denotes whether a company reports in a Financial Services or Industrial format. INDFMT cross-references
+    with CSKEYCODE. INDFMT integer values are: – 5 (INDL Industrial, including manufacturing, retail, construction and other
+    commercial non-financial services.) – 9 (FS Financial Services, including banks, insurance companies, broker or dealers,
+    real estate, and other financial services.) – 16 (ISSUE Issue-level fundamentals.) LSEG Quantitative Analytics Database
+    Schema for Compustat Global'
+- name: CONSOL
+  type: TINYINT
+  nullable: false
+  description: 'CONSOL describes the level of consolidation in the company’s financial statements. Levels of consolidation
+    are: – 6 (C Consolidated – parent and subsidiary combined) – 7 (P Pre-FASB) – 8 (R Pro-forma) – 10 (D Pre-divestiture)
+    – 14 (N Non-consolidated) This item is a key field. CONSOL cross-references with CSKEYCODE where CONSOL = CSKEYCODE.Code.'
+- name: FYR
+  type: TINYINT
+  nullable: false
+  description: FYR is the fiscal year-end month. This item is a key field.
+- name: AJEXIQ
+  type: FLOAT
+  nullable: true
+  description: AJEXIQ is the quarterly security-level adjustment factor; it is cumulative by ex-date.
+- name: CURCDQ
+  type: varchar(4)
+  nullable: true
+  description: CURCDQ is the ISO currency code. Cross-reference CURCDQ with CsgRef where CsgNtrmSecIDesc.compst = CsgRef.refcd1
+    and CsgRef.reftype = 36.
+join_hints:
+- to: CSKEYCODE
+  evidence: INDFMT cross-references with CSKEYCODE.
+  type: cross_reference
+- to: CSKEYCODE
+  evidence: CONSOL cross-references with CSKEYCODE where CONSOL = CSKEYCODE.Code.
+  type: cross_reference
+---
+table: qa_compustat_global.CsgRef
+domain: fundamentals
+description: Compustat Global Code Reference | This table contains values for the Compustat global code reference.
+columns:
+- name: REFTYPE
+  type: SMALLINT
+  nullable: false
+  description: The combination of REFTYPE and REFCD1 provides descriptions across all Csg* tables. REFTYPE is defined below,
+    on page 35.
+- name: REFCD1
+  type: varchar(11)
+  nullable: false
+  description: The combination of REFTYPE and REFCD1 provides descriptions across all Csg* tables. REFCD2 varchar(11) N
+- name: REFDESC
+  type: varchar(255)
+  nullable: true
+  description: REFDESC is the textual description of the REFTYPE. REFSTAT varchar(2) Y REFTYPE codes code definition code
+    definition 1 sections 22 auditors opinion 2 accounting standard 23 price status 3 acquisition method 24 security status
+    4 auditors 25 security adjustment descriptions 5 balance sheet presentation 26 S&P sector codes 6 cash flow format 27
+    SIC codes 7 comparability status 28 S&P industry codes 8 country/FIC code 29 S&P major index code 9 data code 30 status
+    alert 10 document source 31 state/p
+---
+table: qa_compustat_global.CsgSad
+domain: fundamentals
+description: Compustat Global Security Annual Period Descriptors | This table contains information on annually-based security
+  descriptors.
+columns:
+- name: SECID
+  type: INTEGER
+  nullable: false
+  description: SECID is synonymous to IID. SECID is the primary key across all CsgS* tables.
+- name: DATADATE
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DATADATE is the company’s fiscal period end date. For security-level data, it is the trade date for high, low,
+    or close prices. This item is a key field.
+- name: AJEXI
+  type: FLOAT
+  nullable: true
+  description: AJEXI is the annual cumulative adjustment factor on the ex-date.
+- name: CURCDI
+  type: varchar(4)
+  nullable: true
+  description: CURCDI is the security-level ISO currency code. Cross-reference CURCDL with CsgRef where CsgSad.curcdi = CsgRef.refcd1
+    and CsgRef.reftype = 36.
+- name: FYR
+  type: SMALLINT
+  nullable: true
+  description: FYR is the fiscal year-end month. This item is a key field.
+---
+table: qa_compustat_global.CsgSaf
+domain: fundamentals
+description: Compustat Global Security Annual Fundamentals | This table contains security-level annual fundamental data.
+columns:
+- name: SECID
+  type: INTEGER
+  nullable: false
+  description: SECID is synonymous to IID. SECID is the primary key across all CsgS* tables.
+- name: ITEM
+  type: SMALLINT
+  nullable: false
+  description: ITEM identifies standardized fundamental data with related analyst notes or transparency. Cross reference ITEM
+    with CsgItm. ITEM is a key field.
+- name: DATADATE
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DATADATE is the company’s fiscal period end date. For security-level data, it is the trade date for high, low,
+    or close prices. This item is a key field.
+- name: DATACODE
+  type: TINYINT
+  nullable: true
+  description: 'DATACODE indicates non-normal values. DATACODE values are: – 0 (Normal) – 1 (Not available) – 2 (Semi-annual
+    figure) – 3 (Annual figure) – 4 (Combined figure) – 8 (Insignificant figure)'
+- name: FOOTNOTE
+  type: varchar(9)
+  nullable: true
+  description: Cross-reference FOOTNOTE with CsgRef where CsgSaf.footnote = CsgRef.refcd1 and CsfRef.reftype = 13.
+- name: VALUE_
+  type: FLOAT
+  nullable: true
+  description: VALUE_ is the raw value provided by Compustat.
+join_hints:
+- to: CsgRef
+  evidence: 'DATACODE values are: – 0 (Normal) – 1 (Not available) – 2 (Semi-annual figure) – 3 (Annual figure) – 4 (Combined
+    figure) – 8 (Insignificant figure) FOOTNOTE varchar(9) Y Cross-reference FOOTNOTE with CsgRef where CsgSaf.footnote =
+    CsgRef.refcd1 and CsfRef.reftype = 13.'
+  type: cross_reference
+---
+table: qa_compustat_global.CsgSdp
+domain: fundamentals
+description: Compustat Global Security Daily Price Data | Use this table to retrieve security daily price data.
+columns:
+- name: SECID
+  type: INTEGER
+  nullable: false
+  description: SECID is synonymous to IID. SECID is the primary key across all CsgS* tables. LSEG Quantitative Analytics Database
+    Schema for Compustat Global Data 37
+- name: DATADATE
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DATADATE is the company’s fiscal period end date. For security-level data, it is the trade date for high, low,
+    or close prices. This item is a key field.
+- name: CURCDD
+  type: varchar(4)
+  nullable: false
+  description: CURRCDD is the ISO currency code. Cross-reference with CsgRef where CsgSdp.currcdd = CsgRef.refcd1 and CsgRef.reftype
+    = 36.
+- name: ADRRC
+  type: FLOAT
+  nullable: true
+  description: ADRRC represents the number of an international company's common or ordinary shares equivalent to one American
+    Depositary Receipt (ADR) or one American Depositary Share (ADS).
+- name: AJEXDI
+  type: FLOAT
+  nullable: true
+  description: AJEXDI is the security-level cumulative adjustment factor on the ex-date.
+- name: CSHOC
+  type: FLOAT
+  nullable: true
+  description: CSHOC is the shares outstanding.
+- name: CSHTRD
+  type: FLOAT
+  nullable: true
+  description: CSHTRD is the daily trading volume.
+- name: DVI
+  type: FLOAT
+  nullable: true
+  description: DVI is the indicated annual dividend (current).
+- name: EPS
+  type: FLOAT
+  nullable: true
+  description: EPS is the earnings per share (current).
+- name: EPSMO
+  type: TINYINT
+  nullable: true
+  description: EPSMO is the earnings per share month (current).
+- name: PRCCD
+  type: FLOAT
+  nullable: true
+  description: PRCCD is the daily closing price.
+- name: PRCHD
+  type: FLOAT
+  nullable: true
+  description: PRCHD is the daily high price.
+- name: PRCLD
+  type: FLOAT
+  nullable: true
+  description: PRCLD is the daily low price.
+- name: PRCOD
+  type: FLOAT
+  nullable: true
+  description: PRCOD is the range of prices at which the first bids and offers were made or the first transactions were completed.
+- name: PRCSTD
+  type: SMALLINT
+  nullable: true
+  description: PRCSTD is the daily price status code. PRCSTD cross-references with CsgRef where CsgSdp.currcdd = CsgRef.refcd1
+    and CsgRef.reftype = 23.
+- name: QUNIT
+  type: FLOAT
+  nullable: true
+  description: QUNIT is the price quotation unit.
+join_hints:
+- to: CsgRef
+  evidence: PRCSTD cross-references with CsgRef where CsgSdp.currcdd = CsgRef.refcd1 and CsgRef.reftype = 23.
+  type: cross_reference
+---
+table: qa_compustat_global.CsgSdv
+domain: fundamentals
+description: Compustat Global Security Dividend Data | This table contains security dividend data.
+columns:
+- name: SECID
+  type: INTEGER
+  nullable: false
+  description: SECID is synonymous to IID. SECID is the primary key across all CsgS* tables.
+- name: DATADATE
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DATADATE is the company’s fiscal period end date. For security-level data, it is the trade date for high, low,
+    or close prices. This item is a key field.
+- name: CURCDDV
+  type: varchar(4)
+  nullable: false
+  description: CURCDDV is the dividend ISO currency code. Cross-reference CURCDDV with CsgRef where CsgSdv.currcdd = CsgRef.refcd1
+    and CsgRef.reftype = 36.
+- name: ANNCDATE
+  type: TIMESTAMP(6)
+  nullable: true
+  description: ANNCDATE is the date the directors declare the next dividend in the format YYYYMMDD.
+- name: CAPGN
+  type: FLOAT
+  nullable: true
+  description: CAPGN is the capital gain.
+- name: CHEQV
+  type: FLOAT
+  nullable: true
+  description: CHEQV is the cash equivalent distributions per share.
+- name: DIV
+  type: FLOAT
+  nullable: true
+  description: DIV is the daily dividends per share on the ex-date.
+- name: DIVD
+  type: FLOAT
+  nullable: true
+  description: DIVD is the cash dividend paid to shareholders. This figure excludes special dividends, cash equivalents, and
+    capital gains.
+- name: DIVOP
+  type: FLOAT
+  nullable: true
+  description: DIVOP is the optional dividend.
+- name: DIVSP
+  type: FLOAT
+  nullable: true
+  description: DIVSP is a non-recurring, special dividend.
+- name: DVRATED
+  type: FLOAT
+  nullable: true
+  description: DVRATED is an approximate indicator of dividend performance.
+- name: PAYDATE
+  type: TIMESTAMP(6)
+  nullable: true
+  description: PAYDATE is the date shareholders of record will be sent a check for the declared dividend.
+- name: RECORDDATE
+  type: TIMESTAMP(6)
+  nullable: true
+  description: RECORDDATE is the date by which a shareholder must own shares to be entitled to a dividend. LSEG Quantitative
+    Analytics Database Schema for Compustat Global Data 38
+---
+table: qa_compustat_global.CsgSec
+domain: fundamentals
+description: Compustat Global Security Data | This table contains data on global securities.
+columns:
+- name: GVKEY
+  type: INTEGER
+  nullable: false
+  description: 'GVKEY is the Global Company Key. It is a primary key for all companies in all Csg* tables. Use GVKEY with
+    CsgCmp to obtain company-level information, or CsgSec to obtain security-level information. For example, for security
+    mapping, to link to GSecMapX: GSecMapX.vencode = CsgCmp.gvkey where GSecMapX.ventype = 3'
+- name: IID
+  type: varchar(4)
+  nullable: false
+  description: IID is the global issue ID. The IID is an alphanumeric character code. IID consists of a security-identifying
+    numeric component and a population- identifying alpha component. The numeric component distinguishes a security from other
+    securities issued by a company. The alpha component W indicates that the security is traded on a non-Canadian, non-U.S.
+    exchange; C indicates the issue is traded on a Canadian exchange; and no alpha character indicates the security is traded
+    in the United States. Thi
+- name: CUSIP
+  type: varchar(10)
+  nullable: true
+  description: 'CUSIP uniquely identifies a company. CUSIP is a nine-digit code: the first six digits identify the issuer,
+    the seventh and eighth digit identify the security, and the ninth digit is the check digit. A CUSIP with an X as the last
+    digit indicates that the security is inactive.'
+- name: DLDTEI
+  type: TIMESTAMP(6)
+  nullable: true
+  description: DLDTEI is the security inactivation date.
+- name: DLRSNI
+  type: varchar(9)
+  nullable: true
+  description: DLRSNI is the security inactivation reason. DIRSNL cross-references with CsgRef where CsgSec.dlrsni = CsgRef.refcd1
+    and CsgRef.reftype = 16. DLRSNI is defined below on page 39.
+- name: DSCI
+  type: varchar(29)
+  nullable: true
+  description: DSCI is the security description.
+- name: EPF
+  type: char(1)
+  nullable: true
+  description: EPF indicates whether the security participates in the company's earnings. Y (Yes) indicates the security participates
+    in earnings. If the security does not participate in the company's earnings, this item is blank.
+- name: EXCHG
+  type: SMALLINT
+  nullable: true
+  description: EXCHG is the stock exchange.
+- name: EXCNTRY
+  type: varchar(4)
+  nullable: true
+  description: EXCNTRY is the stock exchange country code. Cross-reference EXCNTRY with CsgRef where CsgSec.excntry = CsgRef.refcd1
+    and CsgRef.reftype = 8.
+- name: IBTIC
+  type: varchar(7)
+  nullable: true
+  description: IBTIC is the unique IBES security symbol.
+- name: ISIN
+  type: varchar(13)
+  nullable: true
+  description: ISIN is the international security identification number.
+- name: SECSTAT
+  type: varchar(2)
+  nullable: true
+  description: SECSTAT is the security status marker. SECSTAT cross-references with CsgRef where CsgSec.secstat = CsgRef.refcd1
+    and CsgRef.reftype = 24.
+- name: SEDOL
+  type: varchar(8)
+  nullable: true
+  description: SEDOL is the Stock Exchange Daily Official List security ID, as determined by the International Stock Exchange
+    in London.
+- name: TIC
+  type: varchar(21)
+  nullable: true
+  description: TIC is the ticker/trading symbol.
+- name: TPCI
+  type: varchar(9)
+  nullable: true
+  description: TPCI is the issue type. Cross-reference TPCI with CsgRef where CsgSec.tpci = CsgRef.refcd1 and CsgRef.reftype
+    = 20.
+- name: SECID
+  type: INTEGER
+  nullable: true
+  description: SECID is synonymous to IID. SECID is the primary key across all CsgS* tables.
+- name: NAME
+  type: varchar(250)
+  nullable: true
+  description: 'NAME is the company name. LSEG Quantitative Analytics Database Schema for Compustat Global Data 39 DLRSNI
+    Codes code definition 01 Acquisition or merger 02 Bankruptcy 03 Liquidation 04 Reverse acquisition – 1983 forward 05 No
+    longer fits original format – 1978 forward 06 Leveraged buyout – 1982 forward 07 Other – for example, no longer files
+    with SEC – but pricing continues 09 Now a private company 10 Other – for example, no longer files with SEC 11 Local Settlement
+    Code inactivated because the '
+join_hints:
+- to: CsgRef
+  evidence: SECSTAT cross-references with CsgRef where CsgSec.secstat = CsgRef.refcd1 and CsgRef.reftype = 24.
+  type: cross_reference
+---
+table: qa_compustat_global.CSGSSPLIT
+domain: fundamentals
+description: Compustat Global Security Stock Split Data | This table contains information on security stock splits.
+columns:
+- name: SECID
+  type: INTEGER
+  nullable: false
+  description: SECID is synonymous to IID. SECID is the primary key across all CsgS* tables.
+- name: DATADATE
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DATADATE is the company’s fiscal period end date. For security-level data, it is the trade date for high, low,
+    or close prices. This item is a key field.
+- name: SPLIT
+  type: FLOAT
+  nullable: true
+  description: SPLIT is the split ratio of the stock.
+---
+table: qa_compustat_global.CsgXrd
+domain: fundamentals
+description: Compustat Global Currency Daily Exchange Rate Data | Use this table to retrieve daily exchange rate data.
+columns:
+- name: TOCURD
+  type: varchar(4)
+  nullable: false
+  description: TOCURD is the currency into which the daily translation rate translates. For example, in the translation from
+    Euros into U.S. Dollars, the code for U.S. Dollars is the TOCURD. Use TOCURD in conjunction with FROMCURD. Cross-reference
+    TOCURD with CsgRef, where CsgXrd.tocurd = CsgRef.refcd1 and CsgRef.reftype = 36.
+- name: DATADATE
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DATADATE is the company’s fiscal period end date. For security-level data, it is the trade date for high, low,
+    or close prices. This item is a key field.
+- name: EXRATD
+  type: FLOAT
+  nullable: true
+  description: EXRATD is the daily exchange rate.
+- name: EXRATTPD
+  type: varchar(3)
+  nullable: true
+  description: EXRATTPD is the daily exchange rate report type. EXRATTPD cross- references with CsgRef where CsgXrd.exrattpd
+    = CsgRef.refcd1 and CsgRef.reftype = 12.
+- name: FROMCURD
+  type: varchar(4)
+  nullable: true
+  description: FROMCURD is the ISO currency code for the starting currency in a daily currency translation. For example, in
+    the translation from Euros into U.S. Dollars, the code for Euros is the FROMCURD. Cross-reference FROMCURD with CsgRef,
+    where CsgXrd.fromcurd = CsgRef.refcd1 and CsgRef.reftype = 36. LSEG Quantitative Analytics Database Schema for Compustat
+    Global Data 40
+---
+table: qa_compustat_global.CsgXrm
+domain: fundamentals
+description: Compustat Global Currency Monthly Exchange Rate Data | Use this table to retrieve monthly exchange rate data.
+columns:
+- name: TOCURM
+  type: varchar(4)
+  nullable: false
+  description: TOCURM is the currency into which the monthly translation rate translates. For example, in the translation
+    from Euros into U.S. Dollars, the code for U.S. Dollars is the TOCURM. Use TOCURM in conjunction with FROMCURM. Cross-reference
+    TOCURM with CsgRef, where CsgXrm.tocurm = CsgRef.refcd1 and CsgRef.reftype = 36.
+- name: DATADATE
+  type: TIMESTAMP(6)
+  nullable: false
+  description: DATADATE is the company’s fiscal period end date. For security-level data, it is the trade date for high, low,
+    or close prices. This item is a key field.
+- name: EXRAT10M
+  type: FLOAT
+  nullable: true
+  description: EXRAT10M is the average exchange rate, and 10 is the monthly duration.
+- name: EXRAT11M
+  type: FLOAT
+  nullable: true
+  description: EXRAT11M is the average exchange rate, and 11 is the monthly duration.
+- name: EXRAT12M
+  type: FLOAT
+  nullable: true
+  description: EXRAT12M is the average exchange rate, and 12 is the monthly duration.
+- name: EXRAT13M
+  type: FLOAT
+  nullable: true
+  description: EXRAT13M is the average exchange rate, and 13 is the monthly duration.
+- name: EXRAT14M
+  type: FLOAT
+  nullable: true
+  description: EXRAT14M is the average exchange rate, and 14 is the monthly duration.
+- name: EXRAT15M
+  type: FLOAT
+  nullable: true
+  description: EXRAT15M is the average exchange rate, and 15 is the monthly duration.
+- name: EXRAT16M
+  type: FLOAT
+  nullable: true
+  description: EXRAT16M is the average exchange rate, and 16 is the monthly duration.
+- name: EXRAT17M
+  type: FLOAT
+  nullable: true
+  description: EXRAT17M is the average exchange rate, and 17 is the monthly duration.
+- name: EXRAT18M
+  type: FLOAT
+  nullable: true
+  description: EXRAT18M is the average exchange rate, and is the monthly duration.
+- name: EXRAT1M
+  type: FLOAT
+  nullable: true
+  description: EXRAT1M is the average exchange rate, and 1 is the monthly duration
+- name: EXRAT2M
+  type: FLOAT
+  nullable: true
+  description: EXRAT2M is the average exchange rate, and 2 is the monthly duration.
+- name: EXRAT3M
+  type: FLOAT
+  nullable: true
+  description: EXRAT3M is the average exchange rate, and 3 is the monthly duration.
+- name: EXRAT4M
+  type: FLOAT
+  nullable: true
+  description: EXRAT4M is the average exchange rate, and 4 is the monthly duration.
+- name: EXRAT5M
+  type: FLOAT
+  nullable: true
+  description: EXRAT5M is the average exchange rate, and 5 is the monthly duration.
+- name: EXRAT6M
+  type: FLOAT
+  nullable: true
+  description: EXRAT6M is the average exchange rate, and 6 is the monthly duration.
+- name: EXRAT7M
+  type: FLOAT
+  nullable: true
+  description: EXRAT7M is the average exchange rate, and 7 is the monthly duration.
+- name: EXRAT8M
+  type: FLOAT
+  nullable: true
+  description: EXRAT8M is the average exchange rate, and 8 is the monthly duration.
+- name: EXRAT9M
+  type: FLOAT
+  nullable: true
+  description: EXRAT9M is the average exchange rate, and 9 is the monthly duration.
+- name: EXRATM
+  type: FLOAT
+  nullable: true
+  description: EXRATM is the month-end currency translation rate; it is the official pricing released at 4PM London closing.
+- name: FROMCURM
+  type: varchar(4)
+  nullable: true
+  description: FROMCURM is the ISO currency code for the starting currency in a monthly currency translation. For example,
+    in the translation from Euros into U.S. Dollars, the code for Euros is the FROMCURD. Cross-reference with CsgRef where
+    CsgXrm.tocurm = CsgRef.refcd1and CsgRef.reftype = 36.
+---
+table: qa_compustat_global.CSKEYCODE
+domain: fundamentals
+description: Compustat XF Security Information | This table is also part of the Compustat North American Xpressfeed schema.
+  CSKEYCODE has been added to | the Global schema due to Compustat’s integer conversion. This table contains integer values
+  for INDFMT,
+columns:
+- name: Code
+  type: TINYINT
+  nullable: false
+  description: Code is the numerical value for the field listed under FieldName.
+- name: StringValue
+  type: varchar(13)
+  nullable: true
+  description: StringValue is the Compustat-provided value for the key field. Please consult the Compustat data guide for
+    detailed explanation of the available values.
+- name: FieldName
+  type: varchar(31)
+  nullable: true
+  description: FieldName contains the name of the field described (CONSOL, CURCD, DATAFMT, INDFMT) LSEG Quantitative Analytics
+    Database Schema for Compustat Global Data 41
+- name: Description
+  type: varchar(81)
+  nullable: true
+  description: Description is currently unused. For more information on accessing Compustat documentation, see Accessing Standard
+    & Poor’s Compustat Documentation on page 5. LSEG Quantitative Analytics Database Schema for Compustat Global Data Copyright
+    © 2024 London Stock Exchange Group plc and its group of companies (LSEG) and/or its affiliates. All rights reserved. The
+    LSEG content received through this service is the intellectual property of LSEG or its third party suppliers. Republication
+    or redistributio

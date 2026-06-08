@@ -20,8 +20,12 @@ def workspace_paths() -> dict[str, Path]:
     return {
         "root": root,
         "catalog_json": root / "schemas" / "catalog.json",
+        "qa_catalog_json": root / "schemas" / "qa_catalog.json",
         "schemas_dir": root / "schemas",
+        "qa_schemas_dir": root / "schemas" / "qa",
         "docs_dir": root / "docs",
+        "qa_docs_dir": root / "QA-DOCS",
+        "qa_extracted_dir": root / "QA-DOCS" / "_extracted",
         "sample_data_dir": root / "sample_data",
         "tests_dir": root / "tests",
         "fixtures_dir": root / "tests" / "fixtures",

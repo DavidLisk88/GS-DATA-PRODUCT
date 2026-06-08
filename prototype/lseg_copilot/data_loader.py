@@ -94,23 +94,54 @@ def _create_empty_table_from_spec(
     if not spec.columns:
         # No column info — skip.
         return
+    # Deduplicate columns (QA PDF extraction can produce repeats).
+    seen: set[str] = set()
+    unique_cols = []
+    for c in spec.columns:
+        key = c.name.lower()
+        if key not in seen:
+            seen.add(key)
+            unique_cols.append(c)
     col_defs = ", ".join(
-        f'"{c.name}" {_normalize_type(c.type)}' for c in spec.columns
+        f'"{c.name}" {_normalize_type(c.type)}' for c in unique_cols
     )
-    con.execute(
-        f'CREATE TABLE IF NOT EXISTS "{schema}"."{table}" ({col_defs})'
-    )
+    try:
+        con.execute(
+            f'CREATE TABLE IF NOT EXISTS "{schema}"."{table}" ({col_defs})'
+        )
+    except duckdb.Error:
+        pass
 
 
 def _normalize_type(raw: str) -> str:
-    """Map YAML types -> DuckDB types. ARRAY<...> becomes VARCHAR[]."""
+    """Map YAML/SQL-Server types -> DuckDB-compatible types."""
     cleaned = raw.strip()
     upper = cleaned.upper()
     if upper.startswith("ARRAY<"):
         return "VARCHAR[]"
-    # DuckDB doesn't support TIMESTAMP(6) directly; map to TIMESTAMP.
-    if upper.startswith("TIMESTAMP("):
+    if upper.startswith("TIMESTAMP(") or upper.startswith("TIMESTAMP_"):
         return "TIMESTAMP"
+    if upper in {"SMALLDATETIME", "DATETIME2", "DATETIME"}:
+        return "TIMESTAMP"
+    if upper.startswith("NVARCHAR") or upper.startswith("NCHAR"):
+        return cleaned.upper().replace("NVARCHAR", "VARCHAR").replace("NCHAR", "CHAR")
+    if upper in {"NTEXT", "TEXT", "STRING"}:
+        return "VARCHAR"
+    if upper in {"IMAGE", "VARBINARY"}:
+        return "BLOB"
+    if upper == "MONEY":
+        return "DECIMAL(19,4)"
+    if upper == "BIT":
+        return "BOOLEAN"
+    if upper == "REAL":
+        return "FLOAT"
+    if upper == "UNIQUEIDENTIFIER":
+        return "VARCHAR(36)"
+    if upper in {"NUMBER", "DURATION"}:
+        return "DOUBLE"
+    # OCR artefacts from QA PDF extraction: map to VARCHAR as fallback.
+    if upper in {"IS", "BE", "WERE", "ALL", "HAS", "VACHAR", "VARCHART", "BIGNINT"}:
+        return "VARCHAR"
     return cleaned
 
 

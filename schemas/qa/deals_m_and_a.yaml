@@ -1,0 +1,1345 @@
+table: qa_deals.DLAcctInfo
+domain: corporate_actions
+description: Auditor and Accountant Information | This table contains information for the list of auditors and accountants
+  involved in various deals.
+update_cadence: Daily
+columns:
+- name: AcctId
+  type: INTEGER
+  nullable: false
+  description: AcctId is a unique identifier for an auditor
+- name: AcctCode
+  type: varchar(10)
+  nullable: true
+  description: AcctCode is a unique identifier for an auditor in the Deals database.
+- name: Accountant
+  type: varchar(20)
+  nullable: true
+  description: Accountant is the name of the auditor.
+- name: AcctLongName
+  type: varchar(50)
+  nullable: true
+  description: AcctLongName is the full name of the auditor.
+- name: AcctParent
+  type: varchar(20)
+  nullable: true
+  description: AcctParent is the name of the auditor’s parent.
+- name: Cusip
+  type: varchar(10)
+  nullable: true
+  description: Cusip is the CUSIP of the auditor; it is self-assigned, if not already assigned by the SEC.
+---
+table: qa_deals.DLAdvisor
+domain: corporate_actions
+description: Advisor Information | This table contains information for the advisors in a deal.
+update_cadence: 'Daily Adjusted: N/A'
+columns:
+- name: PrimOrgCIDGen
+  type: BIGINT
+  nullable: false
+  description: PrimOrgCIDGen is the CIDGEN of the primary player of a deal.
+- name: AdvOrgCIDGen
+  type: BIGINT
+  nullable: false
+  description: AdvOrgCIDGen is the CIDGEN of the auxiliary players of the deal.
+- name: AssetClassCode
+  type: TINYINT
+  nullable: false
+  description: AssetClassCode is an integer code that identifies the asset class. DLAdvisor.AssetClassCode cross-references
+    with DLCode.Code where Type_ = 1.
+- name: TransactionId
+  type: BIGINT
+  nullable: false
+  description: TransactionId is the identifier for a Deals transaction.
+- name: PrimRoleCode
+  type: TINYINT
+  nullable: false
+  description: PrimRoleCode is the primary role played by the players in the deal. These roles include the acquirer, target,
+    investor, and seller. DLAdvisor.PrimRoleCode cross-references with DLCode.Code where Type_ = 2.
+- name: AdvRoleCode
+  type: TINYINT
+  nullable: false
+  description: AdvRoleCode is the auxiliary role played by the players in the deal. These roles include the advisor, manger,
+    and accountant. DLAdvisor.AdvRoleCode cross-references with DLCode.Code where Type_ = 3.
+- name: UpdateDate
+  type: INTEGER
+  nullable: true
+  description: UpdateDate is the date of the last significant revision.
+- name: AnnDate
+  type: INTEGER
+  nullable: true
+  description: AnnDate is the date on which the deal was announced.
+- name: EffDate
+  type: INTEGER
+  nullable: true
+  description: EffDate is the date on which the deal became effective.
+- name: WithdrawDate
+  type: INTEGER
+  nullable: true
+  description: WithdrawDate is the date on which the deal was withdrawn.
+- name: RankDate
+  type: INTEGER
+  nullable: true
+  description: RankDate is the date on which rank was allocated.
+- name: LicFlag
+  type: INTEGER
+  nullable: false
+  description: LicFlag is a bit value that represents the license for this table. DLAdvisor.LicFlag cross-references with
+    DLCode.Code where Type_ = 15.
+---
+table: qa_deals.DLAdvisorsFee
+domain: corporate_actions
+description: Advisor Fee Information | This table contains information for advisor fess in a deal.
+update_cadence: Daily
+columns:
+- name: TransactionId
+  type: BIGINT
+  nullable: false
+  description: TransactionId is the identifier for a Deals transaction.
+- name: PrimRoleCode
+  type: TINYINT
+  nullable: false
+  description: PrimRoleCode is the primary role played by the players in the deal corresponding to which the advisor is associated.
+    DLAdvisorsFee.PrimRoleCode cross-references with DLCode.Code where Type_ = 2.
+- name: AdvOrgCIDGen
+  type: BIGINT
+  nullable: false
+  description: AdvOrgCIDGen is the CIDGEN of the auxiliary players of the deal.
+- name: AdvRoleCode
+  type: TINYINT
+  nullable: false
+  description: AdvRoleCode is the auxiliary role played by the players in the deal. These roles include the advisor, manger,
+    and accountant. DLAdvisorsFee.AdvRoleCode cross-references with DLCode.Code where Type_ = 3.
+- name: FeesCode
+  type: TINYINT
+  nullable: false
+  description: FeesCode is the fees code. DLAdvisorsFee.FeesCode cross-references with DLCode.Code where Type_ = 14.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the value corresponding to the item number.
+- name: UpdateDate
+  type: INTEGER
+  nullable: true
+  description: UpdateDate is the date of the last significant revision.
+- name: AnnDate
+  type: INTEGER
+  nullable: true
+  description: AnnDate is the date on which the deal was announced.
+- name: LicFlag
+  type: INTEGER
+  nullable: false
+  description: LicFlag is a bit value that represents the license for this table. DLAdvisorsFee.LicFlag cross-references with
+    DLCode.Code where Type_ = 15.
+---
+table: qa_deals.DLAdvSubRole
+domain: corporate_actions
+description: Advisor Sub Role Information | This table contains the sub role corresponding to the primary role played by an
+  advisor.
+update_cadence: Daily
+columns:
+- name: PrimOrgCIDGen
+  type: BIGINT
+  nullable: false
+  description: PriOrgCIDGEN is the CIDGEN of the primary player of a deal.
+- name: AdvOrgCIDGen
+  type: BIGINT
+  nullable: false
+  description: AdvOrgCIDGEN is the CIDGEN of the auxiliary players of the deal.
+- name: TransactionId
+  type: BIGINT
+  nullable: false
+  description: TransactionId is the identifier for a Deals transaction.
+- name: AdvSubRoleCode
+  type: TINYINT
+  nullable: false
+  description: AdvSubRoleCode is the target legal advisor assignments code. DLAdvSubRole.AdvSubRoleCode cross-references with
+    DLCode.Code where Type_ = 13.
+- name: PrimRoleCode
+  type: TINYINT
+  nullable: false
+  description: PrimRoleCode is the primary role played by the players in the deal. These roles include the acquirer, target,
+    investor, and seller.
+- name: AdvRoleCode
+  type: TINYINT
+  nullable: false
+  description: AdvRoleCode is the auxiliary role played by the players in the deal. These roles include the advisor, manger,
+    and accountant. DLAdvSubRole.AdvRoleCode cross-references with DLCode.Code where Type_ = 3.
+- name: SeqNum
+  type: SMALLINT
+  nullable: false
+  description: Internally derived incremental sequence number for every value instance for a given item.
+- name: UpdateDate
+  type: INTEGER
+  nullable: true
+  description: UpdateDate is the date of the last significant revision.
+- name: AnnDate
+  type: INTEGER
+  nullable: true
+  description: AnnDate is the date on which the deal was announced.
+- name: LicFlag
+  type: INTEGER
+  nullable: false
+  description: LicFlag is a bit value that represents the license for this table. DLAdvSubRole.LicFlag cross-references with
+    DLCode.Code where Type_ = 15.
+---
+table: qa_deals.DLCode
+domain: corporate_actions
+description: Integer Coded Values | This table contains integer coded values.
+update_cadence: Daily
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Type_ is a numeric code for a type of data.
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is a coded value for an element of Type_. When Type_ = 0, Code is the numeric code for each Type_ other
+    than 0 and Desc_ is a description of each Type_.
+- name: Desc_
+  type: varchar(100)
+  nullable: true
+  description: Desc_ is a plain-language description of the element defined by Type_ and Code.
+---
+table: qa_deals.DLConsidDesc
+domain: corporate_actions
+description: Consideration Textual Value | This table contains the textual value of the consideration offered or sought in
+  a deal.
+update_cadence: Daily
+columns:
+- name: TransactionId
+  type: BIGINT
+  nullable: false
+  description: TransactionId is the identifier for a Deals transaction.
+- name: UpdateDate
+  type: INTEGER
+  nullable: true
+  description: UpdateDate is the date of last significant revision.
+- name: AnnDate
+  type: INTEGER
+  nullable: true
+  description: AnnDate is the date on which the deal was announced.
+- name: LicFlag
+  type: INTEGER
+  nullable: false
+  description: LicFlag is a bit value that represents the license for this table. DLConsidDesc.LicFlag cross-references with
+    DLCode.Code where Type_ = 15.
+- name: ConsidOffSought
+  type: varchar(max)
+  nullable: true
+  description: ConsidOffSought is the description of the consideration offered or sought.
+---
+table: qa_deals.DLDealDesc
+domain: corporate_actions
+description: Deal Textual Description | This table contains the textual description of a deal.
+update_cadence: Daily
+columns:
+- name: TransactionId
+  type: BIGINT
+  nullable: false
+  description: TransactionId is the identifier for a Deals transaction.
+- name: UpdateDate
+  type: INTEGER
+  nullable: true
+  description: UpdateDate is the date of last significant revision.
+- name: AnnDate
+  type: INTEGER
+  nullable: true
+  description: AnnDate is the date on which the deal was announced.
+- name: LicFlag
+  type: INTEGER
+  nullable: false
+  description: LicFlag is a bit value that represents the license for this table. DLDealDesc.LicFlag cross-references with
+    DLCode.Code where Type_= 15.
+- name: DealDesc
+  type: varchar(max)
+  nullable: true
+  description: DealDesc is the textual description of a deal.
+---
+table: qa_deals.DLDesc
+domain: corporate_actions
+description: Type-Code Mapping | This table maps codes to descriptions.
+update_cadence: Daily
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Type_ is a numeric code for a type of data.
+- name: Code
+  type: varchar(20)
+  nullable: false
+  description: Code is a coded value for an element of Type_. When Type_ = 0, Code is the numeric code for each Type_ other
+    than 0 and Desc_ is a description of each Type_.
+- name: Desc_
+  type: varchar(100)
+  nullable: true
+  description: Desc_ is a plain-language description of the element defined by Type_ and Code.
+---
+table: qa_deals.DLFinAdvInfo
+domain: corporate_actions
+description: Financial Advisor Information | This table contains information for the list of banks and other financial advisors
+  involved in various deals.
+update_cadence: Daily
+columns:
+- name: FinAdvId
+  type: INTEGER
+  nullable: false
+  description: FinAdvId is a unique numeric identifier for a financial advisor in the Deals database.
+- name: MgrCode
+  type: varchar(20)
+  nullable: true
+  description: MgrCode is the identifier for a financial advisor in the Deals database.
+- name: MgrLongName
+  type: varchar(60)
+  nullable: true
+  description: MgrLongName is the full name of the legal advisor.
+- name: Cusip
+  type: varchar(10)
+  nullable: true
+  description: Cusip is the CUSIP of the legal advisor. It is self-assigned, if not already assigned by the SEC.
+- name: NatCode
+  type: char(2)
+  nullable: true
+  description: NatCode is the code identifying the nation of the advisor.
+- name: StateCode
+  type: char(2)
+  nullable: true
+  description: StateCode is the code identifying the state of the advisor.
+- name: MgrParentCode
+  type: varchar(20)
+  nullable: true
+  description: MgrParentCode is the identifier for the parent of a financial advisor in the Deals database.
+---
+table: qa_deals.DLFinStruct
+domain: corporate_actions
+description: Deal Financial Structure | This table contains the financial structure of a deal.
+update_cadence: Daily
+columns:
+- name: TransactionId
+  type: BIGINT
+  nullable: false
+  description: TransactionId is the identifier for a Deals transaction.
+- name: PctShrSought
+  type: FLOAT
+  nullable: true
+  description: PctShrSought is the percentage of the shares sought.
+- name: PctShrOwn
+  type: FLOAT
+  nullable: true
+  description: PctShrOwn is the percentage of the shares owned.
+- name: PctShrAcq
+  type: FLOAT
+  nullable: true
+  description: PctShrAcq is the percentage of the shares acquired.
+- name: ComShrHelAcq6prioAnn
+  type: FLOAT
+  nullable: true
+  description: ComShrHelAcq6prioAnn is the common shares held by the acquirer six months prior to the AnnDate.
+- name: ComShrIssued
+  type: FLOAT
+  nullable: true
+  description: ComShrIssued is the common shares issued by the acquirer.
+- name: NumConsidSought
+  type: BIGINT
+  nullable: true
+  description: NumConsidSought is the number of consideration types sought.
+- name: Convertibles
+  type: FLOAT
+  nullable: true
+  description: Convertibles is the number of convertible securities that are convertible into common stock.
+- name: SrcDealValue
+  type: varchar(50)
+  nullable: true
+  description: SrcDealValue is the source code used for deal valuation.
+- name: UpdateDate
+  type: INTEGER
+  nullable: true
+  description: UpdateDate is the date of last significant revision.
+- name: AnnDate
+  type: INTEGER
+  nullable: true
+  description: AnnDate is the date on which the deal was announced.
+- name: LicFlag
+  type: INTEGER
+  nullable: false
+  description: LicFlag is a bit value that represents the license for this table.
+---
+table: qa_deals.DLFloatData
+domain: corporate_actions
+description: Float Data Items | This table contains data items for float data types.
+update_cadence: 'Daily Adjusted: N/A'
+columns:
+- name: TransactionId
+  type: BIGINT
+  nullable: false
+  description: TransactionId is the identifier for a Deals transaction.
+- name: SeqNum
+  type: SMALLINT
+  nullable: false
+  description: SeqNum is a unique integer code that enforces the primary key constraint for this table. It is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the feed files.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item is the item number.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the value corresponding to the item number.
+- name: UpdateDate
+  type: INTEGER
+  nullable: true
+  description: UpdateDate is the date of the last significant revision.
+- name: AnnDate
+  type: INTEGER
+  nullable: true
+  description: AnnDate is the date on which the deal was announced.
+- name: LicFlag
+  type: INTEGER
+  nullable: false
+  description: LicFlag is a bit value that represents the license for this table.
+---
+table: qa_deals.DLIntData
+domain: corporate_actions
+description: Integer Data Items | This table contains data items for integer data types.
+update_cadence: Daily
+columns:
+- name: TransactionId
+  type: BIGINT
+  nullable: false
+  description: TransactionId is the identifier for a Deals transaction.
+- name: SeqNum
+  type: SMALLINT
+  nullable: false
+  description: SeqNum is a unique integer code that enforces the primary key constraint for this table. It is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the feed files.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item is the item number.
+- name: Value_
+  type: INTEGER
+  nullable: true
+  description: Value_ is the value corresponding to the item number.
+- name: UpdateDate
+  type: INTEGER
+  nullable: true
+  description: UpdateDate is the date of the last significant revision.
+- name: AnnDate
+  type: INTEGER
+  nullable: true
+  description: AnnDate is the date on which the deal was announced.
+- name: LicFlag
+  type: INTEGER
+  nullable: false
+  description: LicFlag is a bit value that represents the license for this table.
+---
+table: qa_deals.DLItem
+domain: corporate_actions
+description: Item Constituent Information | This table contains information for the constituents of the Deals data.
+update_cadence: Daily
+columns:
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item is a unique integer code that identifies a fundamental data item. This integer code is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the vendor. The vendor provides the fundamental data items as columns in
+    the feed files.
+- name: Mnemonic
+  type: varchar(30)
+  nullable: true
+  description: Mnemonic is the data code for the data items.
+- name: Description
+  type: varchar(80)
+  nullable: true
+  description: Description is the description corresponding to the data item.
+- name: DataType
+  type: varchar(10)
+  nullable: true
+  description: DataType is the data type corresponding to the data item.
+- name: DataTables
+  type: varchar(15)
+  nullable: true
+  description: DataTables is the data tables to which each data item is ingested.
+- name: CodeNumb
+  type: TINYINT
+  nullable: true
+  description: CodeNumb is the code value of the code in the DLCode table, if applicable.
+- name: DescNumb
+  type: TINYINT
+  nullable: true
+  description: DescNumb is the code value of the code in the DLDesc table, if applicable.
+---
+table: qa_deals.DLLegAdvInfo
+domain: corporate_actions
+description: Legal Advisor Information | This table contains information for the list of lawyers and legal advisors involved
+  in various deals.
+update_cadence: Daily
+columns:
+- name: LegAdvId
+  type: INTEGER
+  nullable: false
+  description: LegAdvId is the unique identifier for a legal advisor.
+- name: LwyrCode
+  type: varchar(10)
+  nullable: true
+  description: LwyrCode is the unique identifier for a lawyer in the Deals database.
+- name: Lawyer
+  type: varchar(20)
+  nullable: true
+  description: Lawyer is the name of the legal advisor.
+- name: LwyrLongName
+  type: varchar(60)
+  nullable: true
+  description: LwyrLongName is the full name of the legal advisor.
+- name: LwyrParent
+  type: varchar(20)
+  nullable: true
+  description: LwyrParent is the name of the legal advisor’s parent.
+- name: Cusip
+  type: varchar(10)
+  nullable: true
+  description: Cusip is the CUSIP of the legal advisor. It is self-assigned, if not already assigned by the SEC.
+---
+table: qa_deals.DLOrgChg
+domain: corporate_actions
+description: Entity-related Information for Organizations | This table contains entity-related information for organizations
+  involved in a deal.
+update_cadence: Daily
+columns:
+- name: OrgId
+  type: INTEGER
+  nullable: false
+  description: OrgId is the unique identifier for a company. It constitutes the CID of the CIDGEN.
+- name: CIDGen
+  type: BIGINT
+  nullable: false
+  description: CIDGen is a unique identifier for a company, at a point in time for a particular deal.
+- name: Cusip
+  type: varchar(10)
+  nullable: true
+  description: Cusip is the 6-digit CUSIP.
+- name: UPCusip
+  type: varchar(10)
+  nullable: true
+  description: UPCusip is the ultimate parent 6-digit CUSIP.
+- name: IPCusip
+  type: varchar(10)
+  nullable: true
+  description: IPCusip is the immediate parent 6-digit CUSIP.
+- name: UPCIDGen
+  type: BIGINT
+  nullable: true
+  description: UPCIDGen is the ultimate parent CIDGEN.
+- name: IPCIDGen
+  type: BIGINT
+  nullable: true
+  description: IPCIDGen is the immediate parent CIDGEN.
+- name: PrimSICCode
+  type: varchar(4)
+  nullable: true
+  description: PrimSICCode is the primary SIC code. DLOrgChg.PrimSICCode cross-references with DLDesc.Code where Type_ = 27.
+- name: MacIndCode
+  type: varchar(10)
+  nullable: true
+  description: MacIndCode is the macro industry code. DLOrgChg.MacIndCode cross-references with DLDesc.Code where Type_ =
+    24.
+- name: MidIndCode
+  type: varchar(10)
+  nullable: true
+  description: MidIndCode is the mid industry code. DLOrgChg.MidIndCode cross-references with DLDesc.Code where Type_ = 25.
+- name: FullName
+  type: varchar(100)
+  nullable: true
+  description: FullName is the entity name.
+- name: NatCode
+  type: varchar(10)
+  nullable: true
+  description: NatCode is the nation code.
+- name: ExchCode
+  type: varchar(10)
+  nullable: true
+  description: ExchCode is the stock exchange code. DLOrgChg.ExchCode cross-references with DLDesc.Code where Type_ = 6.
+- name: TickSym
+  type: varchar(10)
+  nullable: true
+  description: TickSym is the ticker symbol.
+- name: PrimNatRegCode
+  type: varchar(10)
+  nullable: true
+  description: PrimNatRegCode is the primary nation region code. DLOrgChg.PrimNatRegCode cross-references with DLDesc.Code
+    where Type_ = 13.
+- name: Sedol
+  type: varchar(10)
+  nullable: true
+  description: Sedol is the SEDOL.
+- name: PubStatCode
+  type: char(1)
+  nullable: true
+  description: PubStatCode is the public status code. DLOrgChg.PubStatCode cross-references with DLDesc.Code where Type_ =
+    18.
+- name: PrimNAICCode
+  type: varchar(10)
+  nullable: true
+  description: PrimNAICCode is the primary NAIC code. DLOrgChg.PrimNAICCode cross-references with DLDesc.Code where Type_
+    = 12.
+- name: State
+  type: char(2)
+  nullable: true
+  description: State indicates the U.S. state or territory or the Canadian province of a company's address.
+- name: PermId
+  type: varchar(10)
+  nullable: true
+  description: PermId is the permanent ID.
+- name: Cusipe
+  type: char(1)
+  nullable: true
+  description: Cusipe is the CUSIP.
+- name: Duns
+  type: varchar(15)
+  nullable: true
+  description: Duns is the Data Universal Numbering System (DUNS).
+- name: Zip
+  type: varchar(15)
+  nullable: true
+  description: Zip is the postal code or zip code of the company's corporate headquarters or home office.
+- name: Cinits
+  type: varchar(15)
+  nullable: true
+  description: Cinits is the Cinits.
+- name: FoundedDate
+  type: INTEGER
+  nullable: true
+  description: FoundedDate is the date a company was founded.
+- name: GenDate
+  type: INTEGER
+  nullable: true
+  description: GenDate is the CIDGEN-generated date.
+- name: Division
+  type: char(1)
+  nullable: true
+  description: Division is the division indicator.
+- name: Veicp
+  type: INTEGER
+  nullable: true
+  description: Veicp is the VEICP.
+- name: Tcim
+  type: INTEGER
+  nullable: true
+  description: Tcim is the TCIM.
+- name: UpdateDate
+  type: INTEGER
+  nullable: true
+  description: UpdateDate is the date of the last significant revision.
+- name: PubMidCode
+  type: char(1)
+  nullable: true
+  description: PubMidCode is the public mid code. DLOrgChg.PubMidCode cross-references with DLDesc.Code where Type_ = 17.
+- name: CountryOfIncorp
+  type: char(2)
+  nullable: true
+  description: CountryOfIncorp is the country of incorporation code.
+- name: CreateDate
+  type: INTEGER
+  nullable: true
+  description: CreateDate is the date created stamp (YYYYMMDD).
+- name: TKOUpdateDate
+  type: INTEGER
+  nullable: true
+  description: TKOUpdateDate is the TKO update stamp (YYYYMMDDHH).
+- name: BusDesc
+  type: varchar(max)
+  nullable: true
+  description: BusDesc is the business short description. LSEG Quantitative Analytics Database Schema for Deals M&A 16
+---
+table: qa_deals.DLOrgInfo
+domain: corporate_actions
+description: Organization Entity-related Information | This table contains the latest entity-related information for organizations
+  involved in a deal from a concordance
+update_cadence: Daily
+columns:
+- name: OrgId
+  type: INTEGER
+  nullable: false
+  description: OrgId is the unique identifier for a company. It constitutes the CID of the CIDGEN.
+- name: CIDGen
+  type: BIGINT
+  nullable: false
+  description: CIDGen is a unique identifier for a company, at a point in time for a particular deal.
+- name: Cusip
+  type: varchar(10)
+  nullable: true
+  description: Cusip is the 6-digit CUSIP.
+- name: UPCusip
+  type: varchar(10)
+  nullable: true
+  description: UPCusip is the ultimate parent 6-digit CUSIP.
+- name: IPCusip
+  type: varchar(10)
+  nullable: true
+  description: IPCusip is the immediate parent 6-digit CUSIP.
+- name: UPCIDGen
+  type: BIGINT
+  nullable: true
+  description: UPCIDGen is the ultimate parent CIDGEN.
+- name: IPCIDGen
+  type: BIGINT
+  nullable: true
+  description: IPCIDGen is the immediate parent CIDGEN.
+- name: TickSym
+  type: varchar(10)
+  nullable: true
+  description: TickSym is the ticker symbol.
+- name: Sedol
+  type: varchar(10)
+  nullable: true
+  description: Sedol is the SEDOL.
+- name: PermId
+  type: varchar(10)
+  nullable: true
+  description: PermId is the permanent ID.
+- name: FullName
+  type: varchar(100)
+  nullable: true
+  description: FullName is the entity name.
+---
+table: qa_deals.DLPriPlyrs
+domain: corporate_actions
+description: Primary Players Information | This table captures the basic information for the primary players of a deal. The
+  primary players for a deal are the
+update_cadence: Daily
+columns:
+- name: OrgID
+  type: INTEGER
+  nullable: false
+  description: OrgID is a unique identifier for a company. It constitutes the CID of the CIDGEN.
+- name: CIDGen
+  type: BIGINT
+  nullable: false
+  description: CIDGen is a unique identifier for a company, at a point in time for a particular deal.
+- name: AssetClassCode
+  type: TINYINT
+  nullable: false
+  description: AssetClassCode is an integer code that identifies an asset class. DLPriPlyrs.AssetClassCode cross-references
+    with DLCode.Code where Type_ = 1.
+- name: TransactionId
+  type: BIGINT
+  nullable: false
+  description: TransactionId is the identifier for a Deals transaction.
+- name: PrimRoleCode
+  type: TINYINT
+  nullable: false
+  description: PrimRoleCode is the primary role played by the players in the deal. These roles include the acquirer, target,
+    investor, and seller. DLPriPlyrs.PrimRoleCode cross-references with DLCode.Code where Type_ = 2.
+- name: SeqNum
+  type: SMALLINT
+  nullable: false
+  description: Internally derived incremental sequence number for every value instance for a given item.
+- name: UpdateDate
+  type: INTEGER
+  nullable: true
+  description: UpdateDate is the date of the last significant revision.
+- name: AnnDate
+  type: INTEGER
+  nullable: true
+  description: AnnDate is the date on which the deal was announced.
+- name: EffDate
+  type: INTEGER
+  nullable: true
+  description: EffDate is the date on which the deal became effective.
+- name: WithdrawDate
+  type: INTEGER
+  nullable: true
+  description: WithdrawDate is the date on which the deal was withdrawn.
+- name: RankDate
+  type: INTEGER
+  nullable: true
+  description: RankDate is the date on which rank was allocated.
+- name: LicFlag
+  type: INTEGER
+  nullable: false
+  description: LicFlag is a bit value that represents the license for this table. DLPriPlyrs.LicFlag cross-references with
+    DLCode.Code where Type_ = 15.
+---
+table: qa_deals.DLRelDeal
+domain: corporate_actions
+description: Related Deals Information | This table contains related deals information pertaining to the transaction.
+update_cadence: Daily
+columns:
+- name: TransactionId
+  type: BIGINT
+  nullable: false
+  description: TransactionId is the identifier for a Deals transaction.
+- name: RelDealNum
+  type: BIGINT
+  nullable: false
+  description: RelDealNum is the related SDC deal number.
+- name: SeqNum
+  type: SMALLINT
+  nullable: false
+  description: Internally derived incremental sequence number for every value instance for a given item.
+- name: RelDealFormCode
+  type: varchar(3)
+  nullable: true
+  description: RelDealFormCode is the related deal form code. DLRelDeal.RelDealFormCode cross-references with DLDesc.Code
+    where Type_ = 9.
+- name: RelDealAnnDate
+  type: INTEGER
+  nullable: true
+  description: RelDealAnnDate is the related date on which the deal was announced.
+- name: RelDealStatCode
+  type: varchar(3)
+  nullable: true
+  description: RelDealStatCode is the related deal status code. DLRelDeal.RelDealStatCode cross-references with DLDesc.Code
+    where Type_ = 22.
+- name: UpdateDate
+  type: INTEGER
+  nullable: true
+  description: UpdateDate is the date of the last significant revision.
+- name: AnnDate
+  type: INTEGER
+  nullable: true
+  description: AnnDate is the date on which the deal was announced.
+- name: IsDeleted
+  type: TINYINT
+  nullable: false
+  description: IsDeleted is the flag indicating if the related deal is a deleted deal.
+- name: LicFlag
+  type: INTEGER
+  nullable: false
+  description: LicFlag is a bit value that represents the license for this table. DLRelDeal.LicFlag cross-references with
+    DLCode.Code where Type_ = 15.
+---
+table: qa_deals.DLTransInfo
+domain: corporate_actions
+description: Deal-specific Transaction Information | This table contains deal-specific transaction information.
+update_cadence: Daily
+columns:
+- name: AssetClassCode
+  type: TINYINT
+  nullable: false
+  description: AssetClassCode is an integer code that identifies an asset class. It is defined in Quantitative Data Warehouse
+    (QDW) and is not received from feed files. DLTransInfo.AssetClassCode cross-references with DLCode.Code where Type_ =
+    1.
+- name: TransactionId
+  type: BIGINT
+  nullable: false
+  description: TransactionId is the identifier for a Deals transaction.
+- name: CurrCode
+  type: varchar(5)
+  nullable: true
+  description: CurrCode is the currency in which a Deals transaction was recorded. DLTransInfo.CurrCode cross-references with
+    DLDesc.Code where Type_ = 5.
+- name: DealAttCode
+  type: char(1)
+  nullable: true
+  description: DealAttCode is the Deals attitude code. DLTransInfo.DealAttCode cross-references with DLDesc.Code where Type_
+    = 2.
+- name: SubStatusCode
+  type: varchar(3)
+  nullable: true
+  description: SubStatusCode is the Deals status. DLTransInfo.SubStatusCode cross-references with DLDesc.Code where Type_
+    = 22.
+- name: StatusCode
+  type: varchar(3)
+  nullable: true
+  description: StatusCode is the Deals status rollup code. DLTransInfo.StatusCode cross-references with DLDesc.Code where
+    Type_ = 23.
+- name: InitReceptCode
+  type: char(1)
+  nullable: true
+  description: InitReceptCode is the initial reception code. DLTransInfo.InitReceptCode cross-references with DLDesc.Code
+    where Type_ = 10.
+- name: OutcomeCode
+  type: char(1)
+  nullable: true
+  description: OutcomeCode is the outcome code. DLTransInfo.OutcomeCode cross-references with DLDesc.Code where Type_ = 16.
+- name: MATypeCode
+  type: char(2)
+  nullable: true
+  description: MATypeCode is the M&A type code. DLTransInfo.MATypeCode cross-references with DLDesc.Code where Type_ = 11.
+- name: VCTypeCode
+  type: INTEGER
+  nullable: true
+  description: VCTypeCode is the venture type code. DLTransInfo.VCTypeCode cross-references with DLCode.Code where Type_ =
+    7.
+- name: DealTypeCode
+  type: varchar(3)
+  nullable: true
+  description: DealTypeCode is the Deals type code. DLTransInfo.DealTypeCode cross-references with DLDesc.Code where Type_
+    = 26.
+- name: TransformCode
+  type: varchar(3)
+  nullable: true
+  description: TransformCode is the form of the transaction. DLTransInfo.TransformCode cross-references with DLDesc.Code where
+    Type_ = 9.
+- name: NumBid
+  type: INTEGER
+  nullable: true
+  description: NumBid is the number of bidders.
+- name: NumInv
+  type: INTEGER
+  nullable: true
+  description: NumInv is the number of investors.
+- name: UpdateDate
+  type: INTEGER
+  nullable: true
+  description: UpdateDate is the date of the last significant revision.
+- name: AnnDate
+  type: INTEGER
+  nullable: true
+  description: AnnDate is the date on which the deal was announced.
+- name: EffDate
+  type: INTEGER
+  nullable: true
+  description: EffDate is the date on which the deal became effective.
+- name: WithdrawDate
+  type: INTEGER
+  nullable: true
+  description: WithdrawDate is the date on which the deal was withdrawn.
+- name: RankDate
+  type: INTEGER
+  nullable: true
+  description: RankDate is the date on which rank was allocated.
+- name: LicFlag
+  type: INTEGER
+  nullable: false
+  description: LicFlag is a bit value that represents the license for this table. DLTransInfo.LicFlag cross-references with
+    DLCode.Code where Type_ = 15.
+---
+table: qa_deals.DLVarcharData
+domain: corporate_actions
+description: Varchar Data Items | This table contains data items for varchar data types.
+update_cadence: Daily
+columns:
+- name: TransactionId
+  type: BIGINT
+  nullable: false
+  description: TransactionId is the identifier for a Deals transaction.
+- name: SeqNum
+  type: SMALLINT
+  nullable: false
+  description: SeqNum is a unique integer code that enforces the primary key constraint for this table. It is defined in Quantitative
+    Data Warehouse (QDW) and is not received from the feed files.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item is the item number.
+- name: Value_
+  type: varchar(100)
+  nullable: true
+  description: Value_ is the value corresponding to the item number.
+- name: UpdateDate
+  type: INTEGER
+  nullable: true
+  description: UpdateDate is the date of the last significant revision.
+- name: AnnDate
+  type: INTEGER
+  nullable: true
+  description: AnnDate is the date on which the deal was announced.
+- name: LicFlag
+  type: INTEGER
+  nullable: false
+  description: LicFlag is a bit value that represents the license for this table. DLVarcharData.LicFlag cross-references with
+    DLCode.Code where Type_ = 15.
+---
+table: qa_deals.DLOAPermInfo
+domain: corporate_actions
+description: This table contains the org-level strategic LSEG identifiers (PermIDs) for mapping and reference purposes.
+update_cadence: Daily
+columns:
+- name: TransactionId
+  type: BIGINT
+  nullable: false
+  description: SDC Deal Number
+- name: SeqNum
+  type: SMALLINT
+  nullable: false
+  description: Sequence Number
+- name: TargetPermID
+  type: BIGINT
+  nullable: true
+  description: Target OA PermID
+- name: AcqPermID
+  type: BIGINT
+  nullable: true
+  description: Acquiror OA PermID
+- name: TIPPermID
+  type: BIGINT
+  nullable: true
+  description: Target Immediate Parent PermID
+- name: AIPPermID
+  type: BIGINT
+  nullable: true
+  description: Acquiror Immediate Parent PermID
+- name: TUPPermID
+  type: BIGINT
+  nullable: true
+  description: Target Ultimate Parent PermID
+- name: AUPPermID
+  type: BIGINT
+  nullable: true
+  description: Acquiror Ultimate Parent PermID
+- name: INVIPPermID
+  type: BIGINT
+  nullable: true
+  description: Investor Immediate Parent PermID
+- name: INVUPPermID
+  type: BIGINT
+  nullable: true
+  description: Investor Ultimate Parent PermID
+- name: INVPermID
+  type: BIGINT
+  nullable: true
+  description: Investor OA PermID
+- name: SELLUPPermID
+  type: BIGINT
+  nullable: true
+  description: Seller Ultimate Parent PermID
+- name: SIPPermID
+  type: BIGINT
+  nullable: true
+  description: Seller Immediate Parent PermID
+- name: SELLPermID
+  type: BIGINT
+  nullable: true
+  description: Seller OA PermID
+- name: LicFlag
+  type: INTEGER
+  nullable: false
+  description: LicFlag is a bit value that represents the license for this table. DLAdvisor.LicFlag cross-references with
+    DLCode.Code where Type_ = 15. LSEG Quantitative Analytics Database Schema for Deals M&A 21 3. Deals Equity/IPO Schema
+    Diagram The following diagram illustrates the Deals M&A schema. LSEG Quantitative Analytics Database Schema for Deals
+    M&A 22
+---
+table: qa_deals.DLEqTransInfo
+domain: corporate_actions
+description: This table contains Equity transaction attributes that are available on a per deal basis. It will only include
+  publicly | table where Type_ = 17. | references the DLCode table where Type_ = 18. | for the offering. Cross references
+  the DLCode table where Type_ | references the DLCode table where Type_ = 20. | references the DLCode table where Type_ =
+  29. | issued. Cross references the DLCode table where Type_ = 21. | Cross references the DLCode table where Type_ = 22.
+  | BearerOrRegis tinyint Y Be
+update_cadence: Daily
+columns:
+- name: TransactionId
+  type: BIGINT
+  nullable: false
+  description: This is a unique deal number that is assigned to each deal.
+- name: SeqNum
+  type: SMALLINT
+  nullable: false
+  description: Internally derived incremental sequence number for every value instance for a given item.
+- name: TransDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: Issue Date.
+- name: TransTypeCode
+  type: SMALLINT
+  nullable: true
+  description: 'This item denotes the underlying source which the issue is tied to. Cross references the following tables:
+    DLCode where Type_ = 26 DLDesc where Type_ = 26'
+- name: FilingDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The first date in which a company files a registration statement with the Securities and Exchange Commission
+    (SEC).
+- name: ShareTypeCode
+  type: SMALLINT
+  nullable: true
+  description: Primary, Secondary or Combined. Cross references the DLCode table where Type_ = 17.
+- name: IssuerName
+  type: varchar(50)
+  nullable: true
+  description: Short name of issuer (30 characters wide).
+- name: IssueTypeCode
+  type: SMALLINT
+  nullable: true
+  description: Short description of type of security being offered. Cross references the DLCode table where Type_ = 18.
+- name: ProceedsOverSold
+  type: FLOAT
+  nullable: true
+  description: Proceeds Amount including Overallotment Sold - in this Mkt ($ mil.).
+- name: BookProceeds
+  type: FLOAT
+  nullable: true
+  description: Proceeds Amount per Book Runner This Market (US $ mil.).
+- name: TotProceedsOverSold
+  type: FLOAT
+  nullable: true
+  description: Proceeds Amount including Overallotment Sold - sum of all Mkts ($ mil.).
+- name: ExpOfferDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: Expected Offer date.
+- name: TotOverallAmt
+  type: FLOAT
+  nullable: true
+  description: Overallotment Amount Option - sum of all Mkts ($ mil.).
+- name: SellShrHolderFlg
+  type: TINYINT
+  nullable: true
+  description: A flag indicating that the selling shareholder has been disclosed for the offering. Cross references the DLCode
+    table where Type_ = 19.
+- name: TransStatusCode
+  type: TINYINT
+  nullable: true
+  description: Indicates the status of an offering (e.g. Live, announced). Cross references the DLCode table where Type_ =
+    20.
+- name: PublicStatusCode
+  type: TINYINT
+  nullable: true
+  description: Issue's public status at time of offer (e.g. Private). Cross references the DLCode table where Type_ = 29.
+- name: LaunchDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: This is the date on which the registration of the offering was filed.
+- name: TradeDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: Date on which the security first trades.
+- name: PaymDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: Date that the syndicate members pay the lead manager for the bond/equity.
+- name: MkrtAreaCode
+  type: SMALLINT
+  nullable: true
+  description: Code for the general market area into which the transaction is issued. Cross references the DLCode table where
+    Type_ = 21.
+- name: InvTypeCode
+  type: SMALLINT
+  nullable: true
+  description: The type of investors the offering is being made available to. Cross references the DLCode table where Type_
+    = 22.
+- name: AmendDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: Amended Filing Date.
+- name: FilePrcHigh
+  type: FLOAT
+  nullable: true
+  description: Highest price, in the original filing price range, at which the issuer expects securities to be offered.
+- name: FilePrcLow
+  type: FLOAT
+  nullable: true
+  description: Lowest price, in the original filing price range, at which the issuer expects securities to be offered.
+- name: BearerOrRegis
+  type: TINYINT
+  nullable: true
+  description: Bearer/Registered. Cross references the DLCode table where Type_ = 30.
+- name: SyndTypeCode
+  type: SMALLINT
+  nullable: true
+  description: Type which describes the syndicate. Cross references the DLCode table where Type_ = 31.
+- name: RankEligibleFlg
+  type: TINYINT
+  nullable: true
+  description: Rank Eligible Flag. Cross references the DLCode table where Type_ = 32.
+- name: AuditorCode
+  type: SMALLINT
+  nullable: true
+  description: Issuer's Auditor Short Name. Cross references the DLCode table where Type_ = 25.
+- name: PutDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: First date on which the holder has the right to put the security to the issuer, if applicable.
+- name: OfferPrc
+  type: FLOAT
+  nullable: true
+  description: Price per share or bond at which the security is offered to the public.
+- name: ConvPremium
+  type: FLOAT
+  nullable: true
+  description: Conversion Premium (%).
+- name: ExchRatio
+  type: FLOAT
+  nullable: true
+  description: Exchange Conversion Ratio.
+- name: ConvRatio
+  type: FLOAT
+  nullable: true
+  description: Conversion Ratio.
+- name: DomNationCode
+  type: SMALLINT
+  nullable: true
+  description: 'Rank Domicile Nation for all equity and syndicated loans transactions is defined as the Issuer/Borrower’s
+    nation of headquarters. Cross references the following tables: DLCode where Type_ = 16 DLDesc where Type_ = 14'
+- name: IssuerMacroIndCode
+  type: SMALLINT
+  nullable: true
+  description: 'Issuer/Borrower Macro Industry (Code). Cross references the following tables: DLCode where Type_ = 24 DLDesc
+    where Type_ = 24.'
+- name: LockupProvCode
+  type: TINYINT
+  nullable: true
+  description: Lock up Provision. Cross references the DLCode table where Type_ = 27.
+- name: IPOListExchCode
+  type: SMALLINT
+  nullable: true
+  description: Exchange Listing of IPO. Cross references the DLCode table where Type_ = 28.
+- name: TotSharesFiled
+  type: BIGINT
+  nullable: true
+  description: 'Sum of all Mkts: Number of global shares filed at original filing.'
+- name: TotPriSharesPct
+  type: FLOAT
+  nullable: true
+  description: 'Sum of all Mkts: global primary shares filed at original filing as a percentage of total global shares filed.'
+- name: LicFlag
+  type: TINYINT
+  nullable: false
+  description: LicFlag is the license flag based on Issue Type. Cross references the DLCode table where Type_ = 15.
+---
+table: qa_deals.DLEqTransdata
+domain: corporate_actions
+description: This table contains Equity transaction attributes that have 1:M values against a TransactionId.
+update_cadence: Daily
+columns:
+- name: TransactionId
+  type: BIGINT
+  nullable: false
+  description: This is a unique deal number that is assigned to each deal.
+- name: SeqNum
+  type: SMALLINT
+  nullable: false
+  description: Internally derived incremental sequence number for every value instance for a given item.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item is a unique integer code that identifies an item. It joins to the DLEqItem table.
+- name: Value_
+  type: varchar(100)
+  nullable: true
+  description: Value_ is the value that corresponds to the item.
+- name: LicFlag
+  type: TINYINT
+  nullable: false
+  description: LicFlag is the license flag based on Issue Type.
+---
+table: qa_deals.DLEqItem
+domain: corporate_actions
+description: This table contains item codes assigned to each individual attribute in the DlEqTransData table. | DataTables
+  varchar(20) Y Numeric code for the Table that corresponding Item joins to.
+update_cadence: Daily
+columns:
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item is a unique integer code that identifies an item. It joins to DlEqTransData table.
+- name: Mnemonic
+  type: varchar(100)
+  nullable: true
+  description: Mnemonic is a single-word, alphanumeric coded name for the item.
+- name: Description
+  type: varchar(500)
+  nullable: true
+  description: Desc_ is a short description of the item.
+- name: DataType
+  type: varchar(10)
+  nullable: true
+  description: Data type of the underlying Item value_.
+- name: DataTables
+  type: varchar(20)
+  nullable: true
+  description: Numeric code for the Table that corresponding Item joins to.
+- name: CodeNumb
+  type: TINYINT
+  nullable: true
+  description: Corresponding Type_ code in the DLCode table.
+- name: DescNumb
+  type: TINYINT
+  nullable: true
+  description: Corresponding Type_ code in the DLCode table.
+---
+table: qa_deals.DLEqInstrInfo
+domain: corporate_actions
+description: This table contains the security-level identifiers like CUSIP, SEDOL, and ISIN for mapping and reference
+update_cadence: Daily
+columns:
+- name: TransactionId
+  type: BIGINT
+  nullable: false
+  description: This is a unique deal number that is assigned to each deal.
+- name: Cusip
+  type: varchar(10)
+  nullable: true
+  description: CUSIP.
+- name: CurrCode
+  type: varchar(5)
+  nullable: true
+  description: Currency of Issue (Code).
+- name: Cusip9
+  type: varchar(9)
+  nullable: true
+  description: 9-digit CUSIP.
+- name: ISIN
+  type: varchar(12)
+  nullable: true
+  description: International Security Identification Number (ISIN).
+- name: UPSedol
+  type: varchar(10)
+  nullable: true
+  description: Issuer/Borrower Ultimate Parent's SEDOL.
+- name: Sedol
+  type: varchar(10)
+  nullable: true
+  description: Issuer/Borrower Sedol.
+- name: UPCusip
+  type: varchar(10)
+  nullable: true
+  description: Issuer Ultimate Parent's 6-digit CUSIP.
+- name: Ticker
+  type: varchar(10)
+  nullable: true
+  description: Issuer Ticker Symbol at Offering.
+- name: SIC
+  type: varchar(10)
+  nullable: true
+  description: Issuer Primary SIC (Code).
+- name: ExchCode
+  type: varchar(10)
+  nullable: true
+  description: Primary stock exchange where Issuer's common stock trades.
+- name: LicFlag
+  type: TINYINT
+  nullable: false
+  description: LicFlag is the license flag based on Issue Type.
+---
+table: qa_deals.DLPermInfo
+domain: corporate_actions
+description: This table contains the org-level strategic LSEG identifiers (PermIDs) for mapping and reference purposes.
+update_cadence: Daily
+columns:
+- name: TransactionId
+  type: BIGINT
+  nullable: false
+  description: This is a unique deal number that is assigned to each deal
+- name: SeqNum
+  type: SMALLINT
+  nullable: false
+  description: Internally derived incremental sequence number for every value instance for a given item.
+- name: IIPPermID
+  type: BIGINT
+  nullable: true
+  description: Issuer/Borrower Immediate Parent OA PermID
+- name: IUPPermID
+  type: BIGINT
+  nullable: true
+  description: Issuer/Borrower Ultimate Parent OA PermID
+- name: IPermID
+  type: BIGINT
+  nullable: true
+  description: Issuer/Borrowe OA PermID
+- name: SPINPermID
+  type: BIGINT
+  nullable: true
+  description: Spinoff Company OA PermID
+- name: SSHPermID
+  type: BIGINT
+  nullable: true
+  description: Selling Shareholder OA PermID
+- name: LicFlag
+  type: TINYINT
+  nullable: false
+  description: LicFlag is the license flag based on Issue Type.

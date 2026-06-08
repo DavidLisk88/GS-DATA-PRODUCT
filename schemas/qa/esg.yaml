@@ -1,0 +1,740 @@
+table: qa_esg.A4CatData
+domain: esg
+description: Category Scores Data | This table provides a snapshot of the scores associated with each category. The scores
+  are provided for each | is 835 – 852. Refer to the A4Item table for more information.
+update_cadence: Once every two weeks for incremental files. Once a year for history files.
+columns:
+- name: OrgID
+  type: INTEGER
+  nullable: false
+  description: OrgID is the unique identifier for each organization provided by ESG.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item is a unique code that identifies each category. The item range for categories is 835 – 852. Refer to the
+    A4Item table for more information.
+- name: SeqNo
+  type: SMALLINT
+  nullable: false
+  description: SeqNo notes the changes that occur in the values. SeqNo is defined for future implementation of Point in Time
+    data. For the current implementation, the SeqNo will always be 1.
+- name: FisYear
+  type: SMALLINT
+  nullable: false
+  description: FisYear is the particular year for which the data is defined.
+- name: Score
+  type: FLOAT
+  nullable: true
+  description: Score is the score associated with the specific category.
+- name: LScore
+  type: FLOAT
+  nullable: true
+  description: LScore is the latest score associated with the specific category.
+- name: FeedDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: FeedDate denotes the feed date, which comes in the feed file. This field is only significant when Point in
+    Time data is implemented. For the present implementation, the date in the feed file is updated when there is a change
+    in the existing value. This date will correspond to the date when the scores are recalculated or modified by the vendor.
+- name: FYEndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: FYEndDate is the Fiscal Year End Date value as provided in the feed.
+- name: CDFlag
+  type: SMALLINT
+  nullable: true
+  description: CDFlag describes the DFlag value, which is calculated when special values like NA, N/F, or N/R come in the
+    feed.
+---
+table: qa_esg.A4CmpChg
+domain: esg
+description: Data Change Information | This table contains any changes to the OrgName, Asset4Id, Primary Exchange, or TRBC
+  Code data that comes in
+update_cadence: Once every two weeks for incremental files. Once a year for history files.
+columns:
+- name: OrgID
+  type: INTEGER
+  nullable: false
+  description: OrgID is the unique identifier for each organization provided by ESG.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item is a unique code that identifies each data point in the feed.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: false
+  description: StartDate is the earliest year associated with the value.
+- name: Value_
+  type: varchar(50)
+  nullable: true
+  description: Value_ is the value corresponding to the item.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: 'EndDate is the date on which a change is applied to Asset4Id, OrgName, PrimExchg, or TRBCCode. Chapter 0:
+    2. ESG Database Schema A4CmpFData: Company Float Data 8'
+---
+table: qa_esg.A4CmpFData
+domain: esg
+description: Company Float Data | This table contains float data for all the data points related to Company Values, Company
+  Controversies, and
+update_cadence: Once every two weeks for incremental files. Once a year for history files.
+columns:
+- name: OrgId
+  type: INTEGER
+  nullable: false
+  description: OrgId is the unique identifier for each organization provided by ESG.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item is a unique code that identifies each data point in the feed.
+- name: SeqNo
+  type: SMALLINT
+  nullable: false
+  description: SeqNo notes the changes that occur in the values. SeqNo is defined for future implementation of Point in Time
+    data. For the current implementation, the SeqNo will always be 1.
+- name: FisYear
+  type: SMALLINT
+  nullable: false
+  description: FisYear is the particular year for which the data is defined.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the float value of the corresponding item.
+- name: FeedDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: FeedDate denotes the feed date, which comes in the feed file. This field is only significant when Point in
+    Time data is implemented. For the present implementation, the date present in the feed file is updated when there is a
+    change in the existing value. This date will correspond to the date when the scores are recalculated or modified by the
+    vendor.
+- name: FYEndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: FYEndDate is the Fiscal Year End Date value as provided in the feed.
+- name: LicFlag
+  type: TINYINT
+  nullable: true
+  description: LicFlag is the licensing flag associated with a particular file.
+- name: DFlag
+  type: TINYINT
+  nullable: true
+  description: DFlag is the value calculated when special values like NA, N/F, or N/R come in the feed. DFlag cross-references
+    A4Code where DFlag= A4Code.Code and A4Code.Type_ = 6. To translate A4Code.Desc_, cross-reference A4Code.Desc_ with A4Desc_.Code
+    where A4Desc_.Type_ = 10.
+---
+table: qa_esg.A4CmpIData
+domain: esg
+description: Company Boolean Data | This table contains Boolean data for all the data points related to Company Values, Company
+  Controversies, and
+update_cadence: Once every two weeks for incremental files; once a year for history files.
+columns:
+- name: OrgId
+  type: INTEGER
+  nullable: false
+  description: OrgId is the unique identifier for each organization provided by ESG.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item is a unique code that identifies each data point in the feed.
+- name: SeqNo
+  type: SMALLINT
+  nullable: false
+  description: SeqNo notes the changes that occur in the values. SeqNo is defined for future implementation of Point in Time
+    data. For the current implementation, the SeqNo will always be 1.
+- name: FisYear
+  type: SMALLINT
+  nullable: false
+  description: FisYear is the particular year for which the data is defined.
+- name: Value_
+  type: TINYINT
+  nullable: true
+  description: Value_ is the Boolean value, converted to tinyint, of the corresponding item.
+- name: FeedDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: 'FeedDate denotes the feed date, which comes in the feed file. This field is only significant when Point in
+    Time data is implemented. For the present implementation, the date present in the feed file is updated when there is a
+    Chapter 0: 2. ESG Database Schema A4CmpInfo: Company Information 9'
+- name: FYEndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: FYEndDate is the Fiscal Year End Date value as provided in the feed.
+- name: LicFlag
+  type: TINYINT
+  nullable: true
+  description: LicFlag is the licensing flag associated with the file.
+- name: DFlag
+  type: TINYINT
+  nullable: true
+  description: DFlag is the value calculated when special values like NA, N/F, or N/R come in the feed. DFlag cross-references
+    A4Code where DFlag= A4Code.Code and A4Code.Type_ = 6. To translate A4Code.Desc_, cross-reference A4Code.Desc_ with A4Desc_.Code
+    where A4Desc_.Type_ = 10.
+---
+table: qa_esg.A4CmpInfo
+domain: esg
+description: Company Information | For a particular organization code, this table contains the corresponding Asset4Id, Company
+  name, and TRBC
+update_cadence: Daily
+columns:
+- name: OrgID
+  type: INTEGER
+  nullable: false
+  description: OrgID is the unique identifier provided by ESG for each organization.
+- name: Asset4Id
+  type: varchar(10)
+  nullable: true
+  description: Asset4Id is the alphanumeric ID provided by ESG for each organization.
+- name: OrgName
+  type: varchar(50)
+  nullable: true
+  description: OrgName is the name of the organization.
+- name: BusTRBCId
+  type: INTEGER
+  nullable: true
+  description: BusTRBCId is The Reference Business Classification Code. This code classifies companies based on their industry.
+- name: PrimExchg
+  type: varchar(10)
+  nullable: true
+  description: PrimExchg is the primary exchange with which the organization is associated.
+- name: StatusFlag
+  type: TINYINT
+  nullable: true
+  description: 'StatusFlag can be the following values: – 1 = the company is active – 0 = the company is inactive'
+- name: OAId
+  type: BIGINT
+  nullable: true
+  description: OAId is the organization authority identifier.
+---
+table: qa_esg.A4CmpSData
+domain: esg
+description: Company String and Varchar Data | This table contains string or varchar data for all the data points related
+  to Company Values, Company
+update_cadence: Once every two weeks for incremental files; once a year for history files.
+columns:
+- name: OrgId
+  type: INTEGER
+  nullable: false
+  description: OrgId is the unique identifier for each organization provided by ESG.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item is a unique code that identifies each data point in the feed.
+- name: SeqNo
+  type: SMALLINT
+  nullable: false
+  description: SeqNo notes the changes that occur in the values. SeqNo is defined for future implementation of Point in Time
+    data. For the current implementation, the SeqNo will always be 1.
+- name: FisYear
+  type: SMALLINT
+  nullable: false
+  description: 'FisYear is the particular year for which the data is defined. Chapter 0: 2. ESG Database Schema A4CmpSummData:
+    Company Score Information 10'
+- name: FeedDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: FeedDate denotes the feed date, which comes in the feed file. This field is only significant when Point in
+    Time data is implemented. For the present implementation, the date present in the feed file is updated when there is a
+    change in the existing value. This date will correspond to the date when the scores are recalculated or modified by the
+    vendor.
+- name: FYEndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: FYEndDate is the Fiscal Year End Date value as provided in the feed.
+- name: LicFlag
+  type: TINYINT
+  nullable: true
+  description: LicFlag is the licensing flag associated with the file.
+- name: DFlag
+  type: TINYINT
+  nullable: true
+  description: DFlag is the value calculated when special values like NA, N/F, or N/R come in the feed. DFlag cross-references
+    A4Code where DFlag= A4Code.Code and A4Code.Type_ = 6. To translate A4Code.Desc_, cross-reference A4Code.Desc_ with A4Desc_.Code
+    where A4Desc_.Type_ = 10.
+- name: Value_
+  type: varchar(max)
+  nullable: true
+  description: Value_ is the string value of the corresponding item.
+---
+table: qa_esg.A4CmpSummData
+domain: esg
+description: Company Score Information | This table contains the overall score and the pillar scores for all companies on
+  a yearly basis.
+update_cadence: Once every two weeks for incremental files; once a year for history files.
+columns:
+- name: OrgID
+  type: INTEGER
+  nullable: false
+  description: OrgID is the unique identifier for each organization provided by ESG.
+- name: SeqNo
+  type: SMALLINT
+  nullable: false
+  description: SeqNo notes the changes that occur in the values. SeqNo is defined for future implementation of Point in Time
+    data. For the current implementation, the SeqNo will always be 1.
+- name: FisYear
+  type: SMALLINT
+  nullable: false
+  description: FisYear is the particular year for which the data is defined.
+- name: Overall
+  type: FLOAT
+  nullable: true
+  description: Overall is the equal weighted rating score.
+- name: LOverall
+  type: FLOAT
+  nullable: true
+  description: LOverall is the latest value for the equal weighted rating score.
+- name: Economic
+  type: FLOAT
+  nullable: true
+  description: Economic is the score associated with the Economic Pillar.
+- name: LEconomic
+  type: FLOAT
+  nullable: true
+  description: LEconomic is the latest score associated with the Economic Pillar.
+- name: Envrnmntal
+  type: FLOAT
+  nullable: true
+  description: Envrnmntal is the score associated with the Environmental Pillar.
+- name: LEnvrnmntal
+  type: FLOAT
+  nullable: true
+  description: LEnvrnmntal is the latest score associated with the Environmental Pillar.
+- name: CorpGov
+  type: FLOAT
+  nullable: true
+  description: CorpGov is the score associated with the CorpGov Pillar.
+- name: LCorpGov
+  type: FLOAT
+  nullable: true
+  description: LCorpGov is the latest score associated with the CorpGov Pillar.
+- name: Social
+  type: FLOAT
+  nullable: true
+  description: Social is the score associated with the Social Pillar.
+- name: LSocial
+  type: FLOAT
+  nullable: true
+  description: LSocial is the latest score associated with the Social Pillar.
+- name: FeedDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: FeedDate denotes the feed date, which comes in the feed file. This field is only significant when Point in
+    Time data is implemented. For the present implementation, the date present in the feed file is updated when there is a
+    change in the existing value. This date will correspond to the date when the scores are recalculated or modified by the
+    vendor.
+- name: FYEndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: FYEndDate is the Fiscal Year End Date value as provided in the feed.
+- name: CDFlag
+  type: BIGINT
+  nullable: true
+  description: 'CDFlag describes the DFlag value, which is calculated when special values like NA, N/F, or N/R come in the
+    feed. Chapter 0: 2. ESG Database Schema A4Code: Numeric Codes 11'
+---
+table: qa_esg.A4Code
+domain: esg
+description: Numeric Codes | This table contains descriptions of ESG numeric codes.
+update_cadence: Once every two weeks for incremental files. Once a year for history files.
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Type_ is a numeric code for a type of data.
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code is a coded value for an element of Type_. When Type_ = 0, Code is the numeric code for each Type_ other
+    than 0 and Desc_ is a description of each Type_.
+- name: Desc_
+  type: varchar(100)
+  nullable: true
+  description: Desc_ is a plain-language description of the element defined by Type_ and Code.
+---
+table: qa_esg.A4Desc
+domain: esg
+description: Character Code Descriptions | This table contains descriptions of ESG character codes.
+update_cadence: Once every two weeks for incremental files; once a year for history files.
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Type_ is a numeric code for a type of data.
+- name: Code
+  type: varchar(10)
+  nullable: false
+  description: Code is a coded value for an element of Type_. When Type_ = 0, Code is the numeric code for each Type_ other
+    than 0 and Desc_ is a description of each Type_.
+- name: Desc_
+  type: varchar(300)
+  nullable: true
+  description: Desc_ is a plain-language description of the element defined by Type_ and Code.
+---
+table: qa_esg.A4DriverData
+domain: esg
+description: Driver Indicator Data | This table contains the scores, latest scores, and values associated with all the Driver
+  Indicators. | 928. Refer to the A4Item table for more information.
+update_cadence: Once every two weeks for incremental files; once a year for history files.
+columns:
+- name: OrgID
+  type: INTEGER
+  nullable: false
+  description: OrgID is the unique identifier for each organization provided by ESG.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item is a unique code that identifies each driver. The item range for drivers is 857 – 928. Refer to the A4Item
+    table for more information.
+- name: SeqNo
+  type: SMALLINT
+  nullable: false
+  description: SeqNo notes the changes that occur in the values. SeqNo is defined for future implementation of Point in Time
+    data. For the current implementation, the SeqNo will always be 1.
+- name: FisYear
+  type: SMALLINT
+  nullable: false
+  description: FisYear is the particular year for which the data is defined.
+- name: Score
+  type: FLOAT
+  nullable: true
+  description: Score is the score associated with the driver.
+- name: LScore
+  type: FLOAT
+  nullable: true
+  description: LScore is the latest score associated with the driver.
+- name: Value_
+  type: TINYINT
+  nullable: true
+  description: 'Value_ is the value associated with the outcome. The Boolean values that come in the feed are converted to
+    tinyint and can be: Chapter 0: 2. ESG Database Schema A4IndAggrData: Industry Aggregated Data 12'
+- name: FeedDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: FeedDate denotes the feed date, which comes in the feed file. This field is only significant when Point in
+    Time data is implemented. For the present implementation, the date present in the feed file is updated when there is a
+    change in the existing value. This date will correspond to the date when the scores are recalculated or modified by the
+    vendor.
+- name: FYEndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: FYEndDate is the Fiscal Year End Date value as provided in the feed.
+- name: CDFlag
+  type: SMALLINT
+  nullable: true
+  description: CDFlag describes the DFlag value, which is calculated when special values like NA, N/F, or N/R come in the
+    feed.
+---
+table: qa_esg.A4IndAggrData
+domain: esg
+description: Industry Aggregated Data | This table contains industry aggregated values for some of the data points. The scores
+  are aggregated based on
+update_cadence: Once every two weeks for incremental files; once a year for history files.
+columns:
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item is a unique code that identifies each data point in the feed.
+- name: BusTRBCId
+  type: INTEGER
+  nullable: false
+  description: BusTRBCId is the TRBC Code from which the data is segregated.
+- name: FisYear
+  type: SMALLINT
+  nullable: false
+  description: FisYear is the particular year for which the data is defined.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the value corresponding to the TRBC Code.
+- name: DFlag
+  type: TINYINT
+  nullable: true
+  description: DFlag is the value calculated when special values like NA, N/F, or N/R come in the feed. DFlag cross-references
+    A4Code where DFlag= A4Code.Code and A4Code.Type_ = 6. To translate A4Code.Desc_, cross-reference A4Code.Desc_ with A4Desc_.Code
+    where A4Desc_.Type_ = 10.
+---
+table: qa_esg.A4Item
+domain: esg
+description: 'Data Items | This table contains the data points that belong to all the files: Company Values, Company Controversies,
+  | Company Negative Screening, Board Members, Non Board Members, and Industry Aggregates. This table | provides details for
+  the type of value a particular item holds and the table where the value resides. | DataTypeCode tinyint Y DataTypeCode determines
+  the table to which the item belongs. | TableCode tinyint Y TableCode is the data table in which the value pertaining to
+  the item'
+update_cadence: Once every two weeks for incremental files; once a year for history files.
+columns:
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item is a unique code that identifies each data point in the feed.
+- name: Mnemonic
+  type: varchar(20)
+  nullable: true
+  description: Mnemonic is a short mnemonic code that describes the item.
+- name: FileCode
+  type: TINYINT
+  nullable: true
+  description: FileCode specifies the feed file to which the data point belongs. A4Item.FileCode cross-references with A4Code.Code
+    where Type_ = 1.
+- name: EnumValues
+  type: varchar(120)
+  nullable: true
+  description: EnumValues represents all the possible values the indicator can have.
+- name: Title
+  type: varchar(100)
+  nullable: true
+  description: Title is the description pertaining to Item.
+- name: DetailedDesc_
+  type: varchar(1200)
+  nullable: true
+  description: DetailedDesc_ is the detailed description pertaining to Item.
+- name: DataTypeCode
+  type: TINYINT
+  nullable: true
+  description: DataTypeCode determines the table to which the item belongs. A4Item.DataTypeCode cross-references with A4Code.Code
+    where Type_ = 3.
+- name: VenDataTypeDesc
+  type: varchar(70)
+  nullable: true
+  description: VenDataTypeDesc defines the data type and range for the values.
+- name: TableCode
+  type: TINYINT
+  nullable: true
+  description: TableCode is the data table in which the value pertaining to the item resides. A4Item.DataTypeCode cross-references
+    with A4Code.Code where Type_ = 4.
+- name: CatItem
+  type: SMALLINT
+  nullable: true
+  description: CatItem is the code that indicates the data item's category. Descriptions for CatItem codes are contained in
+    A4Item where Item = CatItem.
+- name: PillarItem
+  type: SMALLINT
+  nullable: true
+  description: PillarItem is the code that indicates the data item's pillar. Descriptions for PillarItem codes are contained
+    in A4Item where Item = PillarItem.
+---
+table: qa_esg.A4MemFData
+domain: esg
+description: Board Member Float Data | This table contains float data for all the Board Member and Non Board Member related
+  data points.
+update_cadence: Once every two weeks for incremental files; once a year for history files.
+columns:
+- name: OrgID
+  type: INTEGER
+  nullable: false
+  description: OrgID is the unique identifier for each organization provided by ESG.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item is a unique code that identifies each data point in the feed.
+- name: MemberID
+  type: TINYINT
+  nullable: false
+  description: MemberID is a unique number assigned by ESG to each of the members. This number acts as a member identifier.
+- name: FisYear
+  type: SMALLINT
+  nullable: false
+  description: FisYear is the particular year for which the data is defined.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value_ is the float value pertaining to a particular data point.
+- name: IsBMember
+  type: TINYINT
+  nullable: true
+  description: 'IsBMember is a code that identifies whether the data point belongs to Board Member or Non Board Member. IsBMember
+    can be: – 0 = Non Board Member – 1 = Board Member'
+- name: FYEndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: 'FYEndDate is the Fiscal Year End Date value as provided in the feed. Chapter 0: 2. ESG Database Schema A4MemIData:
+    Board Member Boolean Data 14'
+- name: DFlag
+  type: TINYINT
+  nullable: true
+  description: DFlag is the value calculated when special values like NA, N/F, or N/R come in the feed. DFlag cross-references
+    A4Code where DFlag= A4Code.Code and A4Code.Type_ = 6. To translate A4Code.Desc_, cross-reference A4Code.Desc_ with A4Desc_.Code
+    where A4Desc_.Type_ = 10.
+---
+table: qa_esg.A4MemIData
+domain: esg
+description: Board Member Boolean Data | This table contains Boolean data for all the Board Member and Non Board Member related
+  data points. The
+update_cadence: Once every two weeks for incremental files; once a year for history files.
+columns:
+- name: OrgID
+  type: INTEGER
+  nullable: false
+  description: OrgID is the unique identifier for each organization provided by ESG.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item is a unique code that identifies each data point in the feed.
+- name: MemberID
+  type: TINYINT
+  nullable: false
+  description: MemberID is a unique number assigned by ESG to each of the members. This number acts as a member identifier.
+- name: FisYear
+  type: SMALLINT
+  nullable: false
+  description: FisYear is the particular year for which the data is defined.
+- name: Value_
+  type: TINYINT
+  nullable: true
+  description: 'Value_ is the Boolean value, converted to tinyint, pertaining to a particular data point. Value_ can be: –
+    0 = Not in the feed – 1 = In the feed'
+- name: IsBMember
+  type: TINYINT
+  nullable: true
+  description: 'IsBMember is a code that identifies whether the data point belongs to Board Member or Non Board Member. IsBMember
+    can be: – 0 = Non Board Member – 1 = Board Member'
+- name: FYEndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: FYEndDate is the Fiscal Year End Date value as provided in the feed.
+- name: DFlag
+  type: TINYINT
+  nullable: true
+  description: DFlag is the value calculated when special values like NA, N/F, or N/R come in the feed. DFlag cross-references
+    A4Code where DFlag= A4Code.Code and A4Code.Type_ = 6. To translate A4Code.Desc_, cross-reference A4Code.Desc_ with A4Desc_.Code
+    where A4Desc_.Type_ = 10.
+---
+table: qa_esg.A4MemSData
+domain: esg
+description: Board Member String and Varchar Data | This table contains string or varchar data for all the Board Member and
+  Non Board Member related data points.
+update_cadence: Once every two weeks for incremental files; once a year for history files.
+columns:
+- name: OrgID
+  type: INTEGER
+  nullable: false
+  description: OrgID is the unique identifier for each organization provided by ESG.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item is a unique code that identifies each data point in the feed.
+- name: MemberID
+  type: TINYINT
+  nullable: false
+  description: MemberID is a unique number assigned by ESG to each of the members. This number acts as a member identifier.
+- name: FisYear
+  type: SMALLINT
+  nullable: false
+  description: FisYear is the particular year for which the data is defined.
+- name: FYEndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: FYEndDate is the Fiscal Year End Date value as provided in the feed.
+- name: IsBMember
+  type: TINYINT
+  nullable: true
+  description: 'IsBMember is a code that identifies whether the data point belongs to Board Member or Non Board Member. IsBMember
+    can be: – 0 = Non Board Member – 1 = Board Member'
+- name: DFlag
+  type: TINYINT
+  nullable: true
+  description: DFlag is the value calculated when special values like NA, N/F, or N/R come in the feed. DFlag cross-references
+    A4Code where DFlag= A4Code.Code and A4Code.Type_ = 6. To translate A4Code.Desc_, cross-reference A4Code.Desc_ with A4Desc_.Code
+    where A4Desc_.Type_ = 10.
+- name: Desc_
+  type: varchar(max)
+  nullable: true
+  description: Desc_ is the string or varchar description pertaining to the particular data point.
+---
+table: qa_esg.A4OutcomeData
+domain: esg
+description: Outcome Indicator Data | This table contains the scores, latest scores, and values associated with all the Outcome
+  Indicators. | codes is 929 – 1140. Refer to the A4Item table for more information. | The standard Asset4 to Core Table mapping
+  using ventype=46 (ASSET4) is based on one to one mapping logic
+update_cadence: Once every two weeks for incremental files; once a year for history files.
+columns:
+- name: OrgID
+  type: INTEGER
+  nullable: false
+  description: OrgID is the unique identifier for each organization provided by ESG.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: Item is a unique code that identifies each outcome. The item range for outcome codes is 929 – 1140. Refer to
+    the A4Item table for more information.
+- name: SeqNo
+  type: SMALLINT
+  nullable: false
+  description: SeqNo notes the changes that occur in the values. SeqNo is defined for future implementation of Point in Time
+    data. For the current implementation, the SeqNo will always be 1.
+- name: FisYear
+  type: SMALLINT
+  nullable: false
+  description: FisYear is the particular year for which the data is defined.
+- name: Score
+  type: FLOAT
+  nullable: true
+  description: Score is the score associated with the outcome.
+- name: LScore
+  type: FLOAT
+  nullable: true
+  description: LScore is the latest score associated with the outcome.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: 'Value_ is the value associated with the outcome. It includes both float and Boolean values. The Boolean values
+    that come in the feed are converted to tinyint and can be: – 0 = No – 1 = Yes The double Boolean values that come in the
+    feed are converted to tinyint and can be: – 1 = No/No – 4 = No/Yes – 3 = Yes/No – 6 = Yes/Yes'
+- name: FeedDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: 'FeedDate denotes the feed date, which comes in the feed file. This field is only significant when Point in
+    Time data is implemented. For the present implementation, the date present in the feed file is updated when there is a
+    change in the existing value. This date will correspond to the date when the scores are recalculated or modified by the
+    vendor. Chapter 0: 2. ESG Database Schema A4OutcomeData: Outcome Indicator Data 16'
+- name: FYEndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: FYEndDate is the Fiscal Year End Date value as provided in the feed.
+- name: CDFlag
+  type: SMALLINT
+  nullable: true
+  description: CDFlag describes the DFlag value, which is calculated when special values like NA, N/F, or N/R come in the
+    feed. LSEG Quantitative Analytics Database Schema for ESG Data 17 SQL Views The mapping script enhances the coverage of
+    instruments by covering multiple exchanges and includes querying by identifiers like ISIN, Sedol or Cusip. The standard
+    Asset4 to Core Table mapping using ventype=46 (ASSET4) is based on one to one mapping logic from organization to a single
+    security. This architecture lim
+- name: SecCode
+  type: INTEGER
+  nullable: false
+  description: SecCode links across the core master tables.
+- name: ID
+  type: varchar(30)
+  nullable: false
+  description: Id is the unique Quantitative Analytics identifier for a security.
+- name: Name
+  type: varchar(61)
+  nullable: true
+  description: Name is the name of the security.
+- name: ISIN
+  type: varchar(13)
+  nullable: true
+  description: Isin is the security ISIN number.
+- name: Cusip
+  type: varchar(9)
+  nullable: true
+  description: Cusip is the security CUSIP number.
+- name: Sedol
+  type: varchar(7)
+  nullable: true
+  description: Sedol is the primary security SEDOL.
+- name: Typ
+  type: INTEGER
+  nullable: false
+  description: North America = 1, Global = 6. Used to join with vw_SecurityMasterX.
+- name: OrgID
+  type: INTEGER
+  nullable: false
+  description: OrgID is the unique identifier for each organization provided by ESG.
+- name: OrgName
+  type: varchar(50)
+  nullable: true
+  description: 'OrgName is the name of the organization. Example Use case: Retrieving OrgID and related identifiers for specified
+    QAIDs. SELECT * from vw_A4ESGMapping WHERE ID IN (''GOOG'',''BRK.A'',''BRK.B'',''ACF'',''37045V10'',''MSFT'') LSEG Quantitative
+    Analytics Database Schema for ESG Data Copyright © 2024 London Stock Exchange Group plc and its group of companies (LSEG)
+    and/or its affiliates. All rights reserved. The LSEG content received through this service is the intellectual property
+    of LSEG or its third party s'

@@ -1,0 +1,1831 @@
+table: qa_mktpsych.MPICmpInfo
+domain: sentiment
+description: This table contains company level information.
+update_cadence: 'Daily Adjusted: N/A'
+columns:
+- name: OrgPermID
+  type: BIGINT
+  nullable: false
+  description: Organizational PermID.
+- name: OrgName
+  type: varchar(100)
+  nullable: true
+  description: Company Name.
+- name: DomISOCntryCode
+  type: char(2)
+  nullable: true
+  description: Two-character ISO 3166-1 country code. Corresponding code description is in the MPIDesc table. Cross-reference
+    DomISOCntryCode with MPIDesc.Code where Type_ = 3.
+- name: TRBCEcoSector
+  type: varchar(50)
+  nullable: true
+  description: The Reference Business Classification (TRBC) economic sector.
+- name: TrackingStatus
+  type: varchar(10)
+  nullable: true
+  description: “Active” if the PermID may be scored in a live feed, otherwise “Inactive”.
+- name: RIC
+  type: varchar(40)
+  nullable: true
+  description: Main RIC for the company.
+- name: Ticker
+  type: varchar(15)
+  nullable: true
+  description: Ticker for the company. Private companies shall have a MarketPsych-designated ticker beginning with “PVT-".
+- name: MIC
+  type: varchar(5)
+  nullable: true
+  description: ISO 10383 code for market or exchange identification. Value may differ from similar value maintained by London
+    Stock Exchange.
+- name: RegionCode
+  type: TINYINT
+  nullable: true
+  description: 'Indicates the Company Domiciled Region. Corresponding type code in the MPICode table. Company Region can take
+    one of the following values: – 1: AMER – 2: APAC – 3: EMEA Cross-reference RegionCode with MPIDesc.Code where Type_ =
+    2.'
+- name: AltOrgPermID
+  type: bignint
+  nullable: true
+  description: AltOrgPermID is the new PermID assigned to the company after certain corporate events. This can be used for
+    cross content reference.
+---
+table: qa_mktpsych.MPICmpGrpInfo
+domain: sentiment
+description: This table contains company groups' assets information.
+update_cadence: 'Daily Adjusted: N/A'
+columns:
+- name: AstId
+  type: INTEGER
+  nullable: false
+  description: DIS Generated Asset ID.
+- name: AstCode
+  type: varchar(20)
+  nullable: true
+  description: Represents the code used to denote the asset scored. MarketPsych-originated code.
+- name: AstDesc
+  type: varchar(200)
+  nullable: true
+  description: Description of the Asset.
+- name: AstDomCls
+  type: varchar(15)
+  nullable: true
+  description: Asset Domicile Classification.
+- name: AstCat
+  type: varchar(35)
+  nullable: true
+  description: Asset Categorization. LSEG Quantitative Analytics MarketPsych Analytics 9
+---
+table: qa_mktpsych.MPICurInfo
+domain: sentiment
+description: This table contains currencies' assets information.
+update_cadence: Daily
+columns:
+- name: AstId
+  type: INTEGER
+  nullable: false
+  description: DIS Generated Asset ID.
+- name: AstCode
+  type: char(3)
+  nullable: true
+  description: Represents the code used to denote the asset scored. Three- character ISO-4217 code.
+- name: AstDesc
+  type: nvarchar(50)
+  nullable: true
+  description: Description of the Asset
+---
+table: qa_mktpsych.MPICmdtyInfo
+domain: sentiment
+description: This table contains commodities' (agricultural and energy and material) assets information.
+update_cadence: Daily
+columns:
+- name: AstId
+  type: INTEGER
+  nullable: false
+  description: DIS Generated Asset ID.
+- name: AstCode
+  type: varchar(10)
+  nullable: true
+  description: Represents the code used to denote the asset scored. LSEG Topic Code.
+- name: AstDesc
+  type: varchar(30)
+  nullable: true
+  description: Description of the Asset.
+- name: CmdtyType
+  type: char(3)
+  nullable: true
+  description: 'Indicates the Commodity Type. Corresponding code description is in the MPIDesc table. Commodity Type can take
+    one of the following values: – 1: AGR - Agricultural commodities – 2: EGR - Energy & material commodities Cross-reference
+    CmdtyType with MPIDesc.Code where Type_ = 5.'
+---
+table: qa_mktpsych.MPICntryInfo
+domain: sentiment
+description: This table contains countries' assets information.
+update_cadence: Daily
+columns:
+- name: AstId
+  type: INTEGER
+  nullable: false
+  description: DIS Generated Asset ID
+- name: AstCode
+  type: varchar(3)
+  nullable: true
+  description: Represents the code used to denote the asset scored. LSEG topic code, referring to the home country. Also corresponds
+    to ISO 3166- 1 code.
+- name: AstDesc
+  type: nvarchar(50)
+  nullable: true
+  description: Description of the Asset LSEG Quantitative Analytics MarketPsych Analytics 10
+---
+table: qa_mktpsych.MPICntryMrktInfo
+domain: sentiment
+description: This table contains country markets' assets information.
+update_cadence: Daily
+columns:
+- name: AstId
+  type: INTEGER
+  nullable: false
+  description: DIS Generated Asset ID.
+- name: AstCode
+  type: varchar(3)
+  nullable: true
+  description: Represents the code used to denote the asset scored. LSEG topic code, referring to the home country. Also corresponds
+    to ISO 3166- 1 code.
+- name: AstDesc
+  type: nvarchar(50)
+  nullable: true
+  description: Description of the Asset
+---
+table: qa_mktpsych.MPICmpStatus
+domain: sentiment
+description: This table contains the changes to company tracking status.
+update_cadence: Monthly
+columns:
+- name: OrgPermID
+  type: BIGINT
+  nullable: false
+  description: LSEG organizational PermID.
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Change Date.
+- name: OrgName
+  type: varchar(100)
+  nullable: true
+  description: Company Name.
+- name: TrackingStatus
+  type: varchar(10)
+  nullable: true
+  description: “Active” if the PermID may be scored in a live feed. Otherwise “Inactive”.
+---
+table: qa_mktpsych.MPICmpAmerData
+domain: sentiment
+description: This table contains index scores for the company asset class in the AMER region. The index scores comprise of
+update_cadence: Daily
+columns:
+- name: OrgPermId
+  type: BIGINT
+  nullable: false
+  description: Organization Perm ID.
+- name: DataType
+  type: TINYINT
+  nullable: false
+  description: 'Represents the type of content source(s) on which these MIs are based. Corresponding Type_ code in the MPICode
+    table. DataType can take one of the following values: – “News” for news – “Social” for social media – “News_Social” for
+    the combined content Cross-reference DataType with MPICode.Code where Type_ = 2.'
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Represents the date of content aggregation window. The time zone is GMT/UTC.
+- name: WindowHour
+  type: SMALLINT
+  nullable: false
+  description: Represents the endpoint of content aggregation window. The time zone is GMT/UTC. The value ranges from 0-23.
+    LSEG Quantitative Analytics MarketPsych Analytics 11
+- name: Buzz
+  type: FLOAT
+  nullable: true
+  description: Represents a sum of entity-specific words and phrases used in MI computations.
+- name: Sentiment
+  type: FLOAT
+  nullable: true
+  description: 'Overall Positive References, Net Of Negative References (Range: - 1 to 1).'
+- name: Optimism
+  type: FLOAT
+  nullable: true
+  description: 'Optimism, Net Of References To Pessimism (Range: -1 to 1).'
+- name: Joy
+  type: FLOAT
+  nullable: true
+  description: 'Happiness And Affection (Range: 0 to 1*).'
+- name: LoveHate
+  type: FLOAT
+  nullable: true
+  description: 'Love, Net Of References To Hate (Range: -1 to 1).'
+- name: Trust
+  type: FLOAT
+  nullable: true
+  description: 'Trustworthiness, Net Of References Connoting Corruption (Range: -1 to 1).'
+- name: Anger
+  type: FLOAT
+  nullable: true
+  description: 'Anger And Disgust (Range: 0 to 1*).'
+- name: Conflict
+  type: FLOAT
+  nullable: true
+  description: 'Disagreement And Swearing Net Of Agreement And Conciliation (Range: -1 to 1)'
+- name: Fear
+  type: FLOAT
+  nullable: true
+  description: 'Fear And Anxiety (Range: 0 to 1*).'
+- name: Gloom
+  type: FLOAT
+  nullable: true
+  description: 'Gloom And Negative Future Outlook (Range: 0 to 1*).'
+- name: Stress
+  type: FLOAT
+  nullable: true
+  description: 'Arousal And Intensity, Weighted Towards Distress (Range: 0 to 1*).'
+- name: Surprise
+  type: FLOAT
+  nullable: true
+  description: 'Unexpected Events And Surprise (Range: 0 to 1*).'
+- name: TimeUrgency
+  type: FLOAT
+  nullable: true
+  description: 'Urgency And Timeliness, Net Of References To Tardiness And Delays (Range: -1 to 1).'
+- name: Uncertainty
+  type: FLOAT
+  nullable: true
+  description: 'Uncertainty And Confusion (Range: 0 to 1*).'
+- name: Violence
+  type: FLOAT
+  nullable: true
+  description: 'Violent Crime, Terrorism, And War (Range: 0 to 1*).'
+- name: EmotionVsFact
+  type: FLOAT
+  nullable: true
+  description: 'All Emotional Sentiments, Net Of All Factual And Topical References (Range: -1 to 1).'
+- name: MarketRisk
+  type: FLOAT
+  nullable: true
+  description: 'Positive Emotionality And Positive Expectations Net Of Negative Emotionality And Negative Expectations. Includes
+    Factors From Social Media Found Characteristic Of Speculative Bubbles – Higher Values Indicate Greater Bubble Risk. Also
+    Known As The “Bubbleometer.” (Range: -1 to 1).'
+- name: LongShort
+  type: FLOAT
+  nullable: true
+  description: 'Buying, Net Of References To Shorting Or Selling (Range: -1 to 1).'
+- name: LongShortForecast
+  type: FLOAT
+  nullable: true
+  description: 'Forecasts Of Buying, Net Of References To Forecasts Of Shorting Or Selling (Range: -1 to 1).'
+- name: PrcDirection
+  type: FLOAT
+  nullable: true
+  description: 'Price Increases, Net Of References To Price Decreases (Range: -1 to 1).'
+- name: PrcForecast
+  type: FLOAT
+  nullable: true
+  description: 'Forecasts Of Asset Price Rises, Net Of References To Forecasts Of Asset Price Drops (Range: -1 to 1).'
+- name: Volatility
+  type: FLOAT
+  nullable: true
+  description: 'Volatility In Market Prices Or Business Conditions (Range: 0 to 1*).'
+- name: AnalystRating
+  type: FLOAT
+  nullable: true
+  description: 'Upgrade Activity, Net Of References To Downgrade Activity (Range: -1 to 1).'
+- name: CyberCrime
+  type: FLOAT
+  nullable: true
+  description: 'Cyber Attacks And Data Breaches (Range: 0 to 1*).'
+- name: DebtDefault
+  type: FLOAT
+  nullable: true
+  description: 'Debt Defaults And Bankruptcies (Range: 0 to 1*).'
+- name: Dividends
+  type: FLOAT
+  nullable: true
+  description: 'Dividends Rising, Net Of References To Dividends Falling (Range: - 1 to 1).'
+- name: Innovation
+  type: FLOAT
+  nullable: true
+  description: 'Innovativeness (Range: 0 to 1*).'
+- name: EarningsForecast
+  type: FLOAT
+  nullable: true
+  description: 'Expectations About Improving Earnings, Less Those Of Worsening Earnings (Range: -1 to 1).'
+- name: FndStrength
+  type: FLOAT
+  nullable: true
+  description: 'Positivity About Accounting Fundamentals, Net Of References To Negativity About Accounting Fundamentals (Range:
+    -1 to 1).'
+- name: LaborDispute
+  type: FLOAT
+  nullable: true
+  description: 'Labor Unrest And Work Stoppages (Range: 0 to 1*).'
+- name: Layoffs
+  type: FLOAT
+  nullable: true
+  description: 'Staff Reductions And Layoffs (Range: 0 to 1*).'
+- name: Litigation
+  type: FLOAT
+  nullable: true
+  description: 'Litigation And Legal Activity (Range: 0 to 1*).'
+- name: MgmtChange
+  type: FLOAT
+  nullable: true
+  description: 'Changes In A Company''S Management Team, Net Of References To Stability In The Management Team (Range: -1
+    to 1). LSEG Quantitative Analytics MarketPsych Analytics 12'
+- name: MgmtTrust
+  type: FLOAT
+  nullable: true
+  description: 'Trust Expressed In A Company''S Management Team, Net Of References To Reports Of Unethical Behavior Amongst
+    The Management Team (Range: -1 to 1).'
+- name: Mergers
+  type: FLOAT
+  nullable: true
+  description: 'Merger Or Acquisition Activity (Range: 0 to 1*).'
+- name: SysVer
+  type: INTEGER
+  nullable: true
+  description: System Version For Marketpysch Analytics. It’s Used For Version Control. *Unipolar indices – can range below
+    0, although not below -1.
+join_hints:
+- to: MPICode
+  evidence: 'DataType can take one of the following values: – “News” for news – “Social” for social media – “News_Social”
+    for the combined content Cross-reference DataType with MPICode.Code where Type_ = 2.'
+  type: cross_reference
+---
+table: qa_mktpsych.MPICmpApacData
+domain: sentiment
+description: This table contains index scores for the company asset class in the APAC region. The index scores comprise of
+update_cadence: 'Daily Adjusted: N/A'
+columns:
+- name: OrgPermId
+  type: BIGINT
+  nullable: false
+  description: Organization Perm ID.
+- name: DataType
+  type: TINYINT
+  nullable: false
+  description: 'Represents the type of content source(s) on which these MIs are based. Corresponding Type_ code in the MPICode
+    table. DataType can take one of the following values: – “News” for news – “Social” for social media – “News_Social” for
+    the combined content Cross-reference DataType with MPICode.Code where Type_ = 2.'
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Represents the date of content aggregation window. The time zone is GMT/UTC.
+- name: WindowHour
+  type: SMALLINT
+  nullable: false
+  description: Represents the endpoint of content aggregation window. The time zone is GMT/UTC. The value ranges from 0-23.
+- name: Buzz
+  type: FLOAT
+  nullable: true
+  description: Represents a sum of entity-specific words and phrases used in MI computations.
+- name: Sentiment
+  type: FLOAT
+  nullable: true
+  description: 'Overall Positive References, Net Of Negative References (Range: - 1 to 1).'
+- name: Optimism
+  type: FLOAT
+  nullable: true
+  description: 'Optimism, Net Of References To Pessimism (Range: -1 to 1).'
+- name: Joy
+  type: FLOAT
+  nullable: true
+  description: 'Happiness And Affection (Range: 0 to 1*).'
+- name: LoveHate
+  type: FLOAT
+  nullable: true
+  description: 'Love, Net Of References To Hate (Range: -1 to 1).'
+- name: Trust
+  type: FLOAT
+  nullable: true
+  description: 'Trustworthiness, Net Of References Connoting Corruption (Range: -1 to 1).'
+- name: Anger
+  type: FLOAT
+  nullable: true
+  description: 'Anger And Disgust (Range: 0 to 1*).'
+- name: Conflict
+  type: FLOAT
+  nullable: true
+  description: 'Disagreement And Swearing Net Of Agreement And Conciliation (Range: -1 to 1)'
+- name: Fear
+  type: FLOAT
+  nullable: true
+  description: 'Fear And Anxiety (Range: 0 to 1*).'
+- name: Gloom
+  type: FLOAT
+  nullable: true
+  description: 'Gloom And Negative Future Outlook (Range: 0 to 1*).'
+- name: Stress
+  type: FLOAT
+  nullable: true
+  description: 'Arousal And Intensity, Weighted Towards Distress (Range: 0 to 1*).'
+- name: Surprise
+  type: FLOAT
+  nullable: true
+  description: 'Unexpected Events And Surprise (Range: 0 to 1*).'
+- name: TimeUrgency
+  type: FLOAT
+  nullable: true
+  description: 'Urgency And Timeliness, Net Of References To Tardiness And Delays (Range: -1 to 1).'
+- name: Uncertainty
+  type: FLOAT
+  nullable: true
+  description: 'Uncertainty And Confusion (Range: 0 to 1*).'
+- name: Violence
+  type: FLOAT
+  nullable: true
+  description: 'Violent Crime, Terrorism, And War (Range: 0 to 1*). LSEG Quantitative Analytics MarketPsych Analytics 13'
+- name: EmotionVsFact
+  type: FLOAT
+  nullable: true
+  description: 'All Emotional Sentiments, Net Of All Factual And Topical References (Range: -1 to 1).'
+- name: MarketRisk
+  type: FLOAT
+  nullable: true
+  description: 'Positive Emotionality And Positive Expectations Net Of Negative Emotionality And Negative Expectations. Includes
+    Factors From Social Media Found Characteristic Of Speculative Bubbles – Higher Values Indicate Greater Bubble Risk. Also
+    Known As The “Bubbleometer.” (Range: -1 to 1).'
+- name: LongShort
+  type: FLOAT
+  nullable: true
+  description: 'Buying, Net Of References To Shorting Or Selling (Range: -1 to 1).'
+- name: LongShortForecast
+  type: FLOAT
+  nullable: true
+  description: 'Forecasts Of Buying, Net Of References To Forecasts Of Shorting Or Selling (Range: -1 to 1).'
+- name: PrcDirection
+  type: FLOAT
+  nullable: true
+  description: 'Price Increases, Net Of References To Price Decreases (Range: -1 to 1).'
+- name: PrcForecast
+  type: FLOAT
+  nullable: true
+  description: 'Forecasts Of Asset Price Rises, Net Of References To Forecasts Of Asset Price Drops (Range: -1 to 1).'
+- name: Volatility
+  type: FLOAT
+  nullable: true
+  description: 'Volatility In Market Prices Or Business Conditions (Range: 0 to 1*).'
+- name: AnalystRating
+  type: FLOAT
+  nullable: true
+  description: 'Upgrade Activity, Net Of References To Downgrade Activity (Range: -1 to 1).'
+- name: CyberCrime
+  type: FLOAT
+  nullable: true
+  description: 'Cyber Attacks And Data Breaches (Range: 0 to 1*).'
+- name: DebtDefault
+  type: FLOAT
+  nullable: true
+  description: 'Debt Defaults And Bankruptcies (Range: 0 to 1*).'
+- name: Dividends
+  type: FLOAT
+  nullable: true
+  description: 'Dividends Rising, Net Of References To Dividends Falling (Range: - 1 to 1).'
+- name: Innovation
+  type: FLOAT
+  nullable: true
+  description: 'Innovativeness (Range: 0 to 1*).'
+- name: EarningsForecast
+  type: FLOAT
+  nullable: true
+  description: 'Expectations About Improving Earnings, Less Those Of Worsening Earnings (Range: -1 to 1).'
+- name: FndStrength
+  type: FLOAT
+  nullable: true
+  description: 'Positivity About Accounting Fundamentals, Net Of References To Negativity About Accounting Fundamentals (Range:
+    -1 to 1).'
+- name: LaborDispute
+  type: FLOAT
+  nullable: true
+  description: 'Labor Unrest And Work Stoppages (Range: 0 to 1*).'
+- name: Layoffs
+  type: FLOAT
+  nullable: true
+  description: 'Staff Reductions And Layoffs (Range: 0 to 1*).'
+- name: Litigation
+  type: FLOAT
+  nullable: true
+  description: 'Litigation And Legal Activity (Range: 0 to 1*).'
+- name: MgmtChange
+  type: FLOAT
+  nullable: true
+  description: 'Changes In A Company''S Management Team, Net Of References To Stability In The Management Team (Range: -1
+    to 1).'
+- name: MgmtTrust
+  type: FLOAT
+  nullable: true
+  description: 'Trust Expressed In A Company''S Management Team, Net Of References To Reports Of Unethical Behavior Amongst
+    The Management Team (Range: -1 to 1).'
+- name: Mergers
+  type: FLOAT
+  nullable: true
+  description: 'Merger Or Acquisition Activity (Range: 0 to 1*).'
+- name: SysVer
+  type: INTEGER
+  nullable: true
+  description: System Version For MarketPsych Analytics. It’s Used For Version Control. *Unipolar indices – can range below
+    0, although not below -1. LSEG Quantitative Analytics MarketPsych Analytics 14
+join_hints:
+- to: MPICode
+  evidence: 'DataType can take one of the following values: – “News” for news – “Social” for social media – “News_Social”
+    for the combined content Cross-reference DataType with MPICode.Code where Type_ = 2.'
+  type: cross_reference
+---
+table: qa_mktpsych.MPICmpEmeaData
+domain: sentiment
+description: This table contains index scores for the company asset class in the EMEA region. The index scores comprise of
+update_cadence: 'Daily Adjusted: N/A'
+columns:
+- name: OrgPermId
+  type: BIGINT
+  nullable: false
+  description: Organization Perm ID.
+- name: DataType
+  type: TINYINT
+  nullable: false
+  description: 'Represents the type of content source(s) on which these MIs are based. Corresponding Type_ code in the MPICode
+    table. DataType can take one of the following values: – “News” for news – “Social” for social media – “News_Social” for
+    the combined content Cross-reference DataType with MPICode.Code where Type_ = 2.'
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Represents the date of content aggregation window. The time zone is GMT/UTC.
+- name: WindowHour
+  type: SMALLINT
+  nullable: false
+  description: Represents the endpoint of content aggregation window. The time zone is GMT/UTC. The value ranges from 0-23.
+- name: Buzz
+  type: FLOAT
+  nullable: true
+  description: Represents a sum of entity-specific words and phrases used in MI computations.
+- name: Sentiment
+  type: FLOAT
+  nullable: true
+  description: 'Overall Positive References, Net Of Negative References (Range: - 1 to 1).'
+- name: Optimism
+  type: FLOAT
+  nullable: true
+  description: 'Optimism, Net Of References To Pessimism (Range: -1 to 1).'
+- name: Joy
+  type: FLOAT
+  nullable: true
+  description: 'Happiness And Affection (Range: 0 to 1*).'
+- name: LoveHate
+  type: FLOAT
+  nullable: true
+  description: 'Love, Net Of References To Hate (Range: -1 to 1).'
+- name: Trust
+  type: FLOAT
+  nullable: true
+  description: 'Trustworthiness, Net Of References Connoting Corruption (Range: -1 to 1).'
+- name: Anger
+  type: FLOAT
+  nullable: true
+  description: 'Anger And Disgust (Range: 0 to 1*).'
+- name: Conflict
+  type: FLOAT
+  nullable: true
+  description: 'Disagreement And Swearing Net Of Agreement And Conciliation (Range: -1 to 1)'
+- name: Fear
+  type: FLOAT
+  nullable: true
+  description: 'Fear And Anxiety (Range: 0 to 1*).'
+- name: Gloom
+  type: FLOAT
+  nullable: true
+  description: 'Gloom And Negative Future Outlook (Range: 0 to 1*).'
+- name: Stress
+  type: FLOAT
+  nullable: true
+  description: 'Arousal And Intensity, Weighted Towards Distress (Range: 0 to 1*).'
+- name: Surprise
+  type: FLOAT
+  nullable: true
+  description: 'Unexpected Events And Surprise (Range: 0 to 1*).'
+- name: TimeUrgency
+  type: FLOAT
+  nullable: true
+  description: 'Urgency And Timeliness, Net Of References To Tardiness And Delays (Range: -1 to 1).'
+- name: Uncertainty
+  type: FLOAT
+  nullable: true
+  description: 'Uncertainty And Confusion (Range: 0 to 1*).'
+- name: Violence
+  type: FLOAT
+  nullable: true
+  description: 'Violent Crime, Terrorism, And War (Range: 0 to 1*).'
+- name: EmotionVsFact
+  type: FLOAT
+  nullable: true
+  description: 'All Emotional Sentiments, Net Of All Factual And Topical References (Range: -1 to 1).'
+- name: MarketRisk
+  type: FLOAT
+  nullable: true
+  description: 'Positive Emotionality And Positive Expectations Net Of Negative Emotionality And Negative Expectations. Includes
+    Factors From Social Media Found Characteristic Of Speculative Bubbles – Higher Values Indicate Greater Bubble Risk. Also
+    Known As The “Bubbleometer.” (Range: -1 to 1).'
+- name: LongShort
+  type: FLOAT
+  nullable: true
+  description: 'Buying, Net Of References To Shorting Or Selling (Range: -1 to 1).'
+- name: LongShortForecast
+  type: FLOAT
+  nullable: true
+  description: 'Forecasts Of Buying, Net Of References To Forecasts Of Shorting Or Selling (Range: -1 to 1).'
+- name: PrcDirection
+  type: FLOAT
+  nullable: true
+  description: 'Price Increases, Net Of References To Price Decreases (Range: -1 to 1).'
+- name: PrcForecast
+  type: FLOAT
+  nullable: true
+  description: 'Forecasts Of Asset Price Rises, Net Of References To Forecasts Of Asset Price Drops (Range: -1 to 1). LSEG
+    Quantitative Analytics MarketPsych Analytics 15'
+- name: Volatility
+  type: FLOAT
+  nullable: true
+  description: 'Volatility In Market Prices Or Business Conditions (Range: 0 to 1*).'
+- name: AnalystRating
+  type: FLOAT
+  nullable: true
+  description: 'Upgrade Activity, Net Of References To Downgrade Activity (Range: -1 to 1).'
+- name: CyberCrime
+  type: FLOAT
+  nullable: true
+  description: 'Cyber Attacks And Data Breaches (Range: 0 to 1*).'
+- name: DebtDefault
+  type: FLOAT
+  nullable: true
+  description: 'Debt Defaults And Bankruptcies (Range: 0 to 1*).'
+- name: Dividends
+  type: FLOAT
+  nullable: true
+  description: 'Dividends Rising, Net Of References To Dividends Falling (Range: - 1 to 1).'
+- name: Innovation
+  type: FLOAT
+  nullable: true
+  description: 'Innovativeness (Range: 0 to 1*).'
+- name: EarningsForecast
+  type: FLOAT
+  nullable: true
+  description: 'Expectations About Improving Earnings, Less Those Of Worsening Earnings (Range: -1 to 1).'
+- name: FndStrength
+  type: FLOAT
+  nullable: true
+  description: 'Positivity About Accounting Fundamentals, Net Of References To Negativity About Accounting Fundamentals (Range:
+    -1 to 1).'
+- name: LaborDispute
+  type: FLOAT
+  nullable: true
+  description: 'Labor Unrest And Work Stoppages (Range: 0 to 1*).'
+- name: Layoffs
+  type: FLOAT
+  nullable: true
+  description: 'Staff Reductions And Layoffs (Range: 0 to 1*).'
+- name: Litigation
+  type: FLOAT
+  nullable: true
+  description: 'Litigation And Legal Activity (Range: 0 to 1*).'
+- name: MgmtChange
+  type: FLOAT
+  nullable: true
+  description: 'Changes In A Company''S Management Team, Net Of References To Stability In The Management Team (Range: -1
+    to 1).'
+- name: MgmtTrust
+  type: FLOAT
+  nullable: true
+  description: 'Trust Expressed In A Company''S Management Team, Net Of References To Reports Of Unethical Behavior Amongst
+    The Management Team (Range: -1 to 1).'
+- name: Mergers
+  type: FLOAT
+  nullable: true
+  description: 'Merger Or Acquisition Activity (Range: 0 to 1*).'
+- name: SysVer
+  type: INTEGER
+  nullable: true
+  description: System Version For MarketPsych Analytics. It’s Used For Version Control. *Unipolar indices – can range below
+    0, although not below -1.
+join_hints:
+- to: MPICode
+  evidence: 'DataType can take one of the following values: – “News” for news – “Social” for social media – “News_Social”
+    for the combined content Cross-reference DataType with MPICode.Code where Type_ = 2.'
+  type: cross_reference
+---
+table: qa_mktpsych.MPICmpGrpData
+domain: sentiment
+description: This table contains index scores for the company groups asset class. The index scores comprise of emotional
+update_cadence: 'Daily Adjusted: N/A'
+columns:
+- name: AstId
+  type: INTEGER
+  nullable: false
+  description: DIS Generated Company ID.
+- name: DataType
+  type: TINYINT
+  nullable: false
+  description: 'Represents the type of content source(s) on which these MIs are based. Corresponding Type_ code in the MPICode
+    table. DataType can take one of the following values: – “News” for news – “Social” for social media – “News_Social” for
+    the combined content Cross-reference DataType with MPICode.Code where Type_ = 2.'
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Represents the date of content aggregation window. The time zone is GMT/UTC.
+- name: WindowHour
+  type: SMALLINT
+  nullable: false
+  description: Represents the endpoint of content aggregation window. The time zone is GMT/UTC. The value ranges from 0-23.
+- name: Buzz
+  type: FLOAT
+  nullable: true
+  description: Represents a sum of entity-specific words and phrases used in MI computations.
+- name: Sentiment
+  type: FLOAT
+  nullable: true
+  description: 'Overall Positive References, Net Of Negative References (Range: - 1 to 1).'
+- name: Optimism
+  type: FLOAT
+  nullable: true
+  description: 'Optimism, Net Of References To Pessimism (Range: -1 to 1). LSEG Quantitative Analytics MarketPsych Analytics
+    16'
+- name: Joy
+  type: FLOAT
+  nullable: true
+  description: 'Happiness And Affection (Range: 0 to 1*).'
+- name: LoveHate
+  type: FLOAT
+  nullable: true
+  description: 'Love, Net Of References To Hate (Range: -1 to 1).'
+- name: Trust
+  type: FLOAT
+  nullable: true
+  description: 'Trustworthiness, Net Of References Connoting Corruption (Range: -1 to 1).'
+- name: Anger
+  type: FLOAT
+  nullable: true
+  description: 'Anger And Disgust (Range: 0 to 1*).'
+- name: Conflict
+  type: FLOAT
+  nullable: true
+  description: 'Disagreement And Swearing Net Of Agreement And Conciliation (Range: -1 to 1)'
+- name: Fear
+  type: FLOAT
+  nullable: true
+  description: 'Fear And Anxiety (Range: 0 to 1*).'
+- name: Gloom
+  type: FLOAT
+  nullable: true
+  description: 'Gloom And Negative Future Outlook (Range: 0 to 1*).'
+- name: Stress
+  type: FLOAT
+  nullable: true
+  description: 'Arousal And Intensity, Weighted Towards Distress (Range: 0 to 1*).'
+- name: Surprise
+  type: FLOAT
+  nullable: true
+  description: 'Unexpected Events And Surprise (Range: 0 to 1*).'
+- name: TimeUrgency
+  type: FLOAT
+  nullable: true
+  description: 'Urgency And Timeliness, Net Of References To Tardiness And Delays (Range: -1 to 1).'
+- name: Uncertainty
+  type: FLOAT
+  nullable: true
+  description: 'Uncertainty And Confusion (Range: 0 to 1*).'
+- name: Violence
+  type: FLOAT
+  nullable: true
+  description: 'Violent Crime, Terrorism, And War (Range: 0 to 1*).'
+- name: EmotionVsFact
+  type: FLOAT
+  nullable: true
+  description: 'All Emotional Sentiments, Net Of All Factual And Topical References (Range: -1 to 1).'
+- name: MarketRisk
+  type: FLOAT
+  nullable: true
+  description: 'Positive Emotionality And Positive Expectations Net Of Negative Emotionality And Negative Expectations. Includes
+    Factors From Social Media Found Characteristic Of Speculative Bubbles – Higher Values Indicate Greater Bubble Risk. Also
+    Known As The “Bubbleometer.” (Range: -1 to 1).'
+- name: LongShort
+  type: FLOAT
+  nullable: true
+  description: 'Buying, Net Of References To Shorting Or Selling (Range: -1 to 1).'
+- name: LongShortForecast
+  type: FLOAT
+  nullable: true
+  description: 'Forecasts Of Buying, Net Of References To Forecasts Of Shorting Or Selling (Range: -1 to 1).'
+- name: PrcDirection
+  type: FLOAT
+  nullable: true
+  description: 'Price Increases, Net Of References To Price Decreases (Range: -1 to 1).'
+- name: PrcForecast
+  type: FLOAT
+  nullable: true
+  description: 'Forecasts Of Asset Price Rises, Net Of References To Forecasts Of Asset Price Drops (Range: -1 to 1).'
+- name: Volatility
+  type: FLOAT
+  nullable: true
+  description: 'Volatility In Market Prices Or Business Conditions (Range: 0 to 1*).'
+- name: AnalystRating
+  type: FLOAT
+  nullable: true
+  description: 'Upgrade Activity, Net Of References To Downgrade Activity (Range: -1 to 1).'
+- name: CyberCrime
+  type: FLOAT
+  nullable: true
+  description: 'Cyber Attacks And Data Breaches (Range: 0 to 1*).'
+- name: DebtDefault
+  type: FLOAT
+  nullable: true
+  description: 'Debt Defaults And Bankruptcies (Range: 0 to 1*).'
+- name: Dividends
+  type: FLOAT
+  nullable: true
+  description: 'Dividends Rising, Net Of References To Dividends Falling (Range: - 1 to 1).'
+- name: Innovation
+  type: FLOAT
+  nullable: true
+  description: 'Innovativeness (Range: 0 to 1*).'
+- name: EarningsForecast
+  type: FLOAT
+  nullable: true
+  description: 'Expectations About Improving Earnings, Less Those Of Worsening Earnings (Range: -1 to 1).'
+- name: FndStrength
+  type: FLOAT
+  nullable: true
+  description: 'Positivity About Accounting Fundamentals, Net Of References To Negativity About Accounting Fundamentals (Range:
+    -1 to 1).'
+- name: LaborDispute
+  type: FLOAT
+  nullable: true
+  description: 'Labor Unrest And Work Stoppages (Range: 0 to 1*).'
+- name: Layoffs
+  type: FLOAT
+  nullable: true
+  description: 'Staff Reductions And Layoffs (Range: 0 to 1*).'
+- name: Litigation
+  type: FLOAT
+  nullable: true
+  description: 'Litigation And Legal Activity (Range: 0 to 1*).'
+- name: MgmtChange
+  type: FLOAT
+  nullable: true
+  description: 'Changes In A Company''S Management Team, Net Of References To Stability In The Management Team (Range: -1
+    to 1).'
+- name: MgmtTrust
+  type: FLOAT
+  nullable: true
+  description: 'Trust Expressed In A Company''S Management Team, Net Of References To Reports Of Unethical Behavior Amongst
+    The Management Team (Range: -1 to 1).'
+- name: Mergers
+  type: FLOAT
+  nullable: true
+  description: 'Merger Or Acquisition Activity (Range: 0 to 1*).'
+- name: SysVer
+  type: INTEGER
+  nullable: true
+  description: System Version For MarketPsych Analytics. It’s Used For Version Control. LSEG Quantitative Analytics MarketPsych
+    Analytics 17 *Unipolar indices – can range below 0, although not below -1.
+join_hints:
+- to: MPICode
+  evidence: 'DataType can take one of the following values: – “News” for news – “Social” for social media – “News_Social”
+    for the combined content Cross-reference DataType with MPICode.Code where Type_ = 2.'
+  type: cross_reference
+---
+table: qa_mktpsych.MPICurData
+domain: sentiment
+description: This table contains index scores for the currencies asset class. The index scores comprise of emotional
+update_cadence: 'Daily Adjusted: N/A'
+columns:
+- name: AstId
+  type: INTEGER
+  nullable: false
+  description: DIS Generated Asset ID.
+- name: DataType
+  type: TINYINT
+  nullable: false
+  description: 'Represents the type of content source(s) on which these MIs are based. Corresponding Type_ code in the MPICode
+    table. DataType can take one of the following values: – “News” for news – “Social” for social media – “News_Social” for
+    the combined content Cross-reference DataType with MPICode.Code where Type_ = 2.'
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Represents the date of content aggregation window. The time zone is GMT/UTC.
+- name: WindowHour
+  type: SMALLINT
+  nullable: false
+  description: Represents the endpoint of content aggregation window. The time zone is GMT/UTC. The value ranges from 0-23.
+- name: Buzz
+  type: FLOAT
+  nullable: true
+  description: Represents a sum of entity-specific words and phrases used in MI computations.
+- name: Sentiment
+  type: FLOAT
+  nullable: true
+  description: 'Overall Positive References, Net Of Negative References (Range: - 1 to 1).'
+- name: Optimism
+  type: FLOAT
+  nullable: true
+  description: 'Optimism, Net Of References To Pessimism (Range: -1 to 1).'
+- name: Joy
+  type: FLOAT
+  nullable: true
+  description: 'Happiness And Affection (Range: 0 to 1*).'
+- name: LoveHate
+  type: FLOAT
+  nullable: true
+  description: 'Love, Net Of References To Hate (Range: -1 to 1).'
+- name: Trust
+  type: FLOAT
+  nullable: true
+  description: 'Trustworthiness, Net Of References Connoting Corruption (Range: -1 to 1).'
+- name: Anger
+  type: FLOAT
+  nullable: true
+  description: 'Anger And Disgust (Range: 0 to 1*).'
+- name: Conflict
+  type: FLOAT
+  nullable: true
+  description: 'Disagreement And Swearing Net Of Agreement And Conciliation (Range: -1 to 1).'
+- name: Fear
+  type: FLOAT
+  nullable: true
+  description: 'Fear And Anxiety (Range: 0 to 1*).'
+- name: Gloom
+  type: FLOAT
+  nullable: true
+  description: 'Gloom And Negative Future Outlook (Range: 0 to 1*).'
+- name: Stress
+  type: FLOAT
+  nullable: true
+  description: 'Arousal And Intensity, Weighted Towards Distress (Range: 0 to 1*).'
+- name: Surprise
+  type: FLOAT
+  nullable: true
+  description: 'Unexpected Events And Surprise (Range: 0 to 1*).'
+- name: TimeUrgency
+  type: FLOAT
+  nullable: true
+  description: 'Urgency And Timeliness, Net Of References To Tardiness And Delays (Range: -1 to 1).'
+- name: Uncertainty
+  type: FLOAT
+  nullable: true
+  description: 'Uncertainty And Confusion (Range: 0 to 1*).'
+- name: Violence
+  type: FLOAT
+  nullable: true
+  description: 'Violent Crime, Terrorism, And War (Range: 0 to 1*).'
+- name: EmotionVsFact
+  type: FLOAT
+  nullable: true
+  description: 'All Emotional Sentiments, Net Of All Factual And Topical References (Range: -1 to 1).'
+- name: MarketRisk
+  type: FLOAT
+  nullable: true
+  description: 'Positive Emotionality And Positive Expectations Net Of Negative Emotionality And Negative Expectations. Includes
+    Factors From Social Media Found Characteristic Of Speculative Bubbles – Higher Values Indicate Greater Bubble Risk. Also
+    Known As The “Bubbleometer.” (Range: -1 to 1).'
+- name: LongShort
+  type: FLOAT
+  nullable: true
+  description: 'Buying, Net Of References To Shorting Or Selling (Range: -1 to 1).'
+- name: LongShortForecast
+  type: FLOAT
+  nullable: true
+  description: 'Forecasts Of Buying, Net Of References To Forecasts Of Shorting Or Selling (Range: -1 to 1). LSEG Quantitative
+    Analytics MarketPsych Analytics 18'
+- name: PrcDirection
+  type: FLOAT
+  nullable: true
+  description: 'Price Increases, Net Of References To Price Decreases (Range: -1 to 1).'
+- name: PrcForecast
+  type: FLOAT
+  nullable: true
+  description: 'Forecasts Of Asset Price Rises, Net Of References To Forecasts Of Asset Price Drops (Range: -1 to 1).'
+- name: Volatility
+  type: FLOAT
+  nullable: true
+  description: 'Volatility In Market Prices Or Business Conditions (Range: 0 to 1*).'
+- name: CarryTrade
+  type: FLOAT
+  nullable: true
+  description: 'Carry Trade (Range: 0 to 1*).'
+- name: CurrPegInstability
+  type: FLOAT
+  nullable: true
+  description: 'The Instability Of A Currency Peg, Net Of References To The Stability Of A Currency Peg (Range: -1 to 1).'
+- name: PrcMomentum
+  type: FLOAT
+  nullable: true
+  description: 'Currency Price Trend Strength, Net Of References To Trend Weakness (Range: -1 to 1).'
+- name: SysVer
+  type: INTEGER
+  nullable: true
+  description: System Version For MarketPsych Analytics. It’s Used For Version Control. *Unipolar indices – can range below
+    0, although not below -1.
+join_hints:
+- to: MPICode
+  evidence: 'DataType can take one of the following values: – “News” for news – “Social” for social media – “News_Social”
+    for the combined content Cross-reference DataType with MPICode.Code where Type_ = 2.'
+  type: cross_reference
+---
+table: qa_mktpsych.MPIAgrCmdtyData
+domain: sentiment
+description: This table contains index scores for the agricultural commodities asset class. The index scores comprise of
+update_cadence: Daily
+columns:
+- name: AstId
+  type: INTEGER
+  nullable: false
+  description: DIS Generated Company ID.
+- name: DataType
+  type: TINYINT
+  nullable: false
+  description: 'Represents the type of content source(s) on which these MIs are based. Corresponding Type_ code in the MPICode
+    table. DataType can take one of the following values: – “News” for news – “Social” for social media – “News_Social” for
+    the combined content Cross-reference DataType with MPICode.Code where Type_ = 2.'
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Represents the date of content aggregation window. The time zone is GMT/UTC.
+- name: WindowHour
+  type: SMALLINT
+  nullable: false
+  description: Represents the endpoint of content aggregation window. The time zone is GMT/UTC. The value ranges from 0-23.
+- name: Buzz
+  type: FLOAT
+  nullable: true
+  description: Represents a sum of entity-specific words and phrases used in MI computations.
+- name: Sentiment
+  type: FLOAT
+  nullable: true
+  description: 'Overall Positive References, Net Of Negative References (Range: - 1 to 1).'
+- name: Optimism
+  type: FLOAT
+  nullable: true
+  description: 'Optimism, Net Of References To Pessimism (Range: -1 to 1).'
+- name: Joy
+  type: FLOAT
+  nullable: true
+  description: 'Happiness And Affection (Range: 0 to 1*).'
+- name: LoveHate
+  type: FLOAT
+  nullable: true
+  description: 'Love, Net Of References To Hate (Range: -1 to 1).'
+- name: Trust
+  type: FLOAT
+  nullable: true
+  description: 'Trustworthiness, Net Of References Connoting Corruption (Range: -1 to 1).'
+- name: Anger
+  type: FLOAT
+  nullable: true
+  description: 'Anger And Disgust (Range: 0 to 1*).'
+- name: Conflict
+  type: FLOAT
+  nullable: true
+  description: 'Disagreement And Swearing Net Of Agreement And Conciliation (Range: -1 to 1).'
+- name: Fear
+  type: FLOAT
+  nullable: true
+  description: 'Fear And Anxiety (Range: 0 to 1*).'
+- name: Gloom
+  type: FLOAT
+  nullable: true
+  description: 'Gloom And Negative Future Outlook (Range: 0 to 1*). LSEG Quantitative Analytics MarketPsych Analytics 19'
+- name: Stress
+  type: FLOAT
+  nullable: true
+  description: 'Arousal And Intensity, Weighted Towards Distress (Range: 0 to 1*).'
+- name: Surprise
+  type: FLOAT
+  nullable: true
+  description: 'Unexpected Events And Surprise (Range: 0 to 1*).'
+- name: TimeUrgency
+  type: FLOAT
+  nullable: true
+  description: 'Urgency And Timeliness, Net Of References To Tardiness And Delays (Range: -1 to 1).'
+- name: Uncertainty
+  type: FLOAT
+  nullable: true
+  description: 'Uncertainty And Confusion (Range: 0 to 1*).'
+- name: Violence
+  type: FLOAT
+  nullable: true
+  description: 'Violent Crime, Terrorism, And War (Range: 0 to 1*).'
+- name: EmotionVsFact
+  type: FLOAT
+  nullable: true
+  description: 'All Emotional Sentiments, Net Of All Factual And Topical References (Range: -1 to 1).'
+- name: LongShort
+  type: FLOAT
+  nullable: true
+  description: 'Buying, Net Of References To Shorting Or Selling (Range: -1 to 1).'
+- name: LongShortForecast
+  type: FLOAT
+  nullable: true
+  description: 'Forecasts Of Buying, Net Of References To Forecasts Of Shorting Or Selling (Range: -1 to 1).'
+- name: PrcDirection
+  type: FLOAT
+  nullable: true
+  description: 'Price Increases, Net Of References To Price Decreases (Range: -1 to 1).'
+- name: PrcForecast
+  type: FLOAT
+  nullable: true
+  description: 'Forecasts Of Asset Price Rises, Net Of References To Forecasts Of Asset Price Drops (Range: -1 to 1).'
+- name: Volatility
+  type: FLOAT
+  nullable: true
+  description: 'Volatility In Market Prices Or Business Conditions (Range: 0 to 1*).'
+- name: ConsumptionVol
+  type: FLOAT
+  nullable: true
+  description: 'Increasing, Net Of Decreasing, Commodity Consumption (Range: - 1 to 1).'
+- name: ProductionVol
+  type: FLOAT
+  nullable: true
+  description: 'Increasing, Net Of Decreasing, Commodity Production (Range: -1 to 1).'
+- name: RegIssues
+  type: FLOAT
+  nullable: true
+  description: 'Regulatory Changes Affecting The Commodity (Range: 0 to 1*).'
+- name: SupVsDem
+  type: FLOAT
+  nullable: true
+  description: 'Surplus Supply And Lack Of Demand, Net Of References To Supply Shortage And High Demand (Range: -1 to 1).'
+- name: SupVsDemForecast
+  type: FLOAT
+  nullable: true
+  description: 'Expectations Of Supply Outstripping Demand, Net Of References To Expectations Of Demand Outstripping Supply
+    (Range: -1 to 1).'
+- name: AcreageCultivated
+  type: FLOAT
+  nullable: true
+  description: 'Increases In Acreage And Crop Cultivation, Net Or References To Decreases In Acreage And Crop Cultivation
+    (Range: -1 to 1).'
+- name: AgDisease
+  type: FLOAT
+  nullable: true
+  description: 'Commodity Disease (Range: 0 to 1*).'
+- name: AgStress
+  type: FLOAT
+  nullable: true
+  description: 'Production Stress Related To Disease, Water, Or Weather (Range: 0 to 1*).'
+- name: Subsidies
+  type: FLOAT
+  nullable: true
+  description: 'Subsidies Affecting Commodity Prices (Range: 0 to 1*).'
+- name: SubsidiesSentiment
+  type: FLOAT
+  nullable: true
+  description: 'Increases In Subsidies, Net Of References To Decreases In Subsidies (Range: -1 to 1).'
+- name: WeatherDamage
+  type: FLOAT
+  nullable: true
+  description: 'Commodity Weather Risk And Damage (Range: 0 to 1*).'
+- name: SysVer
+  type: INTEGER
+  nullable: true
+  description: System Version For MarketPsych Analytics. It’s Used For Version Control. *Unipolar indices – can range below
+    0, although not below -1. LSEG Quantitative Analytics MarketPsych Analytics 20
+join_hints:
+- to: MPICode
+  evidence: 'DataType can take one of the following values: – “News” for news – “Social” for social media – “News_Social”
+    for the combined content Cross-reference DataType with MPICode.Code where Type_ = 2.'
+  type: cross_reference
+---
+table: qa_mktpsych.MPIEnmCmdtyData
+domain: sentiment
+description: This table contains index scores for the energy and material commodities asset class. The index scores comprise
+update_cadence: 'Daily Adjusted: N/A'
+columns:
+- name: AstId
+  type: INTEGER
+  nullable: false
+  description: DIS Generated Asset ID.
+- name: DataType
+  type: TINYINT
+  nullable: false
+  description: 'Represents the type of content source(s) on which these MIs are based. Corresponding Type_ code in the MPICode
+    table. DataType can take one of the following values: – “News” for news – “Social” for social media – “News_Social” for
+    the combined content Cross-reference DataType with MPICode.Code where Type_ = 2.'
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Represents the date of content aggregation window. The time zone is GMT/UTC.
+- name: WindowHour
+  type: SMALLINT
+  nullable: false
+  description: Represents the endpoint of content aggregation window. The time zone is GMT/UTC. The value ranges from 0-23.
+- name: Buzz
+  type: FLOAT
+  nullable: true
+  description: Represents a sum of entity-specific words and phrases used in MI computations.
+- name: Sentiment
+  type: FLOAT
+  nullable: true
+  description: 'Overall Positive References, Net Of Negative References (Range: - 1 to 1).'
+- name: Optimism
+  type: FLOAT
+  nullable: true
+  description: 'Optimism, Net Of References To Pessimism (Range: -1 to 1).'
+- name: Joy
+  type: FLOAT
+  nullable: true
+  description: 'Happiness And Affection (Range: 0 to 1*).'
+- name: LoveHate
+  type: FLOAT
+  nullable: true
+  description: 'Love, Net Of References To Hate (Range: -1 to 1).'
+- name: Trust
+  type: FLOAT
+  nullable: true
+  description: 'Trustworthiness, Net Of References Connoting Corruption (Range: -1 to 1).'
+- name: Anger
+  type: FLOAT
+  nullable: true
+  description: 'Anger And Disgust (Range: 0 to 1*).'
+- name: Conflict
+  type: FLOAT
+  nullable: true
+  description: 'Disagreement And Swearing Net Of Agreement And Conciliation (Range: -1 to 1).'
+- name: Fear
+  type: FLOAT
+  nullable: true
+  description: 'Fear And Anxiety (Range: 0 to 1*).'
+- name: Gloom
+  type: FLOAT
+  nullable: true
+  description: 'Gloom And Negative Future Outlook (Range: 0 to 1*).'
+- name: Stress
+  type: FLOAT
+  nullable: true
+  description: 'Arousal And Intensity, Weighted Towards Distress (Range: 0 to 1*).'
+- name: Surprise
+  type: FLOAT
+  nullable: true
+  description: 'Unexpected Events And Surprise (Range: 0 to 1*).'
+- name: TimeUrgency
+  type: FLOAT
+  nullable: true
+  description: 'Urgency And Timeliness, Net Of References To Tardiness And Delays (Range: -1 to 1).'
+- name: Uncertainty
+  type: FLOAT
+  nullable: true
+  description: 'Uncertainty And Confusion (Range: 0 to 1*).'
+- name: Violence
+  type: FLOAT
+  nullable: true
+  description: 'Violent Crime, Terrorism, And War (Range: 0 to 1*).'
+- name: EmotionVsFact
+  type: FLOAT
+  nullable: true
+  description: 'All Emotional Sentiments, Net Of All Factual And Topical References (Range: -1 to 1).'
+- name: LongShort
+  type: FLOAT
+  nullable: true
+  description: 'Buying, Net Of References To Shorting Or Selling (Range: -1 to 1).'
+- name: LongShortForecast
+  type: FLOAT
+  nullable: true
+  description: 'Forecasts Of Buying, Net Of References To Forecasts Of Shorting Or Selling (Range: -1 to 1).'
+- name: PrcDirection
+  type: FLOAT
+  nullable: true
+  description: 'Price Increases, Net Of References To Price Decreases (Range: -1 to 1).'
+- name: PrcForecast
+  type: FLOAT
+  nullable: true
+  description: 'Forecasts Of Asset Price Rises, Net Of References To Forecasts Of Asset Price Drops (Range: -1 to 1).'
+- name: Volatility
+  type: FLOAT
+  nullable: true
+  description: 'Volatility In Market Prices Or Business Conditions (Range: 0 to 1*).'
+- name: ConsumptionVol
+  type: FLOAT
+  nullable: true
+  description: 'Increasing, Net Of Decreasing, Commodity Consumption (Range: - 1 to 1).'
+- name: ProductionVol
+  type: FLOAT
+  nullable: true
+  description: 'Increasing, Net Of Decreasing, Commodity Production (Range: -1 to 1). LSEG Quantitative Analytics MarketPsych
+    Analytics 21'
+- name: RegIssues
+  type: FLOAT
+  nullable: true
+  description: 'Regulatory Changes Affecting The Commodity (Range: 0 to 1*).'
+- name: SupVsDem
+  type: FLOAT
+  nullable: true
+  description: 'Surplus Supply And Lack Of Demand, Net Of References To Supply Shortage And High Demand (Range: -1 to 1).'
+- name: SupVsDemForecast
+  type: FLOAT
+  nullable: true
+  description: 'Expectations Of Supply Outstripping Demand, Net Of References To Expectations Of Demand Outstripping Supply
+    (Range: -1 to 1).'
+- name: NewExploration
+  type: FLOAT
+  nullable: true
+  description: 'New Ventures/Exploration (Range: 0 to 1*).'
+- name: SafetyAccident
+  type: FLOAT
+  nullable: true
+  description: 'Safety Accidents (Range: 0 to 1*).'
+- name: SysVer
+  type: INTEGER
+  nullable: true
+  description: System Version For MarketPsych Analytics. It’s Used For Version Control. *Unipolar indices – can range below
+    0, although not below -1.
+join_hints:
+- to: MPICode
+  evidence: 'DataType can take one of the following values: – “News” for news – “Social” for social media – “News_Social”
+    for the combined content Cross-reference DataType with MPICode.Code where Type_ = 2.'
+  type: cross_reference
+---
+table: qa_mktpsych.MPICntryData
+domain: sentiment
+description: This table contains indices data for the countries asset class. The index scores comprise of emotional indicators,
+update_cadence: 'Daily Adjusted: N/A'
+columns:
+- name: AstId
+  type: INTEGER
+  nullable: false
+  description: DIS Generated Asset ID.
+- name: DataType
+  type: TINYINT
+  nullable: false
+  description: 'Represents the type of content source(s) on which these MIs are based. Corresponding Type_ code in the MPICode
+    table. DataType can take one of the following values: – “News” for news – “Social” for social media – “News_Social” for
+    the combined content Cross-reference DataType with MPICode.Code where Type_ = 2.'
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Represents the date of content aggregation window. The time zone is GMT/UTC.
+- name: WindowHour
+  type: SMALLINT
+  nullable: false
+  description: Represents the endpoint of content aggregation window. The time zone is GMT/UTC. The value ranges from 0-23.
+- name: Buzz
+  type: FLOAT
+  nullable: true
+  description: Represents a sum of entity-specific words and phrases used in MI computations.
+- name: Sentiment
+  type: FLOAT
+  nullable: true
+  description: 'Overall Positive References, Net Of Negative References (Range: -1 to 1).'
+- name: Optimism
+  type: FLOAT
+  nullable: true
+  description: 'Optimism, Net Of References To Pessimism (Range: -1 to 1).'
+- name: Joy
+  type: FLOAT
+  nullable: true
+  description: 'Happiness And Affection (Range: 0 to 1*).'
+- name: LoveHate
+  type: FLOAT
+  nullable: true
+  description: 'Love, Net Of References To Hate (Range: -1 to 1).'
+- name: Trust
+  type: FLOAT
+  nullable: true
+  description: 'Trustworthiness, Net Of References Connoting Corruption (Range: -1 to 1).'
+- name: Anger
+  type: FLOAT
+  nullable: true
+  description: 'Anger And Disgust (Range: 0 to 1*).'
+- name: Conflict
+  type: FLOAT
+  nullable: true
+  description: 'Disagreement And Swearing Net Of Agreement And Conciliation (Range: -1 to 1).'
+- name: Fear
+  type: FLOAT
+  nullable: true
+  description: 'Fear And Anxiety (Range: 0 to 1*).'
+- name: Gloom
+  type: FLOAT
+  nullable: true
+  description: 'Gloom And Negative Future Outlook (Range: 0 to 1*).'
+- name: Stress
+  type: FLOAT
+  nullable: true
+  description: 'Arousal And Intensity, Weighted Towards Distress (Range: 0 to 1*).'
+- name: Surprise
+  type: FLOAT
+  nullable: true
+  description: 'Unexpected Events And Surprise (Range: 0 to 1*). LSEG Quantitative Analytics MarketPsych Analytics 22'
+- name: TimeUrgency
+  type: FLOAT
+  nullable: true
+  description: 'Urgency And Timeliness, Net Of References To Tardiness And Delays (Range: -1 to 1).'
+- name: Uncertainty
+  type: FLOAT
+  nullable: true
+  description: 'Uncertainty And Confusion (Range: 0 to 1*).'
+- name: EmotionVsFact
+  type: FLOAT
+  nullable: true
+  description: 'All Emotional Sentiments, Net Of All Factual And Topical References (Range: -1 to 1).'
+- name: MarketRisk
+  type: FLOAT
+  nullable: true
+  description: 'Positive Emotionality And Positive Expectations Net Of Negative Emotionality And Negative Expectations. Includes
+    Factors From Social Media Found Characteristic Of Speculative Bubbles – Higher Values Indicate Greater Bubble Risk. Also
+    Known As The “Bubbleometer.” (Range: - 1 to 1).'
+- name: BudgetDeficit
+  type: FLOAT
+  nullable: true
+  description: 'A Budget Deficit, Net Of References To A Surplus (Range: - 1 to 1).'
+- name: BizExpansion
+  type: FLOAT
+  nullable: true
+  description: 'Businesses Expanding, Net Of References To Contraction (Range: -1 to 1).'
+- name: CommRealEstateSentiment
+  type: FLOAT
+  nullable: true
+  description: 'Positive References To Commercial Real Estate, Net Of Negative References (Range: -1 to 1).'
+- name: ConsumerSentiment
+  type: FLOAT
+  nullable: true
+  description: 'Positive Consumer Sentiment, Net Of References To Negative Consumer Sentiment (Range: -1 to 1).'
+- name: CreditEasyVsTight
+  type: FLOAT
+  nullable: true
+  description: 'Credit Conditions Being Easy, Net Of References To Credit Conditions Being Tight (Range: -1 to 1).'
+- name: EcoGrowth
+  type: FLOAT
+  nullable: true
+  description: 'Increased Business Activity, Net Of References To Decreased Business Activity (Range: -1 to 1).'
+- name: EcoUncertainty
+  type: FLOAT
+  nullable: true
+  description: 'Uncertainty About Business Climate Net Of Confidence And Certainty (Range: -1 to 1).'
+- name: EcoVolatility
+  type: FLOAT
+  nullable: true
+  description: 'Increasing Economic Volatility, Net Of Economic Stability (Range: -1 to 1).'
+- name: FinSysInstability
+  type: FLOAT
+  nullable: true
+  description: 'Financial System Instability, Net Of References To Financial System Stability (Range: -1 to 1).'
+- name: FiscalLooseVsTight
+  type: FLOAT
+  nullable: true
+  description: 'Fiscal Policy Being Loose, Net Of References To Fiscal Policy Being Tight (Range: -1 to 1).'
+- name: Inflation
+  type: FLOAT
+  nullable: true
+  description: 'Consumer Price Increases, Net Of References To Consumer Price Decreases (Range: -1 to 1).'
+- name: InflationForecast
+  type: FLOAT
+  nullable: true
+  description: 'Forecasts Of Consumer Price Increases, Net Of Forecasts Of Consumer Price Decreases (Deflation) (Range: -1
+    to 1).'
+- name: InfraSentiment
+  type: FLOAT
+  nullable: true
+  description: 'Positive Net Of Negative References To Institutions, Facilities, Transportation, And Industry (Range: -1 to
+    1).'
+- name: Innovation
+  type: FLOAT
+  nullable: true
+  description: 'Innovativeness (Range: 0 to 1*).'
+- name: InvestmentFlows
+  type: FLOAT
+  nullable: true
+  description: 'Investment Inflows, Net Of References To Investment Outflows (Range: -1 to 1).'
+- name: ResRealEstateGrowth
+  type: FLOAT
+  nullable: true
+  description: 'Residential Real Estate Expansion, Net Of References To Contraction (Range: -1 to 1).'
+- name: ResRealEstateSales
+  type: FLOAT
+  nullable: true
+  description: 'Residential Real Estate Sales Rising, Net Of References To Sales Decreasing (Range: -1 to 1).'
+- name: ResRealEstateSentiment
+  type: FLOAT
+  nullable: true
+  description: 'Positive References To Residential Real Estate, Net Of Negative References (Range: -1 to 1).'
+- name: ResRealEstateVal
+  type: FLOAT
+  nullable: true
+  description: 'Residential Real Estate Values Rising, Net Of References To Declining Values (Range: -1 to 1).'
+- name: TradeBalance
+  type: FLOAT
+  nullable: true
+  description: 'Exports, Net Of References To Imports (Range: -1 to 1).'
+- name: Unemployment
+  type: FLOAT
+  nullable: true
+  description: 'Unemployment Rising, Net Of References To Unemployment Falling (Range: -1 to 1).'
+- name: UnemploymentForecast
+  type: FLOAT
+  nullable: true
+  description: 'Unemployment Rising, Net Of References To Unemployment Falling In The Future Tense (Range: -1 to 1).'
+- name: GovtAnger
+  type: FLOAT
+  nullable: true
+  description: 'Anger And Disgust About Government Officials And Departments (Range: 0 to 1*). LSEG Quantitative Analytics
+    MarketPsych Analytics 23'
+- name: GovtCorruption
+  type: FLOAT
+  nullable: true
+  description: 'Fraud, Deceit, And Corruption In Government (Range: 0 to 1*).'
+- name: GovtInstability
+  type: FLOAT
+  nullable: true
+  description: 'Governmental Instability, Net Of References To Governmental Stability (Range: -1 to 1).'
+- name: PoliticalSentiment
+  type: FLOAT
+  nullable: true
+  description: 'Positive Sentiment Expressed About Political Parties And Institutions Net Of Negative Sentiment (Range: -1
+    to 1).'
+- name: RegimeChange
+  type: FLOAT
+  nullable: true
+  description: 'Regime Change (Range: 0 to 1*).'
+- name: Sanctions
+  type: FLOAT
+  nullable: true
+  description: 'Sanctions Or Embargoes Emanating From Or Against A Country (Range: 0 to 1*).'
+- name: SocialInequality
+  type: FLOAT
+  nullable: true
+  description: 'Social Inequality (Range: 0 to 1*).'
+- name: SocialUnrest
+  type: FLOAT
+  nullable: true
+  description: 'Social Unrest And Calls For Political Change (Range: 0 to 1*).'
+- name: CyberCrime
+  type: FLOAT
+  nullable: true
+  description: 'Cyberattacks, Data Leaks, And Electronic Espionage (Range: 0 to 1*).'
+- name: Terrorism
+  type: FLOAT
+  nullable: true
+  description: 'Terrorist Threats And Activities (Range: 0 to 1*).'
+- name: ViolentCrime
+  type: FLOAT
+  nullable: true
+  description: 'Criminal Violence (Range: 0 to 1*).'
+- name: War
+  type: FLOAT
+  nullable: true
+  description: 'War And Militant Activity (Range: 0 to 1*).'
+- name: AgriculturalStress
+  type: FLOAT
+  nullable: true
+  description: 'Agricultural Failures And Production Deficiencies (Range: 0 to 1*).'
+- name: Coldwave
+  type: FLOAT
+  nullable: true
+  description: 'Unusually Cold Weather (Range: 0 to 1*).'
+- name: Drought
+  type: FLOAT
+  nullable: true
+  description: 'Lack Of Rain With Environmental Consequences (Range: 0 to 1*).'
+- name: Earthquake
+  type: FLOAT
+  nullable: true
+  description: 'Seismic Activity (Range: 0 to 1*).'
+- name: Famine
+  type: FLOAT
+  nullable: true
+  description: 'Human Caloric Deficiency (Range: 0 to 1*).'
+- name: Fire
+  type: FLOAT
+  nullable: true
+  description: 'Forest, Brush, And Structural Fires (Range: 0 to 1*).'
+- name: Flood
+  type: FLOAT
+  nullable: true
+  description: 'Rising Water Levels With Economic Consequences (Range: 0 to 1*).'
+- name: Heatwave
+  type: FLOAT
+  nullable: true
+  description: 'Unusually Hot Weather (Range: 0 to 1*).'
+- name: HumanInfectiousDisease
+  type: FLOAT
+  nullable: true
+  description: 'Presence And Outbreaks Of Contagious Or Epidemic Diseases (Range: 0 to 1*).'
+- name: Tsunami
+  type: FLOAT
+  nullable: true
+  description: 'Tidal Wave Activity (Range: 0 to 1*).'
+- name: VolcanicActivity
+  type: FLOAT
+  nullable: true
+  description: 'Volcanic Eruption (Range: 0 to 1*).'
+- name: WindStorm
+  type: FLOAT
+  nullable: true
+  description: 'Cyclonic Storms And Extreme Wind Weather Events (Range: 0 to 1*).'
+- name: SysVer
+  type: INTEGER
+  nullable: true
+  description: System Version For MarketPsych Analytics. It’s Used For Version Control. *Unipolar indices – can range below
+    0, although not below -1. LSEG Quantitative Analytics MarketPsych Analytics 24
+join_hints:
+- to: MPICode
+  evidence: 'DataType can take one of the following values: – “News” for news – “Social” for social media – “News_Social”
+    for the combined content Cross-reference DataType with MPICode.Code where Type_ = 2.'
+  type: cross_reference
+---
+table: qa_mktpsych.MPICntryMrktData
+domain: sentiment
+description: This table contains index scores for the country markets asset class. The index scores comprise of emotional
+update_cadence: Daily
+columns:
+- name: AstId
+  type: INTEGER
+  nullable: false
+  description: DIS Generated Asset ID.
+- name: DataType
+  type: TINYINT
+  nullable: false
+  description: 'Represents the type of content source(s) on which these MIs are based. Corresponding Type_ code in the MPICode
+    table. DataType can take one of the following values: – “News” for news – “Social” for social media – “News_Social” for
+    the combined content Cross-reference DataType with MPICode.Code where Type_ = 2.'
+- name: Date_
+  type: TIMESTAMP(6)
+  nullable: false
+  description: Represents the date of content aggregation window. The time zone is GMT/UTC.
+- name: WindowHour
+  type: SMALLINT
+  nullable: false
+  description: Represents the endpoint of content aggregation window. The time zone is GMT/UTC. The value ranges from 0-23.
+- name: StockIdxBuzz
+  type: FLOAT
+  nullable: true
+  description: Sum of all relevant references feeding into the LSEG MarketPsych Analytics.
+- name: BondBuzz
+  type: FLOAT
+  nullable: true
+  description: Sum Of All References To The Country’s Bonds And Debt (Excluding Corporate Debt) In That Country.
+- name: RatesBuzz
+  type: FLOAT
+  nullable: true
+  description: Sum of all references underlying the central bank, debt default, interest rates, interest rates forecast, and
+    monetary policy loose vs tight LSEG MarketPsych Analytics.
+- name: StockIdxSentiment
+  type: FLOAT
+  nullable: true
+  description: 'Overall Positive References, Net Of Negative References(Range: -1 to 1).'
+- name: StockIdxOptimism
+  type: FLOAT
+  nullable: true
+  description: 'Optimism, Net Of References To Pessimism (Range: -1 to 1).'
+- name: StockIdxTrust
+  type: FLOAT
+  nullable: true
+  description: 'Trustworthiness, Net Of References Connoting Mistrust (Range: -1 to 1).'
+- name: StockIdxFear
+  type: FLOAT
+  nullable: true
+  description: 'Fear And Anxiety (Range: 0 to 1*).'
+- name: StockIdxStress
+  type: FLOAT
+  nullable: true
+  description: 'Arousal And Intensity, Weighted Towards Distress (Range: 0 to 1*).'
+- name: StockIdxSurprise
+  type: FLOAT
+  nullable: true
+  description: 'Unexpected Events And Surprise (Range: 0 to 1*).'
+- name: StockIdxUncertainty
+  type: FLOAT
+  nullable: true
+  description: 'Uncertainty And Confusion (Range: 0 to 1*).'
+- name: StockIdxMarketRisk
+  type: FLOAT
+  nullable: true
+  description: 'Positive Emotionality And Positive Expectations Net Of Negative Emotionality And Negative Expectations. Includes
+    Factors From Social Media Found Characteristic Of Speculative Bubbles – Higher Values Indicate Greater Bubble Risk. Also
+    Known As The “Bubbleometer.” (Range: -1 to 1).'
+- name: StockIdxPrcDirection
+  type: FLOAT
+  nullable: true
+  description: 'Stock Price Increases, Net Of References To Price Decreases (Range: -1 to 1).'
+- name: StockIdxPrcForecast
+  type: FLOAT
+  nullable: true
+  description: 'Forecasts Of Stock Price Rises, Net Of References To Forecasts Of Asset Price Drops (Range: -1 to 1).'
+- name: StockIdxVolatility
+  type: FLOAT
+  nullable: true
+  description: 'Volatility In Stock Market Prices (Range: 0 to 1*).'
+- name: BondSentiment
+  type: FLOAT
+  nullable: true
+  description: 'Overall Positive References, Net Of Negative References (Range: -1 to 1).'
+- name: BondOptimism
+  type: FLOAT
+  nullable: true
+  description: 'Optimism, Net Of References To Pessimism (Range: -1 to 1).'
+- name: BondTrust
+  type: FLOAT
+  nullable: true
+  description: 'Trustworthiness, Net Of References Connoting Mistrust (Range: -1 to 1).'
+- name: BondFear
+  type: FLOAT
+  nullable: true
+  description: 'Fear And Anxiety (Range: 0 to 1*). LSEG Quantitative Analytics MarketPsych Analytics 25'
+- name: BondStress
+  type: FLOAT
+  nullable: true
+  description: 'Arousal And Intensity, Weighted Towards Distress (Range: 0 to 1*).'
+- name: BondSurprise
+  type: FLOAT
+  nullable: true
+  description: 'Unexpected Events And Surprise (Range: 0 to 1*).'
+- name: BondUncertainty
+  type: FLOAT
+  nullable: true
+  description: 'Uncertainty And Confusion (Range: 0 to 1*).'
+- name: BondDefault
+  type: FLOAT
+  nullable: true
+  description: 'Debt Defaults, Late Payments, And Bankruptcy (Range: -1 to 1).'
+- name: BondPrcDirection
+  type: FLOAT
+  nullable: true
+  description: 'Bond Price Increase, Net Of References To Price Decrease (Range: -1 to 1).'
+- name: BondPrcForecast
+  type: FLOAT
+  nullable: true
+  description: 'Forecasts Of Bond Price Rises, Net Of References To Forecasts Of Asset Price Drops (Range: -1 to 1).'
+- name: BondVolatility
+  type: FLOAT
+  nullable: true
+  description: 'Volatility In Bond And Debt Values (Range: 0 to 1*).'
+- name: CentralBank
+  type: FLOAT
+  nullable: true
+  description: 'Country Central Bank References (Range: 0 to 1*).'
+- name: DebtDefault
+  type: FLOAT
+  nullable: true
+  description: 'Debt Defaults And Bankruptcies In A Country (Range: 0 to 1*).'
+- name: InterestRates
+  type: FLOAT
+  nullable: true
+  description: 'Interest Rates Rising, Net Of References To Rates Falling (Range: -1 to 1).'
+- name: InterestRatesForecast
+  type: FLOAT
+  nullable: true
+  description: 'Forecasts Of Interest Rates Rising, Net Of Forecasts Of Rates Falling (Range: -1 to 1).'
+- name: MonPolicyLooseVsTight
+  type: FLOAT
+  nullable: true
+  description: 'Monetary Policy Being Loose, Net Of References To Monetary Policy Being Tight (Range: -1 to 1).'
+- name: SysVer
+  type: INTEGER
+  nullable: true
+  description: System Version For MarketPsych Analytics. It’s Used For Version Control. *Unipolar indices – can range below
+    0, although not below -1.
+join_hints:
+- to: MPICode
+  evidence: 'DataType can take one of the following values: – “News” for news – “Social” for social media – “News_Social”
+    for the combined content Cross-reference DataType with MPICode.Code where Type_ = 2.'
+  type: cross_reference
+---
+table: qa_mktpsych.MPICode
+domain: sentiment
+description: This table contains descriptions for the integer codes.
+update_cadence: Daily
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Enlists types of codified data items.
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: Code represents the Value_ data item from any MPI data or change table.
+- name: Desc_
+  type: varchar(100)
+  nullable: true
+  description: Contains the coded data item description.
+---
+table: qa_mktpsych.MPIDesc
+domain: sentiment
+description: This table contains descriptions for the character codes.
+update_cadence: Daily
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Enlists types of codified data items. LSEG Quantitative Analytics MarketPsych Analytics 26
+- name: Code
+  type: varchar(30)
+  nullable: false
+  description: Code represents the Value_ data item from any StreetEvents data or change table.
+- name: Desc_
+  type: varchar(150)
+  nullable: true
+  description: 'Contains the coded data item description. LSEG Quantitative Analytics MarketPsych Analytics Copyright © 2025
+    London Stock Exchange Group plc and its group of companies (LSEG) and/or its affiliates. All rights reserved. The LSEG
+    content received through this service is the intellectual property of LSEG or its third party suppliers. Republicati on
+    or redistribution of content provided by LSEG is expressly prohibited without the prior written consent of LSEG, except
+    where permitted by the terms of '

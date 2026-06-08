@@ -1,0 +1,189 @@
+table: qa_catalog.QASchInfo
+domain: reference
+description: This table provides the information about the schemas available in the Quantitative Analytics database.
+update_cadence: As needed
+columns:
+- name: SchemaId
+  type: INTEGER
+  nullable: false
+  description: Unique Identifier for the Schema Record.
+- name: Name
+  type: varchar(100)
+  nullable: true
+  description: Title of the Schema Document.
+- name: Description
+  type: varchar(1200)
+  nullable: true
+  description: Description of the Schema.
+- name: SchemaLink
+  type: varchar(100)
+  nullable: true
+  description: URL for the Schema Document.
+- name: IsProprietary
+  type: BOOLEAN
+  nullable: true
+  description: Identifies if the schema is an LSEG offering.
+- name: SourcedFrom
+  type: varchar(60)
+  nullable: true
+  description: Product the data is being updated from.
+- name: AvailableOn
+  type: INTEGER
+  nullable: true
+  description: Platform(s) the offering is available on, cross-reference QASchCode where CodeType = 1.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date the Schema became available on Quantitative Analytics.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date the Schema became unavailable on Quantitative Analytics.
+- name: AddDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date the Schema was added to the Quantitative Analytics Schema Catalog.
+- name: LastModDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date the Schema Document was last modified.
+---
+table: qa_catalog.QASchTableInfo
+domain: reference
+description: This table provides the information about tables available in the Quantitative Analytics database schemas. |
+  TableId int No Unique Identifier for a Table Record. | HasPersonalInfo bit Yes Identifies if the Table has personal information.
+  | HasEntitlement bit Yes Identifies if the Table has Entitlements. | StartDate datetime2(3) Yes The date the Table became
+  available on Quantitative | EndDate datetime2(3) Yes The date the Table became unavailable on Quantitative | AddDate datetime2(3)
+  Yes The da
+update_cadence: As needed
+columns:
+- name: TableId
+  type: INTEGER
+  nullable: false
+  description: Unique Identifier for a Table Record.
+- name: SchemaId
+  type: INTEGER
+  nullable: false
+  description: Unique Identifier for the Schema Record.
+- name: Name
+  type: varchar(36)
+  nullable: true
+  description: Name of the Table.
+- name: Description
+  type: varchar(500)
+  nullable: true
+  description: Description of the Table.
+- name: AvailableOn
+  type: INTEGER
+  nullable: true
+  description: Platform(s) the offering is available on, cross-reference QASchCode where CodeType = 1.
+- name: UpdateFrequency
+  type: INTEGER
+  nullable: true
+  description: The update schedule for the Table, cross-reference QASchCode where CodeType = 2.
+- name: HasPersonalInfo
+  type: BOOLEAN
+  nullable: true
+  description: Identifies if the Table has personal information.
+- name: HasEntitlement
+  type: BOOLEAN
+  nullable: true
+  description: Identifies if the Table has Entitlements.
+- name: EntitlementType
+  type: INTEGER
+  nullable: true
+  description: The type of Entitlements in the Table, cross-reference QASchCode where CodeType = 3. LSEG Quantitative Analytics
+    Schema Catalog 7
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date the Table became available on Quantitative Analytics.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date the Table became unavailable on Quantitative Analytics.
+- name: AddDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date the Table was added to the Quantitative Analytics Schema Catalog.
+- name: LastModDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date the Table record was last modified in the Quantitative Analytics Schema Catalog.
+---
+table: qa_catalog.QASchFieldInfo
+domain: reference
+description: This table provides the information about fields available in the Quantitative Analytics database tables. | TableId
+  int No Unique Identifier for a Table Record.
+update_cadence: As needed
+columns:
+- name: FieldId
+  type: INTEGER
+  nullable: false
+  description: Unique Identifier for a Field Record.
+- name: TableId
+  type: INTEGER
+  nullable: false
+  description: Unique Identifier for a Table Record.
+- name: Name
+  type: varchar(36)
+  nullable: true
+  description: Name of the field.
+- name: Description
+  type: varchar(3000)
+  nullable: true
+  description: Description of the Field.
+- name: DataType
+  type: varchar(18)
+  nullable: true
+  description: Data type of the Field.
+- name: OrdinalPosition
+  type: INTEGER
+  nullable: true
+  description: The order in which the Field appears in the Table.
+- name: IsPrimayKey
+  type: BOOLEAN
+  nullable: true
+  description: Identifies if the Field is included in the Primary Key for the Table.
+- name: IsPersonalInfo
+  type: BOOLEAN
+  nullable: true
+  description: Identifies if the Field contains personal information.
+- name: StartDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date the Field became available on Quantitative Analytics.
+- name: EndDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date the Field became unavailable on Quantitative Analytics.
+- name: AddDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date the Field was added to the Quantitative Analytics Schema Catalog.
+- name: LastModDate
+  type: TIMESTAMP(6)
+  nullable: true
+  description: The date the Field record was last modified in the Quantitative Analytics Schema Catalog.
+---
+table: qa_catalog.QASchCode
+domain: reference
+description: The QASchCode table contains descriptions for different encoded fields used throughout the Quantitative
+update_cadence: As needed
+columns:
+- name: CodeType
+  type: TINYINT
+  nullable: false
+  description: The type of code, full list available under CodeType = 0.
+- name: Code
+  type: INTEGER
+  nullable: false
+  description: The coded value.
+- name: Description
+  type: varchar(65)
+  nullable: true
+  description: The full description of the coded value. LSEG Quantitative Analytics Schema Catalog Copyright © 2025 London
+    Stock Exchange Group plc and its group of companies (LSEG) and/or its affiliates. All rights reserved. The LSEG content
+    received through this service is the intellectual property of LSEG or its third party suppliers. Republicati on or redistribution
+    of content provided by LSEG is expressly prohibited without the prior written consent of LSEG, except where permitted
+    by the terms of the rele

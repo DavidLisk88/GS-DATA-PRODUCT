@@ -1,0 +1,1208 @@
+table: qa_eu_taxonomy.EUTOrgClassDet
+domain: esg
+description: This table provides the organization's reported financial information for a given financial period. Out of those
+update_cadence: Monthly
+columns:
+- name: OrgPermID
+  type: BIGINT
+  nullable: false
+  description: Unique system generated Permanent Identifier (Perm ID) for an organisation (also known as Organisation Perm
+    ID).
+- name: FY
+  type: INTEGER
+  nullable: false
+  description: A reporting period, fiscal year of the organization.
+- name: IsRepOrDer
+  type: boolean
+  nullable: false
+  description: A reporting style (As Reported or Derived).
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: An item code to uniquely identify each EU Taxonomy organization classification metric.
+- name: AlignedFlg
+  type: char(1)
+  nullable: true
+  description: Specifies whether for the given segment all technical screening criteria has been passed.
+- name: AsRepFlg
+  type: char(1)
+  nullable: true
+  description: Flag to distinguish between EU Taxonomy reported data and estimated data.
+- name: CurrID
+  type: INTEGER
+  nullable: true
+  description: An identifier or code that is used to specify the currency in which the company has reported revenues.
+- name: ISOCurrCode
+  type: char(3)
+  nullable: true
+  description: ISO code of the currency in which the company has reported revenues.
+- name: PerID
+  type: INTEGER
+  nullable: true
+  description: Financial Period means a financial year or any other period in respect of which measures are calculated by
+    the relevant company.
+- name: GRSrcFlg
+  type: char(1)
+  nullable: true
+  description: The Green Revenue Sourced Flag defines if the company has reported green revenue information.
+- name: MSSComment
+  type: varchar(2000)
+  nullable: true
+  description: Reason for failed minimum social safeguard test.
+- name: MSSPassFlg
+  type: char(1)
+  nullable: true
+  description: Minimum social safeguard test indicates that the company has been evaluated and passed with the social sustainability
+    criteria set forth in the EU Taxonomy.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value corresponding to the Item.
+---
+table: qa_eu_taxonomy.EUTSegClassDet
+domain: esg
+description: This table provide the total amounts reported by the organization broken down by segments, and the total eligible
+update_cadence: Monthly
+columns:
+- name: OrgPermID
+  type: BIGINT
+  nullable: false
+  description: Unique system generated Permanent Identifier (Perm ID) for an organisation (also known as Organisation Perm
+    ID). LSEG Quantitative Analytics Database Schema for EU Taxonomy 7
+- name: FY
+  type: INTEGER
+  nullable: false
+  description: A reporting period, fiscal year of the organization.
+- name: IsRepOrDer
+  type: boolean
+  nullable: false
+  description: A reporting style (As Reported or Derived).
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: An item code to uniquely identify each EU Taxonomy segment classification metric.
+- name: EUTSegCode
+  type: INTEGER
+  nullable: false
+  description: 'Business segments that are classified according to GRCS (Green Revenue Classification System) and TRBC (The
+    Refinitiv Business Classification). Refer to the links below for more information on GRCS and TRBC: – Green Revenues Data
+    Model – TRBC Business Classification Methodology'
+- name: AlignedFlg
+  type: char(1)
+  nullable: true
+  description: Specifies whether for the given segment all technical screening criteria has been passed.
+- name: Comment
+  type: varchar(2000)
+  nullable: true
+  description: Reason for failed segment classification test.
+- name: EligFlg
+  type: char(1)
+  nullable: true
+  description: This flag defines if the segment is eligible as per EU Taxonomy.
+- name: SrcSegID
+  type: varchar(50)
+  nullable: true
+  description: System utilized identifier to allow simpler joining back to the source of the data; either Green Revenue or
+    Fundamentals.
+- name: TestedCount
+  type: INTEGER
+  nullable: true
+  description: Summarization of the number of EU Taxonomy objectives tested against.
+- name: FndBreakdownID
+  type: varchar(100)
+  nullable: true
+  description: Reported Revenues from Financial Statement Line Items, broken down by the specified ranking and weight, at
+    the Segment level.
+- name: GRBreakdownID
+  type: varchar(100)
+  nullable: true
+  description: Reported amounts inputted from the Green Revenue system by company and financial period.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value corresponding to the Item.
+---
+table: qa_eu_taxonomy.EUTObjClassDet
+domain: esg
+description: This table has each organization's reported data tested against the EU Taxonomy technical screening criteria,
+update_cadence: Monthly
+columns:
+- name: OrgPermID
+  type: BIGINT
+  nullable: false
+  description: Unique system generated Permanent Identifier (Perm ID) for an organisation (also known as Organisation Perm
+    ID).
+- name: FY
+  type: INTEGER
+  nullable: false
+  description: A reporting period, fiscal year of the organization.
+- name: IsRepOrDer
+  type: boolean
+  nullable: false
+  description: A reporting style (As Reported or Derived).
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: An item code to uniquely identify each EU Taxonomy objective classification metric.
+- name: ObjTypeCode
+  type: INTEGER
+  nullable: false
+  description: 'This code comprises of six environmental objectives as defined in EU taxonomy: 1) Climate change mitigation
+    2) Climate change adaptation 3) The sustainable use and protection of water and marine resources 4) The transition to
+    a circular economy 5) Pollution prevention and control 6) The protection and restoration of biodiversity and ecosystems"'
+- name: SegCode
+  type: INTEGER
+  nullable: false
+  description: 'Business segments that are classified according to GRCS (Green Revenue Classification System) and TRBC (The
+    Refinitiv Business Classification). Refer to the links below for more information on GRCS and TRBC: LSEG Quantitative
+    Analytics Database Schema for EU Taxonomy 8'
+- name: DNSHPassFlg
+  type: char(1)
+  nullable: true
+  description: Flag indicating whether every DNSH criteria tested for the given objective was passed.
+- name: FndRevBDId
+  type: varchar(100)
+  nullable: true
+  description: Reported revenues from financial statement line items, broken down by the specified ranking and weight, at
+    the segment level.
+- name: GeRevBDId
+  type: varchar(100)
+  nullable: true
+  description: Reported amounts sourced from the Green Revenue system by company and financial period.
+- name: ObjClassID
+  type: varchar(100)
+  nullable: true
+  description: An identifier used to classify the six environmental objectives.
+- name: ResultFlg
+  type: char(1)
+  nullable: true
+  description: Flag indicating whether every DNSH and substantial contribution criteria tested for the given objective was
+    passed.
+- name: SrcSegID
+  type: varchar(50)
+  nullable: true
+  description: System utilized identifier to allow simpler joining back to the source of the data, either Green Revenue or
+    Fundamentals.
+- name: SubsContPassFlg
+  type: char(1)
+  nullable: true
+  description: Flag indicating whether every Substantial Contribution that the Activity was tested against passed.
+- name: TotalActCrtCount
+  type: INTEGER
+  nullable: true
+  description: Summarization of the number of Technical Screening Criteria tested against.
+- name: Comment
+  type: varchar(2000)
+  nullable: true
+  description: Reason for failed activity classification test.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value corresponding to the Item.
+---
+table: qa_eu_taxonomy.EUTObjClassAct
+domain: esg
+description: This table has each organization's reported data tested against the EU Taxonomy technical screening criteria,
+update_cadence: Monthly
+columns:
+- name: OrgPermID
+  type: BIGINT
+  nullable: false
+  description: Unique system generated Permanent Identifier (Perm ID) for an organisation (also known as Organisation Perm
+    ID).
+- name: FY
+  type: INTEGER
+  nullable: false
+  description: A reporting period, fiscal year of the organization.
+- name: IsRepOrDer
+  type: boolean
+  nullable: false
+  description: A reporting style (As Reported or Derived). EUTActID int Identifier of sustainable activities which meet the
+    specifications set out by the European Commission in order to provide companies with a standardized sustainable finance
+    reporting mechanism.
+- name: Item
+  type: SMALLINT
+  nullable: false
+  description: An item code to uniquely identify each EU Taxonomy objective classification metric.
+- name: SrcSegID
+  type: INTEGER
+  nullable: false
+  description: System utilized identifier to allow simpler joining back to the source of the data, either Green Revenue or
+    Fundamentals.
+- name: DNSHPassFlg
+  type: char(1)
+  nullable: true
+  description: Flag indicating whether every DNSH criteria tested for the given objective was passed.
+- name: SubsContPassFlg
+  type: char(1)
+  nullable: true
+  description: Flag indicating whether every Substantial Contribution that the activity was tested against passed.
+- name: TotalDNSHTstCount
+  type: INTEGER
+  nullable: true
+  description: Summarization of the number of DNSHs tested against.
+- name: TotSubsConttstCount
+  type: INTEGER
+  nullable: true
+  description: Summarization of the number of Substantial Contributions tested against.
+- name: TSCComment
+  type: varchar(2000)
+  nullable: true
+  description: Reason for failed segment classification test.
+- name: Value_
+  type: FLOAT
+  nullable: true
+  description: Value corresponding to the Item. LSEG Quantitative Analytics Database Schema for EU Taxonomy 9
+---
+table: qa_eu_taxonomy.EUTObjClassTSC
+domain: esg
+description: This table has each organization's reported data tested against the EU Taxonomy technical screening criteria,
+update_cadence: Monthly
+columns:
+- name: OrgPermID
+  type: BIGINT
+  nullable: false
+  description: Unique system generated Permanent Identifier (Perm ID) for an organisation (also known as Organisation Perm
+    ID).
+- name: FY
+  type: INTEGER
+  nullable: false
+  description: A reporting period, fiscal year of the organization.
+- name: IsRepOrDer
+  type: boolean
+  nullable: false
+  description: A reporting style (As Reported or Derived).
+- name: EUTActID
+  type: INTEGER
+  nullable: false
+  description: Identifier of sustainable activities which meet the specifications set out by the European Commission, in order
+    to provide companies with a standardized sustainable finance reporting mechanism.
+- name: EUTActTSCID
+  type: INTEGER
+  nullable: false
+  description: Object ID in Technical Screening to uniquely identify a technical screening criteria.
+- name: SrcSegID
+  type: SMALLINT
+  nullable: false
+  description: System utilized identifier to allow simpler joining back to the source of the data, either Green Revenue or
+    Fundamentals.
+- name: CrtPassFlg
+  type: char(1)
+  nullable: true
+  description: Technical screening criteria passed flag.
+- name: TSCID
+  type: varchar(50)
+  nullable: true
+  description: Technical Screening Criteria specifies, for a given activity, thresholds which must be met based on certain
+    measures reported. Technical Screening Criteria can be either Substantial Contribution, Do No Significant Harm Criteria,
+    or Minimum Social Safeguard.
+- name: CrtDesc
+  type: varchar(1000)
+  nullable: true
+  description: In the cases where the Technical Screening Criteria(TSC) is a Substantial Contribution type, specifies whether
+    it is a quantitative TSC.
+- name: QuantFlg
+  type: char(1)
+  nullable: true
+  description: 'Describes the type of Technical Screening Criteria. Available values are: Substantial Contribution, DNSH (Do
+    No Significant Harm), Minimum Social Safeguard.'
+- name: TSCTypeCode
+  type: varchar(20)
+  nullable: true
+  description: 'Measuring unit used in the Technical Screening Criteria. Examples: tCO2e per ton3tCO2e/tH2'
+- name: TSCUnitMsrCode
+  type: varchar(200)
+  nullable: true
+  description: 'Text specifying the arithmetic operator to compare ESG measure against the threshold. For example: equals
+    to, greater than, or lesser than etc.'
+- name: ThCmpOpText
+  type: varchar(2000)
+  nullable: true
+  description: In substantial contributions, if the criteria is quantitative, the value being tested against is stored.
+- name: ThValue
+  type: FLOAT
+  nullable: true
+  description: Environmental, social and governance measures that are used for Technical screening criteria testing.
+---
+table: qa_eu_taxonomy.Example
+domain: esg
+description: TR.CementCO2Emission
+columns:
+- name: TotESGMsrTstCount
+  type: INTEGER
+  nullable: true
+  description: Number of data measures tested for Technical Screening Classifications.
+- name: TstESGMsrCode
+  type: varchar(100)
+  nullable: true
+  description: Environmental, social and governance measures that are tested for Technical Screening Classifications.
+- name: Comment
+  type: varchar(2000)
+  nullable: true
+  description: Reason for a failed segment classification test.
+- name: NaceID
+  type: varchar(100)
+  nullable: false
+  description: NaceId is a code used to identify and categorize economic activities in the European Union. NACE stands for
+    Nomenclature of Economic Activities and is a classification system developed by the European Union to identify the main
+    economic activities of companies operating within the EU.
+---
+table: qa_eu_taxonomy.EUTObjClassTSCMsr
+domain: esg
+description: This table has each organization's reported data tested against the EU Taxonomy technical screening criteria
+  and
+update_cadence: Monthly
+columns:
+- name: OrgPermID
+  type: BIGINT
+  nullable: false
+  description: Unique system generated Permanent Identifier (Perm ID) for an organisation (also known as Organisation Perm
+    ID).
+- name: FY
+  type: INTEGER
+  nullable: false
+  description: A reporting period, fiscal year of the organization.
+- name: IsRepOrDer
+  type: boolean
+  nullable: false
+  description: A reporting style (As Reported or Derived).
+- name: EUTActID
+  type: INTEGER
+  nullable: false
+  description: Identifier of sustainable activities which meet the specifications set out by the European Commission in order
+    to provide companies with a standardized sustainable finance reporting mechanism.
+- name: EUTActTSCID
+  type: INTEGER
+  nullable: false
+  description: Object ID in Technical Screening uniquely identify a technical screening criteria
+- name: MsrGrpNo
+  type: SMALLINT
+  nullable: false
+  description: 'Each Technical Screening Criteria must be mapped to one or more ESG measures. If a TSC has multiple ESG measures,
+    the measures will be grouped as follows: 1). If all the ESG indicators, for a particular TSC, must all pass, then all
+    ESG measures must be grouped under the same group number. 2). If at least one ESG indicator, for a particular TSC, must
+    pass, then each ESG measure will be grouped under a different group number.'
+- name: SrcSegID
+  type: SMALLINT
+  nullable: false
+  description: System utilized identifier to allow simpler joining back to the source of the data, either Green Revenue or
+    Fundamentals.
+- name: MsrPassFlg
+  type: char(1)
+  nullable: true
+  description: Data measure that has passed the Technical Screening Classifications test.
+- name: SrcRepValue
+  type: FLOAT
+  nullable: true
+  description: Documents or website where the data is reported by the company.
+---
+table: qa_eu_taxonomy.Example
+domain: esg
+description: Annual report, company website, CSR Report, etc.
+columns:
+- name: TotESGMsrTstCount
+  type: INTEGER
+  nullable: true
+  description: Number of data measures tested for Technical Screening Classifications.
+- name: TstESGMsrCode
+  type: varchar(100)
+  nullable: true
+  description: Environmental, social and governance measures that are tested for Technical Screening Classifications.
+- name: Comment
+  type: varchar(2000)
+  nullable: true
+  description: Reason for a failed segment classification test.
+- name: NaceID
+  type: varchar(100)
+  nullable: false
+  description: NaceId is a code used to identify and categorize economic activities in the European Union. NACE stands for
+    Nomenclature of Economic Activities and is a classification system developed by the European Union to identify the main
+    economic activities of companies operating within the EU.
+---
+table: qa_eu_taxonomy.EUTPassSSG
+domain: esg
+description: This table provides Minimum Social Safeguards, which have been achieved for the given Fiscal Period, for each
+update_cadence: Monthly
+columns:
+- name: OrgPermID
+  type: BIGINT
+  nullable: false
+  description: Unique system generated Permanent Identifier (Perm ID) for an organisation (also known as Organisation Perm
+    ID).
+- name: FY
+  type: INTEGER
+  nullable: false
+  description: A reporting period, fiscal year of the organization.
+- name: IsRepOrDer
+  type: boolean
+  nullable: false
+  description: A reporting style (As Reported or Derived).
+- name: TSCId
+  type: INTEGER
+  nullable: false
+  description: Technical Screening Criteria specifies, for a given activity, thresholds which must be met based on certain
+    measures reported. Technical Screening Criteria can be either Substantial Contribution, Do No Significant Harm Criteria,
+    or Minimum Social Safeguard.
+- name: Comment
+  type: varchar(2000)
+  nullable: true
+  description: Reason for a failed social safeguard test.
+- name: PassedFlg
+  type: char(1)
+  nullable: true
+  description: Minimum social safeguard test indicates that the company has been evaluated and passed with the social sustainability
+    criteria set forth in the EU Taxonomy.
+- name: CritDesc
+  type: varchar(1000)
+  nullable: true
+  description: Describes the Technical Screening Criteria requirement.
+- name: QuantFlg
+  type: char(1)
+  nullable: true
+  description: In the cases where the Technical Screening Criteria (TSC) is the Substantial Contribution type, specifies whether
+    it is quantitative TSC. LSEG Quantitative Analytics Database Schema for EU Taxonomy 11
+- name: TSCTypeCode
+  type: varchar(50)
+  nullable: true
+  description: 'Describes the type of Technical Screening Criteria. Available values are: Substantial Contribution, DNSH (Do
+    No Significant Harm), Minimum Social Safeguard'
+- name: TSCUnitCode
+  type: varchar(200)
+  nullable: true
+  description: 'Measuring unit used in Technical Screening Criteria. Examples: tCO2e per ton3tCO2e/tH2'
+- name: ThCompOpText
+  type: varchar(200)
+  nullable: true
+  description: 'Text specifying the arithmetic operator to compare an ESG measure against the threshold. For example: equals
+    to, greater than, or lesser than, etc.'
+---
+table: qa_eu_taxonomy.EUTGblAct
+domain: esg
+description: This table contains a list of sustainable activities which meet the specifications set out by the European
+update_cadence: Monthly
+columns:
+- name: EUTActID
+  type: varchar(100)
+  nullable: false
+  description: 'Environmental, social and governance measures that are used for Technical screening criteria testing. Example:
+    TR.CementCO2Emission'
+- name: ActName
+  type: varchar(500)
+  nullable: true
+  description: 'Activity name refers to the specific names given to the different environmentally sustainable economic activities,
+    or taxonomy activities, defined by the EU Taxonomy regulation. Example: Afforestation, rehabilitation and restoration
+    of forests, including reforestation and natural forest regeneration after an extreme event.'
+- name: ActNo
+  type: varchar(200)
+  nullable: true
+  description: 'Activity number is a numerical code used to identify and distinguish between different taxonomy activities.
+    Example: CM-1.1 Afforestation, Climate Mitigation.'
+- name: ActContType
+  type: varchar(200)
+  nullable: true
+  description: Category code is to distinguish the contribution type of activities as enabling or transitional. The terms
+    "enabling" and "transitional" refer to different types of economic activities based on their contribution to environmental
+    objectives. Enabling activities are those that provide goods, services, or technologies that help other economic activities
+    to reduce their environmental impact. These activities are important for promoting the transition to a more sustainable
+    economy by creating new ma
+- name: ObjType
+  type: varchar(200)
+  nullable: true
+  description: 'Comprises of six environmental objectives as defined in the EU taxonomy: 1) Climate change mitigation. 2)
+    Climate change adaptation. 3) The sustainable use and protection of water and marine resources. 4) The transition to a
+    circular economy. 5) Pollution prevention and control. LSEG Quantitative Analytics Database Schema for EU Taxonomy 12'
+- name: Sector
+  type: varchar(200)
+  nullable: true
+  description: Mapping between the EU taxonomy activities against NACE classification. Refer to the label NaceId for NACE
+    description.
+---
+table: qa_eu_taxonomy.EUTGblActNACE
+domain: esg
+description: This table contains a mapping of sustainable activities, which meet the specifications set out by the European
+update_cadence: Monthly
+columns:
+- name: EUTActID
+  type: varchar(100)
+  nullable: false
+  description: Environmental, social and governance measures that are used for the technical screening criteria testing.
+---
+table: qa_eu_taxonomy.Example
+domain: esg
+description: TR.CementCO2Emission
+columns:
+- name: TotESGMsrTstCount
+  type: INTEGER
+  nullable: true
+  description: Number of data measures tested for Technical Screening Classifications.
+- name: TstESGMsrCode
+  type: varchar(100)
+  nullable: true
+  description: Environmental, social and governance measures that are tested for Technical Screening Classifications.
+- name: Comment
+  type: varchar(2000)
+  nullable: true
+  description: Reason for a failed segment classification test.
+- name: NaceID
+  type: varchar(100)
+  nullable: false
+  description: NaceId is a code used to identify and categorize economic activities in the European Union. NACE stands for
+    Nomenclature of Economic Activities and is a classification system developed by the European Union to identify the main
+    economic activities of companies operating within the EU.
+---
+table: qa_eu_taxonomy.EUTGblActScrCrt
+domain: esg
+description: This table contains a mapping of sustainable activities and Technical Screening Criteria that specify, for a
+  given
+update_cadence: Monthly
+columns:
+- name: EUTActID
+  type: varchar(100)
+  nullable: false
+  description: 'Environmental, social and governance measures that are used for the Technical Screening criteria testing.
+    Example: TR.CementCO2Emission'
+- name: EUTCrtID
+  type: varchar(100)
+  nullable: false
+  description: Object Id in the screening criteria (Technical Screening Criteria) to uniquely identify a technical screening
+    criteria.
+- name: CritDesc
+  type: varchart(2000)
+  nullable: true
+  description: Describes the Technical Screening Criteria requirement.
+- name: QuantFlg
+  type: char(1)
+  nullable: true
+  description: In the cases where the Technical Screening Criteria (TSC) is a Substantial Contribution type, specifies whether
+    it is quantitative TSC.
+- name: TSCTypeCode
+  type: varchar(50)
+  nullable: true
+  description: 'Code type of the Technical Screening Criteria. Available values are: SC (Substantial Contribution), DNSH (Do
+    No Significant Harm), MSS (Minimum Social Safeguard)'
+- name: TSCUnitCode
+  type: varchar(200)
+  nullable: true
+  description: 'Measuring unit used in the Technical Screening Criteria. Example: tCO2e per ton3tCO2e/tH2'
+- name: ThCompOpText
+  type: varchar(200)
+  nullable: true
+  description: 'Text specifying the arithmetic operator to compare an ESG measure against the threshold. Example: equals to,
+    greater than or lesser than etc.'
+- name: ThValue
+  type: FLOAT
+  nullable: true
+  description: In substantial contributions, if the criteria is quantitative, the value being tested against is stored. LSEG
+    Quantitative Analytics Database Schema for EU Taxonomy 13
+---
+table: qa_eu_taxonomy.EUTGblActScrCrtMsr
+domain: esg
+description: This table contains the environmental, social and governance measures that are used for the Technical
+update_cadence: Monthly
+columns:
+- name: EUTActID
+  type: varchar(100)
+  nullable: false
+  description: 'Environmental, social and governance measures that are used for the Technical Screening Criteria testing.
+    Example: TR.CementCO2Emission'
+- name: EUTCrtID
+  type: varchar(100)
+  nullable: false
+  description: Object Id in the screening criteria (Technical Screening Criteria) to uniquely identify a technical screening
+    criteria.
+- name: ESGMeasureNo
+  type: SMALLINT
+  nullable: false
+  description: Incremental sequence number for each ESG Measure Code.
+- name: ESGMeasure
+  type: varchar(100)
+  nullable: true
+  description: Environmental, social and governance measures that are used for Technical screening criteria testing.
+---
+table: qa_eu_taxonomy.Example
+domain: esg
+description: TR.CementCO2Emission
+columns:
+- name: TotESGMsrTstCount
+  type: INTEGER
+  nullable: true
+  description: Number of data measures tested for Technical Screening Classifications.
+- name: TstESGMsrCode
+  type: varchar(100)
+  nullable: true
+  description: Environmental, social and governance measures that are tested for Technical Screening Classifications.
+- name: Comment
+  type: varchar(2000)
+  nullable: true
+  description: Reason for a failed segment classification test.
+- name: NaceID
+  type: varchar(100)
+  nullable: false
+  description: NaceId is a code used to identify and categorize economic activities in the European Union. NACE stands for
+    Nomenclature of Economic Activities and is a classification system developed by the European Union to identify the main
+    economic activities of companies operating within the EU.
+---
+table: qa_eu_taxonomy.EUTGblGrRevBO
+domain: esg
+description: This table provides reported or estimated revenues from the micro-sector classified by the Green Revenue
+update_cadence: Monthly
+columns:
+- name: OrgPermID
+  type: BIGINT
+  nullable: false
+  description: Unique system generated Permanent Identifier (Perm ID) for an organisation (also known as Organisation Perm
+    ID).
+- name: FY
+  type: INTEGER
+  nullable: false
+  description: A reporting period fiscal year of the organization.
+- name: SegCode
+  type: INTEGER
+  nullable: false
+  description: Business segments that are classified according to GRCS (Green Revenue Classification System) and TRBC (The
+    Refinitiv Business Classification).
+- name: SegID
+  type: INTEGER
+  nullable: false
+  description: 'Segment ID is a unique identifier assigned to all segment divisions disclosed by the company. Each segment
+    division name is unique across segment type codes. For example: Business, Geographic, Customer and Product type, except
+    for Eliminations, Corporate and Other which are generic segments. Each segment name is assigned with a numerical value
+    or Segment ID in a chronological order across segment types to avoid duplicate names. For example: Segment ID- 1, Segment
+    Name- Industrial material, Segme'
+- name: PerID
+  type: INTEGER
+  nullable: true
+  description: Financial Period means a financial year or any other period in respect of which measures are calculated by
+    the relevant company.
+- name: RevWtCurrID
+  type: INTEGER
+  nullable: true
+  description: An identifier or code that is used to specify the currency in which the revenue for the company is reported.
+- name: RevWtISOCurrCode
+  type: char(3)
+  nullable: true
+  description: ISO code of the currency in which company has reported revenues. LSEG Quantitative Analytics Database Schema
+    for EU Taxonomy 14
+- name: RevWtVal
+  type: FLOAT
+  nullable: true
+  description: The weight applied to a segment revenue.
+- name: SrcSegID
+  type: varchar(20)
+  nullable: true
+  description: System utilized identifier to allow simpler joining back to the source of the data, either Green Revenue or
+    Fundamentals.
+- name: WtSegRevAmt
+  type: FLOAT
+  nullable: true
+  description: Weighted segment revenue classified under TRBC classification system.
+---
+table: qa_eu_taxonomy.EUTSegRevBD
+domain: esg
+description: This table provides reported or estimated revenues from the organization's TRBC sector.
+update_cadence: Monthly
+columns:
+- name: OrgPermID
+  type: BIGINT
+  nullable: false
+  description: Unique system generated Permanent Identifier (Perm ID) for an organisation (also known as Organisation Perm
+    ID).
+- name: FY
+  type: INTEGER
+  nullable: false
+  description: A reporting period fiscal year of the organization.
+- name: SegCode
+  type: BIGINT
+  nullable: false
+  description: Business segments that are classified according to GRCS (Green Revenue Classification System) and TRBC (The
+    Refinitiv Business Classification).
+- name: SegID
+  type: INTEGER
+  nullable: false
+  description: 'Segment ID is a unique identifier assigned to all segment divisions disclosed by the company. Each segment
+    division name is unique across segment type codes. For example: Business, Geographic, Customer and Product type, except
+    for Eliminations, Corporate and Other which are generic segments. Each segment name is assigned with a numerical value
+    or Segment ID in a chronological order across segment types to avoid duplicate names. For example: Segment ID- 1, Segment
+    Name- Industrial material, Segme'
+- name: PerID
+  type: INTEGER
+  nullable: true
+  description: Financial Period means a financial year or any other period in respect of which measures are calculated by
+    the relevant company.
+- name: FndRankCode
+  type: INTEGER
+  nullable: true
+  description: Rank is associated with the business segment section and each segment division is assigned a business classification
+    code based on TRBC classification system.
+- name: RevWtCurrID
+  type: INTEGER
+  nullable: true
+  description: An identifier or code that is used to specify the currency in which the revenue for the company is reported.
+- name: RevWtISOCurrCode
+  type: char(3)
+  nullable: true
+  description: ISO code of the currency in which the company has reported revenues.
+- name: RevWtVal
+  type: FLOAT
+  nullable: true
+  description: The weight applied to the segment revenue.
+- name: SrcSegID
+  type: varchar(20)
+  nullable: true
+  description: System utilized identifier to allow simpler joining back to the source of the data, either Green Revenue or
+    Fundamentals.
+- name: WtSegRevAmt
+  type: FLOAT
+  nullable: true
+  description: Weighted segment revenue classified under TRBC classification system. LSEG Quantitative Analytics Database
+    Schema for EU Taxonomy 15
+---
+table: qa_eu_taxonomy.EUTGblFinSeg
+domain: esg
+description: This table contains the information about financial segments for an organization.
+update_cadence: Monthly
+columns:
+- name: OrgPermID
+  type: BIGINT
+  nullable: false
+  description: Unique system generated Permanent Identifier (Perm ID) for an organisation (also known as Organisation Perm
+    ID).
+- name: SegID
+  type: INTEGER
+  nullable: false
+  description: 'Segment ID is a unique identifier assigned to all segment divisions disclosed by the company. Each segment
+    division name is unique across segment type codes. For example: Business, Geographic, Customer and Product type, except
+    for Eliminations, Corporate and Other which are generic segments. Each segment name is assigned with a numerical value
+    or Segment ID in a chronological order across segment types to avoid duplicate names. For example: Segment ID- 1, Segment
+    Name- Industrial material, Segme'
+- name: CorpFlg
+  type: char(1)
+  nullable: true
+  description: Corporate Flag reflects 1 if the segment division comprises of unallocated items or corporate assets primarily
+    related to the company headquarters and head office expenses. Corporate items comprise certain central activities and
+    costs that are not directly related to the activities of the operating segments. Corporate segment consists of financing
+    costs, working capital balances and cost allocated to common support functions which are not directly accountable to operating
+    segments. Corporate Fla
+- name: ElimFlg
+  type: char(1)
+  nullable: true
+  description: Elimination Flag reflects as 1 if the segment relates to intersegment sales. Intersegment sales represents
+    sales between the segments. Companies disclose Total Sales, Intersegment sales and Net sales for each of its business
+    segment. Net sales represent the Net external sales after deducting intersegment sales. Elimination Flag is applicable
+    for both Business and Geographic segment and is common or generic data disclosed by companies in its segment note. Calculation
+    of segment ratios generally e
+- name: InactReasCode
+  type: char(3)
+  nullable: true
+  description: Inactivation Reason Code is associated with the segment divisions and an appropriate Reason Code is tagged
+    when a segment becomes inactive. LSEG Quantitative Analytics Database Schema for EU Taxonomy 16
+- name: InactReasDesc
+  type: varchar(500)
+  nullable: true
+  description: Inactive Reason Other Description is a free text column where elaborate details are added when a segment division
+    becomes inactive. When a segment is inactive, an appropriate reason code is tagged under the Segment Inactivation Reason
+    Code type. There are default reasons available, but if an elaborate text needs to be provided, the same is added under
+    the Inactive Reason Other Description text column. Inactive Reason Other Description text column is available for Business,
+    Geographic, Customer a
+- name: DescLangID
+  type: INTEGER
+  nullable: true
+  description: 'Inactive Reason Other Description Language ID is associated with the segment division and displays the language
+    in which the Inactive Reason Other Description, a free text column, displays the content. Generally, the free text is
+    in the English language and the Inactive Reason Other Description Language ID will reflect the numerical value ranging
+    from 0. Examples of the Inactive Reason Other Description Language ID and respective language names: – Inactive Reason
+    Other Description Language ID: 0'
+- name: NameLangID
+  type: INTEGER
+  nullable: true
+  description: 'Name Language ID is a numerical identified assigned to each language available globally. Name Language ID
+    helps to identify the language used in the collection of as-reported descriptions or any free text. The list includes
+    English and local languages. The below examples provide the Name Language ID and its respective language name: Name Language
+    ID: 505084, Language Name: French; Name Language ID: 505096, Language Name: German.'
+- name: OpSegFlg
+  type: char(1)
+  nullable: true
+  description: Operating Segment Flag is assigned to the business segment section. The flag reflects 1 if the business segment
+    is reportable or operating segment of the company disclosed based on geographic locations. As per IFRS 8 – Operating Segment
+    accounting standard effective post 1 January 2009, companies had an option to disclose operating segment using the geographical
+    concept, hence Operating Segment Flag = 1 indicates that the company reported business segment based on regions or a combination
+    of bot
+- name: OtherFlg
+  type: char(1)
+  nullable: true
+  description: Other Flag reflects 1 if the segment division comprises of miscellaneous or a combination of items aggregated
+    in a single segment. Other segment includes an aggregate of items with nominal or insignificant activities clubbed in
+    the operating segment. The flag is available for Business, Geographic, Product and Customer segment. Calculation of segment
+    ratios generally exclude Other segment and NAICS codes will not be assigned. Other segment is considered as generic segment
+    if the company is silent
+- name: SegName
+  type: varchar(500)
+  nullable: true
+  description: Segment Name is a textual column to capture the as-reported segment name disclosed by the company. In few exceptional
+    cases the segment names may be different from the as-reported description to provide more meaningful names, as in case
+    of abbreviations. Each segment description should be unique across segment type codes i.e. Business, Geographic, Customer
+    and Product type, except for Eliminations, Corporate and Other which are generic segments. Each segment name is assigned
+    with a numerical val
+- name: SegTypeCode
+  type: char(1)
+  nullable: true
+  description: Segment Type is associated with the segment divisions collected and it is classified under 4 segment types.
+    Segment Type code denotes B-Business, G-Geographic, P-Product and C-Customer segment.
+- name: SingleSegFlg
+  type: char(1)
+  nullable: true
+  description: Single Segment Flag is associated with Business and Geographic segments where the company operates – only one
+    segment. Single Business segment denotes the company explicitly operates in a single business activity and single Geographic
+    segment operates in domestic country. Single Segment Flag is marked 1 for single segment and key financial data is displayed
+    of the whole consolidated company.
+- name: ValidFromPerEndDt
+  type: smalldatetime
+  nullable: true
+  description: Valid From Period End Date is associated to each segment division. Each segment is recorded with a create date
+    and an end date. Valid LSEG Quantitative Analytics Database Schema for EU Taxonomy 18
+- name: ValidToPerEndDt
+  type: smalldatetime
+  nullable: true
+  description: Valid To Period End Date is associated to each segment division. Each segment is recorded with a create date
+    and an end date. Valid To Period End Date represents the end date or the period end date when the segment is inactivated.
+    There are multiple reasons a segment can become inactive, such as business diversification, sale of subsidiary, business
+    consolidation, change in GAAP or other. The inactive data is generally updated with the date of the last period end date
+    which discloses the details
+---
+table: qa_eu_taxonomy.EUTGblFinSegHrch
+domain: esg
+description: This table contains the information about financial segments and industry for an organization.
+update_cadence: Monthly
+columns:
+- name: OrgPermID
+  type: BIGINT
+  nullable: false
+  description: Object ID in Financial segment uniquely identifies a segment reported by the reporting organization.
+- name: SegID
+  type: INTEGER
+  nullable: false
+  description: 'Segment ID is a unique identifier assigned to all segment divisions disclosed by the company. Each segment
+    division name is unique across segment type codes. For example: Business, Geographic, Customer and Product type, except
+    for Eliminations, Corporate and Other which are generic segments. Each segment name is assigned with a numerical value
+    or Segment ID in a chronological order across segment types to avoid duplicate names. For example: Segment ID- 1, Segment
+    Name- Industrial material, Segme'
+- name: HrchCode
+  type: BIGINT
+  nullable: false
+  description: 'Hierarchical Code is associated with the business segment section and each segment division is assigned a
+    business classification code based on the North American Industry Classification System (NAICS) schema. Hierarchical Codes
+    are NAICS codes based on the 2007 schema. Examples of Hierarchical Codes or NAICS codes along with their descriptions:
+    – Industry Name: Hierarchical Code: 518112, Industry Name: Web Search Portals; – Hierarchical Code: 518111, Industry Name:
+    Internet Service Providers.'
+- name: IndID
+  type: BIGINT
+  nullable: true
+  description: Industry ID is a permanent identifier assigned to the industrial classification of a segment. LSEG Quantitative
+    Analytics Database Schema for EU Taxonomy 19
+- name: IndName
+  type: varchar(500)
+  nullable: true
+  description: English name of the industry.
+- name: IndSchemeID
+  type: INTEGER
+  nullable: true
+  description: Industry Scheme ID highlights whether a particular Industry ID pertains to a NAICS or TRBC code. For example,
+    Industry Schema ID 515003 refers to NAICS and 515000 refers to TRBC.
+- name: Rank
+  type: SMALLINT
+  nullable: true
+  description: Rank is associated with the Business segment section and each segment division is assigned a business classification
+    code based on the North American Industry Classification System (NAICS) schema. Each segment division has a maximum limit
+    of 4 NAICS assigned based on the business activity of the division. The 4 NAICS are ranked based on the volume of activity,
+    where 0 is the primary activity followed by the rest. The below example illustrates a segment division assigned with 4
+    NAICS based on the
+---
+table: qa_eu_taxonomy.EUTGblFinSegStmt
+domain: esg
+description: This table provides statement and source data reported by the company.
+update_cadence: Monthly
+columns:
+- name: FndID
+  type: BIGINT
+  nullable: false
+  description: Fundamental ID is a permanent identifier (Perm ID) assigned to the sub-group of an organization which is grouped
+    based on the consolidation, parent, and GAAP basis. An organization is further grouped based on the set of comparable
+    financial data under an umbrella known as Fundamental ID. Fundamental ID is categorized for specific GAAP information,
+    consolidated and Parent data. Each Fundamental ID is assigned with a 12-digit numerical identifier. In the below illustration,
+    an organization is sub-
+- name: PerID
+  type: INTEGER
+  nullable: false
+  description: Period ID is associated with the period end date used to report the financial data of the business at the end
+    of the financial period for annual and interims. Period end date differs for each company, however most of the financial
+    periods are based on the tax period of the country in order easily track corporate tax filing. Interim periods have their
+    statement LSEG Quantitative Analytics Database Schema for EU Taxonomy 20
+- name: SrcID
+  type: INTEGER
+  nullable: false
+  description: Source ID is associated with the source or filing document used to collect financial data for a particular
+    period end. Data is collected from multiple source documents such as press, final, amendments for a particular period.
+    Each document is assigned with a Source ID, which is a unique chronological numerical value for each company. Each document
+    is assigned a Document Control Number (DCN) and records the filing date and time when the document is filed. Press documents
+    are marked as 1 under Con
+- name: StdCurrID
+  type: INTEGER
+  nullable: false
+  description: 'Standardized Currency ID is the currency used for standardization of financials on product views. In majority
+    of the cases the standardized replicates the as-reported currency disclosed by the company. But there are few rare cases
+    where they differ as in the below scenarios: where the local currency relates to a country with a hyperinflationary economy
+    and historical values rapidly become meaningless. In this case the standardized currency would be set as the global substitute
+    currency used with'
+- name: StmtCurrID
+  type: INTEGER
+  nullable: false
+  description: 'Standard Currency ID is the unique permanent identifier assigned to each currency name of a country. It is
+    a 6-digit numerical value assigned to each currency. The below example denotes the Standard Currency ID along with the
+    corresponding Currency Code ISO which is the 3-alphabet code as defined by the International Standardization Organization
+    (ISO) guidelines. Standard Currency ID has the Currency Name which are the global currency names. – Currency Code ISO:
+    AUD, Standard Currency ID: 500117'
+- name: StmtTypeCode
+  type: SMALLINT
+  nullable: false
+  description: Statement Type Code is associated with the collection of financial information. Financial data is categorized
+    into multiple statements based on the common accounting disclosures. Data is collected under the main statements such
+    as Income statement (INC), Balance sheet (BAL), Cash flow (CAS) and additional statements such as Business Segment (BUS),
+    Geographic Segment (GEO). The below examples indicate the different types of Statement Type Code with the respective statement
+    descriptions available.
+- name: CmlTypeCode
+  type: char(1)
+  nullable: true
+  description: Cumulative Type Code is associated with the financial data collected for a particular period and appropriate
+    code is assigned based on the periodic data collected. Interim reports disclose quarterly and half-yearly information
+    for a semi-annual period. For a quarterly report 3 months data and for semi-annual 6 months data is marked as D -Discrete
+    type. Discrete type is applicable for income statement and cash flow statements. Interim reports also disclose both quarterly
+    and year-to-date (YTD) in
+- name: PerEndDt
+  type: smalldatetime
+  nullable: true
+  description: Period End Date is the end date of the financial period that a company selects to close the financial accounts
+    of its business. The statement date differs for each company, however most of the financial periods are based on the tax
+    period of the country in order easily track corporate tax filing. Period End Date is applicable to both annual and interim
+    reports. Interim periods have their period end date with the end date of each quarter and for semi-annual with end date
+    half yearly. Period End D
+- name: PerType
+  type: varchar(10)
+  nullable: true
+  description: Period Type is associated with the financial data collected for a particular period and is assigned based on
+    the frequency of data collected. The common frequency of interim data is either quarterly or semi- annual pattern, and
+    the annual period filed every year. The below examples provide the details of the Period Type Code available with respective
+    descriptions. Period Type Code - A, Periodicity Description- Annual. Similarly, M - Monthly, Q - Quarterly, S - Semi-Annual
+    and T - Triannual.
+- name: SrcTypeCode
+  type: varchar(50)
+  nullable: true
+  description: Source Type Code is associated with the source or filing document used to collect financial data for a particular
+    period end. Data is collected from multiple source documents such as press, final, amendments for a particular period.
+    Companies listed on the stock exchange file their reports as per the regulatory guidelines of the Government. These source
+    documents are assigned with specific Source Type Code with a maximum limit of 10 characters to indicate the country and
+    the filing type. Example
+- name: TPSrcCode
+  type: varchar(50)
+  nullable: true
+  description: 'Third Party Source Type Code indicates that the data is been sourced from third party vendors. Below is the
+    list of codes with respective descriptions of the third- party sources from where the information is collected. – Third
+    Party Source Type Code - DnB, Third Party Source Description - Dun and Bradstreet; – Third Party Source Type Code - SS,
+    Third Party Source Description - Self Source; – Third Party Source Type Code - ST, Third Party Source Description- Sinotrust;
+    – Third Party Source Type '
+---
+table: qa_eu_taxonomy.EUTGblFinSegVal
+domain: esg
+description: This table provides segment-wise revenue reported by the company.
+update_cadence: Monthly
+columns:
+- name: FndID
+  type: BIGINT
+  nullable: false
+  description: Fundamental ID is a permanent identifier (Perm ID) assigned to the sub-group of an organization which is grouped
+    based on the consolidation, parent, and GAAP basis. An organization is further grouped based on the set of comparable
+    financial data under an umbrella known as Fundamental ID. Fundamental ID is categorized for specific GAAP information,
+    consolidated and Parent data. Each Fundamental ID is assigned with a 12-digit numerical identifier. In the below illustration,
+    an organization is sub-
+- name: PerID
+  type: INTEGER
+  nullable: false
+  description: Period ID is associated with the period end date used to report the financial data of the business at the end
+    of the financial period for annual and interims. Period end date differs for each company, however most of the financial
+    periods are based on the tax period of the country in order easily track corporate tax filing. Interim periods have their
+    statement date with the end date of each quarter and semi-annual with end date half yearly. Period ID is a unique identifier
+    assigned to each perio
+- name: SrcID
+  type: INTEGER
+  nullable: false
+  description: Source ID is associated with the source or filing document used to collect financial data for a particular
+    period end. Data is collected from multiple source documents such as press, final, amendments for a particular period.
+    Each document is assigned with a Source ID, which is a unique chronological numerical value for each company. Each document
+    is assigned a Document Control Number (DCN) and records the filing date and time when the document is filed. Press documents
+    are marked as 1 under Con
+- name: StdCurrID
+  type: INTEGER
+  nullable: false
+  description: 'Standardized Currency ID is the currency used for standardization of financials on product views. In majority
+    of the cases the standardized replicates the as-reported currency disclosed by the company. But there are few rare cases
+    where they differ as in the below scenarios: where the local currency relates to a country with a hyperinflationary economy
+    and historical values rapidly become meaningless. In this case the standardized currency would be set as the global substitute
+    currency used with'
+- name: StmtCurrID
+  type: INTEGER
+  nullable: false
+  description: 'Standard Currency ID is the unique permanent identifier assigned to each currency name of a country. It is
+    a 6-digit numerical value assigned to each currency. The below example denotes the Standard Currency ID along with the
+    corresponding Currency Code ISO which is the 3-alphabet code as defined by the International Standardization Organization
+    (ISO) guidelines. Standard Currency ID has the Currency Name which are the global currency names. – Currency Code ISO:
+    AUD, Standard Currency ID: 500117'
+- name: StmtTypeCode
+  type: SMALLINT
+  nullable: false
+  description: Statement Type Code is associated with the collection of financial information. Financial data is categorized
+    into multiple statements based on the common accounting disclosures. Data is collected under the main statements such
+    as Income statement (INC), Balance sheet (BAL), Cash flow (CAS) and additional statements such as Business Segment (BUS),
+    Geographic Segment (GEO). The below examples indicate the different types of Statement Type Code with the respective statement
+    descriptions available.
+- name: LineItemID
+  type: INTEGER
+  nullable: false
+  description: Line Item ID is associated with the financial data items collected for each company, where each data item is
+    assigned with a numerical value in chronological order based on the sequence of the as- reported items. The Line Item
+    ID helps to display the items in the as- reported sequence disclosed by the company. The below example illustrates the
+    Line Item ID with the numerical value assigned to each data item under the Line Item Name and is applicable to all the
+    statement sections available in the
+- name: CreditFlg
+  type: char(1)
+  nullable: true
+  description: Credit Flag is associated with the sign or polarity of the amount or value collected for the financial information.
+    Each data item has default polarity based on the nature of the data items. Generally, items related to income/gain are
+    assigned positive, and expense/loss are assigned negative. Credit Flag reflects 1 if the default polarity of the data
+    item is positive and 0 if negative. In the below illustration, the financial data items represented by the Financial Concept
+    Code and description a
+- name: CurrID
+  type: INTEGER
+  nullable: true
+  description: 'Currency ID is the currency used for standardization of financials on product views. In majority of the cases
+    the standardized replicates the as-reported currency disclosed by the company. But there are few rare cases where they
+    differ as in the below scenarios: where the local currency relates to a country with a hyperinflationary economy and historical
+    values rapidly become meaningless. In this case the standardized currency would be set as the global substitute currency
+    used within that count'
+- name: EstFlg
+  type: char(1)
+  nullable: true
+  description: Estimated Flag is associated with the financial data items calculated using the standardized data and is marked
+    1 if one of the inputs is an estimated value. Estimated Flag indicates the estimated attribute of the analytical value,
+    the flag is marked 1 if one of the inputs used in the calculation of the analytics comes directly or indirectly from an
+    estimated data. It is marked 0 if the input is an as-reported value.
+- name: InstKey
+  type: varchar(50)
+  nullable: true
+  description: 'Instance Key is associated with the financial data values derived or calculated by the system using the as-reported
+    content. Analytical data value may be derived either through summation, deduction, multiplication, or division using as-reported
+    values to provide meaningful ratios, and each value is assigned an Instance Key. Each analytical value is assigned with
+    a unique identifier known as Instance Key. The below example illustrates the Instance Key assigned to each analytic value:
+    Organization'
+- name: SegID
+  type: INTEGER
+  nullable: true
+  description: 'Segment ID is a unique identifier assigned to all segment divisions disclosed by the company. Each segment
+    division name is unique across segment type codes. For example: Business, Geographic, Customer and Product type, except
+    for Eliminations, Corporate and Other which are generic segments. Each segment name is assigned with a numerical value
+    or Segment ID in a chronological order across segment types to avoid duplicate names. For example: LSEG Quantitative Analytics
+    Database Schema for EU Taxo'
+- name: SegLineItemID
+  type: INTEGER
+  nullable: true
+  description: Segment Line Item ID is associated with the segment display on the standardized layer and is applicable to
+    Business, Geographic, Customer and Product sections. Each segment division is assigned with the numerical value in a chorological
+    order to display the data in an order consistent across all companies. Segment Line Item ID helps to display the items
+    in an orderly manner across all company to ease comparison.
+- name: StdFinConCode
+  type: varchar(50)
+  nullable: true
+  description: Financial Concept Code is associated with the collection of each financial data item on the product and each
+    code is unique assigned to each accounting concept. Financial Concept Codes are chart of accounts with the list of common
+    accounting concepts available in the taxonomy. There are two layers of Financial Concept Code displayed; one is the as-
+    reported layer, and another is standardized layer. Standardized Financial Concept Code is generally the aggregate of the
+    as-reported codes based on t
+- name: StdVal
+  type: FLOAT
+  nullable: true
+  description: Standardized Value is associated with the amount of each financial data item calculated with the aggregation
+    of the as-reported items. Standardization helps comparability across all markets and GAAP reporting. Standardized Value
+    is an aggregate of the components, calculated based on the nature of item irrespective of the reporting pattern.
+- name: TotalFlg
+  type: char(1)
+  nullable: true
+  description: Total Flag is associated with the segments applicable to Business, Geographic, Customer and Product sections.
+    The as-reported segment values are aggregated to provide comparable data across all companies. For example, a banking
+    company may disclose components of revenues such as interest income, investment income, realized gain/loss on investments
+    and dividend income in its business segment note. The aggregate of revenue is calculated, and the total value is derived.
+    Total Flag is marked as 1 wh
+---
+table: qa_eu_taxonomy.EUTCode
+domain: esg
+description: This table contains descriptions for integer codes.
+update_cadence: Monthly
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Enlists the types of codified data items.
+- name: Code_
+  type: BIGINT
+  nullable: false
+  description: Code represents the Value_ data item from any EU Taxonomy data.
+- name: Desc_
+  type: varchar(500)
+  nullable: true
+  description: Contains the coded data item description. LSEG Quantitative Analytics Database Schema for EU Taxonomy 27
+---
+table: qa_eu_taxonomy.EUTDesc
+domain: esg
+description: This table contains descriptions for the character codes.
+update_cadence: Monthly
+columns:
+- name: Type_
+  type: INTEGER
+  nullable: false
+  description: Enlists the types of codified data items.
+- name: Code_
+  type: BIGINT
+  nullable: false
+  description: Code represents the Value_ data item from any EU Taxonomy data.
+- name: Desc_
+  type: varchar(500)
+  nullable: true
+  description: Contains the coded data item description.
+---
+table: qa_eu_taxonomy.EUTItem
+domain: esg
+description: This table contains the reported financial items and their meta data. | TableName varchar(50) Yes The data table
+  in which the value pertaining to the item resides.
+update_cadence: Monthly
+columns:
+- name: Item
+  type: INTEGER
+  nullable: false
+  description: An item code to uniquely identify each EU Taxonomy item that is a part of the feed.
+- name: Title
+  type: varchar(100)
+  nullable: true
+  description: Description pertaining to the Item.
+- name: Desc_
+  type: varchar(500)
+  nullable: true
+  description: Detailed description pertaining to the Item.
+- name: DataType
+  type: varchar(50)
+  nullable: true
+  description: The data type of the corresponding EU Taxonomy item. Corresponding type code is in the EUTCode table.
+- name: TableName
+  type: varchar(50)
+  nullable: true
+  description: The data table in which the value pertaining to the item resides. Corresponding type code in the EUTCode table.
+    LSEG Quantitative Analytics Database Schema for EU Taxonomy Copyright © 2025 London Stock Exchange Group plc and its group
+    of companies (LSEG) and/or its affiliates. All rights reserved. The LSEG content received through this service is the
+    intellectual property of LSEG or its third party suppliers. Republicati on or redistribution of content provided by LSEG
+    is expressly prohibited wi
