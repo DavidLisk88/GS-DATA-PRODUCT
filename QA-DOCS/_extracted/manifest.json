@@ -1,0 +1,25 @@
+{
+  "generated_at": "2026-06-08T17:05:50.316390+00:00",
+  "source_dir": "QA-DOCS",
+  "output_dir": "QA-DOCS\\_extracted",
+  "pdf_count": 45,
+  "documents": 45,
+  "tables_inferred": 1663,
+  "columns_inferred": 15684,
+  "relationships_inferred": 1868,
+  "raw_pdf_tables_enabled": false,
+  "artifacts": [
+    "inventory.csv",
+    "inventory.json",
+    "pages.jsonl",
+    "chunks.jsonl",
+    "raw_pdf_tables.jsonl",
+    "qa_tables.csv",
+    "qa_tables.json",
+    "qa_columns.csv",
+    "qa_columns.json",
+    "relationships.csv",
+    "relationships.json",
+    "schema_patterns.json"
+  ]
+}
