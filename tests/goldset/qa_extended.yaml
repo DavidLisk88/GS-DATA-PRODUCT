@@ -1,0 +1,644 @@
+# LSEG Data Copilot — Extended Q&A goldset (real QA content sets)
+# These questions target the 1,600+ real tables extracted from the QA Database Schema PDFs.
+# Scoring: same framework as qa.yaml (citation_recall, must_mention, must_not_mention).
+#
+# Naming: QAX-NNNN (QA eXtended)
+
+version: 2026.06.r1
+questions:
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # DATASTREAM (pricing)
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: QAX-0001
+    intent: definitional
+    domain: pricing
+    question: "What is the difference between DsCmpyCode and DsCompCode in the Datastream company table?"
+    must_mention:
+      - "DsCmpyCode"
+      - "DsCompCode"
+      - "internal"
+      - "Datastream company code"
+    notes: "Tests understanding of the Ds2Company table PK vs. display code."
+
+  - id: QAX-0002
+    intent: schema_linking
+    domain: pricing
+    question: "Which Datastream table holds equity time series data, and what is the primary key?"
+    must_mention:
+      - "Ds2PrimQtInfo"
+      - "InfoCode"
+    notes: "Ds2PrimQtInfo is the primary quote information table."
+
+  - id: QAX-0003
+    intent: schema_linking
+    domain: pricing
+    question: "How do I get the total return index for a Datastream security?"
+    must_mention:
+      - "RI"
+      - "Ds2PrimQtRI"
+    notes: "Return index is typically stored in Ds2PrimQtRI or related."
+
+  - id: QAX-0004
+    intent: identifier_resolution
+    domain: pricing
+    question: "How do I map a Datastream code (DsCompCode) to a PermID or ISIN?"
+    must_mention:
+      - "DsCompCode"
+      - "Ds2Mapping"
+    notes: "Tests knowledge of the Datastream cross-reference tables."
+
+  - id: QAX-0005
+    intent: definitional
+    domain: pricing
+    question: "What does the Ds2CtryQtInfo table contain and when would I use it?"
+    must_mention:
+      - "Ds2CtryQtInfo"
+      - "country"
+    notes: "Country-level quote information table."
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # WORLDSCOPE (fundamentals)
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: QAX-0006
+    intent: schema_linking
+    domain: fundamentals
+    question: "Which Worldscope table contains annual financial statement items, and what key links it to a company?"
+    must_mention:
+      - "WC"
+      - "Code"
+    notes: "Worldscope uses WCItemCode or similar field conventions."
+
+  - id: QAX-0007
+    intent: definitional
+    domain: fundamentals
+    question: "What is the difference between Worldscope and Compustat NA for North American fundamentals?"
+    must_mention:
+      - "Worldscope"
+      - "Compustat"
+      - "coverage"
+    must_not_mention:
+      - "same data"
+
+  - id: QAX-0008
+    intent: schema_linking
+    domain: fundamentals
+    question: "Where do I find point-in-time Worldscope data to avoid look-ahead bias in backtests?"
+    must_mention:
+      - "point-in-time"
+      - "Worldscope"
+    notes: "Should reference worldscope_point_in_time content set."
+
+  - id: QAX-0009
+    intent: definitional
+    domain: fundamentals
+    question: "What unique identifier does Compustat use for companies, and how does it differ from PermID?"
+    must_mention:
+      - "GVKEY"
+      - "Compustat"
+    notes: "GVKEY is the primary Compustat identifier."
+
+  - id: QAX-0010
+    intent: schema_linking
+    domain: fundamentals
+    question: "Which Compustat tables hold quarterly income statement data for North American companies?"
+    must_mention:
+      - "Compustat"
+      - "quarterly"
+    notes: "Tests knowledge of Compustat NA fundamental tables."
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # I/B/E/S (estimates)
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: QAX-0011
+    intent: definitional
+    domain: estimates
+    question: "What is the IBES ticker and how do I cross-reference it with PermID?"
+    must_mention:
+      - "IBES ticker"
+      - "cross-reference"
+    notes: "Tests understanding of IBES identifier mapping."
+
+  - id: QAX-0012
+    intent: schema_linking
+    domain: estimates
+    question: "Which IBES table contains individual analyst estimates (detail level)?"
+    must_mention:
+      - "detail"
+      - "analyst"
+      - "estimate"
+    notes: "Should reference the IBES detail-level estimate table."
+
+  - id: QAX-0013
+    intent: schema_linking
+    domain: estimates
+    question: "Where do I find IBES actuals (reported earnings) to calculate earnings surprise?"
+    must_mention:
+      - "actual"
+      - "surprise"
+    notes: "Tests knowledge of IBES actuals tables."
+
+  - id: QAX-0014
+    intent: definitional
+    domain: estimates
+    question: "What is the difference between IBES V1 and IBES V2 (Estimates Version 2)?"
+    must_mention:
+      - "version"
+    notes: "IBES V2 has enhanced coverage, additional measures."
+
+  - id: QAX-0015
+    intent: schema_linking
+    domain: estimates
+    question: "How do I get point-in-time consensus estimates from IBES to avoid look-ahead bias?"
+    must_mention:
+      - "point-in-time"
+      - "IBES"
+    notes: "Should reference ibes_pit content set."
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # STARMINE (analytics)
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: QAX-0016
+    intent: definitional
+    domain: analytics
+    question: "What is the StarMine Equity Summary Score and what inputs does it use?"
+    must_mention:
+      - "StarMine"
+      - "Summary Score"
+    notes: "Tests knowledge of StarMine's composite model."
+
+  - id: QAX-0017
+    intent: schema_linking
+    domain: analytics
+    question: "Which StarMine table holds analyst revision scores?"
+    must_mention:
+      - "StarMine"
+      - "revision"
+    notes: "Analyst Revisions Model is a key StarMine product."
+
+  - id: QAX-0018
+    intent: definitional
+    domain: analytics
+    question: "What is the StarMine Short Squeeze score and which table contains it?"
+    must_mention:
+      - "Short Squeeze"
+      - "StarMine"
+    notes: "Tests knowledge of StarMine short interest analytics."
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # RISK MODELS (Axioma / Barra / MSCI / Northfield)
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: QAX-0019
+    intent: definitional
+    domain: risk_models
+    question: "What risk factor models are available through the Axioma content set on QA?"
+    must_mention:
+      - "Axioma"
+      - "factor"
+    notes: "Tests awareness of Axioma risk model tables."
+
+  - id: QAX-0020
+    intent: definitional
+    domain: risk_models
+    question: "What is the difference between the Barra and MSCI risk factor models available in QA?"
+    must_mention:
+      - "Barra"
+      - "MSCI"
+      - "factor"
+    notes: "Both are multi-factor risk models but with different methodologies."
+
+  - id: QAX-0021
+    intent: schema_linking
+    domain: risk_models
+    question: "Which Northfield table contains factor exposures for individual securities?"
+    must_mention:
+      - "Northfield"
+      - "factor"
+      - "exposure"
+    notes: "Tests knowledge of Northfield risk factor tables."
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # OWNERSHIP
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: QAX-0022
+    intent: schema_linking
+    domain: ownership
+    question: "Which table shows institutional 13F holdings data and what is the primary key?"
+    must_mention:
+      - "13F"
+      - "ownership"
+    notes: "Tests knowledge of ownership filing tables."
+
+  - id: QAX-0023
+    intent: definitional
+    domain: ownership
+    question: "How is insider ownership tracked in the US Insider content set?"
+    must_mention:
+      - "insider"
+      - "filing"
+    notes: "Tests knowledge of SEC insider filing tables."
+
+  - id: QAX-0024
+    intent: schema_linking
+    domain: ownership
+    question: "Where can I find the Ownership V2 share positions data?"
+    must_mention:
+      - "Ownership"
+    notes: "Tests knowledge of the new ownership data model."
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # ESG
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: QAX-0025
+    intent: definitional
+    domain: esg
+    question: "What is the difference between the LSEG ESG and ESG Version 2 content sets?"
+    must_mention:
+      - "ESG"
+      - "version"
+    notes: "V2 has expanded coverage and revised methodology."
+
+  - id: QAX-0026
+    intent: schema_linking
+    domain: esg
+    question: "Which table contains EU Taxonomy alignment data for companies?"
+    must_mention:
+      - "EU Taxonomy"
+      - "alignment"
+    notes: "Tests knowledge of EU Taxonomy content set."
+
+  - id: QAX-0027
+    intent: schema_linking
+    domain: esg
+    question: "Where do I find LSEG Climate data including carbon emissions?"
+    must_mention:
+      - "climate"
+      - "carbon"
+    notes: "Tests knowledge of LSEG Climate content set."
+
+  - id: QAX-0028
+    intent: schema_linking
+    domain: esg
+    question: "Which table has FTSE Green Revenues data showing company revenue from green products?"
+    must_mention:
+      - "FTSE Green Revenue"
+      - "green"
+    notes: "Tests knowledge of FTSE Green Revenues content set."
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # FIXED INCOME
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: QAX-0029
+    intent: schema_linking
+    domain: fixed_income
+    question: "Which QA table contains credit default swap pricing data?"
+    must_mention:
+      - "credit default swap"
+      - "CDS"
+    notes: "Tests knowledge of CDS content set."
+
+  - id: QAX-0030
+    intent: schema_linking
+    domain: fixed_income
+    question: "Where do I find bond pricing data from EJV (Evaluated Junk Values) in QA?"
+    must_mention:
+      - "EJV"
+      - "bond"
+      - "pricing"
+    notes: "Tests knowledge of Fixed Income EJV content set."
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # REFERENCE DATA (Symbology, RDC, GICS, TRBC)
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: QAX-0031
+    intent: definitional
+    domain: reference
+    question: "What is the QA Symbology content set and what identifier mappings does it provide?"
+    must_mention:
+      - "Symbology"
+      - "identifier"
+      - "mapping"
+    notes: "Tests knowledge of the symbology cross-reference tables."
+
+  - id: QAX-0032
+    intent: schema_linking
+    domain: reference
+    question: "Which table maps between PermID, RIC, ISIN, CUSIP, and SEDOL in the Symbology content set?"
+    must_mention:
+      - "Symbology"
+      - "PermID"
+    notes: "Tests knowledge of identifier mapping table."
+
+  - id: QAX-0033
+    intent: definitional
+    domain: reference
+    question: "What is TRBC and what classification levels does it provide?"
+    must_mention:
+      - "TRBC"
+      - "business classification"
+    notes: "Thomson Reuters Business Classification hierarchy."
+
+  - id: QAX-0034
+    intent: schema_linking
+    domain: reference
+    question: "Where do I find S&P GICS sector and industry group classifications in QA?"
+    must_mention:
+      - "GICS"
+      - "sector"
+    notes: "Tests knowledge of S&P GICS content set."
+
+  - id: QAX-0035
+    intent: definitional
+    domain: reference
+    question: "What does the RDC (Refinitiv Data Cloud) content set contain?"
+    must_mention:
+      - "RDC"
+    notes: "Tests knowledge of the RDC reference data tables."
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # INDICES
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: QAX-0036
+    intent: schema_linking
+    domain: indices
+    question: "Which QA table tracks index constituents and their weights?"
+    must_mention:
+      - "index"
+      - "constituent"
+      - "weight"
+    notes: "Tests knowledge of LSEG Indices content set."
+
+  - id: QAX-0037
+    intent: schema_linking
+    domain: indices
+    question: "Where can I find historical index level data (open, high, low, close) in QA?"
+    must_mention:
+      - "index"
+      - "level"
+    notes: "Tests knowledge of Index Data content set."
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # SENTIMENT (MarketPsych)
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: QAX-0038
+    intent: definitional
+    domain: sentiment
+    question: "What is MarketPsych Analytics and what type of data does it provide?"
+    must_mention:
+      - "MarketPsych"
+      - "sentiment"
+    notes: "MarketPsych provides NLP-derived sentiment analytics."
+
+  - id: QAX-0039
+    intent: schema_linking
+    domain: sentiment
+    question: "Which table contains MarketPsych sentiment scores for individual companies?"
+    must_mention:
+      - "MarketPsych"
+      - "score"
+    notes: "Tests knowledge of company-level sentiment tables."
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # EVENTS (Street Events)
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: QAX-0040
+    intent: definitional
+    domain: events
+    question: "What does the Street Events content set cover?"
+    must_mention:
+      - "Street Events"
+      - "earnings"
+    notes: "Street Events covers earnings calls, conferences, etc."
+
+  - id: QAX-0041
+    intent: schema_linking
+    domain: events
+    question: "Which table contains earnings call transcript data in the Street Events content set?"
+    must_mention:
+      - "Street Events"
+      - "transcript"
+    notes: "Tests knowledge of Street Events transcript tables."
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # SHORT INTEREST
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: QAX-0042
+    intent: schema_linking
+    domain: short_interest
+    question: "Which QA table contains short interest data and what fields describe the short position?"
+    must_mention:
+      - "short interest"
+      - "short"
+    notes: "Tests knowledge of Short Interest / Data Explorers content set."
+
+  - id: QAX-0043
+    intent: definitional
+    domain: short_interest
+    question: "What is the difference between short interest data and securities lending data in QA?"
+    must_mention:
+      - "short interest"
+      - "securities lending"
+    notes: "Tests understanding of two related but different datasets."
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # COMMODITIES (CRB)
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: QAX-0044
+    intent: definitional
+    domain: commodities
+    question: "What commodity price data is available through the CRB content set in QA?"
+    must_mention:
+      - "CRB"
+      - "commodity"
+    notes: "Tests knowledge of CRB commodity data tables."
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # CROSS-DOMAIN / ADVANCED
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: QAX-0045
+    intent: cross_domain
+    question: >
+      How do I combine Datastream pricing data with Worldscope fundamental data
+      for the same company? What is the join key?
+    must_mention:
+      - "Datastream"
+      - "Worldscope"
+      - "join"
+    notes: "Tests cross-content-set join knowledge."
+
+  - id: QAX-0046
+    intent: cross_domain
+    question: >
+      I want to build a multi-factor model using StarMine scores, Barra risk
+      factors, and IBES estimates. Which tables do I need and how do they link?
+    must_mention:
+      - "StarMine"
+      - "Barra"
+      - "IBES"
+    notes: "Tests complex multi-content-set integration knowledge."
+
+  - id: QAX-0047
+    intent: cross_domain
+    question: >
+      How do I get ESG scores alongside fundamental financial data for the same
+      company? Which identifier do they share?
+    must_mention:
+      - "ESG"
+      - "fundamental"
+    notes: "Tests ESG-to-fundamentals cross-reference."
+
+  - id: QAX-0048
+    intent: identifier_resolution
+    question: >
+      I have a CUSIP and need to find the corresponding GVKEY for Compustat and
+      the DsCompCode for Datastream. What's the mapping path?
+    must_mention:
+      - "CUSIP"
+      - "GVKEY"
+      - "DsCompCode"
+    notes: "Tests multi-hop identifier resolution across content sets."
+
+  - id: QAX-0049
+    intent: schema_linking
+    question: >
+      What is the QA Schema Catalog table (QaSchTableInfo) and how does it
+      relate to QaSchFieldInfo?
+    must_mention:
+      - "QaSchTableInfo"
+      - "QaSchFieldInfo"
+    notes: "Tests knowledge of the meta-catalog tables."
+
+  - id: QAX-0050
+    intent: definitional
+    question: "What update cadences are typical for QA content sets? Which are daily vs. monthly vs. quarterly?"
+    must_mention:
+      - "update"
+      - "cadence"
+    notes: "Tests knowledge of data refresh frequencies."
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # IDC PRICING
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: QAX-0051
+    intent: definitional
+    domain: pricing
+    question: "What is IDC Pricing and how does it differ from Datastream pricing?"
+    must_mention:
+      - "IDC"
+      - "pricing"
+    notes: "IDC provides evaluated pricing, distinct from Datastream market prices."
+
+  - id: QAX-0052
+    intent: schema_linking
+    domain: pricing
+    question: "Which tables contain IDC evaluated bond prices for North American fixed income?"
+    must_mention:
+      - "IDC"
+      - "North America"
+      - "bond"
+    notes: "Tests knowledge of IDC Pricing NA content set."
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # DEALS M&A
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: QAX-0053
+    intent: schema_linking
+    domain: corporate_actions
+    question: "Which QA content set tracks mergers and acquisitions (M&A) deals?"
+    must_mention:
+      - "M&A"
+      - "deals"
+    notes: "Tests knowledge of Deals M&A content set."
+
+  - id: QAX-0054
+    intent: schema_linking
+    domain: corporate_actions
+    question: "What fields describe the target and acquirer in an M&A deal record?"
+    must_mention:
+      - "target"
+      - "acquirer"
+    notes: "Tests knowledge of deal structure fields."
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # HANWECK OPTIONS
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: QAX-0055
+    intent: definitional
+    domain: derivatives
+    question: "What is the Hanweck Options Data content set and what volatility surfaces does it provide?"
+    must_mention:
+      - "Hanweck"
+      - "options"
+      - "volatility"
+    notes: "Tests knowledge of Hanweck options analytics."
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # LSEG FINANCIALS
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: QAX-0056
+    intent: definitional
+    domain: fundamentals
+    question: "What is the LSEG Financials content set and how does it differ from Worldscope?"
+    must_mention:
+      - "LSEG Financials"
+    notes: "Tests knowledge of the newer LSEG-branded fundamentals dataset."
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # TOYO KEIZAI
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: QAX-0057
+    intent: definitional
+    domain: fundamentals
+    question: "What is the Toyo Keizai content set and which market does it focus on?"
+    must_mention:
+      - "Toyo Keizai"
+      - "Japan"
+    notes: "Toyo Keizai provides Japanese company fundamentals."
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # DATA QUALITY / METHODOLOGY
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: QAX-0058
+    intent: definitional
+    question: "How many content sets are available in the QA database and how are they organized?"
+    must_mention:
+      - "content set"
+    notes: "Tests meta-knowledge about the QA catalog structure."
+
+  - id: QAX-0059
+    intent: definitional
+    question: "What identifier should I use as the universal join key across QA content sets?"
+    must_mention:
+      - "SecID"
+    must_not_mention:
+      - "always"
+    notes: "SecID is common but not universal; some content sets use GVKEY, DsCmpyCode, etc."
+
+  - id: QAX-0060
+    intent: definitional
+    question: "How does QA handle versioning of schema changes across content sets?"
+    must_mention:
+      - "version"
+      - "schema"
+    notes: "Tests knowledge of QA schema versioning conventions."
