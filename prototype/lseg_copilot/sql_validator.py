@@ -46,10 +46,13 @@ def validate_sql(
         )
     tree = statements[0]
 
-    # Allow only SELECT / CTE / DESCRIBE / SHOW.
-    if not isinstance(tree, (exp.Select, exp.With, exp.Describe, exp.Show, exp.Union)):
+    # Allow only SELECT / CTE / DESCRIBE / SHOW. UNION is blocked to prevent
+    # bypassing entitlement checks by appending "UNION SELECT * FROM restricted".
+    if not isinstance(tree, (exp.Select, exp.With, exp.Describe, exp.Show)):
         return ValidationResult(
-            sql=sql, ok=False, errors=[f"Disallowed statement type: {type(tree).__name__}"]
+            sql=sql,
+            ok=False,
+            errors=[f"Disallowed statement type: {type(tree).__name__}"],
         )
 
     # ----- Validate tables -----

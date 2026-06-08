@@ -38,12 +38,17 @@ def main() -> None:
     with st.sidebar:
         st.markdown(f"**Catalog version**: `{catalog.manifest.catalog_version}`")
         st.markdown(f"**Tables**: {len(catalog.tables)}")
-        ents = st.multiselect(
-            "Entitlements",
-            ["LSEG_WC_VIEWER", "LSEG_WC_INVESTIGATOR"],
-            default=[],
-            help="Restricted tables (e.g. World-Check) require entitlements.",
-        )
+        # Entitlements are resolved server-side from the environment; they are
+        # not user-selectable to prevent privilege escalation.
+        ents: list[str] = [
+            e.strip()
+            for e in os.environ.get("LSEG_USER_ENTITLEMENTS", "").split(",")
+            if e.strip()
+        ]
+        if ents:
+            st.markdown(f"**Entitlements**: {', '.join(ents)}")
+        else:
+            st.markdown("**Entitlements**: _none configured_")
         use_llm = st.checkbox(
             "Use LLM (requires OPENAI_API_KEY)",
             value=bool(os.environ.get("OPENAI_API_KEY")),
@@ -57,6 +62,11 @@ def main() -> None:
 
     question = st.chat_input("Ask about the LSEG catalog...")
     if not question:
+        return
+
+    _MAX_QUERY_LEN = 2000
+    if len(question) > _MAX_QUERY_LEN:
+        st.error(f"Query too long ({len(question)} chars). Maximum is {_MAX_QUERY_LEN}.")
         return
 
     st.session_state["history"].append(("user", question))

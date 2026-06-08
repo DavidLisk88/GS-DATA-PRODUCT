@@ -68,7 +68,8 @@ def load_sample_data(
             schemas_seen.add(schema)
         con.execute(
             f'CREATE OR REPLACE TABLE "{schema}"."{table}" AS '
-            f"SELECT * FROM read_csv_auto('{csv_path.as_posix()}', header=True, sample_size=-1)"
+            "SELECT * FROM read_csv_auto($csv_path, header=True, sample_size=-1)",
+            {"csv_path": csv_path.as_posix()},
         )
         row_count = con.execute(
             f'SELECT COUNT(*) FROM "{schema}"."{table}"'

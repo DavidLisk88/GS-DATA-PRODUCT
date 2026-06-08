@@ -1,0 +1,39 @@
+# Byte-compiled / optimised / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+*.egg-info/
+*.egg
+dist/
+build/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Environment / secret files
+.env
+.env.*
+*.pem
+*.key
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# DuckDB databases
+*.duckdb
+*.duckdb.wal
+
+# Index artifacts
+prototype/.index/
+
+# OS
+.DS_Store
+Thumbs.db
