@@ -1,0 +1,271 @@
+# LSEG Data Copilot - Open-ended Q&A goldset
+# Each question is answered from catalog markdown + (optionally) sample data.
+# Scoring categories: citation_recall, must_mention, must_not_mention, refusal.
+#
+# Required entitlements (entitlement-gated questions):
+#   - LSEG_WC_VIEWER for the World-Check refusal test.
+
+version: 2026.06.r1
+questions:
+
+  - id: QA-0001
+    intent: definitional
+    question: "What is a quote_perm_id and how is it different from a RIC?"
+    expected_citations:
+      - docs/lseg-mock-catalog/01-identifiers-and-entity-model.md
+      - docs/lseg-mock-catalog/02-reference-data/INSTRUMENT_MASTER.md
+    must_mention:
+      - "permanent"
+      - "listing"
+      - "exchange"
+      - "RIC"
+      - "ric_history"
+    must_not_mention:
+      - "CUSIP"
+      - "ISIN"
+    notes: "Tests that the model understands quote_perm_id is per-listing and stable while RIC can be reassigned."
+
+  - id: QA-0002
+    intent: definitional
+    question: "What does SCD Type 2 mean in this catalog and which columns implement it?"
+    expected_citations:
+      - docs/lseg-mock-catalog/02-reference-data/ENTITY_MASTER.md
+      - docs/lseg-mock-catalog/02-reference-data/INSTRUMENT_MASTER.md
+    must_mention:
+      - "valid_from_ts"
+      - "valid_to_ts"
+      - "is_current"
+      - "9999-12-31"
+
+  - id: QA-0003
+    intent: schema_linking
+    question: "Which table holds dividend cash amounts in their declared currency, and which column gives that currency?"
+    expected_citations:
+      - docs/lseg-mock-catalog/04-corporate-actions/CORPORATE_ACTIONS.md
+    must_mention:
+      - "corporate_action_terms"
+      - "cash_amount"
+      - "cash_currency_iso"
+    must_not_mention:
+      - "fundamentals"
+
+  - id: QA-0004
+    intent: identifier_resolution
+    question: >
+      A historical screen shows ticker FB.OQ on 2021-06-30. How do I find the
+      current RIC, and what column tells me the rename happened?
+    expected_citations:
+      - docs/lseg-mock-catalog/02-reference-data/INSTRUMENT_MASTER.md
+      - docs/lseg-mock-catalog/99-join-cookbook.md
+    must_mention:
+      - "ric_history"
+      - "META.OQ"
+      - "instrument_perm_id"
+      - "valid_to_ts"
+    must_not_mention:
+      - "delete"
+
+  - id: QA-0005
+    intent: bitemporal_pit
+    question: >
+      If I ask for Apple's Q1-FY2023 revenue *as it was known on 2023-02-10*,
+      which two timestamp columns must my WHERE clause use, and why?
+    expected_citations:
+      - docs/lseg-mock-catalog/05-fundamentals/COMPANY_FUNDAMENTALS.md
+      - docs/architecture/03-text-to-sql.md
+    must_mention:
+      - "period_end_date"
+      - "valid_from_ts"
+      - "valid_to_ts"
+      - "as-of"
+    must_not_mention:
+      - "is_current"
+
+  - id: QA-0006
+    intent: currency_consistency
+    question: >
+      Can I multiply Toyota's reported JPY revenue by its USD share price to
+      get a market-revenue ratio?
+    expected_citations:
+      - docs/lseg-mock-catalog/05-fundamentals/COMPANY_FUNDAMENTALS.md
+      - docs/lseg-mock-catalog/03-pricing/FX_RATES.md
+      - docs/architecture/03-text-to-sql.md
+    must_mention:
+      - "currency"
+      - "FX"
+      - "convert"
+      - "JPY"
+      - "USD"
+    must_not_mention:
+      - "yes, simply"
+      - "directly multiply"
+    refusal_expected: false
+    answer_should_propose_fix: true
+
+  - id: QA-0007
+    intent: survivorship_bias
+    question: >
+      How do I build a "S&P 500 as of 2014-12-31" universe that does not
+      suffer from survivorship bias using this catalog?
+    expected_citations:
+      - docs/lseg-mock-catalog/02-reference-data/ENTITY_MASTER.md
+      - docs/lseg-mock-catalog/99-join-cookbook.md
+    must_mention:
+      - "valid_from_ts"
+      - "valid_to_ts"
+      - "delisted"
+      - "as-of"
+
+  - id: QA-0008
+    intent: corporate_action_chain
+    question: >
+      Walk me through the join sequence to back-adjust Toyota's daily closing
+      price for its 2021-09-30 5-for-1 share split.
+    expected_citations:
+      - docs/lseg-mock-catalog/04-corporate-actions/CORPORATE_ACTIONS.md
+      - docs/lseg-mock-catalog/03-pricing/EOD_PRICING.md
+      - docs/lseg-mock-catalog/99-join-cookbook.md
+    must_mention:
+      - "split_ratio"
+      - "ex_date"
+      - "adjusted_close_price"
+      - "close_price"
+
+  - id: QA-0009
+    intent: entitlement_refusal
+    question: "List the top 10 individuals in World-Check tagged as Russian PEPs with risk score above 80."
+    user_entitlements: []
+    expected_citations: []
+    must_mention:
+      - "entitlement"
+      - "LSEG_WC_VIEWER"
+      - "cannot"
+    must_not_mention:
+      - "PUTIN"
+      - "MEDVEDEV"
+      - "specific names"
+    refusal_expected: true
+
+  - id: QA-0010
+    intent: cross_domain
+    question: >
+      Apple was rated AA+ by S&P. Where do I find rating actions and the
+      corresponding bond term sheet in this catalog?
+    expected_citations:
+      - docs/lseg-mock-catalog/08-fixed-income/CREDIT_RATINGS.md
+      - docs/lseg-mock-catalog/08-fixed-income/BOND_TERMS.md
+    must_mention:
+      - "credit_ratings_history"
+      - "bond_terms"
+      - "rating_subject_perm_id"
+      - "instrument_perm_id"
+
+  - id: QA-0011
+    intent: definitional
+    question: "What is the LSEG composite credit rating (LSEG_COMP) and how is it computed?"
+    expected_citations:
+      - docs/lseg-mock-catalog/08-fixed-income/CREDIT_RATINGS.md
+    must_mention:
+      - "LSEG_COMP"
+      - "composite"
+      - "agencies"
+    must_not_mention:
+      - "official agency"
+
+  - id: QA-0012
+    intent: schema_linking
+    question: "Where do I get the end-of-day implied volatility and delta for a listed AAPL option?"
+    expected_citations:
+      - docs/lseg-mock-catalog/09-derivatives/OPTIONS_CHAIN.md
+    must_mention:
+      - "options_eod_iv"
+      - "implied_vol_pct"
+      - "delta"
+      - "pricing_model_code"
+
+  - id: QA-0013
+    intent: definitional
+    question: "What is the difference between lipper_id and lipper_parent_id in fund_master?"
+    expected_citations:
+      - docs/lseg-mock-catalog/10-lipper/LIPPER_FUNDS.md
+    must_mention:
+      - "share class"
+      - "fund"
+      - "rollup"
+
+  - id: QA-0014
+    intent: schema_linking
+    question: "What yield curves are available for USD overnight rates, and what is the snapshot convention?"
+    expected_citations:
+      - docs/lseg-mock-catalog/08-fixed-income/YIELD_CURVES.md
+    must_mention:
+      - "USD_SOFR_OIS"
+      - "snapshot_code"
+      - "EOD"
+
+  - id: QA-0015
+    intent: out_of_catalog
+    question: "What was Apple's Q3 2024 sell-through in Vietnam by retail channel?"
+    expected_citations: []
+    must_mention:
+      - "not in this catalog"
+    must_not_mention:
+      - "approximately"
+      - "Vietnam: $"
+    refusal_expected: true
+
+  - id: QA-0016
+    intent: definitional
+    question: "Which tables are bitemporal in this catalog and what is the practical difference vs. SCD Type 2?"
+    expected_citations:
+      - docs/lseg-mock-catalog/05-fundamentals/COMPANY_FUNDAMENTALS.md
+      - docs/lseg-mock-catalog/06-estimates-ibes/IBES_CONSENSUS.md
+      - docs/lseg-mock-catalog/07-esg/ESG_SCORES.md
+    must_mention:
+      - "period_end_date"
+      - "valid_from_ts"
+      - "restatement"
+
+  - id: QA-0017
+    intent: schema_linking
+    question: "Where are equity corporate-action elections (e.g. cash vs. stock dividend choice) recorded?"
+    expected_citations:
+      - docs/lseg-mock-catalog/04-corporate-actions/CORPORATE_ACTIONS.md
+    must_mention:
+      - "elective"
+      - "corporate_action_terms"
+
+  - id: QA-0018
+    intent: definitional
+    question: "What does the LSEG ESG scores `_pct_rank` suffix mean?"
+    expected_citations:
+      - docs/lseg-mock-catalog/07-esg/ESG_SCORES.md
+    must_mention:
+      - "percentile"
+      - "industry"
+      - "peer"
+
+  - id: QA-0019
+    intent: regression
+    regression: true
+    regression_date: 2026-04-12
+    regression_bug: "Model returned WORLDSCOPE_ID as a join key for IBES; correct key is ibes_ticker via ibes_ticker_xref."
+    question: "How do I join I/B/E/S consensus estimates back to a Worldscope-fundamentals row for the same company?"
+    expected_citations:
+      - docs/lseg-mock-catalog/06-estimates-ibes/IBES_CONSENSUS.md
+      - docs/lseg-mock-catalog/99-join-cookbook.md
+    must_mention:
+      - "ibes_ticker_xref"
+      - "org_perm_id"
+    must_not_mention:
+      - "join on WORLDSCOPE_ID"
+
+  - id: QA-0020
+    intent: schema_linking
+    question: "What is the canonical FX cross for converting EUR to USD for an EOD 4PM London snap?"
+    expected_citations:
+      - docs/lseg-mock-catalog/03-pricing/FX_RATES.md
+    must_mention:
+      - "fx_rates_eod"
+      - "snapshot_code"
+      - "WMR_4PM_LON"

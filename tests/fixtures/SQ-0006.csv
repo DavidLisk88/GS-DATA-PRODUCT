@@ -1,0 +1,2 @@
+ca_event_id,ca_type_code,ca_subtype_code,ex_date,term_type_code,from_qty,to_qty
+9001054321,STOCK_SPLIT,FWD_5_FOR_1,2021-09-30,STOCK_SPLIT,1.000000,5.000000

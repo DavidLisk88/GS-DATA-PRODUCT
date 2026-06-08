@@ -1,0 +1,70 @@
+table: lseg_fi.bond_terms
+domain: fixed_income
+description: >
+  Fixed-income reference terms (coupon, day-count, optionality, ranking).
+  Inherits from instrument_master where asset_class_code IN ('BOND','CONV','MTN','SUKUK').
+source_product: Refinitiv Fixed Income Reference
+update_cadence: intraday_with_daily_recon
+temporal_model: scd_type_2
+pii_level: none
+grain: One row per (instrument_perm_id, valid_from_ts)
+pk:
+  - instrument_perm_id
+  - valid_from_ts
+partitioned_by: issue_country_iso
+columns:
+  - {name: instrument_perm_id,             type: BIGINT,        nullable: false, pk: true}
+  - {name: valid_from_ts,                  type: TIMESTAMP(6),  nullable: false, pk: true}
+  - {name: valid_to_ts,                    type: TIMESTAMP(6),  nullable: false, pk: false}
+  - {name: is_current,                     type: BOOLEAN,       nullable: false, pk: false}
+  - {name: bond_type_code,                 type: VARCHAR(16),   nullable: false, pk: false, description: "GOVT|CORP|AGCY|MUNI|SUPRA|MBS|ABS|CB|COVERED|LOAN."}
+  - {name: seniority_code,                 type: VARCHAR(16),   nullable: true,  pk: false}
+  - {name: coupon_type_code,               type: VARCHAR(16),   nullable: false, pk: false, description: "FIXED|FLOATING|STEP_UP|ZERO|INFLATION_LINKED|PIK|VAR."}
+  - {name: coupon_rate_pct,                type: "DECIMAL(9,6)", nullable: true, pk: false}
+  - {name: coupon_spread_bps,              type: INTEGER,       nullable: true,  pk: false}
+  - {name: coupon_reference_rate_code,     type: VARCHAR(16),   nullable: true,  pk: false}
+  - {name: coupon_frequency_code,          type: VARCHAR(8),    nullable: false, pk: false}
+  - {name: day_count_convention_code,      type: VARCHAR(16),   nullable: false, pk: false}
+  - {name: business_day_convention_code,   type: VARCHAR(16),   nullable: false, pk: false}
+  - {name: first_coupon_date,              type: DATE,          nullable: true,  pk: false}
+  - {name: next_coupon_date,               type: DATE,          nullable: true,  pk: false}
+  - {name: maturity_date,                  type: DATE,          nullable: true,  pk: false}
+  - {name: is_perpetual,                   type: BOOLEAN,       nullable: false, pk: false}
+  - {name: face_value,                     type: "DECIMAL(18,4)", nullable: false, pk: false}
+  - {name: minimum_denomination,           type: "DECIMAL(18,4)", nullable: true, pk: false}
+  - {name: issue_amount,                   type: "DECIMAL(22,4)", nullable: true, pk: false}
+  - {name: amount_outstanding,             type: "DECIMAL(22,4)", nullable: true, pk: false}
+  - {name: is_callable,                    type: BOOLEAN,       nullable: false, pk: false}
+  - {name: is_puttable,                    type: BOOLEAN,       nullable: false, pk: false}
+  - {name: is_sinkable,                    type: BOOLEAN,       nullable: false, pk: false}
+  - {name: is_convertible,                 type: BOOLEAN,       nullable: false, pk: false}
+  - {name: conversion_ratio,               type: "DECIMAL(18,8)", nullable: true, pk: false}
+  - {name: conversion_underlying_instrument_perm_id, type: BIGINT, nullable: true, pk: false}
+  - {name: is_inflation_linked,            type: BOOLEAN,       nullable: false, pk: false}
+  - {name: inflation_index_code,           type: VARCHAR(16),   nullable: true,  pk: false}
+  - {name: base_index_value,               type: "DECIMAL(18,6)", nullable: true, pk: false}
+  - {name: currency_iso,                   type: CHAR(3),       nullable: false, pk: false}
+  - {name: issue_country_iso,              type: CHAR(2),       nullable: false, pk: false}
+  - {name: governing_law_country_iso,      type: CHAR(2),       nullable: true,  pk: false}
+  - {name: issue_date,                     type: DATE,          nullable: false, pk: false}
+  - {name: is_144a,                        type: BOOLEAN,       nullable: false, pk: false}
+  - {name: is_reg_s,                       type: BOOLEAN,       nullable: false, pk: false}
+  - {name: is_green_bond,                  type: BOOLEAN,       nullable: false, pk: false}
+  - {name: is_social_bond,                 type: BOOLEAN,       nullable: false, pk: false}
+  - {name: is_sustainability_linked,       type: BOOLEAN,       nullable: false, pk: false}
+  - {name: lead_manager_org_perm_ids,      type: "ARRAY<BIGINT>", nullable: true, pk: false}
+  - {name: loaded_ts,                      type: TIMESTAMP(6),  nullable: false, pk: false}
+joins:
+  - to: lseg_ref.instrument_master
+    on: "bond_terms.instrument_perm_id = instrument_master.instrument_perm_id"
+    cardinality: one_to_one
+  - to: lseg_fi.bond_call_schedule
+    on: "bond_terms.instrument_perm_id = bond_call_schedule.instrument_perm_id"
+    cardinality: one_to_many
+  - to: lseg_fi.bond_cashflow_schedule
+    on: "bond_terms.instrument_perm_id = bond_cashflow_schedule.instrument_perm_id"
+    cardinality: one_to_many
+  - to: lseg_fi.credit_ratings_history
+    on: "bond_terms.instrument_perm_id = credit_ratings_history.rating_subject_perm_id AND credit_ratings_history.rating_subject_type = 'ISSUE'"
+    cardinality: one_to_many
+catalog_doc_path: docs/lseg-mock-catalog/08-fixed-income/BOND_TERMS.md

@@ -1,0 +1,21 @@
+table: lseg_fx.fx_rates_eod
+domain: fx
+description: End-of-day FX fixings, including WMR London 4PM snapshots.
+source_product: Refinitiv FX Benchmarks
+update_cadence: eod_fixings
+temporal_model: point_in_time
+grain: One row per (base_ccy, quote_ccy, fix_date, fix_code)
+pk: [base_ccy, quote_ccy, fix_date, fix_code]
+columns:
+  - {name: base_ccy, type: CHAR(3), nullable: false, pk: true}
+  - {name: quote_ccy, type: CHAR(3), nullable: false, pk: true}
+  - {name: fix_date, type: DATE, nullable: false, pk: true}
+  - {name: fix_code, type: VARCHAR(32), nullable: false, pk: true}
+  - {name: mid_rate, type: "DECIMAL(20,10)", nullable: false, pk: false}
+  - {name: bid_rate, type: "DECIMAL(20,10)", nullable: true, pk: false}
+  - {name: ask_rate, type: "DECIMAL(20,10)", nullable: true, pk: false}
+  - {name: is_cross_rate, type: BOOLEAN, nullable: false, pk: false}
+  - {name: quality_flag_code, type: VARCHAR(16), nullable: false, pk: false}
+  - {name: loaded_ts, type: TIMESTAMP(6), nullable: false, pk: false}
+joins: []
+catalog_doc_path: docs/lseg-mock-catalog/03-pricing/FX_RATES.md

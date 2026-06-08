@@ -1,0 +1,6 @@
+ca_event_id,term_seq,term_type_code,from_qty,to_qty,cash_amount,cash_currency_iso,new_instrument_perm_id,fractional_treatment_code,gross_per_share_amount,withholding_tax_pct
+9001245781,1,CASH,,,0.250000,USD,,,0.250000,0.00
+9001247991,1,CASH,,,0.260000,USD,,,0.260000,0.00
+9001302554,1,CASH,,,0.830000,USD,,,0.830000,0.00
+9001188777,1,CASH,,,4.500000,EUR,,,4.500000,26.38
+9001054321,1,STOCK_SPLIT,1.000000,5.000000,,,8590881209,ROUND_DOWN,,

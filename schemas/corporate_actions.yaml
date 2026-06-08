@@ -1,0 +1,29 @@
+table: lseg_ref.corporate_actions
+domain: corporate_actions
+description: Corporate-action event header records.
+source_product: Refinitiv Corporate Actions
+update_cadence: intraday_15min
+temporal_model: point_in_time
+grain: One row per ca_event_id
+pk: [ca_event_id]
+columns:
+  - {name: ca_event_id, type: BIGINT, nullable: false, pk: true}
+  - {name: instrument_perm_id, type: BIGINT, nullable: false, pk: false}
+  - {name: org_perm_id, type: BIGINT, nullable: false, pk: false}
+  - {name: ca_type_code, type: VARCHAR(32), nullable: false, pk: false}
+  - {name: ca_subtype_code, type: VARCHAR(32), nullable: true, pk: false}
+  - {name: is_mandatory, type: BOOLEAN, nullable: false, pk: false}
+  - {name: announce_date, type: DATE, nullable: true, pk: false}
+  - {name: ex_date, type: DATE, nullable: true, pk: false}
+  - {name: record_date, type: DATE, nullable: true, pk: false}
+  - {name: payment_date, type: DATE, nullable: true, pk: false}
+  - {name: event_status_code, type: VARCHAR(16), nullable: false, pk: false}
+  - {name: narrative, type: VARCHAR(1024), nullable: true, pk: false}
+  - {name: vendor_received_ts, type: TIMESTAMP(6), nullable: false, pk: false}
+  - {name: last_updated_ts, type: TIMESTAMP(6), nullable: false, pk: false}
+  - {name: loaded_ts, type: TIMESTAMP(6), nullable: false, pk: false}
+joins:
+  - to: lseg_ref.corporate_action_terms
+    on: "corporate_actions.ca_event_id = corporate_action_terms.ca_event_id"
+    cardinality: one_to_many
+catalog_doc_path: docs/lseg-mock-catalog/04-corporate-actions/CORPORATE_ACTIONS.md

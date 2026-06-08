@@ -1,0 +1,157 @@
+# LSEG Data Copilot - Text-to-SQL goldset
+# Each question is answered by the planner producing SQL that the validator
+# parses (sqlglot) and the executor runs against the sample DuckDB warehouse.
+# The result-set is compared against the named fixture CSV.
+#
+# `expected_tables` is used to score schema-linking F1.
+# `expected_columns_any_of` lists alternative correct projections.
+
+version: 2026.06.r1
+warehouse_dialect: duckdb
+questions:
+
+  - id: SQ-0001
+    intent: simple_select
+    question: "List Apple's open, close and volume on 2026-05-28."
+    expected_tables: [lseg_dss.eod_pricing]
+    expected_columns_any_of:
+      - [price_date, open_price, close_price, volume]
+    fixture: tests/fixtures/SQ-0001.csv
+    must_use_filters:
+      - "ric_as_of = 'AAPL.OQ'"
+      - "price_date = DATE '2026-05-28'"
+
+  - id: SQ-0002
+    intent: identifier_resolution
+    question: "What was Meta's closing price on 2026-05-28?"
+    expected_tables: [lseg_dss.eod_pricing, lseg_ref.instrument_master]
+    fixture: tests/fixtures/SQ-0002.csv
+    must_use_filters:
+      - "ric_as_of IN ('META.OQ', 'FB.OQ')"
+    notes: "Must accept either META.OQ today or join via ric_history."
+
+  - id: SQ-0003
+    intent: scd2_as_of
+    question: "Show Apple's entity_legal_name and entity_country_iso as recorded on 2010-06-01."
+    expected_tables: [lseg_ref.entity_master]
+    fixture: tests/fixtures/SQ-0003.csv
+    must_use_filters:
+      - "org_perm_id = 4295905573"
+      - "valid_from_ts <= TIMESTAMP '2010-06-01 00:00:00'"
+      - "valid_to_ts >  TIMESTAMP '2010-06-01 00:00:00'"
+    must_not_use_filters:
+      - "is_current = TRUE"
+    notes: "Tests that the planner does NOT take the hot-path is_current shortcut for an historical AS-OF query."
+
+  - id: SQ-0004
+    intent: bitemporal_pit
+    question: >
+      What was Apple's FY2024 total revenue *as it was known on
+      2024-11-15*? Return one row.
+    expected_tables: [lseg_wsf.company_fundamentals]
+    fixture: tests/fixtures/SQ-0004.csv
+    must_use_filters:
+      - "org_perm_id = 4295905573"
+      - "period_end_date = DATE '2024-09-28'"
+      - "valid_from_ts <= TIMESTAMP '2024-11-15 23:59:59'"
+      - "valid_to_ts >  TIMESTAMP '2024-11-15 23:59:59'"
+
+  - id: SQ-0005
+    intent: currency_consistency
+    question: >
+      Convert Toyota's 2026-05-28 close from JPY to USD using the WMR 4PM
+      London snap of that day.
+    expected_tables: [lseg_dss.eod_pricing, lseg_fx.fx_rates_eod]
+    fixture: tests/fixtures/SQ-0005.csv
+    must_use_filters:
+      - "ric_as_of = '7203.T'"
+      - "price_date = DATE '2026-05-28'"
+      - "base_ccy = 'JPY'"
+      - "quote_ccy = 'USD'"
+      - "snapshot_code = 'WMR_LON_4PM'"
+    notes: "Tests the currency-consistency check + FX join recipe."
+
+  - id: SQ-0006
+    intent: corporate_action_chain
+    question: >
+      Show Toyota's 2021-09-30 corporate-action event, its subtype, and the
+      from_qty/to_qty terms.
+    expected_tables:
+      - lseg_ref.corporate_actions
+      - lseg_ref.corporate_action_terms
+    fixture: tests/fixtures/SQ-0006.csv
+    must_use_filters:
+      - "org_perm_id = 4295875323"
+      - "ex_date = DATE '2021-09-30'"
+
+  - id: SQ-0007
+    intent: cross_domain
+    question: >
+      For Apple's S&P long-term issuer rating, list all rating actions in
+      chronological order with the numeric rating value.
+    expected_tables: [lseg_fi.credit_ratings_history]
+    fixture: tests/fixtures/SQ-0007.csv
+    must_use_filters:
+      - "rating_subject_perm_id = 4295905573"
+      - "rating_subject_type = 'ISSUER'"
+      - "agency_code = 'SP'"
+      - "rating_scale_code = 'LT_FC'"
+
+  - id: SQ-0008
+    intent: cross_domain
+    question: "Show all Apple corporate bonds with maturity in 2033 or later, ordered by maturity."
+    expected_tables: [lseg_fi.bond_terms, lseg_ref.instrument_master]
+    fixture: tests/fixtures/SQ-0008.csv
+
+  - id: SQ-0009
+    intent: aggregation
+    question: "What is the 25-delta call IV for AAPL on 2024-06-28?"
+    expected_tables: [lseg_drv.options_chain, lseg_drv.options_eod_iv]
+    fixture: tests/fixtures/SQ-0009.csv
+    notes: "Allows answer to be the option closest to delta = 0.25 from the AAPL chain."
+
+  - id: SQ-0010
+    intent: aggregation
+    question: "What is the USD SOFR-OIS 10Y zero rate on 2024-06-28?"
+    expected_tables: [lseg_fi.yield_curves_eod]
+    fixture: tests/fixtures/SQ-0010.csv
+    must_use_filters:
+      - "curve_code = 'USD_SOFR_OIS'"
+      - "tenor_code = '10Y'"
+      - "curve_date = DATE '2024-06-28'"
+
+  - id: SQ-0011
+    intent: schema_linking
+    question: "List all S&P 500 ETFs (Lipper global class EQUS, ETF type) and their total expense ratios."
+    expected_tables: [lseg_lipper.fund_master]
+    fixture: tests/fixtures/SQ-0011.csv
+
+  - id: SQ-0012
+    intent: entitlement_refusal
+    question: "List all individuals in World-Check on the OFAC SDN list."
+    user_entitlements: []
+    expected_tables: []
+    expected_sql_action: refuse
+    fixture: null
+    notes: "Planner must refuse with explanation; no SQL must be emitted."
+
+  - id: SQ-0013
+    intent: front_month_futures
+    question: "What is the current front-month CL (WTI) contract as of 2024-06-22?"
+    expected_tables: [lseg_drv.futures_contracts]
+    fixture: tests/fixtures/SQ-0013.csv
+    must_use_filters:
+      - "futures_series_code = 'CL'"
+      - "last_trade_date >= DATE '2024-06-22'"
+
+  - id: SQ-0014
+    intent: aggregation
+    question: "Average daily volume for the largest 3 US tech names over 2026-05-26 to 2026-05-28."
+    expected_tables: [lseg_dss.eod_pricing]
+    fixture: tests/fixtures/SQ-0014.csv
+
+  - id: SQ-0015
+    intent: schema_linking
+    question: "Get the consensus 12-month-forward EPS estimate for Apple as of the most recent snapshot."
+    expected_tables: [lseg_ibes.estimate_consensus, lseg_ibes.ibes_ticker_xref]
+    fixture: tests/fixtures/SQ-0015.csv

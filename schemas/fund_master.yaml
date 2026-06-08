@@ -1,0 +1,51 @@
+table: lseg_lipper.fund_master
+domain: funds
+description: >
+  Lipper fund + share-class master. lipper_id is share-class grain;
+  lipper_parent_id rolls share classes up into a fund.
+source_product: Refinitiv Lipper
+update_cadence: daily
+temporal_model: scd_type_2
+grain: One row per (lipper_id, valid_from_ts)
+pk: [lipper_id, valid_from_ts]
+columns:
+  - {name: lipper_id,                  type: BIGINT,        nullable: false, pk: true}
+  - {name: lipper_parent_id,           type: BIGINT,        nullable: false, pk: false, description: "Fund-level rollup (umbrella)."}
+  - {name: valid_from_ts,              type: TIMESTAMP(6),  nullable: false, pk: true}
+  - {name: valid_to_ts,                type: TIMESTAMP(6),  nullable: false, pk: false}
+  - {name: is_current,                 type: BOOLEAN,       nullable: false, pk: false}
+  - {name: instrument_perm_id,         type: BIGINT,        nullable: true,  pk: false, description: "Links share class to the tradable security."}
+  - {name: fund_name,                  type: VARCHAR(256),  nullable: false, pk: false}
+  - {name: share_class_name,           type: VARCHAR(128),  nullable: true,  pk: false}
+  - {name: lipper_global_class_code,   type: VARCHAR(16),   nullable: false, pk: false, description: "e.g. EQUS, BNDGLB, MMUSD."}
+  - {name: lipper_asset_type_code,     type: VARCHAR(16),   nullable: false, pk: false, description: "EQ|FI|MM|MA|ALT|COMM."}
+  - {name: fund_type_code,             type: VARCHAR(16),   nullable: false, pk: false, description: "MUTUAL|ETF|CEF|UCITS|SICAV|CIT|HEDGE|SMA."}
+  - {name: domicile_country_iso,       type: CHAR(2),       nullable: false, pk: false}
+  - {name: registered_for_sale_iso,    type: "ARRAY<CHAR(2)>", nullable: true, pk: false}
+  - {name: base_currency_iso,          type: CHAR(3),       nullable: false, pk: false}
+  - {name: management_company_org_perm_id, type: BIGINT,    nullable: true,  pk: false}
+  - {name: management_company_name,    type: VARCHAR(256),  nullable: false, pk: false}
+  - {name: portfolio_manager_name,     type: VARCHAR(256),  nullable: true,  pk: false}
+  - {name: inception_date,             type: DATE,          nullable: false, pk: false}
+  - {name: ter_pct,                    type: "DECIMAL(7,4)", nullable: true, pk: false}
+  - {name: management_fee_pct,         type: "DECIMAL(7,4)", nullable: true, pk: false}
+  - {name: load_pct,                   type: "DECIMAL(7,4)", nullable: true, pk: false}
+  - {name: load_type_code,             type: VARCHAR(8),    nullable: true,  pk: false}
+  - {name: minimum_investment,         type: "DECIMAL(18,2)", nullable: true, pk: false}
+  - {name: dividend_distribution_code, type: VARCHAR(8),    nullable: true,  pk: false, description: "ACC|DIST."}
+  - {name: benchmark_index_code,       type: VARCHAR(32),   nullable: true,  pk: false}
+  - {name: aum_base_ccy,               type: "DECIMAL(22,2)", nullable: true, pk: false}
+  - {name: aum_as_of_date,             type: DATE,          nullable: true,  pk: false}
+  - {name: is_active,                  type: BOOLEAN,       nullable: false, pk: false}
+  - {name: status_code,                type: VARCHAR(16),   nullable: false, pk: false, description: "ACTIVE|LIQUIDATED|MERGED|SUSPENDED."}
+  - {name: terminated_date,            type: DATE,          nullable: true,  pk: false}
+  - {name: merged_into_lipper_id,      type: BIGINT,        nullable: true,  pk: false}
+  - {name: loaded_ts,                  type: TIMESTAMP(6),  nullable: false, pk: false}
+joins:
+  - to: lseg_ref.instrument_master
+    on: "fund_master.instrument_perm_id = instrument_master.instrument_perm_id"
+    cardinality: one_to_one
+  - to: lseg_lipper.fund_nav_history
+    on: "fund_master.lipper_id = fund_nav_history.lipper_id"
+    cardinality: one_to_many
+catalog_doc_path: docs/lseg-mock-catalog/10-lipper/LIPPER_FUNDS.md

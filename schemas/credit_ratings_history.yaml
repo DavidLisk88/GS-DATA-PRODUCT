@@ -1,0 +1,44 @@
+table: lseg_fi.credit_ratings_history
+domain: fixed_income
+description: >
+  Append-only ledger of every credit-rating action (issuer + instrument level)
+  across S&P, Moody's, Fitch, DBRS, JCR + an LSEG composite.
+source_product: Refinitiv Ratings
+update_cadence: intraday_with_eod_recon
+temporal_model: scd_type_2
+pii_level: none
+grain: One row per (rating_subject_perm_id, rating_subject_type, agency_code, rating_scale_code, valid_from_ts)
+pk:
+  - rating_subject_perm_id
+  - rating_subject_type
+  - agency_code
+  - rating_scale_code
+  - valid_from_ts
+partitioned_by: rating_subject_type
+columns:
+  - {name: rating_subject_perm_id,    type: BIGINT,        nullable: false, pk: true, description: "Either org_perm_id (ISSUER) or instrument_perm_id (ISSUE)."}
+  - {name: rating_subject_type,       type: VARCHAR(8),    nullable: false, pk: true, description: "ISSUER|ISSUE."}
+  - {name: agency_code,               type: VARCHAR(8),    nullable: false, pk: true, description: "SP|MDY|FITCH|DBRS|JCR|RICN|EGAN|KBRA|LSEG_COMP."}
+  - {name: rating_scale_code,         type: VARCHAR(16),   nullable: false, pk: true, description: "LT_FC|LT_LC|ST_FC|ST_LC|LT_DEP|ST_DEP|IFS."}
+  - {name: valid_from_ts,             type: TIMESTAMP(6),  nullable: false, pk: true}
+  - {name: valid_to_ts,               type: TIMESTAMP(6),  nullable: false, pk: false}
+  - {name: is_current,                type: BOOLEAN,       nullable: false, pk: false}
+  - {name: rating_code,               type: VARCHAR(8),    nullable: false, pk: false}
+  - {name: rating_outlook_code,       type: VARCHAR(8),    nullable: true,  pk: false, description: "POS|NEG|STABLE|DEVELOPING|RWN|RWP|RWU."}
+  - {name: rating_action_code,        type: VARCHAR(16),   nullable: false, pk: false}
+  - {name: notch_change,              type: SMALLINT,      nullable: true,  pk: false}
+  - {name: composite_rating_code,     type: VARCHAR(8),    nullable: true,  pk: false}
+  - {name: numeric_rating_value,      type: SMALLINT,      nullable: false, pk: false, description: "0-22 uniform scale (AAA=22, BBB-=13, D=1, NR=0)."}
+  - {name: is_investment_grade,       type: BOOLEAN,       nullable: false, pk: false}
+  - {name: is_split_rated,            type: BOOLEAN,       nullable: true,  pk: false}
+  - {name: rating_announce_ts,        type: TIMESTAMP(6),  nullable: false, pk: false}
+  - {name: rating_press_release_url,  type: VARCHAR(512),  nullable: true,  pk: false}
+  - {name: loaded_ts,                 type: TIMESTAMP(6),  nullable: false, pk: false}
+joins:
+  - to: lseg_ref.entity_master
+    on: "credit_ratings_history.rating_subject_perm_id = entity_master.org_perm_id AND credit_ratings_history.rating_subject_type = 'ISSUER'"
+    cardinality: many_to_one
+  - to: lseg_ref.instrument_master
+    on: "credit_ratings_history.rating_subject_perm_id = instrument_master.instrument_perm_id AND credit_ratings_history.rating_subject_type = 'ISSUE'"
+    cardinality: many_to_one
+catalog_doc_path: docs/lseg-mock-catalog/08-fixed-income/CREDIT_RATINGS.md

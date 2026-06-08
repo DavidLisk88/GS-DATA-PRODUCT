@@ -1,0 +1,7 @@
+futures_series_code,valid_from_ts,valid_to_ts,is_current,series_description,exchange_mic,asset_class_code,underlying_instrument_perm_id,underlying_description,contract_size,contract_size_unit,tick_size,tick_value,currency_iso,settlement_type_code,ric_root,cme_globex_root,bloomberg_ticker_root,loaded_ts
+ES,1997-09-09 00:00:00,9999-12-31 00:00:00,true,E-mini S&P 500,XCME,EQUITY_IDX,,S&P 500 Index,50.0000,USD_PER_INDEX_POINT,0.25000000,12.500000,USD,CASH,ES,ES,ES,1997-09-10 02:00:00
+NQ,1999-06-21 00:00:00,9999-12-31 00:00:00,true,E-mini Nasdaq-100,XCME,EQUITY_IDX,,Nasdaq-100 Index,20.0000,USD_PER_INDEX_POINT,0.25000000,5.000000,USD,CASH,NQ,NQ,NQ,1999-06-22 02:00:00
+CL,1983-03-30 00:00:00,9999-12-31 00:00:00,true,WTI Light Sweet Crude Oil,XNYM,ENERGY,,WTI Crude,1000.0000,BARREL,0.01000000,10.000000,USD,PHYS,CLc,CL,CL,1983-03-31 02:00:00
+ZN,1982-05-03 00:00:00,9999-12-31 00:00:00,true,10-Year US Treasury Note,XCBT,RATE,,UST 10Y,100000.0000,USD_FACE,0.01562500,15.625000,USD,PHYS,TYc,ZN,TY,1982-05-04 02:00:00
+GC,1974-12-31 00:00:00,9999-12-31 00:00:00,true,Gold,XCEC,METAL,,Gold,100.0000,TROY_OZ,0.10000000,10.000000,USD,PHYS,GCc,GC,GC,1975-01-02 02:00:00
+FGBL,1988-09-01 00:00:00,9999-12-31 00:00:00,true,Euro-Bund Future,XEUR,RATE,,Bund 8.5-10.5Y,100000.0000,EUR_FACE,0.01000000,10.000000,EUR,PHYS,FGBLc,,RX,1988-09-02 02:00:00

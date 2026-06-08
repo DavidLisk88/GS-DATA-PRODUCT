@@ -1,0 +1,66 @@
+table: lseg_ref.entity_master
+domain: reference
+description: >
+  Single source of truth for legal-entity reference attributes. SCD Type 2.
+  Anchor for fundamentals, ESG, I/B/E/S, ownership.
+source_product: Refinitiv Reference Data (DSS feed RefDataPro_Entity_v3)
+update_cadence: daily_06_NYT
+temporal_model: scd_type_2
+pii_level: none
+grain: One row per org_perm_id per validity period
+pk:
+  - org_perm_id
+  - valid_from_ts
+partitioned_by: entity_country_iso
+clustered_by:
+  - org_perm_id
+columns:
+  - {name: org_perm_id,                  type: BIGINT,        nullable: false, pk: true,  description: "LSEG Organisation PermID."}
+  - {name: valid_from_ts,                type: TIMESTAMP(6),  nullable: false, pk: true,  description: "Inclusive UTC effective timestamp."}
+  - {name: valid_to_ts,                  type: TIMESTAMP(6),  nullable: false, pk: false, description: "Exclusive UTC superseded timestamp."}
+  - {name: is_current,                   type: BOOLEAN,       nullable: false, pk: false, description: "valid_to_ts = 9999-12-31."}
+  - {name: entity_legal_name,            type: VARCHAR(512),  nullable: false, pk: false, description: "Full registered legal name."}
+  - {name: entity_common_name,           type: VARCHAR(256),  nullable: false, pk: false, description: "Marketing / display name."}
+  - {name: entity_status_code,           type: VARCHAR(16),   nullable: false, pk: false, description: "ACTIVE|INACTIVE|MERGED|LIQUIDATED|DISSOLVED|SUSPENDED."}
+  - {name: entity_type_code,             type: VARCHAR(16),   nullable: false, pk: false, description: "PUB_CO|PRV_CO|FUND|GOVT|MUNI|SUPRA|SPV|TRUST|OTHER."}
+  - {name: entity_country_iso,           type: CHAR(2),       nullable: false, pk: false, description: "ISO 3166-1 alpha-2 country of incorporation."}
+  - {name: entity_country_iso_hq,        type: CHAR(2),       nullable: true,  pk: false, description: "HQ country if different."}
+  - {name: entity_state_code,            type: VARCHAR(8),    nullable: true,  pk: false, description: "Sub-national code (ISO 3166-2 suffix)."}
+  - {name: lei,                          type: CHAR(20),      nullable: true,  pk: false, description: "GLEIF Legal Entity Identifier."}
+  - {name: parent_org_perm_id,           type: BIGINT,        nullable: true,  pk: false, description: "Immediate parent org_perm_id."}
+  - {name: ultimate_parent_org_perm_id,  type: BIGINT,        nullable: true,  pk: false, description: "Ultimate parent org_perm_id."}
+  - {name: successor_org_perm_id,        type: BIGINT,        nullable: true,  pk: false, description: "Surviving entity when status=MERGED."}
+  - {name: predecessor_org_perm_ids,     type: "ARRAY<BIGINT>", nullable: true, pk: false, description: "Entities that merged into this one."}
+  - {name: incorporation_date,           type: DATE,          nullable: true,  pk: false, description: "Date of incorporation."}
+  - {name: delisting_date,               type: DATE,          nullable: true,  pk: false, description: "First date no longer publicly traded anywhere."}
+  - {name: nace_code,                    type: VARCHAR(8),    nullable: true,  pk: false, description: "NACE Rev. 2 industry classification."}
+  - {name: naics_code,                   type: VARCHAR(8),    nullable: true,  pk: false, description: "NAICS 2022 industry classification."}
+  - {name: trbc_industry_code,           type: VARCHAR(10),   nullable: true,  pk: false, description: "TRBC leaf industry; joins to sector_classification."}
+  - {name: website_url,                  type: VARCHAR(512),  nullable: true,  pk: false, description: "Primary corporate website."}
+  - {name: source_change_reason_code,    type: VARCHAR(32),   nullable: false, pk: false, description: "Why this SCD-2 row was created."}
+  - {name: loaded_ts,                    type: TIMESTAMP(6),  nullable: false, pk: false, description: "EDL landing timestamp."}
+joins:
+  - to: lseg_ref.instrument_master
+    on: "entity_master.org_perm_id = instrument_master.org_perm_id"
+    cardinality: one_to_many
+  - to: lseg_ref.country_ref
+    on: "entity_master.entity_country_iso = country_ref.country_iso"
+    cardinality: many_to_one
+  - to: lseg_ref.sector_classification
+    on: "entity_master.trbc_industry_code = sector_classification.trbc_industry_code"
+    cardinality: many_to_one
+  - to: lseg_wsf.company_fundamentals
+    on: "entity_master.org_perm_id = company_fundamentals.org_perm_id"
+    cardinality: one_to_many
+    note: "PIT-band on period_end_date BETWEEN entity_master.valid_from_ts AND valid_to_ts."
+  - to: lseg_ibes.ibes_ticker_xref
+    on: "entity_master.org_perm_id = ibes_ticker_xref.org_perm_id"
+    cardinality: one_to_many
+  - to: lseg_esg.esg_scores
+    on: "entity_master.org_perm_id = esg_scores.org_perm_id"
+    cardinality: one_to_many
+  - to: lseg_ref.entity_master
+    on: "child.parent_org_perm_id = parent.org_perm_id"
+    cardinality: many_to_one
+    note: "Corporate hierarchy self-join."
+catalog_doc_path: docs/lseg-mock-catalog/02-reference-data/ENTITY_MASTER.md

@@ -1,0 +1,66 @@
+table: lseg_drv.options_chain
+domain: derivatives
+description: Listed options reference - one row per option strike/expiry/type.
+source_product: Refinitiv Derivatives Reference (OPRA + ex-US exchanges)
+update_cadence: daily_06_NYT
+temporal_model: scd_type_2
+grain: One row per (instrument_perm_id, valid_from_ts)
+pk: [instrument_perm_id, valid_from_ts]
+columns:
+  - {name: instrument_perm_id,         type: BIGINT,       nullable: false, pk: true}
+  - {name: valid_from_ts,              type: TIMESTAMP(6), nullable: false, pk: true}
+  - {name: valid_to_ts,                type: TIMESTAMP(6), nullable: false, pk: false}
+  - {name: is_current,                 type: BOOLEAN,      nullable: false, pk: false}
+  - {name: underlying_instrument_perm_id, type: BIGINT,    nullable: false, pk: false}
+  - {name: underlying_ric,             type: VARCHAR(16),  nullable: false, pk: false}
+  - {name: option_type_code,           type: CHAR(1),      nullable: false, pk: false, description: "C|P."}
+  - {name: exercise_style_code,        type: VARCHAR(8),   nullable: false, pk: false, description: "AMER|EURO|BERM."}
+  - {name: strike_price,               type: "DECIMAL(18,6)", nullable: false, pk: false}
+  - {name: strike_currency_iso,        type: CHAR(3),      nullable: false, pk: false}
+  - {name: contract_multiplier,        type: "DECIMAL(18,4)", nullable: false, pk: false}
+  - {name: settlement_type_code,       type: VARCHAR(8),   nullable: false, pk: false}
+  - {name: expiration_date,            type: DATE,         nullable: false, pk: false}
+  - {name: expiration_style_code,      type: VARCHAR(16),  nullable: false, pk: false, description: "STANDARD|WEEKLY|QUARTERLY|EOM|FLEX|LEAP."}
+  - {name: listing_date,               type: DATE,         nullable: false, pk: false}
+  - {name: last_trade_date,            type: DATE,         nullable: false, pk: false}
+  - {name: ric,                        type: VARCHAR(32),  nullable: false, pk: false}
+  - {name: opra_symbol,                type: VARCHAR(32),  nullable: true,  pk: false}
+  - {name: exchange_mic,               type: CHAR(4),      nullable: false, pk: false}
+  - {name: is_adjusted,                type: BOOLEAN,      nullable: false, pk: false, description: "TRUE if strike/multiplier adjusted by a corporate action."}
+  - {name: ca_adjustment_event_id,     type: BIGINT,       nullable: true,  pk: false}
+  - {name: loaded_ts,                  type: TIMESTAMP(6), nullable: false, pk: false}
+catalog_doc_path: docs/lseg-mock-catalog/09-derivatives/OPTIONS_CHAIN.md
+
+---
+table: lseg_drv.options_eod_iv
+domain: derivatives
+description: EOD implied vol + Greeks per option contract.
+source_product: Refinitiv Derivatives Analytics
+update_cadence: eod_1730_NYT
+temporal_model: point_in_time
+grain: One row per (instrument_perm_id, trade_date)
+pk: [instrument_perm_id, trade_date]
+columns:
+  - {name: instrument_perm_id,    type: BIGINT,       nullable: false, pk: true}
+  - {name: trade_date,            type: DATE,         nullable: false, pk: true}
+  - {name: settlement_price,      type: "DECIMAL(18,6)", nullable: true, pk: false}
+  - {name: bid_price,             type: "DECIMAL(18,6)", nullable: true, pk: false}
+  - {name: ask_price,             type: "DECIMAL(18,6)", nullable: true, pk: false}
+  - {name: open_interest,         type: BIGINT,       nullable: true,  pk: false}
+  - {name: volume,                type: BIGINT,       nullable: true,  pk: false}
+  - {name: underlying_price,      type: "DECIMAL(18,6)", nullable: false, pk: false}
+  - {name: risk_free_rate_pct,    type: "DECIMAL(9,6)", nullable: false, pk: false}
+  - {name: dividend_yield_pct,    type: "DECIMAL(9,6)", nullable: true, pk: false}
+  - {name: implied_vol_pct,       type: "DECIMAL(9,6)", nullable: true, pk: false}
+  - {name: pricing_model_code,    type: VARCHAR(8),   nullable: false, pk: false, description: "BSM|BS|BAW|TRIN|BIN."}
+  - {name: delta,                 type: "DECIMAL(9,6)", nullable: true, pk: false}
+  - {name: gamma,                 type: "DECIMAL(12,9)", nullable: true, pk: false}
+  - {name: vega,                  type: "DECIMAL(12,6)", nullable: true, pk: false}
+  - {name: theta,                 type: "DECIMAL(12,6)", nullable: true, pk: false}
+  - {name: rho,                   type: "DECIMAL(12,6)", nullable: true, pk: false}
+  - {name: loaded_ts,             type: TIMESTAMP(6), nullable: false, pk: false}
+joins:
+  - to: lseg_drv.options_chain
+    on: "options_eod_iv.instrument_perm_id = options_chain.instrument_perm_id AND options_chain.is_current = TRUE"
+    cardinality: many_to_one
+catalog_doc_path: docs/lseg-mock-catalog/09-derivatives/OPTIONS_CHAIN.md

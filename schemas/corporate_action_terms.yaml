@@ -1,0 +1,25 @@
+table: lseg_ref.corporate_action_terms
+domain: corporate_actions
+description: Corporate-action terms and ratios by event.
+source_product: Refinitiv Corporate Actions
+update_cadence: intraday_15min
+temporal_model: point_in_time
+grain: One row per (ca_event_id, term_seq)
+pk: [ca_event_id, term_seq]
+columns:
+  - {name: ca_event_id, type: BIGINT, nullable: false, pk: true}
+  - {name: term_seq, type: INTEGER, nullable: false, pk: true}
+  - {name: term_type_code, type: VARCHAR(32), nullable: false, pk: false}
+  - {name: from_qty, type: "DECIMAL(18,6)", nullable: true, pk: false}
+  - {name: to_qty, type: "DECIMAL(18,6)", nullable: true, pk: false}
+  - {name: cash_amount, type: "DECIMAL(18,6)", nullable: true, pk: false}
+  - {name: cash_currency_iso, type: CHAR(3), nullable: true, pk: false}
+  - {name: new_instrument_perm_id, type: BIGINT, nullable: true, pk: false}
+  - {name: fractional_treatment_code, type: VARCHAR(32), nullable: true, pk: false}
+  - {name: gross_per_share_amount, type: "DECIMAL(18,6)", nullable: true, pk: false}
+  - {name: withholding_tax_pct, type: "DECIMAL(9,4)", nullable: true, pk: false}
+joins:
+  - to: lseg_ref.corporate_actions
+    on: "corporate_action_terms.ca_event_id = corporate_actions.ca_event_id"
+    cardinality: many_to_one
+catalog_doc_path: docs/lseg-mock-catalog/04-corporate-actions/CORPORATE_ACTIONS.md

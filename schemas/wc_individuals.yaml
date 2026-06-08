@@ -1,0 +1,62 @@
+table: lseg_wc.wc_individuals
+domain: world_check
+description: >
+  Person-level KYC/AML watch records. ALL columns RESTRICTED.
+  Requires LSEG_WC_VIEWER or LSEG_WC_INVESTIGATOR entitlement.
+source_product: LSEG World-Check
+update_cadence: streaming
+temporal_model: scd_type_2
+pii_level: restricted
+restricted: true
+required_entitlement: LSEG_WC_VIEWER
+grain: One row per (wc_subject_id, valid_from_ts)
+pk: [wc_subject_id, valid_from_ts]
+columns:
+  - {name: wc_subject_id,         type: VARCHAR(32),  nullable: false, pk: true, restricted: true}
+  - {name: valid_from_ts,         type: TIMESTAMP(6), nullable: false, pk: true, restricted: true}
+  - {name: valid_to_ts,           type: TIMESTAMP(6), nullable: false, pk: false, restricted: true}
+  - {name: is_current,            type: BOOLEAN,      nullable: false, pk: false, restricted: true}
+  - {name: subject_type_code,     type: VARCHAR(16),  nullable: false, pk: false, restricted: true, description: "INDIVIDUAL."}
+  - {name: full_name,             type: VARCHAR(256), nullable: false, pk: false, restricted: true}
+  - {name: gender_code,           type: CHAR(1),      nullable: true,  pk: false, restricted: true}
+  - {name: date_of_birth,         type: DATE,         nullable: true,  pk: false, restricted: true}
+  - {name: place_of_birth,        type: VARCHAR(128), nullable: true,  pk: false, restricted: true}
+  - {name: nationality_iso_list,  type: "ARRAY<CHAR(2)>", nullable: true, pk: false, restricted: true}
+  - {name: residence_country_iso, type: CHAR(2),      nullable: true,  pk: false, restricted: true}
+  - {name: primary_risk_category_code, type: VARCHAR(16), nullable: false, pk: false, restricted: true, description: "SAN|PEP|RCA|AME|TER|ORG|REG|LAW|SIE|IIO."}
+  - {name: risk_categories,       type: "ARRAY<VARCHAR(16)>", nullable: false, pk: false, restricted: true}
+  - {name: world_check_risk_score, type: SMALLINT,    nullable: true,  pk: false, restricted: true, description: "0-100 vendor score."}
+  - {name: is_deceased,           type: BOOLEAN,      nullable: false, pk: false, restricted: true}
+  - {name: deceased_date,         type: DATE,         nullable: true,  pk: false, restricted: true}
+  - {name: subject_summary,       type: VARCHAR(2048), nullable: true, pk: false, restricted: true}
+  - {name: source_count,          type: INTEGER,      nullable: false, pk: false, restricted: true}
+  - {name: first_added_date,      type: DATE,         nullable: false, pk: false, restricted: true}
+  - {name: last_updated_ts,       type: TIMESTAMP(6), nullable: false, pk: false, restricted: true}
+  - {name: loaded_ts,             type: TIMESTAMP(6), nullable: false, pk: false, restricted: true}
+catalog_doc_path: docs/lseg-mock-catalog/11-world-check/WORLD_CHECK.md
+
+---
+table: lseg_wc.wc_sanctions_listings
+domain: world_check
+description: Active and historical sanctions list memberships. RESTRICTED.
+source_product: LSEG World-Check
+update_cadence: streaming
+temporal_model: scd_type_2
+restricted: true
+required_entitlement: LSEG_WC_VIEWER
+grain: One row per (wc_subject_id, sanctions_list_code, listed_program_code, valid_from_ts)
+pk: [wc_subject_id, sanctions_list_code, listed_program_code, valid_from_ts]
+columns:
+  - {name: wc_subject_id,             type: VARCHAR(32),  nullable: false, pk: true, restricted: true}
+  - {name: sanctions_list_code,       type: VARCHAR(32),  nullable: false, pk: true, restricted: true, description: "OFAC_SDN|OFAC_SSI|UN_CONS|EU_FSF|UK_HMT|CH_SECO|AU_DFAT|CA_OSFI|JP_METI|MX_BLOQ."}
+  - {name: listed_program_code,       type: VARCHAR(32),  nullable: false, pk: true, restricted: true}
+  - {name: valid_from_ts,             type: TIMESTAMP(6), nullable: false, pk: true, restricted: true}
+  - {name: valid_to_ts,               type: TIMESTAMP(6), nullable: false, pk: false, restricted: true}
+  - {name: is_current,                type: BOOLEAN,      nullable: false, pk: false, restricted: true}
+  - {name: listing_authority,         type: VARCHAR(128), nullable: false, pk: false, restricted: true}
+  - {name: official_list_url,         type: VARCHAR(512), nullable: true,  pk: false, restricted: true}
+  - {name: listed_date,               type: DATE,         nullable: false, pk: false, restricted: true}
+  - {name: delisted_date,             type: DATE,         nullable: true,  pk: false, restricted: true}
+  - {name: listing_reason,            type: VARCHAR(2048), nullable: true, pk: false, restricted: true}
+  - {name: loaded_ts,                 type: TIMESTAMP(6), nullable: false, pk: false, restricted: true}
+catalog_doc_path: docs/lseg-mock-catalog/11-world-check/WORLD_CHECK.md

@@ -1,0 +1,428 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "catalog_version": "2026.05.r3",
+  "vendor": "London Stock Exchange Group (LSEG)",
+  "license_tier": "Enterprise",
+  "generated_at": "2026-06-05T00:00:00Z",
+  "domains": [
+    {"code": "reference",           "name": "Reference Data",       "anchor_keys": ["org_perm_id", "instrument_perm_id", "quote_perm_id"]},
+    {"code": "pricing",             "name": "Pricing",              "anchor_keys": ["quote_perm_id"]},
+    {"code": "corporate_actions",   "name": "Corporate Actions",    "anchor_keys": ["instrument_perm_id", "ca_event_id"]},
+    {"code": "fundamentals",        "name": "Fundamentals",         "anchor_keys": ["org_perm_id", "period_end_date"]},
+    {"code": "estimates",           "name": "I/B/E/S Estimates",    "anchor_keys": ["ibes_ticker", "org_perm_id"]},
+    {"code": "esg",                 "name": "ESG",                  "anchor_keys": ["org_perm_id"]},
+    {"code": "fx",                  "name": "FX Rates",             "anchor_keys": ["base_ccy", "quote_ccy"]},
+    {"code": "fixed_income",        "name": "Fixed Income",         "anchor_keys": ["instrument_perm_id", "org_perm_id"]},
+    {"code": "derivatives",         "name": "Derivatives",          "anchor_keys": ["instrument_perm_id", "futures_series_code"]},
+    {"code": "funds",               "name": "Funds (Lipper)",       "anchor_keys": ["lipper_id", "instrument_perm_id"]},
+    {"code": "world_check",         "name": "World-Check (KYC/AML)", "anchor_keys": ["wc_subject_id"]}
+  ],
+  "tables": [
+    {
+      "fqn": "lseg_ref.entity_master",
+      "domain": "reference",
+      "schema_path": "schemas/entity_master.yaml",
+      "doc_path": "docs/lseg-mock-catalog/02-reference-data/ENTITY_MASTER.md",
+      "temporal_model": "scd_type_2",
+      "update_cadence": "daily_06_NYT",
+      "approx_row_count": 8500000,
+      "tags": ["entity", "legal_entity", "perm_id", "scd2", "anchor"]
+    },
+    {
+      "fqn": "lseg_ref.instrument_master",
+      "domain": "reference",
+      "schema_path": "schemas/instrument_master.yaml",
+      "doc_path": "docs/lseg-mock-catalog/02-reference-data/INSTRUMENT_MASTER.md",
+      "temporal_model": "scd_type_2",
+      "update_cadence": "daily_06_NYT",
+      "approx_row_count": 14200000,
+      "tags": ["instrument", "isin", "cusip", "figi", "scd2", "anchor"]
+    },
+    {
+      "fqn": "lseg_ref.quote_master",
+      "domain": "reference",
+      "schema_path": "schemas/instrument_master.yaml",
+      "doc_path": "docs/lseg-mock-catalog/02-reference-data/INSTRUMENT_MASTER.md",
+      "temporal_model": "scd_type_2",
+      "update_cadence": "daily_06_NYT",
+      "approx_row_count": 41600000,
+      "tags": ["quote", "listing", "ric", "mic", "sedol", "scd2"]
+    },
+    {
+      "fqn": "lseg_ref.ric_history",
+      "domain": "reference",
+      "schema_path": "schemas/ric_history.yaml",
+      "doc_path": "docs/lseg-mock-catalog/02-reference-data/INSTRUMENT_MASTER.md",
+      "temporal_model": "scd_type_2",
+      "update_cadence": "daily_06_NYT",
+      "approx_row_count": 63000000,
+      "tags": ["ric", "audit_history"]
+    },
+    {
+      "fqn": "lseg_ref.exchange_ref",
+      "domain": "reference",
+      "schema_path": "schemas/exchange_ref.yaml",
+      "doc_path": "docs/lseg-mock-catalog/02-reference-data/EXCHANGE_REF.md",
+      "temporal_model": "scd_type_2",
+      "update_cadence": "weekly_sunday_04_NYT",
+      "approx_row_count": 6100,
+      "tags": ["mic", "exchange", "lookup"]
+    },
+    {
+      "fqn": "lseg_ref.country_ref",
+      "domain": "reference",
+      "schema_path": "schemas/country_ref.yaml",
+      "doc_path": "docs/lseg-mock-catalog/02-reference-data/CURRENCY_AND_COUNTRY_REF.md",
+      "temporal_model": "scd_type_2",
+      "update_cadence": "monthly_1bd",
+      "approx_row_count": 250,
+      "tags": ["country", "iso_3166", "lookup"]
+    },
+    {
+      "fqn": "lseg_ref.currency_ref",
+      "domain": "reference",
+      "schema_path": "schemas/currency_ref.yaml",
+      "doc_path": "docs/lseg-mock-catalog/02-reference-data/CURRENCY_AND_COUNTRY_REF.md",
+      "temporal_model": "scd_type_2",
+      "update_cadence": "monthly_1bd",
+      "approx_row_count": 280,
+      "tags": ["currency", "iso_4217", "lookup"]
+    },
+    {
+      "fqn": "lseg_ref.sector_classification",
+      "domain": "reference",
+      "schema_path": "schemas/sector_classification.yaml",
+      "doc_path": "docs/lseg-mock-catalog/02-reference-data/SECTOR_CLASSIFICATION.md",
+      "temporal_model": "scd_type_2",
+      "update_cadence": "quarterly_15th",
+      "approx_row_count": 898,
+      "tags": ["trbc", "sector", "industry", "classification"]
+    },
+    {
+      "fqn": "lseg_dss.eod_pricing",
+      "domain": "pricing",
+      "schema_path": "schemas/eod_pricing.yaml",
+      "doc_path": "docs/lseg-mock-catalog/03-pricing/EOD_PRICING.md",
+      "temporal_model": "point_in_time",
+      "update_cadence": "eod_region_local",
+      "approx_row_count": 2300000000,
+      "tags": ["pricing", "ohlc", "close", "adjusted", "eod"]
+    },
+    {
+      "fqn": "lseg_dss.eod_pricing_corrections",
+      "domain": "pricing",
+      "schema_path": "schemas/eod_pricing_corrections.yaml",
+      "doc_path": "docs/lseg-mock-catalog/03-pricing/EOD_PRICING.md",
+      "temporal_model": "point_in_time",
+      "update_cadence": "intraday_corrections",
+      "approx_row_count": 5800000,
+      "tags": ["pricing", "corrections", "restatement"]
+    },
+    {
+      "fqn": "lseg_tick.tick_trades",
+      "domain": "pricing",
+      "schema_path": "schemas/tick_trades.yaml",
+      "doc_path": "docs/lseg-mock-catalog/03-pricing/INTRADAY_TICK.md",
+      "temporal_model": "point_in_time",
+      "update_cadence": "streaming",
+      "approx_row_count": 38000000000,
+      "tags": ["tick", "trades", "intraday", "rth"]
+    },
+    {
+      "fqn": "lseg_tick.tick_quotes",
+      "domain": "pricing",
+      "schema_path": "schemas/tick_quotes.yaml",
+      "doc_path": "docs/lseg-mock-catalog/03-pricing/INTRADAY_TICK.md",
+      "temporal_model": "point_in_time",
+      "update_cadence": "streaming",
+      "approx_row_count": 410000000000,
+      "tags": ["tick", "quotes", "nbbo", "intraday"]
+    },
+    {
+      "fqn": "lseg_fx.fx_rates_eod",
+      "domain": "fx",
+      "schema_path": "schemas/fx_rates_eod.yaml",
+      "doc_path": "docs/lseg-mock-catalog/03-pricing/FX_RATES.md",
+      "temporal_model": "point_in_time",
+      "update_cadence": "eod_fixings",
+      "approx_row_count": 800000,
+      "tags": ["fx", "wmr", "fixing", "spot"]
+    },
+    {
+      "fqn": "lseg_fx.fx_rates_intraday",
+      "domain": "fx",
+      "schema_path": "schemas/fx_rates_intraday.yaml",
+      "doc_path": "docs/lseg-mock-catalog/03-pricing/FX_RATES.md",
+      "temporal_model": "point_in_time",
+      "update_cadence": "streaming",
+      "approx_row_count": 50000000,
+      "tags": ["fx", "intraday", "streaming"]
+    },
+    {
+      "fqn": "lseg_ref.corporate_actions",
+      "domain": "corporate_actions",
+      "schema_path": "schemas/corporate_actions.yaml",
+      "doc_path": "docs/lseg-mock-catalog/04-corporate-actions/CORPORATE_ACTIONS.md",
+      "temporal_model": "point_in_time",
+      "update_cadence": "intraday_15min",
+      "approx_row_count": 24000000,
+      "tags": ["ca", "dividend", "split", "spinoff", "merger"]
+    },
+    {
+      "fqn": "lseg_ref.corporate_action_terms",
+      "domain": "corporate_actions",
+      "schema_path": "schemas/corporate_action_terms.yaml",
+      "doc_path": "docs/lseg-mock-catalog/04-corporate-actions/CORPORATE_ACTIONS.md",
+      "temporal_model": "point_in_time",
+      "update_cadence": "intraday_15min",
+      "approx_row_count": 31000000,
+      "tags": ["ca", "terms", "child"]
+    },
+    {
+      "fqn": "lseg_ref.corporate_action_elections",
+      "domain": "corporate_actions",
+      "schema_path": "schemas/corporate_action_elections.yaml",
+      "doc_path": "docs/lseg-mock-catalog/04-corporate-actions/CORPORATE_ACTIONS.md",
+      "temporal_model": "point_in_time",
+      "update_cadence": "intraday_15min",
+      "approx_row_count": 2100000,
+      "tags": ["ca", "voluntary", "election"]
+    },
+    {
+      "fqn": "lseg_wsf.company_fundamentals",
+      "domain": "fundamentals",
+      "schema_path": "schemas/company_fundamentals.yaml",
+      "doc_path": "docs/lseg-mock-catalog/05-fundamentals/COMPANY_FUNDAMENTALS.md",
+      "temporal_model": "bitemporal",
+      "update_cadence": "filing_driven",
+      "approx_row_count": 89000000,
+      "tags": ["fundamentals", "worldscope", "bitemporal", "filings"]
+    },
+    {
+      "fqn": "lseg_ibes.ibes_ticker_xref",
+      "domain": "estimates",
+      "schema_path": "schemas/ibes_ticker_xref.yaml",
+      "doc_path": "docs/lseg-mock-catalog/06-estimates-ibes/IBES_CONSENSUS.md",
+      "temporal_model": "scd_type_2",
+      "update_cadence": "nightly_02_NYT",
+      "approx_row_count": 220000,
+      "tags": ["ibes", "xref", "rosetta"]
+    },
+    {
+      "fqn": "lseg_ibes.estimate_consensus",
+      "domain": "estimates",
+      "schema_path": "schemas/estimate_consensus.yaml",
+      "doc_path": "docs/lseg-mock-catalog/06-estimates-ibes/IBES_CONSENSUS.md",
+      "temporal_model": "point_in_time",
+      "update_cadence": "nightly_02_NYT",
+      "approx_row_count": 18000000,
+      "tags": ["ibes", "consensus", "estimates"]
+    },
+    {
+      "fqn": "lseg_ibes.estimate_detail",
+      "domain": "estimates",
+      "schema_path": "schemas/estimate_detail.yaml",
+      "doc_path": "docs/lseg-mock-catalog/06-estimates-ibes/IBES_CONSENSUS.md",
+      "temporal_model": "point_in_time",
+      "update_cadence": "nightly_02_NYT",
+      "approx_row_count": 410000000,
+      "tags": ["ibes", "analyst", "detail"],
+      "has_restricted_columns": true
+    },
+    {
+      "fqn": "lseg_esg.esg_scores",
+      "domain": "esg",
+      "schema_path": "schemas/esg_scores.yaml",
+      "doc_path": "docs/lseg-mock-catalog/07-esg/ESG_SCORES.md",
+      "temporal_model": "bitemporal",
+      "update_cadence": "monthly_5bd",
+      "approx_row_count": 3000000,
+      "tags": ["esg", "asset4", "scores", "carbon"]
+    },
+    {
+      "fqn": "lseg_fi.bond_terms",
+      "domain": "fixed_income",
+      "schema_path": "schemas/bond_terms.yaml",
+      "doc_path": "docs/lseg-mock-catalog/08-fixed-income/BOND_TERMS.md",
+      "temporal_model": "scd_type_2",
+      "update_cadence": "intraday_with_daily_recon",
+      "approx_row_count": 7800000,
+      "tags": ["bond", "fixed_income", "coupon", "maturity", "callable"]
+    },
+    {
+      "fqn": "lseg_fi.bond_call_schedule",
+      "domain": "fixed_income",
+      "schema_path": "schemas/bond_call_schedule.yaml",
+      "doc_path": "docs/lseg-mock-catalog/08-fixed-income/BOND_TERMS.md",
+      "temporal_model": "point_in_time",
+      "update_cadence": "intraday_with_daily_recon",
+      "approx_row_count": 4200000,
+      "tags": ["bond", "callable", "schedule"]
+    },
+    {
+      "fqn": "lseg_fi.bond_cashflow_schedule",
+      "domain": "fixed_income",
+      "schema_path": "schemas/bond_cashflow_schedule.yaml",
+      "doc_path": "docs/lseg-mock-catalog/08-fixed-income/BOND_TERMS.md",
+      "temporal_model": "point_in_time",
+      "update_cadence": "daily",
+      "approx_row_count": 380000000,
+      "tags": ["bond", "cashflow", "coupon", "projection"]
+    },
+    {
+      "fqn": "lseg_fi.credit_ratings_history",
+      "domain": "fixed_income",
+      "schema_path": "schemas/credit_ratings_history.yaml",
+      "doc_path": "docs/lseg-mock-catalog/08-fixed-income/CREDIT_RATINGS.md",
+      "temporal_model": "scd_type_2",
+      "update_cadence": "intraday_with_eod_recon",
+      "approx_row_count": 38000000,
+      "tags": ["rating", "sp", "moody", "fitch", "composite"]
+    },
+    {
+      "fqn": "lseg_fi.yield_curves_eod",
+      "domain": "fixed_income",
+      "schema_path": "schemas/yield_curves_eod.yaml",
+      "doc_path": "docs/lseg-mock-catalog/08-fixed-income/YIELD_CURVES.md",
+      "temporal_model": "point_in_time",
+      "update_cadence": "eod_region_local",
+      "approx_row_count": 75000000,
+      "tags": ["yield_curve", "sofr", "sonia", "sovereign", "swap", "cds"]
+    },
+    {
+      "fqn": "lseg_drv.futures_series_chain",
+      "domain": "derivatives",
+      "schema_path": "schemas/futures_series_chain.yaml",
+      "doc_path": "docs/lseg-mock-catalog/09-derivatives/FUTURES_CONTRACTS.md",
+      "temporal_model": "scd_type_2",
+      "update_cadence": "daily_06_NYT",
+      "approx_row_count": 2400,
+      "tags": ["futures", "series", "chain"]
+    },
+    {
+      "fqn": "lseg_drv.futures_contracts",
+      "domain": "derivatives",
+      "schema_path": "schemas/futures_contracts.yaml",
+      "doc_path": "docs/lseg-mock-catalog/09-derivatives/FUTURES_CONTRACTS.md",
+      "temporal_model": "scd_type_2",
+      "update_cadence": "daily_06_NYT",
+      "approx_row_count": 1200000,
+      "tags": ["futures", "contract", "expiration", "front_month"]
+    },
+    {
+      "fqn": "lseg_drv.options_chain",
+      "domain": "derivatives",
+      "schema_path": "schemas/options_chain.yaml",
+      "doc_path": "docs/lseg-mock-catalog/09-derivatives/OPTIONS_CHAIN.md",
+      "temporal_model": "scd_type_2",
+      "update_cadence": "daily_06_NYT",
+      "approx_row_count": 120000000,
+      "tags": ["options", "strike", "expiration", "opra"]
+    },
+    {
+      "fqn": "lseg_drv.options_eod_iv",
+      "domain": "derivatives",
+      "schema_path": "schemas/options_chain.yaml",
+      "doc_path": "docs/lseg-mock-catalog/09-derivatives/OPTIONS_CHAIN.md",
+      "temporal_model": "point_in_time",
+      "update_cadence": "eod_1730_NYT",
+      "approx_row_count": 85000000,
+      "tags": ["options", "implied_vol", "greeks", "eod"]
+    },
+    {
+      "fqn": "lseg_lipper.fund_master",
+      "domain": "funds",
+      "schema_path": "schemas/fund_master.yaml",
+      "doc_path": "docs/lseg-mock-catalog/10-lipper/LIPPER_FUNDS.md",
+      "temporal_model": "scd_type_2",
+      "update_cadence": "daily",
+      "approx_row_count": 410000,
+      "tags": ["fund", "lipper", "share_class", "ucits", "etf"]
+    },
+    {
+      "fqn": "lseg_lipper.fund_nav_history",
+      "domain": "funds",
+      "schema_path": "schemas/fund_nav_history.yaml",
+      "doc_path": "docs/lseg-mock-catalog/10-lipper/LIPPER_FUNDS.md",
+      "temporal_model": "point_in_time",
+      "update_cadence": "daily_t_plus_1",
+      "approx_row_count": 1800000000,
+      "tags": ["fund", "nav", "daily"]
+    },
+    {
+      "fqn": "lseg_lipper.fund_performance_monthly",
+      "domain": "funds",
+      "schema_path": "schemas/fund_performance_monthly.yaml",
+      "doc_path": "docs/lseg-mock-catalog/10-lipper/LIPPER_FUNDS.md",
+      "temporal_model": "point_in_time",
+      "update_cadence": "monthly_3bd",
+      "approx_row_count": 95000000,
+      "tags": ["fund", "performance", "sharpe", "leader"]
+    },
+    {
+      "fqn": "lseg_lipper.fund_holdings_quarterly",
+      "domain": "funds",
+      "schema_path": "schemas/fund_holdings_quarterly.yaml",
+      "doc_path": "docs/lseg-mock-catalog/10-lipper/LIPPER_FUNDS.md",
+      "temporal_model": "point_in_time",
+      "update_cadence": "quarterly_with_lag",
+      "approx_row_count": 62000000,
+      "tags": ["fund", "holdings", "positions", "disclosure"]
+    },
+    {
+      "fqn": "lseg_wc.wc_individuals",
+      "domain": "world_check",
+      "schema_path": "schemas/wc_individuals.yaml",
+      "doc_path": "docs/lseg-mock-catalog/11-world-check/WORLD_CHECK.md",
+      "temporal_model": "scd_type_2",
+      "update_cadence": "streaming",
+      "approx_row_count": 6100000,
+      "tags": ["world_check", "individual", "kyc", "aml"],
+      "has_restricted_columns": true,
+      "required_entitlement": "LSEG_WC_VIEWER"
+    },
+    {
+      "fqn": "lseg_wc.wc_organisations",
+      "domain": "world_check",
+      "schema_path": "schemas/wc_organisations.yaml",
+      "doc_path": "docs/lseg-mock-catalog/11-world-check/WORLD_CHECK.md",
+      "temporal_model": "scd_type_2",
+      "update_cadence": "streaming",
+      "approx_row_count": 2700000,
+      "tags": ["world_check", "organisation", "kyc", "aml", "lei"],
+      "has_restricted_columns": true,
+      "required_entitlement": "LSEG_WC_VIEWER"
+    },
+    {
+      "fqn": "lseg_wc.wc_sanctions_listings",
+      "domain": "world_check",
+      "schema_path": "schemas/wc_sanctions_listings.yaml",
+      "doc_path": "docs/lseg-mock-catalog/11-world-check/WORLD_CHECK.md",
+      "temporal_model": "scd_type_2",
+      "update_cadence": "streaming",
+      "approx_row_count": 14500000,
+      "tags": ["world_check", "sanctions", "ofac", "un", "eu"],
+      "has_restricted_columns": true,
+      "required_entitlement": "LSEG_WC_VIEWER"
+    },
+    {
+      "fqn": "lseg_wc.wc_pep_listings",
+      "domain": "world_check",
+      "schema_path": "schemas/wc_pep_listings.yaml",
+      "doc_path": "docs/lseg-mock-catalog/11-world-check/WORLD_CHECK.md",
+      "temporal_model": "scd_type_2",
+      "update_cadence": "streaming",
+      "approx_row_count": 8200000,
+      "tags": ["world_check", "pep", "politically_exposed"],
+      "has_restricted_columns": true,
+      "required_entitlement": "LSEG_WC_VIEWER"
+    }
+  ],
+  "global_conventions": {
+    "timestamps": "All *_ts columns are UTC.",
+    "monetary_units": "Always paired with *_ccy ISO 4217 column. Stored in units, not thousands/millions.",
+    "scd2_sentinel_to_ts": "9999-12-31 00:00:00",
+    "default_pit_predicate": ":as_of_ts BETWEEN valid_from_ts AND valid_to_ts",
+    "default_restated_predicate": "is_current_version = TRUE"
+  }
+}

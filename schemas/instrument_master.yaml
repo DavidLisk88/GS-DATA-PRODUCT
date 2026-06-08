@@ -1,0 +1,104 @@
+table: lseg_ref.instrument_master
+domain: reference
+description: >
+  One row per issued security per validity period (SCD-2). Cross-references
+  to ISIN, CUSIP, FIGI + asset-class metadata. Bridge between instrument-level
+  and entity-level data.
+source_product: Refinitiv Reference Data (DSS feed RefDataPro_Instrument_v3)
+update_cadence: daily_06_NYT
+temporal_model: scd_type_2
+pii_level: none
+grain: One row per instrument_perm_id per validity period
+pk:
+  - instrument_perm_id
+  - valid_from_ts
+partitioned_by: asset_class_code
+columns:
+  - {name: instrument_perm_id,       type: BIGINT,        nullable: false, pk: true}
+  - {name: valid_from_ts,            type: TIMESTAMP(6),  nullable: false, pk: true}
+  - {name: valid_to_ts,              type: TIMESTAMP(6),  nullable: false, pk: false}
+  - {name: is_current,               type: BOOLEAN,       nullable: false, pk: false}
+  - {name: org_perm_id,              type: BIGINT,        nullable: false, pk: false, description: "Issuer org_perm_id."}
+  - {name: asset_class_code,         type: VARCHAR(8),    nullable: false, pk: false, description: "EQTY|PREF|BOND|CONV|WARRANT|ETF|FUND|FUT|OPT|IDX|FX."}
+  - {name: instrument_subtype_code,  type: VARCHAR(16),   nullable: true,  pk: false, description: "E.g. COMMON|ADR|GDR|CLASS_A|CLASS_C|MTN|SUKUK."}
+  - {name: instrument_name,          type: VARCHAR(256),  nullable: false, pk: false}
+  - {name: currency_iso,             type: CHAR(3),       nullable: false, pk: false, description: "Denomination currency (ISO 4217)."}
+  - {name: country_of_issue_iso,     type: CHAR(2),       nullable: false, pk: false}
+  - {name: isin,                     type: CHAR(12),      nullable: true,  pk: false}
+  - {name: cusip,                    type: CHAR(9),       nullable: true,  pk: false}
+  - {name: composite_figi,           type: CHAR(12),      nullable: true,  pk: false}
+  - {name: share_class_figi,         type: CHAR(12),      nullable: true,  pk: false}
+  - {name: issue_date,               type: DATE,          nullable: true,  pk: false}
+  - {name: maturity_date,            type: DATE,          nullable: true,  pk: false, description: "Fixed-income only."}
+  - {name: coupon_rate_pct,          type: "DECIMAL(9,6)", nullable: true, pk: false}
+  - {name: coupon_frequency_code,    type: VARCHAR(8),    nullable: true,  pk: false}
+  - {name: face_value,               type: "DECIMAL(18,4)", nullable: true, pk: false}
+  - {name: shares_outstanding,       type: BIGINT,        nullable: true,  pk: false, description: "Latest reported (equity only)."}
+  - {name: instrument_status_code,   type: VARCHAR(16),   nullable: false, pk: false, description: "ACTIVE|MATURED|CALLED|DEFAULTED|SUSPENDED|WITHDRAWN."}
+  - {name: is_primary_security,      type: BOOLEAN,       nullable: false, pk: false}
+  - {name: cfi_code,                 type: CHAR(6),       nullable: true,  pk: false, description: "ISO 10962 CFI."}
+  - {name: source_change_reason_code,type: VARCHAR(32),   nullable: false, pk: false}
+  - {name: loaded_ts,                type: TIMESTAMP(6),  nullable: false, pk: false}
+joins:
+  - to: lseg_ref.entity_master
+    on: "instrument_master.org_perm_id = entity_master.org_perm_id"
+    cardinality: many_to_one
+  - to: lseg_ref.quote_master
+    on: "instrument_master.instrument_perm_id = quote_master.instrument_perm_id"
+    cardinality: one_to_many
+  - to: lseg_ref.corporate_actions
+    on: "instrument_master.instrument_perm_id = corporate_actions.instrument_perm_id"
+    cardinality: one_to_many
+catalog_doc_path: docs/lseg-mock-catalog/02-reference-data/INSTRUMENT_MASTER.md
+---
+table: lseg_ref.quote_master
+domain: reference
+description: >
+  One row per listing of an instrument on a venue per validity period (SCD-2).
+  Joins pricing data to reference.
+source_product: Refinitiv Reference Data
+update_cadence: daily_06_NYT
+temporal_model: scd_type_2
+pii_level: none
+grain: One row per quote_perm_id per validity period
+pk:
+  - quote_perm_id
+  - valid_from_ts
+partitioned_by: mic
+columns:
+  - {name: quote_perm_id,         type: BIGINT,        nullable: false, pk: true}
+  - {name: valid_from_ts,         type: TIMESTAMP(6),  nullable: false, pk: true}
+  - {name: valid_to_ts,           type: TIMESTAMP(6),  nullable: false, pk: false}
+  - {name: is_current,            type: BOOLEAN,       nullable: false, pk: false}
+  - {name: instrument_perm_id,    type: BIGINT,        nullable: false, pk: false}
+  - {name: ric,                   type: VARCHAR(20),   nullable: false, pk: false}
+  - {name: mic,                   type: CHAR(4),       nullable: false, pk: false}
+  - {name: trading_currency_iso,  type: CHAR(3),       nullable: false, pk: false}
+  - {name: lot_size,              type: INTEGER,       nullable: true,  pk: false}
+  - {name: tick_size_rule_code,   type: VARCHAR(32),   nullable: true,  pk: false}
+  - {name: is_primary_listing,    type: BOOLEAN,       nullable: false, pk: false}
+  - {name: is_consolidated_tape,  type: BOOLEAN,       nullable: false, pk: false}
+  - {name: listing_date,          type: DATE,          nullable: true,  pk: false}
+  - {name: delisting_date,        type: DATE,          nullable: true,  pk: false}
+  - {name: quote_status_code,     type: VARCHAR(16),   nullable: false, pk: false}
+  - {name: sedol,                 type: CHAR(7),       nullable: true,  pk: false}
+  - {name: exchange_ticker,       type: VARCHAR(16),   nullable: true,  pk: false}
+  - {name: figi,                  type: CHAR(12),      nullable: true,  pk: false}
+  - {name: loaded_ts,             type: TIMESTAMP(6),  nullable: false, pk: false}
+joins:
+  - to: lseg_ref.instrument_master
+    on: "quote_master.instrument_perm_id = instrument_master.instrument_perm_id"
+    cardinality: many_to_one
+  - to: lseg_ref.exchange_ref
+    on: "quote_master.mic = exchange_ref.mic"
+    cardinality: many_to_one
+  - to: lseg_dss.eod_pricing
+    on: "quote_master.quote_perm_id = eod_pricing.quote_perm_id"
+    cardinality: one_to_many
+  - to: lseg_tick.tick_trades
+    on: "quote_master.quote_perm_id = tick_trades.quote_perm_id"
+    cardinality: one_to_many
+  - to: lseg_ref.ric_history
+    on: "quote_master.quote_perm_id = ric_history.quote_perm_id"
+    cardinality: one_to_many
+catalog_doc_path: docs/lseg-mock-catalog/02-reference-data/INSTRUMENT_MASTER.md

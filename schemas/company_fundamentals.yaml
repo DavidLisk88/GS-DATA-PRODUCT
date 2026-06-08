@@ -1,0 +1,71 @@
+table: lseg_wsf.company_fundamentals
+domain: fundamentals
+description: >
+  Standardised point-in-time corporate fundamentals (P&L, balance sheet,
+  cash flow). Bitemporal: every (company, period, period-type) carries
+  multiple versions as restatements arrive.
+source_product: Worldscope Fundamentals (DSS feed WS_Fund_v6)
+update_cadence: filing_driven
+temporal_model: bitemporal
+pii_level: none
+grain: One row per (org_perm_id, period_end_date, fiscal_period_type_code, valid_from_ts)
+pk:
+  - org_perm_id
+  - period_end_date
+  - fiscal_period_type_code
+  - valid_from_ts
+partitioned_by: period_end_year
+clustered_by:
+  - org_perm_id
+columns:
+  - {name: org_perm_id,                type: BIGINT,         nullable: false, pk: true}
+  - {name: period_end_date,            type: DATE,           nullable: false, pk: true}
+  - {name: fiscal_period_type_code,    type: VARCHAR(8),     nullable: false, pk: true, description: "FY|SA|Q1|Q2|Q3|Q4|LTM|YTD|IFY."}
+  - {name: valid_from_ts,              type: TIMESTAMP(6),   nullable: false, pk: true}
+  - {name: valid_to_ts,                type: TIMESTAMP(6),   nullable: false, pk: false}
+  - {name: is_current_version,         type: BOOLEAN,        nullable: false, pk: false}
+  - {name: fiscal_year,                type: SMALLINT,       nullable: false, pk: false}
+  - {name: report_currency_iso,        type: CHAR(3),        nullable: false, pk: false}
+  - {name: report_filing_date,         type: DATE,           nullable: true,  pk: false}
+  - {name: report_restatement_flag,    type: BOOLEAN,        nullable: false, pk: false}
+  - {name: accounting_standard_code,   type: VARCHAR(8),     nullable: false, pk: false, description: "IFRS|USGAAP|JGAAP|INDAS|CHGAAP|OTHER."}
+  - {name: audit_status_code,          type: VARCHAR(16),    nullable: true,  pk: false}
+  - {name: revenue,                    type: "DECIMAL(22,2)", nullable: true, pk: false}
+  - {name: cost_of_revenue,            type: "DECIMAL(22,2)", nullable: true, pk: false}
+  - {name: gross_profit,               type: "DECIMAL(22,2)", nullable: true, pk: false}
+  - {name: operating_expenses,         type: "DECIMAL(22,2)", nullable: true, pk: false}
+  - {name: operating_income,           type: "DECIMAL(22,2)", nullable: true, pk: false}
+  - {name: ebitda,                     type: "DECIMAL(22,2)", nullable: true, pk: false}
+  - {name: interest_expense,           type: "DECIMAL(22,2)", nullable: true, pk: false}
+  - {name: income_before_tax,          type: "DECIMAL(22,2)", nullable: true, pk: false}
+  - {name: tax_expense,                type: "DECIMAL(22,2)", nullable: true, pk: false}
+  - {name: net_income,                 type: "DECIMAL(22,2)", nullable: true, pk: false}
+  - {name: net_income_to_minorities,   type: "DECIMAL(22,2)", nullable: true, pk: false}
+  - {name: eps_basic,                  type: "DECIMAL(18,6)", nullable: true, pk: false}
+  - {name: eps_diluted,                type: "DECIMAL(18,6)", nullable: true, pk: false}
+  - {name: shares_basic_weighted_avg,  type: BIGINT,          nullable: true, pk: false}
+  - {name: shares_diluted_weighted_avg,type: BIGINT,          nullable: true, pk: false}
+  - {name: revenue_usd,                type: "DECIMAL(22,2)", nullable: true, pk: false, description: "FX-translated at period-end WMR_LON_4PM."}
+  - {name: net_income_usd,             type: "DECIMAL(22,2)", nullable: true, pk: false}
+  - {name: balance_sheet_assets_total, type: "DECIMAL(22,2)", nullable: true, pk: false}
+  - {name: balance_sheet_liab_total,   type: "DECIMAL(22,2)", nullable: true, pk: false}
+  - {name: balance_sheet_equity_total, type: "DECIMAL(22,2)", nullable: true, pk: false}
+  - {name: cash_and_equivalents,       type: "DECIMAL(22,2)", nullable: true, pk: false}
+  - {name: total_debt,                 type: "DECIMAL(22,2)", nullable: true, pk: false}
+  - {name: cfo,                        type: "DECIMAL(22,2)", nullable: true, pk: false}
+  - {name: cfi,                        type: "DECIMAL(22,2)", nullable: true, pk: false}
+  - {name: cff,                        type: "DECIMAL(22,2)", nullable: true, pk: false}
+  - {name: capex,                      type: "DECIMAL(22,2)", nullable: true, pk: false}
+  - {name: free_cash_flow,             type: "DECIMAL(22,2)", nullable: true, pk: false}
+  - {name: period_end_year,            type: SMALLINT,        nullable: false, pk: false, description: "Partition column."}
+  - {name: loaded_ts,                  type: TIMESTAMP(6),    nullable: false, pk: false}
+joins:
+  - to: lseg_ref.entity_master
+    on: "company_fundamentals.org_perm_id = entity_master.org_perm_id"
+    cardinality: many_to_one
+    note: "PIT band on period_end_date BETWEEN entity_master.valid_from_ts AND valid_to_ts."
+  - to: lseg_ibes.ibes_ticker_xref
+    on: "company_fundamentals.org_perm_id = ibes_ticker_xref.org_perm_id"
+    cardinality: many_to_many
+    note: "Filter by ibes_region_code to disambiguate."
+catalog_doc_path: docs/lseg-mock-catalog/05-fundamentals/COMPANY_FUNDAMENTALS.md

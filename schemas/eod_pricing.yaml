@@ -1,0 +1,55 @@
+table: lseg_dss.eod_pricing
+domain: pricing
+description: >
+  Official end-of-day pricing — OHLC, volume, VWAP, adjusted variants.
+  Listing-level, one row per quote_perm_id per local trading date.
+source_product: DataScope Select — EOD Pricing v4
+update_cadence: eod_region_local
+temporal_model: point_in_time
+pii_level: none
+grain: One row per (quote_perm_id, price_date)
+pk:
+  - quote_perm_id
+  - price_date
+partitioned_by: price_date_month
+clustered_by:
+  - quote_perm_id
+columns:
+  - {name: quote_perm_id,           type: BIGINT,         nullable: false, pk: true}
+  - {name: price_date,              type: DATE,           nullable: false, pk: true, description: "Local trading date on the listing's venue."}
+  - {name: ric_as_of,               type: VARCHAR(20),    nullable: false, pk: false, description: "Snapshot of RIC in effect on price_date."}
+  - {name: mic,                     type: CHAR(4),        nullable: false, pk: false}
+  - {name: trading_currency_iso,    type: CHAR(3),        nullable: false, pk: false}
+  - {name: open_price,              type: "DECIMAL(18,6)", nullable: true,  pk: false}
+  - {name: high_price,              type: "DECIMAL(18,6)", nullable: true,  pk: false}
+  - {name: low_price,               type: "DECIMAL(18,6)", nullable: true,  pk: false}
+  - {name: close_price,             type: "DECIMAL(18,6)", nullable: true,  pk: false, description: "Official closing price per venue rules."}
+  - {name: last_trade_price,        type: "DECIMAL(18,6)", nullable: true,  pk: false}
+  - {name: bid_close,               type: "DECIMAL(18,6)", nullable: true,  pk: false}
+  - {name: ask_close,               type: "DECIMAL(18,6)", nullable: true,  pk: false}
+  - {name: mid_close,               type: "DECIMAL(18,6)", nullable: true,  pk: false}
+  - {name: vwap,                    type: "DECIMAL(18,6)", nullable: true,  pk: false}
+  - {name: volume,                  type: BIGINT,         nullable: true,  pk: false}
+  - {name: trade_count,             type: INTEGER,        nullable: true,  pk: false}
+  - {name: turnover,                type: "DECIMAL(22,4)", nullable: true,  pk: false}
+  - {name: close_adj_price,         type: "DECIMAL(18,6)", nullable: true,  pk: false, description: "Adjusted for splits + dividends + spin-offs (CRSP-style)."}
+  - {name: close_adj_split_only,    type: "DECIMAL(18,6)", nullable: true,  pk: false}
+  - {name: cumulative_adj_factor,   type: "DECIMAL(18,10)", nullable: true, pk: false}
+  - {name: settlement_price,        type: "DECIMAL(18,6)", nullable: true,  pk: false, description: "Derivatives only."}
+  - {name: is_no_trade_day,         type: BOOLEAN,        nullable: false, pk: false}
+  - {name: is_estimated,            type: BOOLEAN,        nullable: false, pk: false}
+  - {name: quality_flag_code,       type: VARCHAR(16),    nullable: false, pk: false, description: "OK|STALE|WIDE_SPREAD|LOW_VOLUME|CORRECTED|ESTIMATED."}
+  - {name: vendor_received_ts,      type: TIMESTAMP(6),   nullable: false, pk: false}
+  - {name: loaded_ts,               type: TIMESTAMP(6),   nullable: false, pk: false}
+joins:
+  - to: lseg_ref.quote_master
+    on: "eod_pricing.quote_perm_id = quote_master.quote_perm_id"
+    cardinality: many_to_one
+  - to: lseg_dss.eod_pricing_corrections
+    on: "eod_pricing.quote_perm_id = eod_pricing_corrections.quote_perm_id AND eod_pricing.price_date = eod_pricing_corrections.price_date"
+    cardinality: one_to_many
+  - to: lseg_fx.fx_rates_eod
+    on: "fx_rates_eod.quote_ccy = eod_pricing.trading_currency_iso AND fx_rates_eod.fix_date = eod_pricing.price_date"
+    cardinality: many_to_one
+    note: "Use fix_code = 'WMR_LON_4PM' for institutional standard."
+catalog_doc_path: docs/lseg-mock-catalog/03-pricing/EOD_PRICING.md

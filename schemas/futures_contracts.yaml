@@ -1,0 +1,67 @@
+table: lseg_drv.futures_series_chain
+domain: derivatives
+description: Master of generic listed-futures series (e.g. ES, CL, ZN, FGBL).
+source_product: Refinitiv Derivatives Reference
+update_cadence: daily_06_NYT
+temporal_model: scd_type_2
+grain: One row per (futures_series_code, valid_from_ts)
+pk: [futures_series_code, valid_from_ts]
+columns:
+  - {name: futures_series_code,       type: VARCHAR(8),   nullable: false, pk: true, description: "Vendor-stable mnemonic (ES,NQ,CL,GC,ZN,FGBL,Z,SI,HG,NG,KE,ZC)."}
+  - {name: valid_from_ts,             type: TIMESTAMP(6), nullable: false, pk: true}
+  - {name: valid_to_ts,               type: TIMESTAMP(6), nullable: false, pk: false}
+  - {name: is_current,                type: BOOLEAN,      nullable: false, pk: false}
+  - {name: series_description,        type: VARCHAR(128), nullable: false, pk: false}
+  - {name: exchange_mic,              type: CHAR(4),      nullable: false, pk: false}
+  - {name: asset_class_code,          type: VARCHAR(16),  nullable: false, pk: false, description: "EQUITY_IDX|RATE|FX|ENERGY|METAL|AGRI|CRYPTO|VOL."}
+  - {name: underlying_instrument_perm_id, type: BIGINT,   nullable: true,  pk: false}
+  - {name: underlying_description,    type: VARCHAR(128), nullable: false, pk: false}
+  - {name: contract_size,             type: "DECIMAL(20,6)", nullable: false, pk: false}
+  - {name: contract_size_unit,        type: VARCHAR(16),  nullable: false, pk: false}
+  - {name: tick_size,                 type: "DECIMAL(18,8)", nullable: false, pk: false}
+  - {name: tick_value,                type: "DECIMAL(18,6)", nullable: false, pk: false}
+  - {name: currency_iso,              type: CHAR(3),      nullable: false, pk: false}
+  - {name: settlement_type_code,      type: VARCHAR(8),   nullable: false, pk: false, description: "CASH|PHYS."}
+  - {name: ric_root,                  type: VARCHAR(8),   nullable: false, pk: false}
+  - {name: cme_globex_root,           type: VARCHAR(8),   nullable: true,  pk: false}
+  - {name: bloomberg_ticker_root,     type: VARCHAR(8),   nullable: true,  pk: false}
+  - {name: loaded_ts,                 type: TIMESTAMP(6), nullable: false, pk: false}
+catalog_doc_path: docs/lseg-mock-catalog/09-derivatives/FUTURES_CONTRACTS.md
+
+---
+table: lseg_drv.futures_contracts
+domain: derivatives
+description: Individual listed futures contracts (one row per expiry/series).
+source_product: Refinitiv Derivatives Reference
+update_cadence: daily_06_NYT
+temporal_model: scd_type_2
+grain: One row per (instrument_perm_id, valid_from_ts)
+pk: [instrument_perm_id, valid_from_ts]
+columns:
+  - {name: instrument_perm_id,        type: BIGINT,       nullable: false, pk: true}
+  - {name: valid_from_ts,             type: TIMESTAMP(6), nullable: false, pk: true}
+  - {name: valid_to_ts,               type: TIMESTAMP(6), nullable: false, pk: false}
+  - {name: is_current,                type: BOOLEAN,      nullable: false, pk: false}
+  - {name: futures_series_code,       type: VARCHAR(8),   nullable: false, pk: false}
+  - {name: contract_month_code,       type: CHAR(1),      nullable: false, pk: false, description: "CME month: F G H J K M N Q U V X Z."}
+  - {name: contract_year,             type: SMALLINT,     nullable: false, pk: false}
+  - {name: contract_label,            type: VARCHAR(16),  nullable: false, pk: false, description: "e.g. ESZ25, CLG26."}
+  - {name: ric,                       type: VARCHAR(16),  nullable: false, pk: false}
+  - {name: opra_root,                 type: VARCHAR(8),   nullable: true,  pk: false}
+  - {name: listing_date,              type: DATE,         nullable: false, pk: false}
+  - {name: first_trade_date,          type: DATE,         nullable: false, pk: false}
+  - {name: last_trade_date,           type: DATE,         nullable: false, pk: false}
+  - {name: first_notice_date,         type: DATE,         nullable: true,  pk: false}
+  - {name: expiration_date,           type: DATE,         nullable: false, pk: false}
+  - {name: delivery_start_date,       type: DATE,         nullable: true,  pk: false}
+  - {name: delivery_end_date,         type: DATE,         nullable: true,  pk: false}
+  - {name: is_serial,                 type: BOOLEAN,      nullable: false, pk: false}
+  - {name: is_quarterly,              type: BOOLEAN,      nullable: false, pk: false}
+  - {name: initial_margin,            type: "DECIMAL(18,4)", nullable: true, pk: false}
+  - {name: maintenance_margin,        type: "DECIMAL(18,4)", nullable: true, pk: false}
+  - {name: loaded_ts,                 type: TIMESTAMP(6), nullable: false, pk: false}
+joins:
+  - to: lseg_drv.futures_series_chain
+    on: "futures_contracts.futures_series_code = futures_series_chain.futures_series_code"
+    cardinality: many_to_one
+catalog_doc_path: docs/lseg-mock-catalog/09-derivatives/FUTURES_CONTRACTS.md

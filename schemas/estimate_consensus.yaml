@@ -1,0 +1,30 @@
+table: lseg_ibes.estimate_consensus
+domain: estimates
+description: I/B/E/S consensus estimate snapshots by ticker, measure, and period.
+source_product: I/B/E/S Estimates
+update_cadence: nightly_02_NYT
+temporal_model: point_in_time
+grain: One row per (ibes_ticker, measure_code, period_type_code, period_end_date, consensus_date)
+pk: [ibes_ticker, measure_code, period_type_code, period_end_date, consensus_date]
+columns:
+  - {name: ibes_ticker, type: VARCHAR(32), nullable: false, pk: true}
+  - {name: ibes_region_code, type: VARCHAR(8), nullable: false, pk: false}
+  - {name: measure_code, type: VARCHAR(16), nullable: false, pk: true}
+  - {name: period_end_date, type: DATE, nullable: false, pk: true}
+  - {name: consensus_date, type: DATE, nullable: false, pk: true}
+  - {name: period_type_code, type: VARCHAR(16), nullable: false, pk: true}
+  - {name: currency_iso, type: CHAR(3), nullable: false, pk: false}
+  - {name: mean_value, type: "DECIMAL(22,6)", nullable: true, pk: false}
+  - {name: median_value, type: "DECIMAL(22,6)", nullable: true, pk: false}
+  - {name: stddev_value, type: "DECIMAL(22,6)", nullable: true, pk: false}
+  - {name: high_value, type: "DECIMAL(22,6)", nullable: true, pk: false}
+  - {name: low_value, type: "DECIMAL(22,6)", nullable: true, pk: false}
+  - {name: num_estimates, type: INTEGER, nullable: true, pk: false}
+  - {name: num_up_revisions_30d, type: INTEGER, nullable: true, pk: false}
+  - {name: num_down_revisions_30d, type: INTEGER, nullable: true, pk: false}
+  - {name: loaded_ts, type: TIMESTAMP(6), nullable: false, pk: false}
+joins:
+  - to: lseg_ibes.ibes_ticker_xref
+    on: "estimate_consensus.ibes_ticker = ibes_ticker_xref.ibes_ticker"
+    cardinality: many_to_one
+catalog_doc_path: docs/lseg-mock-catalog/06-estimates-ibes/IBES_CONSENSUS.md

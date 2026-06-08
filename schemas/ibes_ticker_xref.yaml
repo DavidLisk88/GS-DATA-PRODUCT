@@ -1,0 +1,26 @@
+table: lseg_ibes.ibes_ticker_xref
+domain: estimates
+description: Cross-reference between I/B/E/S tickers and LSEG organisation identifiers.
+source_product: I/B/E/S Estimates
+update_cadence: nightly_02_NYT
+temporal_model: scd_type_2
+grain: One row per (ibes_ticker, ibes_region_code, valid_from_ts)
+pk: [ibes_ticker, ibes_region_code, valid_from_ts]
+columns:
+  - {name: ibes_ticker, type: VARCHAR(32), nullable: false, pk: true}
+  - {name: ibes_region_code, type: VARCHAR(8), nullable: false, pk: true}
+  - {name: valid_from_ts, type: TIMESTAMP(6), nullable: false, pk: true}
+  - {name: valid_to_ts, type: TIMESTAMP(6), nullable: false, pk: false}
+  - {name: is_current, type: BOOLEAN, nullable: false, pk: false}
+  - {name: org_perm_id, type: BIGINT, nullable: false, pk: false}
+  - {name: primary_isin, type: CHAR(12), nullable: true, pk: false}
+  - {name: primary_currency_iso, type: CHAR(3), nullable: false, pk: false}
+  - {name: loaded_ts, type: TIMESTAMP(6), nullable: false, pk: false}
+joins:
+  - to: lseg_ref.entity_master
+    on: "ibes_ticker_xref.org_perm_id = entity_master.org_perm_id"
+    cardinality: many_to_one
+  - to: lseg_ibes.estimate_consensus
+    on: "ibes_ticker_xref.ibes_ticker = estimate_consensus.ibes_ticker"
+    cardinality: one_to_many
+catalog_doc_path: docs/lseg-mock-catalog/06-estimates-ibes/IBES_CONSENSUS.md

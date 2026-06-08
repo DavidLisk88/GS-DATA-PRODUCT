@@ -1,0 +1,34 @@
+table: lseg_fi.yield_curves_eod
+domain: fixed_income
+description: >
+  EOD discount/zero/par-yield curves for sovereigns, swaps, OIS, inflation, CDS.
+source_product: Refinitiv Yield Curves
+update_cadence: eod_region_local
+temporal_model: point_in_time
+pii_level: none
+grain: One row per (curve_code, curve_date, snapshot_code, tenor_code)
+pk:
+  - curve_code
+  - curve_date
+  - snapshot_code
+  - tenor_code
+partitioned_by: curve_date_month
+columns:
+  - {name: curve_code,                 type: VARCHAR(32),     nullable: false, pk: true, description: "USD_TSY_PAR|EUR_BUND|USD_SOFR_OIS|... see curve registry."}
+  - {name: curve_date,                 type: DATE,            nullable: false, pk: true}
+  - {name: snapshot_code,              type: VARCHAR(16),     nullable: false, pk: true, description: "EOD|NY_3PM|LON_4PM|TOK_3PM|INTRA_HH."}
+  - {name: tenor_code,                 type: VARCHAR(8),      nullable: false, pk: true}
+  - {name: tenor_years,                type: "DECIMAL(9,6)",  nullable: false, pk: false}
+  - {name: currency_iso,               type: CHAR(3),         nullable: false, pk: false}
+  - {name: curve_type_code,            type: VARCHAR(16),     nullable: false, pk: false, description: "SOVEREIGN|SWAP|OIS|INFLATION|CDS_SPREAD|MUNI|MMK_RATE."}
+  - {name: zero_rate_pct,              type: "DECIMAL(12,8)", nullable: true,  pk: false}
+  - {name: par_yield_pct,              type: "DECIMAL(12,8)", nullable: true,  pk: false}
+  - {name: discount_factor,            type: "DECIMAL(20,12)", nullable: true, pk: false}
+  - {name: forward_rate_3m_pct,        type: "DECIMAL(12,8)", nullable: true,  pk: false}
+  - {name: day_count_convention_code,  type: VARCHAR(16),     nullable: false, pk: false}
+  - {name: interpolation_method_code,  type: VARCHAR(16),     nullable: false, pk: false}
+  - {name: is_bootstrapped,            type: BOOLEAN,         nullable: false, pk: false}
+  - {name: vendor_received_ts,         type: TIMESTAMP(6),    nullable: false, pk: false}
+  - {name: loaded_ts,                  type: TIMESTAMP(6),    nullable: false, pk: false}
+joins: []
+catalog_doc_path: docs/lseg-mock-catalog/08-fixed-income/YIELD_CURVES.md

@@ -1,0 +1,3 @@
+wc_subject_id,sanctions_list_code,listed_program_code,valid_from_ts,valid_to_ts,is_current,listing_authority,official_list_url,listed_date,delisted_date,listing_reason,loaded_ts
+WC-TEST-000001,FAKE_LIST,FAKE_PROG_001,2018-03-10 00:00:00,9999-12-31 00:00:00,true,Fictitious Sanctions Authority,https://example.invalid/fake-list,2018-03-10,,"Synthetic test record. NOT a real sanctions designation.",2018-03-12 22:00:00
+WC-TEST-000001,FAKE_LIST,FAKE_PROG_FIN,2019-06-01 00:00:00,9999-12-31 00:00:00,true,Fictitious Sanctions Authority,https://example.invalid/fake-list,2019-06-01,,"Synthetic test record - secondary financial sector designation.",2019-06-02 22:00:00
