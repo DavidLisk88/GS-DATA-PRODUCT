@@ -117,14 +117,10 @@ def _classify_intent(question: str) -> IntentType:
 def _search_chunks(question: str, *, max_results: int = 10) -> list[dict[str, Any]]:
     """Search the index for relevant chunks."""
     index = _get_index()
-    from ..retriever import retrieve
+    from ..retriever import HybridRetriever
     catalog = _get_catalog()
-    results = retrieve(
-        query=question,
-        index=index,
-        catalog=catalog,
-        top_k=max_results,
-    )
+    retriever = HybridRetriever(artifacts=index, catalog=catalog)
+    results = retriever.search(question, top_k=max_results)
     return [
         {
             "chunk_id": r.chunk.chunk_id,
@@ -146,7 +142,7 @@ def _resolve_related_tables(question: str) -> list[str]:
     for word in words:
         for fqn in catalog.symbol_index.get(word, []):
             related.add(fqn)
-    return sorted(related)[:20]
+    return sorted(related)[:10]
 
 
 def _build_answer(question: str, chunks: list[dict[str, Any]], intent: IntentType) -> str:
@@ -175,23 +171,53 @@ def _build_answer(question: str, chunks: list[dict[str, Any]], intent: IntentTyp
 
 
 def _generate_sql_if_applicable(question: str, related_tables: list[str]) -> SQLResult | None:
-    """Attempt SQL generation for query-intent questions."""
-    catalog = _get_catalog()
+    """Attempt SQL generation for query-intent questions.
+
+    The Planner produces a structured plan (tables, identifiers, dates)
+    but full SQL generation requires an LLM.  For now we return the plan
+    as a commented SQL sketch so the user sees relevant tables.
+    """
     if not related_tables:
         return None
 
-    from ..planner import plan_query
     try:
-        plan = plan_query(question, catalog=catalog)
-        if plan.sql:
-            from ..sql_validator import validate_sql
-            validation = validate_sql(plan.sql, catalog)
-            return SQLResult(
-                sql=validation.sql,
-                validated=validation.ok,
-                errors=validation.errors,
-                warnings=validation.warnings,
-            )
+        from ..planner import Planner
+        from ..retriever import HybridRetriever
+        catalog = _get_catalog()
+        index = _get_index()
+        retriever = HybridRetriever(artifacts=index, catalog=catalog)
+        chunks = retriever.search(question, top_k=5)
+        planner = Planner(catalog)
+        plan = planner.plan(question, retrieved=chunks)
+
+        # Build a sketch SQL from the plan (limit to avoid huge output)
+        tables = (plan.candidate_tables or related_tables)[:5]
+        ids = plan.identifiers
+        sketch_lines = [f"-- Intent: {plan.intent}"]
+        if plan.notes:
+            for note in plan.notes:
+                sketch_lines.append(f"-- {note}")
+        sketch_lines.append(f"SELECT *")
+        sketch_lines.append(f"FROM {tables[0] if tables else '?'}")
+        for t in tables[1:]:
+            sketch_lines.append(f"  JOIN {t} ON /* ... */")
+        if ids:
+            sketch_lines.append(f"WHERE /* identifiers: {', '.join(b.raw for b in ids)} */")
+        if plan.as_of_ts:
+            sketch_lines.append(f"  AND valid_from_ts <= TIMESTAMP '{plan.as_of_ts}'")
+            sketch_lines.append(f"  AND valid_to_ts >  TIMESTAMP '{plan.as_of_ts}'")
+        sketch_lines.append("LIMIT 100")
+        sketch_sql = "\n".join(sketch_lines)
+
+        # Validate the sketch (it will likely fail since it's not complete SQL)
+        from ..sql_validator import validate_sql
+        validation = validate_sql(sketch_sql, catalog)
+        return SQLResult(
+            sql=sketch_sql,
+            validated=validation.ok,
+            errors=validation.errors,
+            warnings=validation.warnings,
+        )
     except Exception as exc:
         LOGGER.warning("SQL generation failed: %s", exc)
     return None
