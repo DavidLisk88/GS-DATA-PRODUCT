@@ -89,8 +89,7 @@ def load_sample_data(
 def _create_empty_table_from_spec(
     con: duckdb.DuckDBPyConnection, spec: TableSpec
 ) -> None:
-    schema, table = spec.fqn.split(".", 1)
-    con.execute(f'CREATE SCHEMA IF NOT EXISTS "{schema}"')
+    con.execute(f'CREATE SCHEMA IF NOT EXISTS "{spec.schema_name}"')
     if not spec.columns:
         # No column info — skip.
         return
@@ -98,7 +97,7 @@ def _create_empty_table_from_spec(
         f'"{c.name}" {_normalize_type(c.type)}' for c in spec.columns
     )
     con.execute(
-        f'CREATE TABLE IF NOT EXISTS "{schema}"."{table}" ({col_defs})'
+        f'CREATE TABLE IF NOT EXISTS "{spec.schema_name}"."{spec.table_name}" ({col_defs})'
     )
 
 

@@ -9,24 +9,14 @@ import os
 
 import streamlit as st
 
-from .catalog import Catalog
-from .data_loader import load_sample_data, open_warehouse
-from .indexer import build_index
-from .planner import Planner
-from .reasoner import LLMReasoner, OpenAIChatClient, StubReasoner
-from .retriever import HybridRetriever
-from .sql_validator import validate_sql
+from .pipeline import CopilotPipeline, bootstrap
+from .reasoner import create_reasoner
+from .sql_executor import execute_validated_sql
 
 
 @st.cache_resource(show_spinner="Loading catalog & sample data...")
-def _bootstrap():
-    catalog = Catalog.load()
-    artifacts = build_index(catalog=catalog, embed=False)
-    retriever = HybridRetriever(artifacts, catalog)
-    planner = Planner(catalog)
-    con = open_warehouse()
-    load_sample_data(con, catalog=catalog)
-    return catalog, retriever, planner, con
+def _bootstrap() -> CopilotPipeline:
+    return bootstrap(load_warehouse=True)
 
 
 def main() -> None:
@@ -34,10 +24,10 @@ def main() -> None:
     st.title("LSEG Data Copilot — prototype")
     st.caption("RAG + Text-to-SQL over a mock LSEG enterprise catalog.")
 
-    catalog, retriever, planner, con = _bootstrap()
+    pipe = _bootstrap()
     with st.sidebar:
-        st.markdown(f"**Catalog version**: `{catalog.manifest.catalog_version}`")
-        st.markdown(f"**Tables**: {len(catalog.tables)}")
+        st.markdown(f"**Catalog version**: `{pipe.catalog.manifest.catalog_version}`")
+        st.markdown(f"**Tables**: {len(pipe.catalog.tables)}")
         ents = st.multiselect(
             "Entitlements",
             ["LSEG_WC_VIEWER", "LSEG_WC_INVESTIGATOR"],
@@ -63,12 +53,9 @@ def main() -> None:
     with st.chat_message("user"):
         st.markdown(question)
 
-    retrieved = retriever.search(question, top_k=8)
-    plan = planner.plan(question, retrieved, user_entitlements=ents)
-    if use_llm and os.environ.get("OPENAI_API_KEY"):
-        reasoner = LLMReasoner(catalog, OpenAIChatClient())
-    else:
-        reasoner = StubReasoner(catalog)
+    retrieved = pipe.retriever.search(question, top_k=8)
+    plan = pipe.planner.plan(question, retrieved, user_entitlements=ents)
+    reasoner = create_reasoner(pipe.catalog, use_llm=use_llm)
     answer = reasoner.answer(plan)
 
     with st.chat_message("assistant"):
@@ -79,19 +66,17 @@ def main() -> None:
             with st.expander("Citations"):
                 for c in answer.citations:
                     st.markdown(f"- `{c}`")
-        if answer.sql:
-            validation = validate_sql(answer.sql, catalog)
-            st.code(validation.sql, language="sql")
-            if validation.errors:
-                st.error(f"SQL validation errors: {validation.errors}")
-            for w in validation.warnings:
+        if answer.sql and pipe.warehouse is not None:
+            result = execute_validated_sql(answer.sql, pipe.catalog, pipe.warehouse)
+            st.code(result.validation.sql, language="sql")
+            if result.validation.errors:
+                st.error(f"SQL validation errors: {result.validation.errors}")
+            for w in result.validation.warnings:
                 st.warning(w)
-            if validation.ok:
-                try:
-                    df = con.execute(validation.sql).fetchdf()
-                    st.dataframe(df)
-                except Exception as exc:
-                    st.error(f"Execution error: {exc}")
+            if result.executed:
+                st.dataframe(result.dataframe)
+            elif result.error:
+                st.error(f"Execution error: {result.error}")
     st.session_state["history"].append(("assistant", answer.text))
 
 
