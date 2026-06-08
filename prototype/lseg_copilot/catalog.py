@@ -130,7 +130,17 @@ class Catalog:
         paths = workspace_paths()
         root = base_path or paths["root"]
         manifest_path = root / "schemas" / "catalog.json"
-        manifest_raw = json.loads(manifest_path.read_text(encoding="utf-8"))
+        if not manifest_path.exists():
+            raise FileNotFoundError(
+                f"Catalog manifest not found at {manifest_path}. "
+                "Ensure schemas/catalog.json exists in the workspace root."
+            )
+        try:
+            manifest_raw = json.loads(manifest_path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError as exc:
+            raise ValueError(
+                f"Malformed JSON in catalog manifest {manifest_path}: {exc}"
+            ) from exc
         manifest = CatalogManifest(**manifest_raw)
 
         tables: dict[str, TableSpec] = {}
@@ -139,10 +149,15 @@ class Catalog:
             yaml_path = root / schema_rel if schema_rel else None
             yaml_docs: list[dict[str, Any]] = []
             if yaml_path and yaml_path.exists():
-                with yaml_path.open("r", encoding="utf-8") as fh:
-                    for doc in yaml.safe_load_all(fh):
-                        if doc:
-                            yaml_docs.append(doc)
+                try:
+                    with yaml_path.open("r", encoding="utf-8") as fh:
+                        for doc in yaml.safe_load_all(fh):
+                            if doc:
+                                yaml_docs.append(doc)
+                except yaml.YAMLError as exc:
+                    raise ValueError(
+                        f"Malformed YAML in schema file {yaml_path}: {exc}"
+                    ) from exc
 
             # If the YAML file holds multiple tables, pick the one whose
             # `table:` field matches this catalog entry's fqn. If none match

@@ -140,6 +140,7 @@ def ask_cmd(question: str, use_llm: bool, entitlements: tuple[str, ...], execute
                 console.print(df.to_string(index=False))
             except Exception as exc:
                 console.print(f"[red]Execution error:[/red] {exc}")
+                raise SystemExit(1) from exc
 
 
 # --------------------------------------------------------------------------- #
@@ -260,9 +261,16 @@ def _eval_qa(questions, retriever, planner, reasoner) -> None:
 
 
 def _read_fixture(path: Path) -> list[dict]:
-    with path.open("r", encoding="utf-8") as fh:
-        reader = csv.DictReader(fh)
-        return [row for row in reader]
+    if not path.exists():
+        console.print(f"[red]Fixture file missing:[/red] {path}")
+        return []
+    try:
+        with path.open("r", encoding="utf-8") as fh:
+            reader = csv.DictReader(fh)
+            return [row for row in reader]
+    except (OSError, csv.Error) as exc:
+        console.print(f"[red]Fixture read error ({path.name}):[/red] {exc}")
+        return []
 
 
 def _compare_rows(df, fixture_rows: list[dict]) -> bool:

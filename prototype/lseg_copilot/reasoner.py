@@ -9,12 +9,15 @@ Two modes:
 from __future__ import annotations
 
 import json
+import logging
 import os
 from dataclasses import dataclass, field
 from typing import Any, Protocol
 
 from .catalog import Catalog
 from .planner import PlanResult
+
+LOGGER = logging.getLogger(__name__)
 
 
 @dataclass
@@ -276,10 +279,20 @@ class LLMReasoner:
             f"Catalog excerpts:\n{excerpts}\n\n"
             "Respond as a JSON object only."
         )
-        raw = self.client.complete(system=_LLM_SYSTEM_PROMPT, user=user_msg)
+        try:
+            raw = self.client.complete(system=_LLM_SYSTEM_PROMPT, user=user_msg)
+        except Exception as exc:
+            LOGGER.error("LLM client call failed: %s", exc)
+            return Answer(
+                question=plan.question,
+                text=f"LLM call failed: {exc}",
+                citations=[r.chunk.source_path for r in plan.retrieved[:5]],
+                confidence=0.0,
+            )
         try:
             payload = json.loads(raw)
         except json.JSONDecodeError:
+            LOGGER.warning("LLM returned non-JSON response: %.200s", raw)
             return Answer(
                 question=plan.question,
                 text=f"LLM produced non-JSON response: {raw[:200]}",

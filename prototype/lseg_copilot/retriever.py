@@ -1,6 +1,7 @@
 """Hybrid retriever: BM25 + (optional) FAISS dense, fused with RRF + symbol boost."""
 from __future__ import annotations
 
+import logging
 import re
 from dataclasses import dataclass
 from typing import Iterable
@@ -8,9 +9,11 @@ from typing import Iterable
 from .catalog import Catalog
 from .indexer import Chunk, IndexArtifacts, _tokenise
 
+LOGGER = logging.getLogger(__name__)
+
 try:
     import numpy as np  # type: ignore
-except Exception:  # pragma: no cover
+except ImportError:  # pragma: no cover
     np = None  # type: ignore
 
 
@@ -62,7 +65,8 @@ class HybridRetriever:
                 _, idxs = self.artifacts.faiss_index.search(q_vec, k)
                 for rank, idx in enumerate(idxs[0].tolist()):
                     dense_rank[idx] = rank + 1
-            except Exception:  # pragma: no cover
+            except Exception as exc:  # pragma: no cover
+                LOGGER.warning("Dense retrieval failed, falling back to BM25-only: %s", exc)
                 dense_rank = {}
 
         # Find mentioned symbols in the query so we can boost matching chunks.
